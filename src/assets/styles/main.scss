@@ -22,14 +22,13 @@
 @import 'basics/Layout';
 
 // SETUP
-
 @import "setup/variables";
 @import 'setup/_Typography.scss';
-
 
 // COMPONENTS
 @import 'cmps/Player';
 @import 'cmps/Header';
 @import 'cmps/Sidebar';
 @import 'cmps/StationPreview';
-@import 'cmps/StationIndex'
+@import 'cmps/StationIndex';
+@import 'cmps/HomePage';

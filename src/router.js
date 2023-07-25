@@ -12,7 +12,7 @@ const routes = [
     component: StationIndex,
     children: [
       {
-        path: 'home',
+        path: '',
         name: 'HomePage',
         component: HomePage,
       },
@@ -22,7 +22,7 @@ const routes = [
         component: SearchPage,
       },
       {
-        path: 'details/:stationId',
+        path: 'station/:stationId',
         name: 'StationDetails',
         component: StationDetails,
       },

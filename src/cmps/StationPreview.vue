@@ -1,7 +1,7 @@
 <template>
     <section class="main-preview-container">
         <div class="prev-img-container">
-            <img :src="`${station.img}`" alt="">
+            <img :src="`${station.imgUrl}`" alt="">
             <button class="play-btn"><svg role="img" height="24" width="24" aria-hidden="true" viewBox="0 0 24 24"
                     data-encore-id="icon" class="Svg-sc-ytk21e-0 haNxPq">
                     <path
