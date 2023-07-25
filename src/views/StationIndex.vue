@@ -1,5 +1,5 @@
 <template>
-    <section class="main-container">
+    <section class="station-main-container">
         <StationList v-if="stations" :stations="stations" />
     </section>
 </template>
