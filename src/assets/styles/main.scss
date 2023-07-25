@@ -1,20 +1,34 @@
-// Setup
+// // Setup
+// @import "setup/functions";
+// @import "setup/mixins";
+// @import "setup/typography";
+
+// // Basics
+// @import "basics/helpers";
+// @import "basics/layout";
+// @import "basics/base";
+// @import "basics/links";
+// @import "basics/forms";
+
+// // Components
+// @import "cmps/AppHeader";
+// @import "cmps/UserMsg";
+// @import "cmps/ReviewList";
+// @import "cmps/StationList";
+
+
+// BASICS
+@import 'basics/Base';
+@import 'basics/Layout';
+
+// SETUP
+
 @import "setup/variables";
-@import "setup/functions";
-@import "setup/mixins";
-@import "setup/typography";
-
-// Basics
-@import "basics/helpers";
-@import "basics/layout";
-@import "basics/base";
-@import "basics/links";
-@import "basics/forms";
-
-// Components
-@import "cmps/AppHeader";
-@import "cmps/UserMsg";
-@import "cmps/ReviewList";
-@import "cmps/StationList";
+@import 'setup/_Typography.scss';
 
 
+// COMPONENTS
+@import 'cmps/Player';
+@import 'cmps/Header';
+@import 'cmps/Sidebar';
+@import 'cmps/StationPreview';

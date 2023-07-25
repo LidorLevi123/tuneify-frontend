@@ -1,0 +1,34 @@
+.sidebar-list-container {
+    grid-column: 1;
+    width: 412px;
+    height: 112px;
+    background-color: $clr4;
+    height: calc(100vh - 224px);
+    border-radius: 0.5rem;
+    // margin-block-start: 0.5rem;
+    padding: 1.1rem;
+}
+
+.sidebar-list-container .collapse div {
+    color: $clr3;
+    font-size: 0.94rem;
+    font-weight: 700;
+}
+
+.sidebar-list-container .collapse {
+
+    gap: 0.8rem;
+    display: flex;
+    align-items: center;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.sidebar-list-container .collapse:hover div {
+    color: $clr2
+}
+
+.sidebar-list-container .collapse:hover .icon {
+    fill: $clr2;
+}

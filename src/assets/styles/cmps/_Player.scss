@@ -1,0 +1,122 @@
+.main-player-container {
+    grid-column: 1/-1;
+    // position: fixed;
+    // bottom: 0;
+    width: 100%;
+    padding-block-start: 0.8rem;
+    background-color: $clr1;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    justify-content: space-between;
+}
+
+.main-player-container .play {
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.main-player-container .forward,
+.back,
+.shuffle,
+.repeat {
+    color: $clr3;
+    border: none;
+    height: 2rem;
+    background-color: transparent;
+}
+
+
+.main-player-container .play:hover {
+    scale: 104%;
+}
+
+.main-player-container .forward:hover,
+.back:hover,
+.repeat:hover,
+.shuffle:hover {
+    color: $clr2;
+}
+
+.main-player-container .material-symbols-outlined {
+    font-variation-settings:
+        'FILL' 1,
+        'wght' 700,
+        'GRAD' 200,
+        'opsz' 48
+}
+
+.main-player-container .icon {
+    fill: $clr3
+}
+
+.main-player-container .btn:hover .icon path {
+    fill: $clr2
+}
+
+.player-main-controls {
+    display: flex;
+}
+
+.player-main-controls .btn {
+    height: 2rem;
+    width: 2rem;
+    margin-inline: 0.5rem;
+}
+
+/////////////////////////////////////////////
+/// 
+///
+.vol-container {
+    display: flex;
+    margin-inline-end: 1.5rem;
+}
+
+.vol-slider {
+    align-self: center;
+    justify-self: end;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 93px;
+    height: 4px;
+    border-radius: 50px;
+}
+
+.vol-slider:hover {
+    background: $clr7;
+}
+
+.vol-slider:hover::-webkit-slider-thumb {
+    opacity: 1;
+}
+
+/* Style the slider track */
+.vol-slider::-webkit-slider-runnable-track {
+    height: px;
+    border-radius: 5px;
+}
+
+.vol-slider-track {
+    height: 10px;
+    border-radius: 5px;
+}
+
+/* Style the slider thumb (dot) */
+.vol-slider::-webkit-slider-thumb {
+    opacity: 0;
+    -webkit-appearance: none;
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    background: $clr2;
+}
+
+.main-player-container .vol-btn {
+    color: $clr2;
+    align-self: center;
+    font-size: 1rem
+}

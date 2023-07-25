@@ -1,0 +1,73 @@
+.main-preview-container {
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.5rem;
+    background-color: $clr5;
+    width: 11.875rem;
+    height: 17.5rem;
+    padding: 1rem;
+    cursor: pointer;
+    transition: ease-in-out 0.3s;
+    overflow: hidden;
+
+}
+
+.main-preview-container:hover {
+    background-color: $clr6;
+
+}
+
+.main-preview-container img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-block-end: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+}
+
+.main-preview-container h4 {
+    margin: 0;
+    padding-bottom: 0.5rem;
+    color: $clr2
+}
+
+.main-preview-container span {
+    font-size: small;
+    color: $clr2
+}
+
+.main-preview-container .play-btn {
+
+    position: absolute;
+    bottom: 0.8rem;
+    right: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $clr7;
+    height: 3rem;
+    width: 3rem;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(0);
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.main-preview-container .play-btn:hover {
+    transition: 0.2s;
+    scale: 104%;
+}
+
+.main-preview-container:hover .play-btn {
+    opacity: 1;
+    transform: translateY(-0.6rem);
+}
+
+.main-preview-container .prev-img-container {
+    position: relative;
+}
