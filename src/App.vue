@@ -1,32 +1,19 @@
-
 <template>
-  <!-- <AppHeader /> -->
-  <!-- <RouterView /> -->
+  <RouterView />
   <UserMsg />
-  <StationPreview />
-  <Header />
-  <Sidebar />
-  <Player />
 </template>
 
-
 <script>
-import Player from './views/Player.vue'
-import Header from './views/Header.vue'
-import Sidebar from './views/Sidebar.vue'
-import StationPreview from './cmps/StationPreview.vue'
-
-
-import { userService } from './services/user.service'
-import UserMsg from './views/UserMsg.vue'
+import UserMsg from './cmps/UserMsg.vue'
 
 export default {
+
+  created() {
+    this.$store.dispatch({ type: 'loadStations' })
+  },
+
   components: {
-    Sidebar,
     UserMsg,
-    Player,
-    Header,
-    StationPreview
   }
 }
 </script>

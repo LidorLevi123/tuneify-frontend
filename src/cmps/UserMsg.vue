@@ -1,35 +1,42 @@
 <template>
-  <div v-show="alive" class="alert" :class="alertClass">
-    {{ msg?.txt }}
-  </div>
+        <section :class="msg.type" v-if="msg.txt" class="user-msg">
+            {{ msg.txt }}
+        </section>
 </template>
-
-
+ 
 <script>
-import { eventBus, SHOW_MSG } from "../services/event-bus.service.js"
+import { eventBus } from '../services/event-bus.service.js'
 
 export default {
-  created() {
-    eventBus.on(SHOW_MSG, (msg) => {
-      this.msg = msg
-      var delay = msg.delay || 2000
-      this.alive = true
-      setTimeout(() => {
-        this.alive = false
-      }, delay)
-    })
-  },
-  data() {
-    return {
-      alive: false,
-      msg: null,
-    }
-  },
-  computed: {
-    alertClass() {
-      if (!this.msg) return
-      return `alert-${this.msg.type}`
-    },
-  },
+	data() {
+		return {
+			msg: { txt: '', type: 'success' },
+		}
+	},
+	created() {
+		eventBus.on('show-msg', this.showMsg)
+	},
+	methods: {
+		showMsg(msg) {
+			this.msg = msg
+			setTimeout(() => (this.msg.txt = ''), this.msg.timeout || 5000)
+		},
+	},
 }
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

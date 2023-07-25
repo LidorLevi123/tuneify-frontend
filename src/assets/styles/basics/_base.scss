@@ -38,9 +38,9 @@
 //     max-width: 40ch;
 // }
 
-// a {
-//     text-decoration: none;
-// }
+a {
+    text-decoration: none;
+}
 // a:hover {
 //     text-decoration: underline;
 // }
@@ -53,11 +53,6 @@ body {
     margin: 0;
     padding: 0.5rem;
     line-height: 1.6;
-
-    // background-image: linear-gradient(to bottom, #212121 0%, #121212 25%, #121212 25%, #121212 100%);
-
-
     background-color: #000000;
-    font-family: Gotham;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }

@@ -1,7 +1,7 @@
 <template>
     <section class="main-preview-container">
         <div class="prev-img-container">
-            <img src="https://picsum.photos/170" alt="">
+            <img :src="`${station.imgUrl}`" alt="">
             <button class="play-btn"><svg role="img" height="24" width="24" aria-hidden="true" viewBox="0 0 24 24"
                     data-encore-id="icon" class="Svg-sc-ytk21e-0 haNxPq">
                     <path
@@ -11,7 +11,17 @@
             </button>
         </div>
 
-        <h4> Miley Cyrus Mix</h4>
-        <span>Current Favorits and exciting new music...</span>
+        <h4>{{ station.name }}</h4>
+        <span>{{ station.description }}</span>
     </section>
 </template>
+<script>
+
+export default {
+    name: 'StationPreview',
+    props: {
+        station: { type: Object, required: true },
+    },
+}
+
+</script>

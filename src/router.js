@@ -1,37 +1,33 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
-import Home from './views/Home.vue'
-// import Chat from './views/Chat.vue'
 import StationIndex from './views/StationIndex.vue'
-// import LoginSignup from './views/LoginSignup.vue'
-import UserDetails from './views/UserDetails.vue'
+import HomePage from './views/HomePage.vue'
+import SearchPage from './views/SearchPage.vue'
+import StationDetails from './views/StationDetails.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/station',
     name: 'StationIndex',
-    component: StationIndex
+    component: StationIndex,
+    children: [
+      {
+        path: '',
+        name: 'HomePage',
+        component: HomePage,
+      },
+      {
+        path: 'search',
+        name: 'SearchPage',
+        component: SearchPage,
+      },
+      {
+        path: 'station/:stationId',
+        name: 'StationDetails',
+        component: StationDetails,
+      },
+    ]
   },
-  // {
-  //   path: '/chat',
-  //   name: 'Chat',
-  //   component: Chat
-  // },
-  // {
-  //   path: '/login',
-  //   name: 'LoginSignup',
-  //   component: LoginSignup
-  // },
-  {
-    path: '/user/:id',
-    name: 'UserDetails',
-    component: UserDetails
-  }
 ]
 
 

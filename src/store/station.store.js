@@ -55,50 +55,12 @@ export const stationStore = {
         },
     },
     actions: {
-        async addStation(context, { station }) {
-            try {
-                station = await stationService.save(station)
-                context.commit(getActionAddStation(station))
-                return station
-            } catch (err) {
-                console.log('stationStore: Error in addStation', err)
-                throw err
-            }
-        },
-        async updateStation(context, { station }) {
-            try {
-                station = await stationService.save(station)
-                context.commit(getActionUpdateStation(station))
-                return station
-            } catch (err) {
-                console.log('stationStore: Error in updateStation', err)
-                throw err
-            }
-        },
         async loadStations(context) {
             try {
                 const stations = await stationService.query()
                 context.commit({ type: 'setStations', stations })
             } catch (err) {
                 console.log('stationStore: Error in loadStations', err)
-                throw err
-            }
-        },
-        async removeStation(context, { stationId }) {
-            try {
-                await stationService.remove(stationId)
-                context.commit(getActionRemoveStation(stationId))
-            } catch (err) {
-                console.log('stationStore: Error in removeStation', err)
-                throw err
-            }
-        },
-        async addStationMsg(context, { stationId, txt }) {
-            try {
-                const msg = await stationService.addStationMsg(stationId, txt)
-                context.commit({type: 'addStationMsg', stationId, msg })
-            } catch (err) {
-                console.log('stationStore: Error in addStationMsg', err)
                 throw err
             }
         },
