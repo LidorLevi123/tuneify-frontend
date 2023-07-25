@@ -1,2 +1,1 @@
-# Coding Academy
-## Vue Frontend Starter
+# Tuneify - Frontend
