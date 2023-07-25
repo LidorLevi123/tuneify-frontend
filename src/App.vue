@@ -1,8 +1,8 @@
 
 <template>
   <Header />
-  <Sidebar />
   <RouterView />
+  <Sidebar />
   <Player />
   <UserMsg />
 </template>
