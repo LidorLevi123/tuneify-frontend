@@ -1,5 +1,5 @@
 <template>
-    <ul class="station-list clean-list grid gap-2 m-2">
+    <ul class="station-list">
         <li v-for="station in stations" :key="station._id">
             <StationPreview :station="station" />
         </li>
@@ -20,8 +20,3 @@ export default {
 }
 </script>
 
-<style>
-.station-list {
-    grid-template-columns: repeat(auto-fill, 15rem)
-}
-</style>
