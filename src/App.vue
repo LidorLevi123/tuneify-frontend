@@ -1,23 +1,17 @@
 
 <template>
-  <!-- <AppHeader /> -->
-  <!-- <StationPreview /> -->
-  <RouterView />
-  <UserMsg />
-  <Header/>
+  <Header />
   <Sidebar />
+  <RouterView />
   <Player />
+  <UserMsg />
 </template>
 
-
 <script>
-import Player from './views/Player.vue'
-import Header from './views/Header.vue'
-import Sidebar from './views/Sidebar.vue'
-import StationPreview from './cmps/StationPreview.vue'
-
-import { userService } from './services/user.service'
-import UserMsg from './views/UserMsg.vue'
+import Player from './cmps/Player.vue'
+import Header from './cmps/Header.vue'
+import Sidebar from './cmps/Sidebar.vue'
+import UserMsg from './cmps/UserMsg.vue'
 
 export default {
   components: {
@@ -25,7 +19,6 @@ export default {
     UserMsg,
     Player,
     Header,
-    StationPreview
   }
 }
 </script>

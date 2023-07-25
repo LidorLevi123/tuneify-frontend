@@ -1,12 +1,11 @@
 <template>
-    <section class="station-main-container">
-        <h1 style="color: white;">STATION INDEX</h1>
-        <!-- <StationList v-if="stations" :stations="stations" /> -->
+    <section class="main-container">
+        <StationList v-if="stations" :stations="stations" />
     </section>
 </template>
 
 <script>
-// import StationList from './cmps/StationList.vue'
+import StationList from '../cmps/StationList.vue'
 
 export default {
     created() {
@@ -26,7 +25,7 @@ export default {
     },
 
     components: {
-        // StationList
+        StationList
     }
 }
 

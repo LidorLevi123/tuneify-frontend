@@ -1,9 +1,8 @@
-
 import { storageService } from './async-storage.service.js'
 import { utilService } from './util.service.js'
 import { userService } from './user.service.js'
 
-const STORAGE_KEY = 'station'
+const STORAGE_KEY = 'stationDB'
 
 export const stationService = {
   query,
@@ -11,21 +10,14 @@ export const stationService = {
   save,
   remove,
   getEmptyStation,
-  // addStationMsg
 }
 
-const gStations = _createStations()
+_createStations(3)
 
-async function query(filterBy = { txt: '', price: 0 }) {
+async function query(filterBy = { name: ''}) {
   var stations = await storageService.query(STORAGE_KEY)
-  // if (filterBy.txt) {
-  //     const regex = new RegExp(filterBy.txt, 'i')
-  //     stations = stations.filter(station => regex.test(station.vendor) || regex.test(station.description))
-  // }
-  // if (filterBy.price) {
-  //     stations = stations.filter(station => station.price <= filterBy.price)
-  // }
-  console.log(stations)
+
+  // console.log(stations)
   return stations
 }
 
@@ -49,93 +41,34 @@ async function save(station) {
   return savedStation
 }
 
-// async function addStationMsg(stationId, txt) {
-//     // Later, this is all done by the backend
-//     const station = await getById(stationId)
-//     if (!station.msgs) station.msgs = []
-
-//     const msg = {
-//         id: utilService.makeId(),
-//         by: userService.getLoggedinUser(),
-//         txt
-//     }
-//     station.msgs.push(msg)
-//     await storageService.put(STORAGE_KEY, station)
-
-//     return msg
-// }
-
 function getEmptyStation() {
   return {
-    vendor: 'Susita-' + (Date.now() % 1000),
-    price: utilService.getRandomIntInclusive(1000, 9000),
+    name: utilService.makeLorem(3),
+    description: utilService.makeLorem(5),
+    imgUrl: 'https://picsum.photos/170',
   }
 }
 
-function _createStations() {
-  var stations = []
-
-  stations.push(_createStation(
-    's101',
-    'Funky Monks',
-    'Current Favorits and exciting new music...',
-    'https://picsum.photos/170')
-  )
-  stations.push(_createStation(
-    's102',
-    'Yaron Nitzan',
-    'Browse Great Music from Yaron Nitzan',
-    'https://picsum.photos/170')
-  )
-
-  return stations
+function _createStations(amount) {
+  let stations = utilService.loadFromStorage(STORAGE_KEY)
+    if (!stations || !stations.length) {
+        stations = []
+        for (let i = 0; i < amount; i++) {
+            stations.push(_createStation())
+          }
+          console.log(stations);
+        utilService.saveToStorage(STORAGE_KEY, stations)
+    }
 }
 
-function _createStation(id, name, description, imgUrl) {
-  return {
-    "_id": id,
-    "name": name,
-    "description": description,
-    "imgUrl": imgUrl,
-    "tags": [
-      "Funk",
-      "Happy"
-    ],
-    "createdBy": {
-      "_id": "u101",
-      "fullname": "Puki Ben David",
-      "imgUrl": "http://some-photo/"
-    },
-    "likedByUsers": ['{minimal-user}', '{minimal-user}'],
-    "songs": [
-      {
-        "id": "s1001",
-        "title": "The Meters - Cissy Strut",
-        "url": "youtube/song.mp4",
-        "imgUrl": "https://i.ytimg.com/vi/4_iC0MyIykM/mqdefault.jpg",
-        "addedBy": '{minimal-user}',
-        "addedAt": 162521765262
-      },
-      {
-        "id": "mUkfiLjooxs",
-        "title": "The JB's - Pass The Peas",
-        "url": "youtube/song.mp4",
-        "imgUrl": "https://i.ytimg.com/vi/mUkfiLjooxs/mqdefault.jpg",
-        "addedBy": {}
-      },
-    ],
-    "msgs": [
-      {
-        id: 'm101',
-        from: '{mini-user}',
-        txt: 'Manish?'
-      }
-    ]
-  }
+function _createStation() {
+  const station = getEmptyStation()
+  station._id = utilService.makeId()
+  return station
 }
 
 
 // Initial data
 // ;(async ()=>{
-//     await storageService.post(STORAGE_KEY, gStations)
+//     await storageService.post(STORAGE_KEY, station)
 // })()
