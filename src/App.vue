@@ -4,7 +4,7 @@
   <!-- <StationPreview /> -->
   <RouterView />
   <UserMsg />
-  <Header/>
+  <Header />
   <Sidebar />
   <Player />
 </template>

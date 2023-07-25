@@ -12,7 +12,7 @@
         </div>
 
         <h4> {{ station.name }}</h4>
-        <span>C{{ station.description }}</span>
+        <span>{{ station.description }}</span>
     </section>
 </template>
 
