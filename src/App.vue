@@ -1,24 +1,19 @@
-
 <template>
-  <Header />
   <RouterView />
-  <Sidebar />
-  <Player />
   <UserMsg />
 </template>
 
 <script>
-import Player from './cmps/Player.vue'
-import Header from './cmps/Header.vue'
-import Sidebar from './cmps/Sidebar.vue'
 import UserMsg from './cmps/UserMsg.vue'
 
 export default {
+
+  created() {
+    this.$store.dispatch({ type: 'loadStations' })
+  },
+
   components: {
-    Sidebar,
     UserMsg,
-    Player,
-    Header,
   }
 }
 </script>

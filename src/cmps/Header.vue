@@ -1,7 +1,7 @@
 <template>
     <section class="main-header-container">
         <nav>
-            <RouterLink to="/home">
+            <RouterLink to="/">
                 <div>
                     <svg role="img" height="24" width="24" aria-hidden="true" class="Svg-sc-ytk21e-0 haNxPq icon"
                         viewBox="0 0 24 24" data-encore-id="icon">
@@ -26,5 +26,17 @@
                 </div>
             </RouterLink>
         </nav>
+        <Sidebar />
     </section>
 </template>
+
+<script>
+
+import Sidebar from './Sidebar.vue'
+
+export default {
+    components: {
+        Sidebar
+    }
+}
+</script>

@@ -43,8 +43,8 @@ async function save(station) {
 
 function getEmptyStation() {
   return {
-    name: utilService.makeLorem(3),
-    description: utilService.makeLorem(5),
+    name: utilService.makeLorem(2),
+    description: utilService.makeLorem(3),
     imgUrl: 'https://picsum.photos/170',
   }
 }
