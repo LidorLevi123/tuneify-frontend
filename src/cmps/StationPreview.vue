@@ -11,7 +11,7 @@
             </button>
         </div>
 
-        <h4> Miley Cyrus Mix</h4>
+        <h4>Miley Cyrus Mix</h4>
         <span>Current Favorits and exciting new music...</span>
     </section>
 </template>

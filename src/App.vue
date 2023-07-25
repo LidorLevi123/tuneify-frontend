@@ -1,10 +1,10 @@
 
 <template>
   <!-- <AppHeader /> -->
-  <!-- <RouterView /> -->
+  <!-- <StationPreview /> -->
+  <RouterView />
   <UserMsg />
-  <StationPreview />
-  <Header />
+  <Header/>
   <Sidebar />
   <Player />
 </template>
@@ -15,7 +15,6 @@ import Player from './views/Player.vue'
 import Header from './views/Header.vue'
 import Sidebar from './views/Sidebar.vue'
 import StationPreview from './cmps/StationPreview.vue'
-
 
 import { userService } from './services/user.service'
 import UserMsg from './views/UserMsg.vue'
