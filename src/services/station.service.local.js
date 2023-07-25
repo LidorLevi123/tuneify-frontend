@@ -6,47 +6,47 @@ import { userService } from './user.service.js'
 const STORAGE_KEY = 'station'
 
 export const stationService = {
-    query,
-    getById,
-    save,
-    remove,
-    getEmptyStation,
-    // addStationMsg
+  query,
+  getById,
+  save,
+  remove,
+  getEmptyStation,
+  // addStationMsg
 }
 
 const gStations = _createStations()
-console.log(gStations)
 
 async function query(filterBy = { txt: '', price: 0 }) {
-    var stations = await storageService.query(STORAGE_KEY)
-    // if (filterBy.txt) {
-    //     const regex = new RegExp(filterBy.txt, 'i')
-    //     stations = stations.filter(station => regex.test(station.vendor) || regex.test(station.description))
-    // }
-    // if (filterBy.price) {
-    //     stations = stations.filter(station => station.price <= filterBy.price)
-    // }
-    return stations
+  var stations = await storageService.query(STORAGE_KEY)
+  // if (filterBy.txt) {
+  //     const regex = new RegExp(filterBy.txt, 'i')
+  //     stations = stations.filter(station => regex.test(station.vendor) || regex.test(station.description))
+  // }
+  // if (filterBy.price) {
+  //     stations = stations.filter(station => station.price <= filterBy.price)
+  // }
+  console.log(stations)
+  return stations
 }
 
 function getById(stationId) {
-    return storageService.get(STORAGE_KEY, stationId)
+  return storageService.get(STORAGE_KEY, stationId)
 }
 
 async function remove(stationId) {
-    await storageService.remove(STORAGE_KEY, stationId)
+  await storageService.remove(STORAGE_KEY, stationId)
 }
 
 async function save(station) {
-    var savedStation
-    if (station._id) {
-        savedStation = await storageService.put(STORAGE_KEY, station)
-    } else {
-        // Later, owner is set by the backend
-        station.owner = userService.getLoggedinUser()
-        savedStation = await storageService.post(STORAGE_KEY, station)
-    }
-    return savedStation
+  var savedStation
+  if (station._id) {
+    savedStation = await storageService.put(STORAGE_KEY, station)
+  } else {
+    // Later, owner is set by the backend
+    station.owner = userService.getLoggedinUser()
+    savedStation = await storageService.post(STORAGE_KEY, station)
+  }
+  return savedStation
 }
 
 // async function addStationMsg(stationId, txt) {
@@ -66,60 +66,72 @@ async function save(station) {
 // }
 
 function getEmptyStation() {
-    return {
-        vendor: 'Susita-' + (Date.now() % 1000),
-        price: utilService.getRandomIntInclusive(1000, 9000),
-    }
+  return {
+    vendor: 'Susita-' + (Date.now() % 1000),
+    price: utilService.getRandomIntInclusive(1000, 9000),
+  }
 }
 
 function _createStations() {
-    var stations = []
+  var stations = []
 
-    stations.push(_createStation('s101', 'Funky Monks'))
-    stations.push(_createStation('s102', 'Yaron Nitzan'))
+  stations.push(_createStation(
+    's101',
+    'Funky Monks',
+    'Current Favorits and exciting new music...',
+    'https://picsum.photos/170')
+  )
+  stations.push(_createStation(
+    's102',
+    'Yaron Nitzan',
+    'Browse Great Music from Yaron Nitzan',
+    'https://picsum.photos/170')
+  )
 
-    return stations
+  return stations
 }
 
-function _createStation(id, name) {
-    return {
-        "_id": id,
-        "name": name,
-        "tags": [
-          "Funk",
-          "Happy"
-        ],
-        "createdBy": {
-          "_id": "u101",
-          "fullname": "Puki Ben David",
-          "imgUrl": "http://some-photo/"
-        },
-        "likedByUsers": ['{minimal-user}', '{minimal-user}'],
-        "songs": [
-          {
-            "id": "s1001",
-            "title": "The Meters - Cissy Strut",
-            "url": "youtube/song.mp4",
-            "imgUrl": "https://i.ytimg.com/vi/4_iC0MyIykM/mqdefault.jpg",
-            "addedBy": '{minimal-user}',
-            "addedAt": 162521765262
-          },
-          {
-            "id": "mUkfiLjooxs",
-            "title": "The JB's - Pass The Peas",
-            "url": "youtube/song.mp4",
-            "imgUrl": "https://i.ytimg.com/vi/mUkfiLjooxs/mqdefault.jpg",
-            "addedBy": {}
-          },
-        ],
-        "msgs": [
-          {
-            id: 'm101',
-            from: '{mini-user}',
-            txt: 'Manish?'
-          }
-        ]
+function _createStation(id, name, description, imgUrl) {
+  return {
+    "_id": id,
+    "name": name,
+    "description": description,
+    "imgUrl": imgUrl,
+    "tags": [
+      "Funk",
+      "Happy"
+    ],
+    "createdBy": {
+      "_id": "u101",
+      "fullname": "Puki Ben David",
+      "imgUrl": "http://some-photo/"
+    },
+    "likedByUsers": ['{minimal-user}', '{minimal-user}'],
+    "songs": [
+      {
+        "id": "s1001",
+        "title": "The Meters - Cissy Strut",
+        "url": "youtube/song.mp4",
+        "imgUrl": "https://i.ytimg.com/vi/4_iC0MyIykM/mqdefault.jpg",
+        "addedBy": '{minimal-user}',
+        "addedAt": 162521765262
+      },
+      {
+        "id": "mUkfiLjooxs",
+        "title": "The JB's - Pass The Peas",
+        "url": "youtube/song.mp4",
+        "imgUrl": "https://i.ytimg.com/vi/mUkfiLjooxs/mqdefault.jpg",
+        "addedBy": {}
+      },
+    ],
+    "msgs": [
+      {
+        id: 'm101',
+        from: '{mini-user}',
+        txt: 'Manish?'
       }
+    ]
+  }
 }
 
 

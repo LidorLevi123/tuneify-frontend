@@ -1,19 +1,19 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 import Home from './views/Home.vue'
-// import Chat from './views/Chat.vue'
 import StationIndex from './views/StationIndex.vue'
+// import UserDetails from './views/UserDetails.vue'
+// import Chat from './views/Chat.vue'
 // import LoginSignup from './views/LoginSignup.vue'
-import UserDetails from './views/UserDetails.vue'
 
 const routes = [
+  // {
+  //   path: '/',
+  //   name: 'Home',
+  //   component: Home
+  // },
   {
     path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/station',
     name: 'StationIndex',
     component: StationIndex
   },
@@ -27,11 +27,11 @@ const routes = [
   //   name: 'LoginSignup',
   //   component: LoginSignup
   // },
-  {
-    path: '/user/:id',
-    name: 'UserDetails',
-    component: UserDetails
-  }
+  // {
+  //   path: '/user/:id',
+  //   name: 'UserDetails',
+  //   component: UserDetails
+  // }
 ]
 
 
