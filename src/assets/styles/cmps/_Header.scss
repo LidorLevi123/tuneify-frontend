@@ -5,32 +5,34 @@
     width: 412px;
     height: min-content;
     color: $clr2;
-}
 
-.main-header-container nav {
-    border-radius: 0.5rem;
-    background-color: $clr4;
-    font-weight: 600;
-    gap: 20px;
-    padding-inline: 0.75rem;
-    padding-block: 0.5rem;
-}
+    nav {
+        border-radius: 0.5rem;
+        background-color: $clr4;
+        font-weight: 600;
+        gap: 20px;
+        padding-inline: 0.75rem;
+        padding-block: 0.5rem;
 
-.main-header-container nav div {
-    cursor: pointer;
-    color: #b3b3af;
-    height: 48px;
-    font-size: 1rem;
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    padding: 0.25rem 0.75rem 0.25rem 0.75rem;
-}
+        div {
+            cursor: pointer;
+            color: #b3b3af;
+            height: 48px;
+            font-size: 1rem;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            padding: 0.25rem 0.75rem 0.25rem 0.75rem;
 
-.main-header-container nav div:hover {
-    color: $clr2
-}
+            &:hover {
+                color: $clr2;
 
-.main-header-container nav div:hover .icon path {
-    fill: $clr2;
+                .icon {
+                    path {
+                        fill: $clr2;
+                    }
+                }
+            }
+        }
+    }
 }

@@ -1,5 +1,4 @@
 .track-preview {
-
     img {
         height: 2.5rem;
         width: 2.5rem;
@@ -9,7 +8,6 @@
     .track-num {
         display: flex;
         align-items: center;
-
     }
 
     .track-album {
@@ -17,24 +15,24 @@
         font-size: 0.875rem;
         font-weight: 400;
     }
-}
 
-.track-preview .img-container {
-    display: flex;
-    align-items: center;
-}
+    .img-container {
+        display: flex;
+        align-items: center;
+    }
 
-.track-preview .mini-prev {
-    height: 3.375rem;
-    display: flex;
-    align-items: center;
-}
+    .mini-prev {
+        height: 3.375rem;
+        display: flex;
+        align-items: center;
 
-.track-preview .mini-prev .track-name {
-    color: $clr2
-}
+        .track-name {
+            color: $clr2;
+        }
 
-.track-preview .mini-prev .track-artist {
-    color: $clr3;
-    font-size: 0.875rem;
+        .track-artist {
+            color: $clr3;
+            font-size: 0.875rem;
+        }
+    }
 }
