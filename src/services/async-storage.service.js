@@ -23,7 +23,7 @@ function post(entityType, newEntity) {
     newEntity = JSON.parse(JSON.stringify(newEntity))    
     newEntity._id = _makeId()
     return query(entityType).then(entities => {
-        entities.push(newEntity)
+        entities.unshift(newEntity)
         _save(entityType, entities)
         return newEntity
     })

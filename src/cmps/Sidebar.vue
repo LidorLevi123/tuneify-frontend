@@ -17,12 +17,14 @@
 </template>
 
 <script>
+import { stationService } from '../services/station.service.local';
 import LibraryStationList from './LibraryStationList.vue';
+
 export default {
     methods: {
         addStation() {
-            this.$store.dispatch({ type: 'addStation' });
-        }
+            this.$store.dispatch({ type: 'saveStation' })
+        },
     },
 
     computed: {
