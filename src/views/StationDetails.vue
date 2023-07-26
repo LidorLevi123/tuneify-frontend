@@ -6,8 +6,8 @@
             </section>
             <section class="station-info">
                 <span>Playlist</span>
-                <h1>Fast Pop Run</h1>
-                <p class="description">Catchy pop music to keep those legs going.</p>
+                <h1>{{ station.name }}</h1>
+                <p class="description">{{ station.description }}</p>
             </section>
         </section>
         <section class="details-player">
