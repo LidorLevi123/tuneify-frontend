@@ -1,5 +1,6 @@
 <template>
-    <h1 style="color:white; font-size: 30px;">{{ this.currentTrack.currIdx + 1 }}</h1>
+    <!-- <h1 style="color:white; font-size: 30px;">Track {{ this.currentTrack.currIdx + 1 }}</h1> -->
+
     <YouTube
         ref="youtubePlayer"
         :src="currentTrack.YTid"
@@ -7,16 +8,47 @@
         @state-change="onStateChange"
         style="display: none;"/>
 
-    <!-- <h1 style="color:white;">{{ this.station[this.currentTrack.currIdx].trackList.title }}</h1> -->
-
     <section class="main-player-container">
         <section></section>
         <section class="player-main-controls">
-            <button class="shuffle btn" @click="toggleShuffle" title="Shuffle"><span v-icon="'shuffle'" :class="{ 'enabled': this.isShuffle }"></span></button>
-            <button class="previous btn" @click="previousVideo" title="Previous"><span class="material-symbols-outlined">skip_previous</span></button>
-            <button class="play btn" @click="togglePlayPause" title="play"><span v-icon="'play'"></span></button>
-            <button class="next btn" @click="nextVideo" title="Next"><span class="material-symbols-outlined">skip_next</span></button>
-            <button class="repeat btn" @click="toggleRepeat" title="Repeat" :class="{ 'enabled': this.isRepeat }"><span v-icon="'repeat'"></span></button>
+
+            <button
+                class="shuffle btn"
+                @click="toggleShuffle"
+                title="Shuffle">
+                <span v-icon="'shuffle'" :class="{ 'enabled': this.isShuffle }"></span>
+            </button>
+
+            <button
+                class="previous btn"
+                @click="previousVideo"
+                title="Previous">
+                <span class="material-symbols-outlined">skip_previous</span>
+            </button>
+
+            <button
+                class="play btn"
+                @click="togglePlayPause"
+                title="play">
+                <span v-if="!this.isPlaying" v-icon="'play'"></span>
+                <span v-if="this.isPlaying" v-icon="'pause'"></span>
+            </button>
+
+            <button
+                class="next btn"
+                @click="nextVideo"
+                title="Next">
+                <span class="material-symbols-outlined">skip_next</span>
+            </button>
+
+            <button
+                class="repeat btn"
+                @click="toggleRepeat"
+                title="Repeat"
+                :class="{ 'enabled': this.isRepeat }">
+                <span v-icon="'repeat'"></span>
+            </button>
+
         </section>
         <section class="vol-container">
             <button class="mute btn" @click="toggleMute" title="Mute"><span class=" material-symbols-outlined vol-btn">volume_up</span></button>
@@ -36,13 +68,17 @@ import YouTube from 'vue3-youtube'
 export default {
     data() {
         return {
+            isPlaying: false,
+            isShuffle: false,
+            isRepeat: false,
+            isMute: false,
+            currVolume: 80,
             currentTrack: {
                 videoUrl: 'https://www.youtube.com/watch?v=F1B9Fk_SgI0&ab_channel=ChildishGambinoVEVO',
                 YTid: null,
                 currIdx: 0,
                 name: ''
             },
-            isPlaying: false,
             player: null,
             station: [],
             playerStates: {
@@ -53,10 +89,6 @@ export default {
                 BUFFERING: 3,
                 CUED: 5,
             },
-            isShuffle: false,
-            isRepeat: false,
-            isMute: false,
-            currVolume: 80
         }
     },
     components: {
@@ -64,7 +96,6 @@ export default {
     },
     created() {
         this.station = stationService.getEmptyStation().trackList
-
         this.currentTrack.YTid = this.station[this.currentTrack.currIdx].YTid
     },
     methods: {
@@ -91,6 +122,7 @@ export default {
         },
         loadVideo() {
             this.currentTrack.YTid = this.station[this.currentTrack.currIdx].YTid
+            this.isPlaying = true
         },
         toggleShuffle() {
             this.isShuffle = !this.isShuffle
@@ -137,3 +169,5 @@ export default {
     },
 }
 </script>
+
+
