@@ -42,9 +42,14 @@ a {
     text-decoration: none;
 }
 
-// a:hover {
-//     text-decoration: underline;
-// }
+.btn {
+    background: none;
+    border: none;
+}
+
+svg {
+    cursor: pointer;
+}
 
 * {
     box-sizing: border-box;

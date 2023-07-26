@@ -8,6 +8,7 @@
         font-weight: 900;
         font-size: 6rem;
         color: $clr2;
+        cursor: pointer;
     }
 
     span {
@@ -16,7 +17,7 @@
         font-weight: 700;
     }
 
-    img {
+    .station-img {
         height: 14.5rem;
         width: 14.5rem;
         box-shadow: 0 4px 60px rgba(0, 0, 0, .5);

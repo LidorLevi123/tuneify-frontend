@@ -1,11 +1,7 @@
 <template>
     <article class="track-preview track-preview-layout">
         <span>{{ track.idx }}</span>
-        <div>
-
-            <span>{{ track.title }}</span>
-            
-        </div>
+        <span>{{ track.title }}</span>
         <span>{{ track.album }}</span>
     </article>
 </template>
@@ -21,6 +17,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-
+.track-preview span{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}    
 </style>

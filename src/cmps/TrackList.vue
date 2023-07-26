@@ -10,7 +10,7 @@
         <hr>
         <ul v-if="tracks" class="clean-list">
             <li v-for="(track, idx) in tracks" :key="track.id">
-                <template>{{ track.idx = idx+1 }} </template>
+                <template>{{ track.idx = idx+1 }}</template>
                 <TrackPreview :track="track" />
             </li>
         </ul>

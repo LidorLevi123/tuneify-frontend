@@ -12,12 +12,6 @@ export default {
         station: { type: Object, required: true },
     },
 
-    data() {
-        return {
-            elTitle: this.$refs.he
-        }
-    },
-
     computed: {
         stationName() {
             return this.station.name || `My Playlist`
