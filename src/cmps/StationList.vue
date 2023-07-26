@@ -10,13 +10,15 @@
 import StationPreview from './StationPreview.vue'
 
 export default {
-    name: 'StationList',
     props: {
         stations: { type: Array, required: true },
     },
+
     components: {
         StationPreview,
     },
+
+    name: 'StationList',
 }
 </script>
 

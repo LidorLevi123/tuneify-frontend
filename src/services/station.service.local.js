@@ -14,7 +14,7 @@ export const stationService = {
 
 _createStations(3)
 
-async function query(filterBy = { name: ''}) {
+async function query(filterBy = { name: '' }) {
   var stations = await storageService.query(STORAGE_KEY)
 
   // console.log(stations)
@@ -35,7 +35,8 @@ async function save(station) {
     savedStation = await storageService.put(STORAGE_KEY, station)
   } else {
     // Later, owner is set by the backend
-    station.owner = userService.getLoggedinUser()
+    // station.owner = userService.getLoggedinUser()
+    station.owner = 'Guest'
     savedStation = await storageService.post(STORAGE_KEY, station)
   }
   return savedStation
@@ -43,27 +44,34 @@ async function save(station) {
 
 function getEmptyStation() {
   return {
-    name: utilService.makeLorem(2),
-    description: utilService.makeLorem(3),
-    imgUrl: 'https://picsum.photos/170',
+    _id: '',
+    name: '',
+    description: '',
+    imgUrl: '',
+    owner: ''
   }
 }
 
 function _createStations(amount) {
   let stations = utilService.loadFromStorage(STORAGE_KEY)
-    if (!stations || !stations.length) {
-        stations = []
-        for (let i = 0; i < amount; i++) {
-            stations.push(_createStation())
-          }
-          console.log(stations);
-        utilService.saveToStorage(STORAGE_KEY, stations)
+  if (!stations || !stations.length) {
+    stations = []
+    for (let i = 0; i < amount; i++) {
+      stations.push(_createStation())
     }
+    
+    utilService.saveToStorage(STORAGE_KEY, stations)
+  }
 }
 
 function _createStation() {
   const station = getEmptyStation()
+
   station._id = utilService.makeId()
+  station.name = utilService.makeLorem(2),
+  station.description = utilService.makeLorem(3),
+  station.imgUrl = 'https://picsum.photos/170'
+
   return station
 }
 

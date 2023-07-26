@@ -29,24 +29,26 @@ import { stationService } from '../services/station.service.local'
 
 export const stationStore = {
     state: {
-        stations: []
+        stations: [],
     },
     getters: {
-        stations({stations}) { return stations },
+        stations({ stations }) { return stations.filter(station => !station.owner) },
+        library({ stations }) { return stations.filter(station => station.owner) }
     },
     mutations: {
         setStations(state, { stations }) {
             state.stations = stations
         },
-        addStation(state, { station }) {
-            state.stations.push(station)
+        addStation({ stations }, { stationToSave }) {
+            stations.unshift(stationToSave)
         },
-        updateStation(state, { station }) {
-            const idx = state.stations.findIndex(c => c._id === station._id)
-            state.stations.splice(idx, 1, station)
+        updateStation({ stations }, { station }) {
+            const idx = state.stations.findIndex(s => s._id === station._id)
+            stations.splice(idx, 1, station)
         },
-        removeStation(state, { stationId }) {
-            state.stations = state.stations.filter(station => station._id !== stationId)
+        removeStation({ stations }, { stationId }) {
+            const idx = stations.findIndex(station => station._id === stationId)
+            stations.splice(idx, 1)
         },
         addStationMsg(state, { stationId , msg}) {
             const station = state.stations.find(station => station._id === stationId)
@@ -55,15 +57,39 @@ export const stationStore = {
         },
     },
     actions: {
-        async loadStations(context) {
+        async loadStations( { commit }) {
             try {
                 const stations = await stationService.query()
-                context.commit({ type: 'setStations', stations })
+                commit({ type: 'setStations', stations })
             } catch (err) {
                 console.log('stationStore: Error in loadStations', err)
-                throw err
+                throw new Error('Could not load stations')
             }
         },
+        async saveStation({ commit }, { stationToSave }) {
+            var type = 'updateStation'
 
+            if(!stationToSave) {
+                stationToSave = stationService.getEmptyStation()
+                type = 'addStation'
+            }
+            
+            try {
+                const station = await stationService.save(stationToSave)
+                commit({ type, stationToSave: station })
+            } catch (err) {
+                console.log(err.message)
+                throw new Error('Could not save station')
+            }
+        },
+        async removeStation({ commit }, payload) {
+            try {
+                await stationService.remove(payload.stationId)
+                commit(payload)
+            } catch (err) {
+                console.log(err.message)
+                throw new Error('Could not remove station')
+            }
+        },
     }
 }

@@ -1,5 +1,5 @@
 <template>
-  <RouterView />
+  <RouterView /> 
   <UserMsg />
 </template>
 
