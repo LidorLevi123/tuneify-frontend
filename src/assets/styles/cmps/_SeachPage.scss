@@ -1,0 +1,20 @@
+.search-page input {
+    color: $clr2;
+    font-size: 0.875rem;
+    border: none;
+    width: 22.75rem;
+    height: 3rem;
+    outline: none;
+    background-color: #242424;
+}
+
+.search-page label {
+    display: flex;
+    width: 22.75rem;
+    height: 3rem;
+    background-color: #242424;
+    align-items: center;
+    padding-inline: 5px;
+    border: 1px solid transparent;
+    border-radius: 30px;
+}
