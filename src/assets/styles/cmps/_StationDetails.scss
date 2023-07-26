@@ -1,5 +1,4 @@
 .station-details {
-    background-image: linear-gradient(to bottom, #212121 0%, #121212 25%, #121212 25%, #121212 100%);
 
     pre {
         color: white;
@@ -18,6 +17,8 @@
     }
 
     img {
+        height: 14.5rem;
+        width: 14.5rem;
         box-shadow: 0 4px 60px rgba(0, 0, 0, .5);
     }
 }
@@ -36,7 +37,7 @@
 
 .station-details .details-player {
     display: flex;
-    background-color: rgb(23, 106, 106);
+    // background-color: rgb(23, 106, 106);
     padding: 1.5rem;
 }
 
@@ -75,6 +76,6 @@
     padding-left: 1rem;
     display: flex;
     align-items: center;
-    background-color: brown;
+    // background-color: brown;
     height: 2.25rem;
 }
