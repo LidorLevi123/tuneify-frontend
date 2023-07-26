@@ -9,6 +9,31 @@
     padding: 1.1rem;
 }
 
+.sidebar-list-container .sidebar-top {
+    display: flex;
+    justify-content: space-between;
+}
+
+.sidebar-list-container .sidebar-top .add-station {
+    height: 2rem;
+    width: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    border-radius: 50%;
+}
+
+.sidebar-list-container .sidebar-top .add-station:hover {
+    background-color: $clr8;
+}
+
+.sidebar-list-container .sidebar-top .add-station:hover .plus-icon {
+    fill: $clr2
+}
+
+
 .sidebar-list-container .collapse div {
     color: $clr3;
     font-size: 0.94rem;
