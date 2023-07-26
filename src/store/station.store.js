@@ -42,9 +42,9 @@ export const stationStore = {
         addStation({ stations }, { stationToSave }) {
             stations.unshift(stationToSave)
         },
-        updateStation({ stations }, { station }) {
-            const idx = state.stations.findIndex(s => s._id === station._id)
-            stations.splice(idx, 1, station)
+        updateStation({ stations }, { stationToSave }) {
+            const idx = stations.findIndex(s => s._id === stationToSave._id)
+            stations.splice(idx, 1, stationToSave)
         },
         removeStation({ stations }, { stationId }) {
             const idx = stations.findIndex(station => station._id === stationId)
@@ -67,16 +67,11 @@ export const stationStore = {
             }
         },
         async saveStation({ commit }, { stationToSave }) {
-            var type = 'updateStation'
-
-            if(!stationToSave) {
-                stationToSave = stationService.getEmptyStation()
-                type = 'addStation'
-            }
-            
+            const type = stationToSave._id ? 'updateStation' : 'addStation'
             try {
                 const station = await stationService.save(stationToSave)
                 commit({ type, stationToSave: station })
+                return station
             } catch (err) {
                 console.log(err.message)
                 throw new Error('Could not save station')

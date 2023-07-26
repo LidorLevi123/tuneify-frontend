@@ -3,7 +3,7 @@
             <ul class="clean-list">
                 <li @click="goToDetails(station._id)" v-for="station in libraryStations" :key="station.id">
                     <LibraryStationPreview :station="station"/>
-                    <button @click="removeStation(station._id)">X</button>
+                    <button @click="removeStation(station._id, $event)">X</button>
                 </li>
             </ul>
         </section>
@@ -18,7 +18,8 @@ export default {
     },
 
     methods: {
-        removeStation(stationId) {
+        removeStation(stationId, ev) {
+            ev.stopPropagation()
             this.$store.dispatch({ type: 'removeStation', stationId })
         },
         goToDetails(stationId) {
