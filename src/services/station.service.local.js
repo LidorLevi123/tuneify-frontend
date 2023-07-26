@@ -52,13 +52,24 @@ function getEmptyStation() {
         trackList: [
             {
                 _id: 111,
-                name: "track1",
-                YTid: "kXeSRsH3ibw"
+                title: "track1",
+                YTid: "hbkkJctZSLY",
             },
             {
                 _id: 222,
-                name: "track2",
-                YTid: "a-JlV44nqJ0"
+                title: "track2",
+                YTid: "T4zgG3TlcZc",
+            },
+            {
+                _id: 333,
+                title: "track3",
+                YTid: "kXeSRsH3ibw",
+
+            },
+            {
+                _id: 444,
+                title: "track4",
+                YTid: "a-JlV44nqJ0",
             },
         ]
     }
