@@ -6,8 +6,8 @@
             </section>
             <section class="station-info">
                 <span>Playlist</span>
-                <h1>{{ station.name }}</h1>
-                <p class="description">{{ station.description }}</p>
+                <h1>{{ station?.name }}</h1>
+                <p class="description">{{ station?.description }}</p>
             </section>
         </section>
         <section class="details-player">
