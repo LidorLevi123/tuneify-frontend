@@ -46,8 +46,11 @@
     grid-template-columns: 16px 6fr 4fr 3fr minmax(120px, 1fr);
     gap: 16px;
     padding: 0 16px;
-
+    align-items: center;
     border: 1px solid transparent;
     border-radius: 4px;
 }
 
+.track-preview-layout:hover {
+    background-color: #2c2d2a;
+}

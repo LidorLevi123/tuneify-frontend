@@ -10,7 +10,7 @@
                 <div class="track-artist">{{ track.artists[0] }}</div>
             </section>
         </div>
-        <span>{{ track.album }}</span>
+        <span class="track-album">{{ track.album }}</span>
     </article>
 </template>
 
