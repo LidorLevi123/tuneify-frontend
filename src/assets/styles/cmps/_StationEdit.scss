@@ -13,6 +13,10 @@
     height: fit-content;
     border: 0.2px solid #d8d8d8;
 
+    h1, span {
+        color: rgb(31, 31, 31);
+    }
+    
     form {
         display: grid;
         gap: 10px;

@@ -1,6 +1,6 @@
 <template>
     <section class="song-list">
-        <div class="list-header grid-layout">
+        <div class="list-header song-preview-layout">
             <span>#</span>
             <span>Title</span>
             <span>Album</span>
@@ -8,7 +8,7 @@
             <span>Song Length</span>
         </div>
         <hr>
-        <ul class="clean-list grid-layout">
+        <ul class="clean-list">
             <li v-for="song in songs" :key="song._id">
                 <SongPreview :song="song" />
             </li>
@@ -32,16 +32,13 @@ export default {
 }
 </script>
 
-<style scoped>
-.grid-layout {
-    display: grid;
-    grid-template-columns: 16px 6fr 4fr 3fr minmax(120px, 1fr);
-    gap: 16px;
-    padding: 0 16px;
+<style lang="scss" scoped>
 
-    border: 1px solid transparent;
-    border-radius: 4px;
-    height: 56px;
-    position: relative;
+.song-list {
+    .list-header {
+        margin-block-start: 0.5em;
+    }
+
 }
+
 </style>
