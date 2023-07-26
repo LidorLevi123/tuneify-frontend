@@ -2,20 +2,27 @@
     <section class="station-details" v-if="station">
         <section class="img-photo">
             <section class="img">
-                <img class="elImg" :src="station.imgUrl" alt="">
+                <img class="station-img" :src="station.imgUrl" alt="">
             </section>
             <section class="station-info">
                 <span>Playlist</span>
-                <h1>{{ station?.name }}</h1>
+                <h1 @click="openStationEditor">{{ station?.name }}</h1>
                 <p class="description">{{ station?.description }}</p>
             </section>
         </section>
         <section class="details-player">
-            <button class="details-play"><span class="details-play" v-icon="'detailsPlay'"></span></button>
-            <button class="details-like"><span v-icon="'like'"></span></button>
+            <button class="details-play">
+                <span class="details-play" v-icon="'detailsPlay'"></span>
+            </button>
+            <button v-show="!station.owner" class="details-like">
+                <span v-icon="'like'"></span>
+            </button>
+            <button class="btn details-edit">
+                <span v-icon="'moreOptions'"></span>
+            </button>
         </section>
         <TrackList :tracks="station.tracks"/>
-        <!-- <StationEdit /> -->
+        <StationEdit />
     </section>
 </template>
 
@@ -38,7 +45,7 @@ export default {
     computed: {
         stationId() {
             return this.$route.params
-        }
+        },
     },
     // created() {
     //     this.loadStation()
@@ -92,13 +99,17 @@ export default {
                     }
                 })
             }
+        },
+        openStationEditor() {
+            if(!this.station.owner) return
+            document.body.classList.add('modal-open')
         }
 
     },
     watch: {
         stationId() {
             this.loadStation()
-        }
+        },
     },
     components: { 
         StationEdit,

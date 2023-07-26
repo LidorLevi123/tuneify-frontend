@@ -1,19 +1,26 @@
 <template>
-    <section v-if="stationToEdit" class="station-edit">
-        <h1>Edit Station</h1>
-        <form @submit.prevent="save">
-            <label>
-                <span>Name: </span>
-                <input type="text" v-model="stationToEdit.name" placeholder="Enter Name...">
-            </label>
-            <label>
-                <span>Description: </span>
-                <input type="text" v-model="stationToEdit.description" placeholder="Enter description...">
-            </label>
-            <div class="actions">
-                <button type="submit">Save</button>
-            </div>
-        </form>
+    <section v-if="stationToEdit" class="station-edit" ref="station-edit">
+        <header>
+            <h1>Edit details</h1>
+            <span v-icon="'close'" @click="onCloseModal()"></span>
+        </header>
+        
+        <div>
+            <img :src="stationToEdit.imgUrl" alt="">
+            <form>
+                <!-- <legend>Name</legend> -->
+                <input type="text" v-model="stationToEdit.name" placeholder="Add a name">
+
+                <!-- <legend>Description</legend> -->
+                <textarea v-model="stationToEdit.description" placeholder="Add an optional description"></textarea>
+            </form>
+        </div>
+
+        <button @click="save" type="submit">Save</button>
+
+        <small>By proceeding, you agree to give Tuneify access to the image you choose to upload. <br> 
+            Please make sure you have the right to upload the image.
+        </small>
     </section>
 </template>
 
@@ -34,7 +41,7 @@ export default {
     methods: {
         async loadStationToEdit() {
             const { stationId } = this.$route.params
-            if(!stationId) return
+            if (!stationId) return
 
             try {
                 this.stationToEdit = await stationService.getById(stationId)
@@ -45,15 +52,31 @@ export default {
         },
         async save() {
             try {
-                await this.$store.dispatch({type: 'saveStation', stationToSave: this.stationToEdit})
+                await this.$store.dispatch({ type: 'saveStation', stationToSave: this.stationToEdit })
                 console.log('Station Saved');
                 this.stationToEdit = stationService.getEmptyStation()
+                this.onCloseModal()
             } catch (err) {
                 console.log(err.message);
             }
-		},
+        },
+        onCloseModal() {
+            document.body.classList.remove('modal-open')
+        }
     },
-    
+
+    computed: {
+        stationId() {
+            return this.$route.params
+        }
+    },
+
+    watch: {
+        stationId() {
+            this.loadStationToEdit()
+        },
+    }
+
 }
 
 </script>

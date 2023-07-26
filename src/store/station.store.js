@@ -24,16 +24,20 @@ export const stationStore = {
             const idx = stations.findIndex(station => station._id === stationId)
             stations.splice(idx, 1)
         },
-        addStationMsg(state, { stationId , msg}) {
-            const station = state.stations.find(station => station._id === stationId)
-            if (!station.msgs) station.msgs = []
-            station.msgs.push(msg)
-        },
     },
     actions: {
-        async loadStations( { commit }) {
+        async setStations( { commit }) {
             try {
                 const stations = await stationService.getStations()
+                commit({ type: 'setStations', stations })
+            } catch (err) {
+                console.log('stationStore: Error in loadStations', err)
+                throw new Error('Could not load stations')
+            }
+        },
+        async loadStations( { commit }) {
+            try {
+                const stations = await stationService.query()
                 commit({ type: 'setStations', stations })
             } catch (err) {
                 console.log('stationStore: Error in loadStations', err)

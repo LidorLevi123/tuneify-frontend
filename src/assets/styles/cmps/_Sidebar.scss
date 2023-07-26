@@ -1,4 +1,5 @@
 .sidebar-list-container {
+    overflow: auto;
     grid-column: 1;
     width: 412px;
     height: 112px;
@@ -7,54 +8,54 @@
     border-radius: 0.5rem;
     margin-block-start: 0.5rem;
     padding: 1.1rem;
-}
 
-.sidebar-list-container .sidebar-top {
-    display: flex;
-    justify-content: space-between;
-}
+    .sidebar-top {
+        display: flex;
+        justify-content: space-between;
 
-.sidebar-list-container .sidebar-top .add-station {
-    height: 2rem;
-    width: 2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: transparent;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-}
+        .add-station {
+            height: 2rem;
+            width: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: transparent;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
 
-.sidebar-list-container .sidebar-top .add-station:hover {
-    background-color: $clr8;
-}
+            &:hover {
+                background-color: $clr8;
 
-.sidebar-list-container .sidebar-top .add-station:hover .plus-icon {
-    fill: $clr2
-}
+                .plus-icon {
+                    fill: $clr2;
+                }
+            }
+        }
+    }
 
+    .collapse div {
+        color: $clr3;
+        font-size: 0.94rem;
+        font-weight: 700;
+    }
 
-.sidebar-list-container .collapse div {
-    color: $clr3;
-    font-size: 0.94rem;
-    font-weight: 700;
-}
+    .collapse {
+        gap: 0.8rem;
+        display: flex;
+        align-items: center;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
 
-.sidebar-list-container .collapse {
+        &:hover {
+            div {
+                color: $clr2;
+            }
 
-    gap: 0.8rem;
-    display: flex;
-    align-items: center;
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-}
-
-.sidebar-list-container .collapse:hover div {
-    color: $clr2
-}
-
-.sidebar-list-container .collapse:hover .icon {
-    fill: $clr2;
+            .icon {
+                fill: $clr2;
+            }
+        }
+    }
 }

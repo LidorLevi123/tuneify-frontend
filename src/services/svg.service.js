@@ -7,7 +7,7 @@ const TunifySvgs = {
   </path>
 </svg>`,
 
-  search:`  <svg role="img" height="24" width="24" aria-hidden="true" class="Svg-sc-ytk21e-0 haNxPq icon"
+  search: `  <svg role="img" height="24" width="24" aria-hidden="true" class="Svg-sc-ytk21e-0 haNxPq icon"
   viewBox="0 0 24 24" data-encore-id="icon">
   <path
       d="M10.533 1.279c-5.18 0-9.407 4.14-9.407 9.279s4.226 9.279 9.407 9.279c2.234 0 4.29-.77 5.907-2.058l4.353 4.353a1 1 0 1 0 1.414-1.414l-4.344-4.344a9.157 9.157 0 0 0 2.077-5.816c0-5.14-4.226-9.28-9.407-9.28zm-7.407 9.279c0-4.006 3.302-7.28 7.407-7.28s7.407 3.274 7.407 7.28-3.302 7.279-7.407 7.279-7.407-3.273-7.407-7.28z"
@@ -48,25 +48,40 @@ const TunifySvgs = {
   </path>
 </svg>`,
 
+
   play: `<svg role="img" height="16" width="16" aria-hidden="true"
   viewBox="0 0 16 16" data-encore-id="icon" class="Svg-sc-ytk21e-0 haNxPq">
   <path
       d="M3 1.713a.7.7 0 0 1 1.05-.607l10.89 6.288a.7.7 0 0 1 0 1.212L4.05 14.894A.7.7 0 0 1 3 14.288V1.713z">
   </path>
 </svg>`,
-  like:`<svg role="img" height="32" width="32" aria-hidden="true" viewBox="0 0 24 24"
+
+  like: `<svg role="img" height="32" width="32" aria-hidden="true" viewBox="0 0 24 24"
   data-encore-id="icon" class="Svg-sc-ytk21e-0 haNxPq">
   <path
       d="M8.667 1.912a6.257 6.257 0 0 0-7.462 7.677c.24.906.683 1.747 1.295 2.457l7.955 9.482a2.015 2.015 0 0 0 3.09 0l7.956-9.482a6.188 6.188 0 0 0 1.382-5.234l-.49.097.49-.099a6.303 6.303 0 0 0-5.162-4.98h-.002a6.24 6.24 0 0 0-5.295 1.65.623.623 0 0 1-.848 0 6.257 6.257 0 0 0-2.91-1.568z"
       fill="#1ed760">
   </path>
 </svg>`,
+
   detailsPlay: `<svg role="img" height="28" width="28" aria-hidden="true" viewBox="0 0 24 24"
   data-encore-id="icon" class="Svg-sc-ytk21e-0 haNxPq">
   <path
       d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z">
   </path>
 </svg>`,
+
+  moreOptions: `<svg role="img" height="32" width="32" aria-hidden="true"
+   viewBox="0 0 24 24" data-encore-id="icon" class="Svg-sc-ytk21e-0 haNxPq">
+   <path d="M4.5 13.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm15 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm-7.5 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z">
+   </path></svg>`,
+
+  close: `<svg role="img" height="16" width="16" aria-hidden="true" 
+  aria-label="Close" viewBox="0 0 16 16" data-encore-id="icon" 
+  class="Svg-sc-ytk21e-0 haNxPq">
+  <path d="M1.47 1.47a.75.75 0 0 1 1.06 0L8 6.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L9.06 8l5.47 5.47a.75.75 0 1 1-1.06 
+  1.06L8 9.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L6.94 8 1.47 2.53a.75.75 0 0 1 0-1.06z"></path></svg>`,
+
   pause: `<svg role="img" height="16" width="16" aria-hidden="true" viewBox="0 0 16 16" data-encore-id="icon"
   class="Svg-sc-ytk21e-0 haNxPq"><path d="M2.7 1a.7.7 0 0 0-.7.7v12.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0
   .7-.7V1.7a.7.7 0 0 0-.7-.7H2.7zm8 0a.7.7 0 0 0-.7.7v12.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0

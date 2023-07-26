@@ -42,14 +42,16 @@ async function save(station) {
 }
 
 async function getStations() {
-  const stations = await spotifyService.getSpotifyItems('categoryStations', '0JQ5DAqbMKFDXXwE9BDJAr')
-  utilService.saveToStorage(STORAGE_KEY, stations)
-  return stations
+    let stations = utilService.loadFromStorage(STORAGE_KEY)
+    if(stations) return stations
+
+    stations = await spotifyService.getSpotifyItems('categoryStations', '0JQ5DAqbMKFDXXwE9BDJAr')
+    utilService.saveToStorage(STORAGE_KEY, stations)
+    return stations
 }
 
 async function getStationTracks(stationId) {
   const tracks = await spotifyService.getSpotifyItems('tracks', stationId)
-//   console.log(tracks)
   return tracks
 }
 

@@ -1,13 +1,13 @@
 .station-details {
-
-    pre {
-        color: white;
-    }
+    height: calc(100vh - 105px);
+    overflow: auto;
+    border-radius: 0.5rem;
 
     h1 {
         font-weight: 900;
         font-size: 6rem;
         color: $clr2;
+        cursor: pointer;
     }
 
     span {
@@ -16,74 +16,57 @@
         font-weight: 700;
     }
 
-    img {
+    .station-img {
         height: 14.5rem;
         width: 14.5rem;
-        box-shadow: 0 4px 60px rgba(0, 0, 0, .5);
+        box-shadow: 0 4px 60px rgba(0, 0, 0, 0.5);
     }
-}
 
-.station-details .description {
-    color: $clr2
-}
+    & .description {
+        color: $clr2;
+    }
 
-.station-details .img-photo {
-    // background-color: #bd6868;
-    display: flex;
-    gap: 2rem;
-    margin-block-start: 9rem;
-    margin-inline-start: 1.5rem;
-}
+    & .img-photo {
+        display: flex;
+        gap: 2rem;
+        margin-block-start: 9rem;
+        margin-inline-start: 1.5rem;
+    }
 
-.station-details .details-player {
-    display: flex;
-    // background-color: rgb(23, 106, 106);
-    padding: 1.5rem;
-}
+    & .details-player {
+        display: flex;
+        // background-color: rgb(23, 106, 106);
+        padding: 1.5rem;
 
-.station-details .details-player .details-play {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 3.5rem;
-    width: 3.5rem;
-    background-color: $clr7;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-}
+        & .details-play {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 3.5rem;
+            width: 3.5rem;
+            background-color: $clr7;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
 
-.station-details .details-player .details-play:hover {
-    scale: 104%;
-}
+            &:hover {
+                transform: scale(1.04);
+            }
+        }
 
-.station-details .details-player .details-like {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    cursor: pointer;
-    background-color: transparent;
+        & .details-like {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            cursor: pointer;
+            background-color: transparent;
+        }
+    }
 }
 
 // .station-details .track-list {
 //     display: grid;
 //     // grid-template-columns: [index] 16px [first] 4fr [var1] 2fr [last] minmax(120px, 1fr);
 //     padding: 1.5rem;
-// }
-
-.station-details .song-list-header {
-    padding-left: 1rem;
-    display: flex;
-    align-items: center;
-    // background-color: brown;
-    height: 2.25rem;
-}
-
-// .station-details .song-list-header {
-//     padding-left: 1rem;
-//     display: flex;
-//     align-items: center;
-//     background-color: brown;
-//     height: 2.25rem;
 // }

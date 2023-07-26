@@ -26,6 +26,7 @@
 @import 'setup/typography';
 
 // COMPONENTS
+@import 'cmps/BackDrop';
 @import 'cmps/Player';
 @import 'cmps/Header';
 @import 'cmps/Sidebar';
@@ -37,4 +38,6 @@
 @import 'cmps/StationEdit';
 @import 'cmps/LibraryStationList';
 @import 'cmps/LibraryStationPreview';
-@import 'cmps/SeachPage'
+@import 'cmps/SeachPage';
+@import 'cmps/TrackPreview';
+@import 'cmps/TrackList'
