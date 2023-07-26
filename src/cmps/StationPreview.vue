@@ -1,5 +1,5 @@
 <template>
-    <article class="main-preview-container">
+    <article @click="goToDetails(station._id)" class="main-preview-container">
         <div class="prev-img-container">
             <img :src="`${station.imgUrl}`" alt="">
             <button class="play-btn"><svg role="img" height="24" width="24" aria-hidden="true" viewBox="0 0 24 24"
@@ -17,11 +17,17 @@
     </article>
 </template>
 <script>
-
 export default {
     name: 'StationPreview',
     props: {
         station: { type: Object, required: true },
+    },
+
+    methods: {
+        goToDetails(stationId) {
+            // await this.getStationTracks(stationId)
+            this.$router.push(`station/${stationId}`)
+        }
     },
 }
 

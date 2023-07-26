@@ -1,5 +1,6 @@
 import { storageService } from './async-storage.service.js'
 import { utilService } from './util.service.js'
+import { spotifyService } from './spotify.service.js'
 import { userService } from './user.service.js'
 
 const STORAGE_KEY = 'stationDB'
@@ -10,14 +11,11 @@ export const stationService = {
     save,
     remove,
     getEmptyStation,
+    getStations
 }
-
-_createStations(3)
 
 async function query(filterBy = { name: '' }) {
     var stations = await storageService.query(STORAGE_KEY)
-
-    // console.log(stations)
     return stations
 }
 
@@ -40,6 +38,12 @@ async function save(station) {
         savedStation = await storageService.post(STORAGE_KEY, station)
     }
     return savedStation
+}
+
+async function getStations() {
+  const stations = await spotifyService.getSpotifyItems('categoryStations', '0JQ5DAqbMKFDXXwE9BDJAr')
+  utilService.saveToStorage(STORAGE_KEY, stations)
+  return stations
 }
 
 function getEmptyStation() {
@@ -97,8 +101,8 @@ function _createStation() {
     return station
 }
 
-
 // Initial data
 // ;(async ()=>{
+//     const station = _getDemoStation()
 //     await storageService.post(STORAGE_KEY, station)
 // })()
