@@ -13,33 +13,33 @@ export default {
     data() {
         return {
             station: null
-        };
+        }
     },
     computed: {
         stationId() {
-            return this.$route.params;
+            return this.$route.params
         }
     },
     created() {
-        this.loadStation();
+        this.loadStation()
     },
     methods: {
         async loadStation() {
-            const { stationId } = this.$route.params;
+            const { stationId } = this.$route.params
             if (!stationId)
                 return;
             try {
-                this.station = await stationService.getById(stationId);
+                this.station = await stationService.getById(stationId)
             }
             catch {
-                console.log("Cannot load station");
-                this.$router.push("/");
+                console.log("Cannot load station")
+                this.$router.push("/")
             }
         },
     },
     watch: {
-        stationId() {
-            this.loadStation();
+        station() {
+            this.loadStation()
         }
     },
     components: { 

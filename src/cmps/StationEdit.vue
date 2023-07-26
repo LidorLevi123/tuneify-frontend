@@ -34,10 +34,10 @@ export default {
     methods: {
         async loadStationToEdit() {
             const { stationId } = this.$route.params
+            if(!stationId) return
 
             try {
-                const stationToEdit = await stationService.getById(stationId)
-                this.stationToEdit = stationToEdit
+                this.stationToEdit = await stationService.getById(stationId)
             } catch (err) {
                 console.log('Cannot load station for edit', err.message)
                 this.$router.push('/')
@@ -47,6 +47,7 @@ export default {
             try {
                 await this.$store.dispatch({type: 'saveStation', stationToSave: this.stationToEdit})
                 console.log('Station Saved');
+                this.stationToEdit = stationService.getEmptyStation()
             } catch (err) {
                 console.log(err.message);
             }
