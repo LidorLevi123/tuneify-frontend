@@ -1,8 +1,16 @@
 <template>
     <article class="track-preview track-preview-layout">
-        <span>{{ track.idx }}</span>
-        <span>{{ track.title }}</span>
-        <span>{{ track.album }}</span>
+        <span class="track-num">{{ track.idx }}</span>
+        <div class="mini-prev">
+            <section class="img-container">
+                <img :src="`${track.imgUrl}`" alt="">
+            </section>
+            <section>
+                <div class="track-name">{{ track.title }}</div>
+                <div class="track-artist">{{ track.artists[0] }}</div>
+            </section>
+        </div>
+        <span class="track-album">{{ track.album }}</span>
     </article>
 </template>
 
@@ -16,10 +24,3 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.track-preview span{
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}    
-</style>

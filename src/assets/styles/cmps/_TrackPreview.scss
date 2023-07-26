@@ -1,0 +1,38 @@
+.track-preview {
+    img {
+        height: 2.5rem;
+        width: 2.5rem;
+        margin-inline-end: 1rem;
+    }
+
+    .track-num {
+        display: flex;
+        align-items: center;
+    }
+
+    .track-album {
+        color: $clr3;
+        font-size: 0.875rem;
+        font-weight: 400;
+    }
+
+    .img-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .mini-prev {
+        height: 3.375rem;
+        display: flex;
+        align-items: center;
+
+        .track-name {
+            color: $clr2;
+        }
+
+        .track-artist {
+            color: $clr3;
+            font-size: 0.875rem;
+        }
+    }
+}
