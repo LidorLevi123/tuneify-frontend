@@ -1,8 +1,11 @@
 <template>
 
-    <YouTube ref="youtubePlayer"
-        :src="getVideoIdFromUrl(currentTrack.videoUrl)"
-        @ready="onPlayerReady"></YouTube>
+    <YouTube
+        ref="youtubePlayer"
+        :src="currentTrack.YTid"
+        @ready="onPlayerReady"
+        @state-change="onStateChange"
+        />
 
 
     <section class="main-player-container">
@@ -11,13 +14,15 @@
             <button class="pause btn" @click="pauseVideo">Pause</button>
             <button class="stop btn" @click="stopVideo">Stop</button>
             <button class="next btn" @click="nextVideo">Next</button>
-            <button class="previous btn" @click="previouspVideo">Back</button>
+            <button class="previous btn" @click="previousVideo">Back</button>
         </section>
     </section>
 </template>
 
 
 <script>
+
+import { stationService } from '../services/station.service.local.js'
 
 import YouTube from 'vue3-youtube'
 
@@ -26,38 +31,59 @@ export default {
         return {
             currentTrack: {
                 videoUrl: 'https://www.youtube.com/watch?v=F1B9Fk_SgI0&ab_channel=ChildishGambinoVEVO',
+                YTid: null,
+                currIdx: 0
             },
             isPlaying: false,
-            player: null
+            player: null,
+            station: [],
+            playerStates: {
+                UNSTARTED: -1,
+                ENDED: 0,
+                PLAYING: 1,
+                PAUSED: 2,
+                BUFFERING: 3,
+                CUED: 5,
+            }
         }
     },
     components: {
         YouTube,
     },
     created() {
+        // console.log(this.getVideoIdFromUrl(this.currentTrack.videoUrl))
+
+        this.station = stationService.getEmptyStation().trackList
+
+        this.currentTrack.YTid = this.station[this.currentTrack.currIdx].YTid
+
+
     },
     methods: {
-        onYouTubeIframeAPIReady() {
-            console.log('onYouTubeIframeAPIReady')
-            this.player = new YT.Player('youtube-player', {
-                height: '390',
-                width: '640',
-                videoId: this.getVideoIdFromUrl(this.currentTrack.videoUrl),
-                playerVars: {
-                    'playsinline': 1,
-                },
-                events: {
-                    'onReady': this.onPlayerReady,
-                    'onStateChange': this.onPlayerStateChange,
-                },
-            })
+        onPlayerReady(event) {
+            console.log('onPlayerReady')
+            console.log('ev', event)
+            this.player = event.target
+            event.target.playVideo()
         },
-        getVideoIdFromUrl(url) {
-            const videoIdRegex = /[?&]v=([^&]+)/;
-            const match = url.match(videoIdRegex);
-            return match ? match[1] : null;
+        nextVideo() {
+           this.currentTrack.currIdx += 1
+           if(this.currentTrack.currIdx > this.station.length-1) this.currentTrack.currIdx = 0
+           this.loadVideo()
         },
-
+        previousVideo() {
+           this.currentTrack.currIdx -= 1
+           if(this.currentTrack.currIdx < 0) this.currentTrack.currIdx = this.station.length-1
+           this.loadVideo()
+        },
+        loadVideo() {
+            this.currentTrack.YTid = this.station[this.currentTrack.currIdx].YTid
+        },
+        // getVideoIdFromUrl(url) {
+        //     const videoIdRegex = /[?&]v=([^&]+)/
+        //     const match = url.match(videoIdRegex)
+        //     return match ? match[1] : null
+        // },
         playVideo() {
             this.isPlaying = true
             this.$refs.youtubePlayer.playVideo()
@@ -70,12 +96,10 @@ export default {
             this.isPlaying = false
             this.$refs.youtubePlayer.stopVideo()
         },
-        onPlayerReady(event) {
-            console.log('onPlayerReady')
-            console.log('ev', event)
-            this.player = event.target
-            event.target.playVideo()
-        },
+        onStateChange(event) {
+            console.log(event)
+            if(event.data === this.playerStates.ENDED) this.nextVideo()
+        }
     },
 }
 </script>

@@ -9,6 +9,7 @@
                     </path>
                 </svg>
             </button>
+
         </div>
 
         <h4>{{ station.name }}</h4>
