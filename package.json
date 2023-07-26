@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "fast-average-color": "^9.3.0",
     "sass": "^1.53.0",
     "socket.io-client": "^4.5.1",
     "vue": "^3.2.37",
