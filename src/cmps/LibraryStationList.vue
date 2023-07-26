@@ -1,7 +1,7 @@
 <template>
     <section class="library-station-list">
             <ul class="clean-list">
-                <li v-for="station in libraryStations" :key="station.id">
+                <li @click="goToDetails(station._id)" v-for="station in libraryStations" :key="station.id">
                     <LibraryStationPreview :station="station"/>
                     <button @click="removeStation(station._id)">X</button>
                 </li>
@@ -21,6 +21,9 @@ export default {
         removeStation(stationId) {
             this.$store.dispatch({ type: 'removeStation', stationId })
         },
+        goToDetails(stationId) {
+            this.$router.push(`/station/${stationId}`)
+        }
     },
 
     components: {
