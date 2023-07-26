@@ -14,15 +14,7 @@
             <button class="details-play"><span class="details-play" v-icon="'detailsPlay'"></span></button>
             <button class="details-like"><span v-icon="'like'"></span></button>
         </section>
-        <section class="song-list">
-            <section class="song-list-header">
-                <span>#</span>
-                <span>Title</span>
-                <span>Album</span>
-            </section>
-
-        </section>
-        <pre>{{ station }}</pre>
+        <SongList :songs="station.songs" />
         <StationEdit />
     </section>
 </template>
@@ -32,7 +24,9 @@ import { utilService } from '../services/util.service'
 import { FastAverageColor } from 'fast-average-color'
 const fac = new FastAverageColor()
 import { stationService } from '../services/station.service.local'
+
 import StationEdit from '../cmps/StationEdit.vue'
+import SongList from '../cmps/SongList.vue'
 
 export default {
     data() {
