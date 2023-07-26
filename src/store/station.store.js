@@ -43,7 +43,7 @@ export const stationStore = {
             stations.unshift(stationToSave)
         },
         updateStation({ stations }, { station }) {
-            const idx = state.stations.findIndex(s => s._id === station._id)
+            const idx = stations.findIndex(s => s._id === station._id)
             stations.splice(idx, 1, station)
         },
         removeStation({ stations }, { stationId }) {
@@ -68,7 +68,6 @@ export const stationStore = {
         },
         async saveStation({ commit }, { stationToSave }) {
             const type = stationToSave._id ? 'updateStation' : 'addStation'
-            
             try {
                 const station = await stationService.save(stationToSave)
                 commit({ type, stationToSave: station })

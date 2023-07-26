@@ -1,0 +1,35 @@
+.station-edit {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    position: relative;
+    font-size: 1.1em;
+    background-color: whitesmoke;
+    color: #8b8b8b;
+    border-radius: 5px;
+    text-align: center;
+    padding: 10px;
+    width: max-content;
+    height: fit-content;
+    border: 0.2px solid #d8d8d8;
+
+    form {
+        display: grid;
+        gap: 10px;
+        margin-block-end: 10px;
+        margin-inline: 20px;
+        text-align: start;
+    }
+
+    label {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .actions {
+        display: flex;
+        justify-content: space-between;
+        margin-block-start: 20px;
+        width: 100%;
+    }
+}
