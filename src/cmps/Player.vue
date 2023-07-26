@@ -1,4 +1,11 @@
 <template>
+    <YoutubePlayer
+        :videoUrl="currentTrack.videoUrl"
+        @play="onPlay"
+        @pause="onPause"
+        ref="youtubePlayer" />
+
+
     <section class="main-player-container">
         <section></section>
         <section class="player-main-controls">
@@ -32,3 +39,31 @@
         </section>
     </section>
 </template>
+
+
+<script>
+
+import YoutubePlayer from '../cmps/YoutubePlayer.vue'
+
+export default {
+    data() {
+        return {
+            currentTrack: {
+                videoUrl: 'https://www.youtube.com/watch?v=F1B9Fk_SgI0&ab_channel=ChildishGambinoVEVO',
+            },
+            isPlaying: false,
+        }
+    },
+    components: {
+        YoutubePlayer,
+    },
+    methods: {
+        onPlay() {
+            this.isPlaying = true
+        },
+        onPause() {
+            this.isPlaying = false
+        },
+    },
+}
+</script>
