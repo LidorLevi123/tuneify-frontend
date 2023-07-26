@@ -80,21 +80,9 @@ function _createStation() {
     const station = getEmptyStation()
 
     station._id = utilService.makeId()
-    station.name = utilService.makeLorem(2),
-    station.description = utilService.makeLorem(3),
-    station.imgUrl = 'https://picsum.photos/170',
-    station.trackList = [
-        {
-            _id: 111,
-            name: "track1",
-            YTid: "kXeSRsH3ibw"
-        },
-        {
-            _id: 222,
-            name: "track2",
-            YTid: "a-JlV44nqJ0"
-        },
-    ]
+    station.name = utilService.makeLorem(2)
+    station.description = utilService.makeLorem(3)
+    station.imgUrl = 'https://picsum.photos/170'
 
     return station
 }
