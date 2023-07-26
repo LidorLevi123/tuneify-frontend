@@ -15,7 +15,7 @@
             <button class="details-like"><span v-icon="'like'"></span></button>
         </section>
         <TrackList :tracks="station.tracks"/>
-        <StationEdit />
+        <!-- <StationEdit /> -->
     </section>
 </template>
 
@@ -58,6 +58,8 @@ export default {
                 return;
             try {
                 this.station = await stationService.getById(stationId)
+                this.station.tracks = await stationService.getStationTracks(stationId)
+                console.log(this.station.tracks);
             }
             catch {
                 console.log("Cannot load station")
@@ -92,7 +94,7 @@ export default {
 
     },
     watch: {
-        station() {
+        stationId() {
             this.loadStation()
         }
     },
