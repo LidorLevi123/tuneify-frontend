@@ -1,9 +1,9 @@
 <template>
-    <section class="library-station-preview">
+    <article class="library-station-preview">
         <img :src="station.imgUrl" alt="">
         <h5>{{ stationName }}</h5>
         <small>Playlist &bull; Guest</small>
-    </section>
+    </article>
 </template>
 <script>
 
