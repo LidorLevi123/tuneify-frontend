@@ -13,30 +13,41 @@
 
 .main-player-container .play {
     border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     border-radius: 50%;
 }
 
-.main-player-container .forward,
-.back,
+.main-player-container .play span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-player-container
+.next,
+.previous,
 .shuffle,
 .repeat {
     color: $clr3;
     border: none;
     height: 2rem;
-    background-color: transparent;
+    background-color: transparent
 }
 
+.main-player-container
+.mute {
+    background-color: transparent;
+    border: none;
+}
 
 .main-player-container .play:hover {
     scale: 104%;
 }
 
-.main-player-container .forward:hover,
-.back:hover,
+.main-player-container
+.next:hover,
+.previous:hover,
 .repeat:hover,
+.mute:hover,
 .shuffle:hover {
     color: $clr2;
 }
@@ -68,7 +79,7 @@
 }
 
 /////////////////////////////////////////////
-/// 
+///
 ///
 .vol-container {
     display: flex;
@@ -119,4 +130,8 @@
     color: $clr2;
     align-self: center;
     font-size: 1rem
+}
+
+.enabled path {
+    fill: $clr9;
 }
