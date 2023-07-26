@@ -9,7 +9,8 @@
         </div>
         <hr>
         <ul class="clean-list">
-            <li v-for="track in tracks" :key="track._id">
+            <li v-for="(track, idx) in tracks" :key="track.id">
+                <template>{{ track.idx = idx+1 }} </template>
                 <TrackPreview :track="track" />
             </li>
         </ul>

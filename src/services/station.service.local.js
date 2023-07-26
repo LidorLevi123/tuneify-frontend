@@ -11,7 +11,8 @@ export const stationService = {
     save,
     remove,
     getEmptyStation,
-    getStations
+    getStations,
+    getStationTracks
 }
 
 async function query(filterBy = { name: '' }) {
@@ -44,6 +45,11 @@ async function getStations() {
   const stations = await spotifyService.getSpotifyItems('categoryStations', '0JQ5DAqbMKFDXXwE9BDJAr')
   utilService.saveToStorage(STORAGE_KEY, stations)
   return stations
+}
+
+async function getStationTracks(stationId) {
+  const tracks = await spotifyService.getSpotifyItems('tracks', stationId)
+  return tracks
 }
 
 function getEmptyStation() {

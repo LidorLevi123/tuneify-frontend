@@ -27,9 +27,9 @@ async function getSpotifyItems(reqType, id) {
             case 'categoryStations':
                 cleanData = _cleanCategoryStationsData(response.data)
                 break
-            // case 'tracks':
-            //     cleanData = _cleanStationsTracksData(response.data)
-            //     break
+            case 'tracks':
+                cleanData = _cleanStationsTracksData(response.data)
+                break
             // case 'station':
             //   cleanData = _cleanStationsData(response.data)
             //   break
