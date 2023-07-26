@@ -1,6 +1,6 @@
 <template>
     <section class="library-station-preview">
-        <img src="https://picsum.photos/169" alt="">
+        <img :src="station.imgUrl" alt="">
         <h5>{{ stationName }}</h5>
         <small>Playlist &bull; Guest</small>
     </section>
