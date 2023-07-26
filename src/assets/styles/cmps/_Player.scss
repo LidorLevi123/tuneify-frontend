@@ -22,8 +22,7 @@
     justify-content: center;
 }
 
-.main-player-container
-.next,
+.main-player-container .next,
 .previous,
 .shuffle,
 .repeat {
@@ -33,8 +32,7 @@
     background-color: transparent
 }
 
-.main-player-container
-.mute {
+.main-player-container .mute {
     background-color: transparent;
     border: none;
 }
@@ -43,8 +41,7 @@
     scale: 104%;
 }
 
-.main-player-container
-.next:hover,
+.main-player-container .next:hover,
 .previous:hover,
 .repeat:hover,
 .mute:hover,

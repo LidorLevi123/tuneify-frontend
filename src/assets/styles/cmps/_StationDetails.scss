@@ -1,4 +1,7 @@
 .station-details {
+    height: calc(100vh - 105px);
+    overflow: auto;
+    border-radius: 0.5rem;
 
     pre {
         color: white;
@@ -42,9 +45,9 @@
 }
 
 .station-details .details-player .details-play {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
     height: 3.5rem;
     width: 3.5rem;
     background-color: $clr7;

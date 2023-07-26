@@ -1,0 +1,34 @@
+.track-preview {
+
+    img {
+        height: 2.5rem;
+        width: 2.5rem;
+        margin-inline-end: 1rem;
+    }
+
+    .track-num {
+        display: flex;
+        align-items: center;
+
+    }
+}
+
+.track-preview .img-container {
+    display: flex;
+    align-items: center;
+}
+
+.track-preview .mini-prev {
+    height: 3.375rem;
+    display: flex;
+    align-items: center;
+}
+
+.track-preview .mini-prev .track-name {
+    color: $clr2
+}
+
+.track-preview .mini-prev .track-artist {
+    color: $clr3;
+    font-size: 0.875rem;
+}

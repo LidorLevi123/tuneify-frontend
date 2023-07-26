@@ -21,7 +21,7 @@ export default {
             const stationToSave = stationService.getEmptyStation()
 
             stationToSave.name = 'My Playlist #' + (this.libraryStations.length + 1)
-            stationToSave.imgUrl = 'https://picsum.photos/' + ((this.libraryStations.length + 1) * 2)
+            stationToSave.imgUrl = 'https://picsum.photos/' + ((this.libraryStations.length + 1) * 232)
 
             const station = await this.$store.dispatch({ type: 'saveStation', stationToSave })
             this.$router.push(`/station/${station._id}`)
