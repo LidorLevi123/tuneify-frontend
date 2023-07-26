@@ -1,5 +1,5 @@
 <template>
-    <section class="main-preview-container">
+    <article class="main-preview-container">
         <div class="prev-img-container">
             <img :src="`${station.imgUrl}`" alt="">
             <button class="play-btn"><svg role="img" height="24" width="24" aria-hidden="true" viewBox="0 0 24 24"
@@ -14,7 +14,7 @@
 
         <h4>{{ station.name }}</h4>
         <span>{{ station.description }}</span>
-    </section>
+    </article>
 </template>
 <script>
 
