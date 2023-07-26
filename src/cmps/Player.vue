@@ -1,30 +1,26 @@
 <template>
-    <YouTube ref="youtubePlayer" :src="currentTrack.YTid" @ready="onPlayerReady" @state-change="onStateChange" />
+    <h1 style="color:white; font-size: 30px;">{{ this.currentTrack.currIdx + 1 }}</h1>
+    <YouTube
+        ref="youtubePlayer"
+        :src="currentTrack.YTid"
+        @ready="onPlayerReady"
+        @state-change="onStateChange"
+        style="display: none;"/>
 
-    <!-- <section class="main-player-container">
-        <section class="player-main-controls">
-            <button class="play btn" @click="playVideo">Play</button>
-            <button class="pause btn" @click="pauseVideo">Pause</button>
-            <button class="stop btn" @click="stopVideo">Stop</button>
-            <button class="next btn" @click="nextVideo">Next</button>
-            <button class="previous btn" @click="previousVideo">Back</button>
-            <button class="shuffle btn" @click="toggleShuffle">Shuffle</button>
-            <button class="shuffle btn" @click="toggleRepeat">Repeat</button>
-        </section>
-    </section> -->
+    <!-- <h1 style="color:white;">{{ this.station[this.currentTrack.currIdx].trackList.title }}</h1> -->
 
     <section class="main-player-container">
         <section></section>
         <section class="player-main-controls">
-            <button class="shuffle btn"><span v-icon="'shuffle'"></span></button>
-            <button class="back btn" title="Previous"><span class="material-symbols-outlined">skip_previous</span></button>
-            <button class="play btn" title="play"><span v-icon="'play'"></span></button>
-            <button class="forward btn" title="Next"><span class="material-symbols-outlined">skip_next</span></button>
-            <button class="repeat btn"><span v-icon="'repeat'"></span></button>
+            <button class="shuffle btn" @click="toggleShuffle" title="Shuffle"><span v-icon="'shuffle'" :class="{ 'enabled': this.isShuffle }"></span></button>
+            <button class="previous btn" @click="previousVideo" title="Previous"><span class="material-symbols-outlined">skip_previous</span></button>
+            <button class="play btn" @click="togglePlayPause" title="play"><span v-icon="'play'"></span></button>
+            <button class="next btn" @click="nextVideo" title="Next"><span class="material-symbols-outlined">skip_next</span></button>
+            <button class="repeat btn" @click="toggleRepeat" title="Repeat" :class="{ 'enabled': this.isRepeat }"><span v-icon="'repeat'"></span></button>
         </section>
         <section class="vol-container">
-            <span class="material-symbols-outlined vol-btn">volume_up</span>
-            <input class="vol-slider" type="range" min="0" max="100">
+            <button class="mute btn" @click="toggleMute" title="Mute"><span class=" material-symbols-outlined vol-btn">volume_up</span></button>
+            <input class="vol-slider" @input="onChangeVolume" type="range" min="0" max="100" v-model="currVolume" >
         </section>
     </section>
 </template>
@@ -43,7 +39,8 @@ export default {
             currentTrack: {
                 videoUrl: 'https://www.youtube.com/watch?v=F1B9Fk_SgI0&ab_channel=ChildishGambinoVEVO',
                 YTid: null,
-                currIdx: 0
+                currIdx: 0,
+                name: ''
             },
             isPlaying: false,
             player: null,
@@ -57,30 +54,27 @@ export default {
                 CUED: 5,
             },
             isShuffle: false,
-            isRepeat: false
+            isRepeat: false,
+            isMute: false,
+            currVolume: 80
         }
     },
     components: {
         YouTube,
     },
     created() {
-        // console.log(this.getVideoIdFromUrl(this.currentTrack.videoUrl))
-
         this.station = stationService.getEmptyStation().trackList
 
         this.currentTrack.YTid = this.station[this.currentTrack.currIdx].YTid
-
-
     },
     methods: {
         onPlayerReady(event) {
             console.log('onPlayerReady')
             console.log('ev', event)
             this.player = event.target
-            event.target.playVideo()
+            // event.target.playVideo()
         },
         nextVideo() {
-
             this.currentTrack.currIdx += 1
 
             if (this.isShuffle) {
@@ -99,34 +93,47 @@ export default {
             this.currentTrack.YTid = this.station[this.currentTrack.currIdx].YTid
         },
         toggleShuffle() {
-            this.isShuffle = this.isShuffle ? false : true
+            this.isShuffle = !this.isShuffle
+            console.log('shuffle', this.isShuffle)
         },
         toggleRepeat() {
-            this.isRepeat = isRepeat ? false : true
+            this.isRepeat = !this.isRepeat
+            console.log('repeat', this.isRepeat)
         },
-        // getVideoIdFromUrl(url) {
-        //     const videoIdRegex = /[?&]v=([^&]+)/
-        //     const match = url.match(videoIdRegex)
-        //     return match ? match[1] : null
-        // },
-        playVideo() {
-            this.isPlaying = true
-            this.$refs.youtubePlayer.playVideo()
+        toggleMute() {
+            console.log(this.isMute)
+            if(this.isMute) {
+                this.isMute = false
+                this.$refs.youtubePlayer.unMute()
+            } else {
+                this.isMute = true
+                this.$refs.youtubePlayer.mute()
+            }
         },
-        pauseVideo() {
-            this.isPlaying = false
-            this.$refs.youtubePlayer.pauseVideo()
+        togglePlayPause() {
+            console.log(this.isPlaying)
+            if(this.isPlaying) {
+                this.isPlaying = false
+                this.$refs.youtubePlayer.pauseVideo()
+            } else {
+                this.isPlaying = true
+                this.$refs.youtubePlayer.playVideo()
+            }
+        },
+        onChangeVolume() {
+            console.log('currVolume', this.currVolume)
+            this.$refs.youtubePlayer.setVolume(this.currVolume)
         },
         stopVideo() {
             this.isPlaying = false
             this.$refs.youtubePlayer.stopVideo()
         },
         onStateChange(event) {
-            console.log(event)
+            // console.log(event)
             if (event.data === this.playerStates.ENDED) {
                 this.nextVideo()
             } else return
-        }
+        },
     },
 }
 </script>

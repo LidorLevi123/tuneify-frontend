@@ -67,7 +67,6 @@ function getEmptyStation() {
                 _id: 333,
                 title: "track3",
                 YTid: "kXeSRsH3ibw",
-
             },
             {
                 _id: 444,
