@@ -22,11 +22,12 @@
 <script>
 import { utilService } from '../services/util.service'
 import { FastAverageColor } from 'fast-average-color'
-const fac = new FastAverageColor()
 import { stationService } from '../services/station.service.local'
 
 import StationEdit from '../cmps/StationEdit.vue'
 import TrackList from '../cmps/TrackList.vue'
+
+const fac = new FastAverageColor()
 
 export default {
     data() {
@@ -58,8 +59,9 @@ export default {
                 return;
             try {
                 this.station = await stationService.getById(stationId)
-                this.station.tracks = await stationService.getStationTracks(stationId)
-                console.log(this.station.tracks);
+                if(!this.station.owner) {
+                    this.station.tracks = await stationService.getStationTracks(stationId)
+                }
             }
             catch {
                 console.log("Cannot load station")
