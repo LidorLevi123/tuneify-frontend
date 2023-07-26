@@ -67,16 +67,12 @@ export const stationStore = {
             }
         },
         async saveStation({ commit }, { stationToSave }) {
-            var type = 'updateStation'
-
-            if(!stationToSave) {
-                stationToSave = stationService.getEmptyStation()
-                type = 'addStation'
-            }
+            const type = stationToSave._id ? 'updateStation' : 'addStation'
             
             try {
                 const station = await stationService.save(stationToSave)
                 commit({ type, stationToSave: station })
+                return station
             } catch (err) {
                 console.log(err.message)
                 throw new Error('Could not save station')
