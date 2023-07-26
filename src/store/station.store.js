@@ -29,17 +29,20 @@ import { stationService } from '../services/station.service.local'
 
 export const stationStore = {
     state: {
-        stations: []
+        stations: [],
+        library: []
     },
     getters: {
-        stations({stations}) { return stations },
+        stations({ stations }) { return stations },
+        library({ library }) { return library }
     },
     mutations: {
         setStations(state, { stations }) {
             state.stations = stations
         },
         addStation(state, { station }) {
-            state.stations.push(station)
+            state.library.unshift(station)
+            console.log(state.library);
         },
         updateStation(state, { station }) {
             const idx = state.stations.findIndex(c => c._id === station._id)
@@ -55,15 +58,29 @@ export const stationStore = {
         },
     },
     actions: {
-        async loadStations(context) {
+        async loadStations( { commit }) {
             try {
                 const stations = await stationService.query()
-                context.commit({ type: 'setStations', stations })
+                commit({ type: 'setStations', stations })
             } catch (err) {
                 console.log('stationStore: Error in loadStations', err)
-                throw err
+                throw new Error('Could not load stations')
             }
         },
+        async addStation({ commit }, { stationId }) {
 
+            if(!stationId) {
+                const station = stationService.getEmptyStation()
+                commit({ type: 'addStation', station })
+                return
+            }
+            try {
+                const station = await stationService.get(stationId)
+                commit({ type: 'addStation', station })
+            } catch (err) {
+                console.log('stationStore: Error in addStation', err)
+                throw new Error('Could not add station')
+            }
+        },
     }
 }

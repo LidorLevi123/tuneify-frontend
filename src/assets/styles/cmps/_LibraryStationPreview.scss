@@ -1,0 +1,12 @@
+.library-station-preview {
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: auto 1fr;
+    gap: 10px;
+
+    img {
+        grid-row: span 2;
+        width: 50px;
+        border-radius: 0.5rem;
+    }
+}
