@@ -30,8 +30,10 @@ import LibraryStationList from './LibraryStationList.vue';
 
 export default {
     methods: {
-        addStation() {
-            this.$store.dispatch({ type: 'saveStation' })
+        async addStation() {
+            const stationToSave = stationService.getEmptyStation()
+            const station = await this.$store.dispatch({ type: 'saveStation', stationToSave })
+            this.$router.push(`/station/${station._id}`)
         },
     },
 
