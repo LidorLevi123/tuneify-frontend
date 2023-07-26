@@ -9,9 +9,9 @@ function createEventEmitter() {
                 listenersMap[evName] = listenersMap[evName].filter(func => func !== listener)
             }
         },
-        emit(evName, data) {
+        emit(evName, ...data) {
             if (!listenersMap[evName]) return
-            listenersMap[evName].forEach(listener => listener(data))
+            listenersMap[evName].forEach(listener => listener(...data))
         }
     }
 }

@@ -1,9 +1,9 @@
 <template>
-    <!-- <h1 style="color:white; font-size: 30px;">Track {{ this.currentTrack.currIdx + 1 }}</h1> -->
+    <h1 style="color:white; font-size: 30px;">Track {{ this.currTrack.currIdx + 1 }}</h1>
 
     <YouTube
         ref="youtubePlayer"
-        :src="currentTrack.YTid"
+        :src="currTrack.YTid"
         @ready="onPlayerReady"
         @state-change="onStateChange"
         style="display: none;"/>
@@ -60,8 +60,8 @@
 
 <script>
 
-import { stationService } from '../services/station.service.local.js'
 import { utilService } from '../services/util.service.js'
+import { eventBus } from '../services/event-bus.service.js'
 
 import YouTube from 'vue3-youtube'
 
@@ -72,15 +72,15 @@ export default {
             isShuffle: false,
             isRepeat: false,
             isMute: false,
+            currTrackList: [],
             currVolume: 80,
-            currentTrack: {
-                videoUrl: 'https://www.youtube.com/watch?v=F1B9Fk_SgI0&ab_channel=ChildishGambinoVEVO',
-                YTid: null,
+            currTrack: {
+                YTid: '',
                 currIdx: 0,
-                name: ''
+                name: '',
+                trackId: null
             },
             player: null,
-            station: [],
             playerStates: {
                 UNSTARTED: -1,
                 ENDED: 0,
@@ -95,45 +95,50 @@ export default {
         YouTube,
     },
     created() {
-        this.station = stationService.getEmptyStation().trackList
-        this.currentTrack.YTid = this.station[this.currentTrack.currIdx].YTid
+        eventBus.on('playTrack', this.onPlayTrack)
     },
     methods: {
         onPlayerReady(event) {
-            console.log('onPlayerReady')
-            console.log('ev', event)
             this.player = event.target
             // event.target.playVideo()
         },
-        nextVideo() {
-            this.currentTrack.currIdx += 1
+        async nextVideo() {
+            this.currTrack.currIdx += 1
 
             if (this.isShuffle) {
-                this.currentTrack.currIdx = utilService.getRandomIntInclusive(0, this.station.length - 1)
+                this.currTrack.currIdx = utilService.getRandomIntInclusive(0, this.currTrackList.length - 1)
             }
 
-            if (this.currentTrack.currIdx > this.station.length - 1) this.currentTrack.currIdx = 0
-            this.loadVideo()
+            if (this.currTrack.currIdx > this.currTrackList.length - 1) this.currTrack.currIdx = 0
+
+            let clickedTrack = this.currTrackList[this.currTrack.currIdx]
+            let YTid = await this.queryYT(clickedTrack.title, clickedTrack.artists[0])
+            this.loadVideo(YTid)
         },
-        previousVideo() {
-            this.currentTrack.currIdx -= 1
-            if (this.currentTrack.currIdx < 0) this.currentTrack.currIdx = this.station.length - 1
-            this.loadVideo()
+        async previousVideo() {
+            this.currTrack.currIdx -= 1
+
+            if (this.isShuffle) {
+                this.currTrack.currIdx = utilService.getRandomIntInclusive(0, this.currTrackList.length - 1)
+            }
+
+            if (this.currTrack.currIdx < 0) this.currTrack.currIdx = this.currTrackList.length - 1
+
+            let clickedTrack = this.currTrackList[this.currTrack.currIdx]
+            let YTid = await this.queryYT(clickedTrack.title, clickedTrack.artists[0])
+            this.loadVideo(YTid)
         },
-        loadVideo() {
-            this.currentTrack.YTid = this.station[this.currentTrack.currIdx].YTid
+        loadVideo(YTid) {
+            this.currTrack.YTid = YTid
             this.isPlaying = true
         },
         toggleShuffle() {
             this.isShuffle = !this.isShuffle
-            console.log('shuffle', this.isShuffle)
         },
         toggleRepeat() {
             this.isRepeat = !this.isRepeat
-            console.log('repeat', this.isRepeat)
         },
         toggleMute() {
-            console.log(this.isMute)
             if(this.isMute) {
                 this.isMute = false
                 this.$refs.youtubePlayer.unMute()
@@ -143,7 +148,6 @@ export default {
             }
         },
         togglePlayPause() {
-            console.log(this.isPlaying)
             if(this.isPlaying) {
                 this.isPlaying = false
                 this.$refs.youtubePlayer.pauseVideo()
@@ -153,7 +157,6 @@ export default {
             }
         },
         onChangeVolume() {
-            console.log('currVolume', this.currVolume)
             this.$refs.youtubePlayer.setVolume(this.currVolume)
         },
         stopVideo() {
@@ -161,13 +164,37 @@ export default {
             this.$refs.youtubePlayer.stopVideo()
         },
         onStateChange(event) {
-            // console.log(event)
             if (event.data === this.playerStates.ENDED) {
                 this.nextVideo()
             } else return
         },
+        async onPlayTrack(trackId, tracks) {
+            this.currTrackList = tracks
+            this.currTrack.currIdx = this.currTrackList.findIndex(track => track.id === trackId)
+
+            let clickedTrack = this.currTrackList[this.currTrack.currIdx]
+
+            let YTid = await this.queryYT(clickedTrack.title, clickedTrack.artists[0])
+            this.loadVideo(YTid)
+
+        },
+        async queryYT(trackName, artists) {
+            const API_KEY = 'AIzaSyCy-U5zlHg4WobQ9TIYb_Y3d7uMvFqFv9A'
+            const SEARCH = trackName + ' ' + artists
+            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&videoEmbeddable=true&type=video&key=${API_KEY}&q=${SEARCH}`
+
+            try {
+                const response = await fetch(url)
+                const data = await response.json()
+                return data.items[0].id.videoId
+
+            } catch (error) {
+                console.error('Error fetching data:', error)
+            }
+        }
     },
 }
+
 </script>
 
 

@@ -49,6 +49,7 @@ async function getStations() {
 
 async function getStationTracks(stationId) {
   const tracks = await spotifyService.getSpotifyItems('tracks', stationId)
+//   console.log(tracks)
   return tracks
 }
 
