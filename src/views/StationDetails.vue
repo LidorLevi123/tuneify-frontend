@@ -2,7 +2,7 @@
     <section class="station-details" v-if="station">
         <section class="img-photo">
             <section class="img">
-                <img :src="station.imgUrl" alt="" style="width: 170px;">
+                <img :src="station.imgUrl" alt="">
             </section>
             <section class="station-info">
                 <span>Playlist</span>
@@ -25,7 +25,7 @@
                     </path>
                 </svg></button>
         </section>
-        <SongList :songs="station.songs"/>
+        <TrackList :tracks="station.tracks"/>
         <StationEdit />
         </section>
     </template>
@@ -34,7 +34,7 @@
 import { stationService } from '../services/station.service.local'
 
 import StationEdit from '../cmps/StationEdit.vue'
-import SongList from '../cmps/SongList.vue'
+import TrackList from '../cmps/TrackList.vue'
 
 export default {
     data() {
@@ -71,7 +71,7 @@ export default {
     },
     components: { 
         StationEdit,
-        SongList
+        TrackList
     }
 }
 </script>

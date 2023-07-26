@@ -1,5 +1,5 @@
 <template>
-    <article class="song-preview">
+    <article class="track-preview">
         
     </article>
 </template>
@@ -7,10 +7,10 @@
 <script>
 export default {
     props: {
-        song: { type: Object },
+        track: { type: Object },
     },
 
-    name: 'SongPreview',
+    name: 'TrackPreview',
 }
 </script>
 

@@ -22,20 +22,19 @@ async function getSpotifyItems(reqType, id) {
             },
         })
         // Return the playlist data from the response
-        //   let cleanData
-        //   switch (reqType) {
-        //     case 'categoryStations':
-        //       cleanData = _cleanCategoryPlaylistsData(response.data)
-        //       break
-        //     case 'station':
-        //       cleanData = _cleanPlaylistsData(response.data)
-        //       break
-        //     case 'tracks':
-        //       cleanData = _cleanPlaylistsTracksData(response.data)
-        //       break
-        //   }
-        //   return cleanData
-        console.log(response.data)
+        let cleanData
+        switch (reqType) {
+            case 'categoryStations':
+                cleanData = _cleanCategoryStationsData(response.data)
+                break
+            // case 'tracks':
+            //     cleanData = _cleanStationsTracksData(response.data)
+            //     break
+            // case 'station':
+            //   cleanData = _cleanStationsData(response.data)
+            //   break
+        }
+        return cleanData
     } catch (error) {
         console.error(
             'Error retrieving data:',
@@ -67,7 +66,6 @@ async function getAccessToken(clientId, clientSecret) {
         const { data } = response
         const accessToken = data.access_token
         const expiresIn = data.expires_in
-        console.log('accessToken', accessToken)
         return accessToken
     } catch (error) {
         console.error(
@@ -78,8 +76,19 @@ async function getAccessToken(clientId, clientSecret) {
     }
 }
 
-function _cleanPlaylistsTracksData(data) {
-    return data.items.map((item) => {
+function _cleanCategoryStationsData(data) {
+    return data.playlists.items.map(item => {
+        return {
+            _id: item.id,
+            name: item.name,
+            imgUrl: item.images[0].url,
+            description: item.description,
+        }
+    })
+}
+
+function _cleanStationsTracksData(data) {
+    return data.items.map(item => {
         return {
             addedAt: item.added_at,
             id: item.track.id,

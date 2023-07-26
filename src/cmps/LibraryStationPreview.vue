@@ -3,7 +3,6 @@
         <img :src="station.imgUrl" alt="">
         <h5>{{ stationName }}</h5>
         <small>Playlist &bull; Guest</small>
-        <div ref="he">hello</div>
     </article>
 </template>
 <script>

@@ -17,7 +17,6 @@
     </article>
 </template>
 <script>
-
 export default {
     name: 'StationPreview',
     props: {
@@ -26,9 +25,10 @@ export default {
 
     methods: {
         goToDetails(stationId) {
+            // await this.getStationTracks(stationId)
             this.$router.push(`station/${stationId}`)
         }
-    }
+    },
 }
 
 </script>

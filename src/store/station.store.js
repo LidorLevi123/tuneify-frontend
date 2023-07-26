@@ -1,32 +1,6 @@
 import { stationService } from '../services/station.service.local'
 // import { stationService } from '../services/station.service'
 
-// export function getActionRemoveStation(stationId) {
-//     return {
-//         type: 'removeStation',
-//         stationId
-//     }
-// }
-// export function getActionAddStation(station) {
-//     return {
-//         type: 'addStation',
-//         station
-//     }
-// }
-// export function getActionUpdateStation(station) {
-//     return {
-//         type: 'updateStation',
-//         station
-//     }
-// }
-// export function getActionAddStationMsg(stationId) {
-//     return {
-//         type: 'addStationMsg',
-//         stationId,
-//         txt: 'Stam txt'
-//     }
-// }
-
 export const stationStore = {
     state: {
         stations: [],
@@ -59,7 +33,7 @@ export const stationStore = {
     actions: {
         async loadStations( { commit }) {
             try {
-                const stations = await stationService.query()
+                const stations = await stationService.getStations()
                 commit({ type: 'setStations', stations })
             } catch (err) {
                 console.log('stationStore: Error in loadStations', err)

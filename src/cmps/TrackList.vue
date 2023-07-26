@@ -1,40 +1,40 @@
 <template>
-    <section class="song-list">
-        <div class="list-header song-preview-layout">
+    <section class="track-list">
+        <div class="list-header track-preview-layout">
             <span>#</span>
             <span>Title</span>
             <span>Album</span>
             <span>Date Added</span>
-            <span>Song Length</span>
+            <span>Track Length</span>
         </div>
         <hr>
         <ul class="clean-list">
-            <li v-for="song in songs" :key="song._id">
-                <SongPreview :song="song" />
+            <li v-for="track in tracks" :key="track._id">
+                <TrackPreview :track="track" />
             </li>
         </ul>
     </section>
 </template>
 
 <script>
-import SongPreview from './SongPreview.vue'
+import TrackPreview from './TrackPreview.vue'
 
 export default {
     props: {
-        songs: { type: Array },
+        tracks: { type: Array },
     },
 
     components: {
-        SongPreview,
+        TrackPreview,
     },
 
-    name: 'SongList',
+    name: 'TrackList',
 }
 </script>
 
 <style lang="scss" scoped>
 
-.song-list {
+.track-list {
     .list-header {
         margin-block-start: 0.5em;
     }
