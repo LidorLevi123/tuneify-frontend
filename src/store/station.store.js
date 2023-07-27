@@ -3,15 +3,20 @@ import { stationService } from '../services/station.service.local'
 
 export const stationStore = {
     state: {
-        stations: [],
+        stations: [], // For now we hold all stations here until wo move to backend
+        currStation: null
     },
     getters: {
         stations({ stations }) { return stations.filter(station => !station.owner) },
-        library({ stations }) { return stations.filter(station => station.owner) }
+        library({ stations }) { return stations.filter(station => station.owner) },
+        currStation({ currStation }) { return currStation }
     },
     mutations: {
         setStations(state, { stations }) {
             state.stations = stations
+        },
+        setCurrStation(state, { station }) {
+            state.currStation = station
         },
         addStation({ stations }, { stationToSave }) {
             stations.unshift(stationToSave)
@@ -44,11 +49,21 @@ export const stationStore = {
                 throw new Error('Could not load stations')
             }
         },
+        async setCurrStation({ commit }, { stationId }) {
+            try {
+                const station = await stationService.getById(stationId)
+                commit({ type: 'setCurrStation', station: { ...station } })
+            } catch (err) {
+                console.log('Could not set current station', err)
+                throw new Error('Could not set current station')
+            }
+        },
         async saveStation({ commit }, { stationToSave }) {
             const type = stationToSave._id ? 'updateStation' : 'addStation'
             try {
                 const station = await stationService.save(stationToSave)
                 commit({ type, stationToSave: station })
+                commit({ type: 'setCurrStation', station: { ...station } })
                 return station
             } catch (err) {
                 console.log(err.message)

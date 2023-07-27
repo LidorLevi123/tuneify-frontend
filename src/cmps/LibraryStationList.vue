@@ -24,6 +24,7 @@ export default {
         },
         goToDetails(stationId) {
             this.$router.push(`/station/${stationId}`)
+            this.$store.dispatch({ type: 'setCurrStation', stationId })
         }
     },
 
