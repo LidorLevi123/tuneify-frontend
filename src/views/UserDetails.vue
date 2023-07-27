@@ -53,11 +53,11 @@ export default {
       try {
         const user = await userService.getById(this.userId)
         socketService.off(SOCKET_EVENT_USER_UPDATED, this.onUserUpdate)
-        
+
         socketService.emit(SOCKET_EMIT_USER_WATCH, this.userId)
         socketService.on(SOCKET_EVENT_USER_UPDATED, this.onUserUpdate)
         this.user = user
-      } catch(err) {
+      } catch (err) {
         showErrorMsg('Cannot load user: ' + this.userId)
         console.error('Failed to load user', err)
       }

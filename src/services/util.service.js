@@ -74,11 +74,12 @@ function getRandomColor() {
     return color;
 }
 
-function generateColors() {
-    // Generate random RGB values between 0 and 255
-    const r = Math.floor(Math.random() * 256)
-    const g = Math.floor(Math.random() * 256)
-    const b = Math.floor(Math.random() * 256)
+function generateColors(hexColor) {
+
+    // Convert the hex color to RGB format
+    const r = parseInt(hexColor.substring(1, 3), 16)
+    const g = parseInt(hexColor.substring(3, 5), 16)
+    const b = parseInt(hexColor.substring(5, 7), 16)
   
     // Calculate the darker colors by reducing the RGB values by 23%
     const darkerR = Math.floor(r * 0.77)
@@ -89,11 +90,10 @@ function generateColors() {
     const darkerDarkerB = Math.floor(darkerB * 0.77)
   
     // Format the RGB values as hexadecimal color codes
-    const randomColor = "#" + _componentToHex(r) + _componentToHex(g) + _componentToHex(b)
     const darkerColor = "#" + _componentToHex(darkerR) + _componentToHex(darkerG) + _componentToHex(darkerB)
     const darkerDarkerColor = "#" + _componentToHex(darkerDarkerR) + _componentToHex(darkerDarkerG) + _componentToHex(darkerDarkerB)
-  
-    return [randomColor, darkerColor, darkerDarkerColor]
+
+    return [darkerColor, darkerDarkerColor]
   }
   
   function _componentToHex(c) {

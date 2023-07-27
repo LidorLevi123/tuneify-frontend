@@ -3,7 +3,7 @@
         <div class="top-gradient">
             <section class="img-photo">
                 <section class="img">
-                    <img class="station-img" :src="station.imgUrl" alt="">
+                    <img crossorigin="anonymous" class="station-img" :src="station.imgUrl" alt="">
                 </section>
                 <section class="station-info">
                     <span>Playlist</span>
@@ -37,6 +37,8 @@
 </template>
 
 <script>
+import { FastAverageColor } from 'fast-average-color'
+const fac = new FastAverageColor()
 import { utilService } from '../services/util.service'
 
 import StationEdit from '../cmps/StationEdit.vue'
@@ -70,13 +72,14 @@ export default {
     methods: {
         async loadStation() {
             await this.$store.dispatch({ type: 'setCurrStation', stationId: this.$route.params.stationId })
-            this.setBackgroundClr()
+            this.getAvgImgClr()
             this.setTracksTotalDuration()
         },
-        setBackgroundClr() {
-            const [randomColor, darkerColor, darkerDarkerColor] = utilService.generateColors()
+        setBackgroundClr(avgColor) {
+            const [darkerColor, darkerDarkerColor] = utilService.generateColors(avgColor)
+
             document.querySelector('.top-gradient').style.backgroundImage =
-                `linear-gradient(to bottom, ${randomColor} 0%, ${darkerColor} 100%)`
+                `linear-gradient(to bottom, ${avgColor} 0%, ${darkerColor} 100%)`
             document.querySelector('.bottom-gradient').style.backgroundImage =
                 `linear-gradient(to bottom, ${darkerDarkerColor} 0%, #121212 6%, #121212 100%)`
         },
@@ -86,7 +89,17 @@ export default {
         },
         setTracksTotalDuration() {
             this.tracksTotalDuration = this.station.tracks?.reduce((sum, track) => sum = sum + track.formalDuration, 0)
+        },
+        async getAvgImgClr() {
+            try {
+                const { hex } = await fac.getColorAsync(document.querySelector('.station-img'))
+                this.setBackgroundClr(hex)
+            } catch (err) {
+                console.log(err)
+                throw new Error('cant get average color')
+            }
         }
+
 
     },
     watch: {
