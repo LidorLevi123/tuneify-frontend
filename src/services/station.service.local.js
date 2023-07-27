@@ -20,8 +20,11 @@ async function query(filterBy = { name: '' }) {
     return stations
 }
 
-function getById(stationId) {
-    return storageService.get(STORAGE_KEY, stationId)
+async function getById(stationId) {
+    let station = await storageService.get(STORAGE_KEY, stationId)
+    station = JSON.parse(JSON.stringify(station))
+    station.tracks = await stationService.getStationTracks(station)
+    return station
 }
 
 async function remove(stationId) {
@@ -50,8 +53,9 @@ async function getStations() {
     return stations
 }
 
-async function getStationTracks(stationId) {
-  const tracks = await spotifyService.getSpotifyItems('tracks', stationId)
+async function getStationTracks(station) {
+  if(station.owner) return
+  const tracks = await spotifyService.getSpotifyItems('tracks', station._id)
   return tracks
 }
 

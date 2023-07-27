@@ -16,6 +16,7 @@ export const stationStore = {
             state.stations = stations
         },
         setCurrStation(state, { station }) {
+            console.log('station: ', station);
             state.currStation = station
         },
         addStation({ stations }, { stationToSave }) {
@@ -52,7 +53,7 @@ export const stationStore = {
         async setCurrStation({ commit }, { stationId }) {
             try {
                 const station = await stationService.getById(stationId)
-                commit({ type: 'setCurrStation', station: { ...station } })
+                commit({ type: 'setCurrStation', station })
             } catch (err) {
                 console.log('Could not set current station', err)
                 throw new Error('Could not set current station')
