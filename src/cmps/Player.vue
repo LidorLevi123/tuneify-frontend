@@ -77,6 +77,7 @@ export default {
     },
     created() {
         eventBus.on('playTrack', this.onPlayTrack)
+        this.isMute = false
     },
     methods: {
         onPlayerReady(event) {
