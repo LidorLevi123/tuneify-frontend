@@ -1,9 +1,10 @@
 .main-header-container {
+    display: flex;
+    flex-direction: column;
     background-color: $clr1;
     grid-column: 1;
     grid-row: 1;
     width: 412px;
-    height: min-content;
     color: $clr2;
 
     nav {

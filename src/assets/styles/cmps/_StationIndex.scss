@@ -1,6 +1,9 @@
 .station-main-container {
+    padding: 0.5rem;
     display: grid;
     grid-template-columns: 412px 1fr;
+    grid-template-rows: 1fr auto;
     grid-column-gap: 0.5rem;
     grid-row-gap: 0.5rem;
+    height: 100vh;
 }
