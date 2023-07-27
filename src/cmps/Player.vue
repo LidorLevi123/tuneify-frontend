@@ -1,57 +1,38 @@
 <template>
 
-    <YouTube
-        ref="youtubePlayer"
-        :src="currTrack.YTid"
-        @ready="onPlayerReady"
-        @state-change="onStateChange"
-        style="display: none;"/>
+    <YouTube ref="youtubePlayer" :src="currTrack.YTid" @ready="onPlayerReady" @state-change="onStateChange"
+        style="display: none;" />
 
     <section class="main-player-container">
         <section><h1 style="color:white; font-size: 25px;">Track {{ this.currTrack.currIdx + 1 }}</h1></section>
         <section class="player-main-controls">
 
-            <button
-                class="shuffle btn"
-                @click="toggleShuffle"
-                title="Shuffle">
+            <button class="shuffle btn" @click="toggleShuffle" title="Shuffle">
                 <span v-icon="'shuffle'" :class="{ 'enabled': this.isShuffle }"></span>
             </button>
 
-            <button
-                class="previous btn"
-                @click="previousVideo"
-                title="Previous">
+            <button class="previous btn" @click="previousVideo" title="Previous">
                 <span class="material-symbols-outlined">skip_previous</span>
             </button>
 
-            <button
-                class="play btn"
-                @click="togglePlayPause"
-                title="play">
+            <button class="play btn" @click="togglePlayPause" title="play">
                 <span v-if="!this.isPlaying" v-icon="'play'"></span>
                 <span v-if="this.isPlaying" v-icon="'pause'"></span>
             </button>
 
-            <button
-                class="next btn"
-                @click="nextVideo"
-                title="Next">
+            <button class="next btn" @click="nextVideo" title="Next">
                 <span class="material-symbols-outlined">skip_next</span>
             </button>
 
-            <button
-                class="repeat btn"
-                @click="toggleRepeat"
-                title="Repeat"
-                :class="{ 'enabled': this.isRepeat }">
+            <button class="repeat btn" @click="toggleRepeat" title="Repeat" :class="{ 'enabled': this.isRepeat }">
                 <span v-icon="'repeat'"></span>
             </button>
 
         </section>
         <section class="vol-container">
-            <button class="mute btn" @click="toggleMute" title="Mute"><span class=" material-symbols-outlined vol-btn">volume_up</span></button>
-            <input class="vol-slider" @input="onChangeVolume" type="range" min="0" max="100" v-model="currVolume" >
+            <button class="mute btn" @click="toggleMute" title="Mute"><span
+                    class=" material-symbols-outlined vol-btn">volume_up</span></button>
+            <input class="vol-slider" @input="onChangeVolume" type="range" min="0" max="100" v-model="currVolume">
         </section>
     </section>
 </template>
@@ -145,7 +126,7 @@ export default {
             this.isRepeat = !this.isRepeat
         },
         toggleMute() {
-            if(this.isMute) {
+            if (this.isMute) {
                 this.isMute = false
                 this.$refs.youtubePlayer.unMute()
             } else {
@@ -154,7 +135,7 @@ export default {
             }
         },
         togglePlayPause() {
-            if(this.isPlaying) {
+            if (this.isPlaying) {
                 this.isPlaying = false
                 this.$refs.youtubePlayer.pauseVideo()
             } else {

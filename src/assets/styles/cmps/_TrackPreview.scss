@@ -1,4 +1,9 @@
 .track-preview {
+
+    &:hover {
+        background-color: #2c2d2a;
+    }
+
     img {
         height: 2.5rem;
         width: 2.5rem;
