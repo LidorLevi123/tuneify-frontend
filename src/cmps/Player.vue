@@ -1,58 +1,38 @@
 <template>
-    <h1 style="color:white; font-size: 30px;">Track {{ this.currTrack.currIdx + 1 }}</h1>
 
-    <YouTube
-        ref="youtubePlayer"
-        :src="currTrack.YTid"
-        @ready="onPlayerReady"
-        @state-change="onStateChange"
-        style="display: none;"/>
+    <YouTube ref="youtubePlayer" :src="currTrack.YTid" @ready="onPlayerReady" @state-change="onStateChange"
+        style="display: none;" />
 
     <section class="main-player-container">
-        <section></section>
+        <section><h1 style="color:white; font-size: 25px;">Track {{ this.currTrack.currIdx + 1 }}</h1></section>
         <section class="player-main-controls">
 
-            <button
-                class="shuffle btn"
-                @click="toggleShuffle"
-                title="Shuffle">
+            <button class="shuffle btn" @click="toggleShuffle" title="Shuffle">
                 <span v-icon="'shuffle'" :class="{ 'enabled': this.isShuffle }"></span>
             </button>
 
-            <button
-                class="previous btn"
-                @click="previousVideo"
-                title="Previous">
+            <button class="previous btn" @click="previousVideo" title="Previous">
                 <span class="material-symbols-outlined">skip_previous</span>
             </button>
 
-            <button
-                class="play btn"
-                @click="togglePlayPause"
-                title="play">
+            <button class="play btn" @click="togglePlayPause" title="play">
                 <span v-if="!this.isPlaying" v-icon="'play'"></span>
                 <span v-if="this.isPlaying" v-icon="'pause'"></span>
             </button>
 
-            <button
-                class="next btn"
-                @click="nextVideo"
-                title="Next">
+            <button class="next btn" @click="nextVideo" title="Next">
                 <span class="material-symbols-outlined">skip_next</span>
             </button>
 
-            <button
-                class="repeat btn"
-                @click="toggleRepeat"
-                title="Repeat"
-                :class="{ 'enabled': this.isRepeat }">
+            <button class="repeat btn" @click="toggleRepeat" title="Repeat" :class="{ 'enabled': this.isRepeat }">
                 <span v-icon="'repeat'"></span>
             </button>
 
         </section>
         <section class="vol-container">
-            <button class="mute btn" @click="toggleMute" title="Mute"><span class=" material-symbols-outlined vol-btn">volume_up</span></button>
-            <input class="vol-slider" @input="onChangeVolume" type="range" min="0" max="100" v-model="currVolume" >
+            <button class="mute btn" @click="toggleMute" title="Mute"><span
+                    class=" material-symbols-outlined vol-btn">volume_up</span></button>
+            <input class="vol-slider" @input="onChangeVolume" type="range" min="0" max="100" v-model="currVolume">
         </section>
     </section>
 </template>
@@ -62,6 +42,7 @@
 
 import { utilService } from '../services/util.service.js'
 import { eventBus } from '../services/event-bus.service.js'
+import { ytService } from '../services/yt.service.js'
 
 import YouTube from 'vue3-youtube'
 
@@ -112,7 +93,10 @@ export default {
             if (this.currTrack.currIdx > this.currTrackList.length - 1) this.currTrack.currIdx = 0
 
             let clickedTrack = this.currTrackList[this.currTrack.currIdx]
-            let YTid = await this.queryYT(clickedTrack.title, clickedTrack.artists[0])
+
+            // let YTid = await ytService.queryYT(clickedTrack.title, clickedTrack.artists[0])
+            let YTid = 'UNZJQw8cr6o'
+
             this.loadVideo(YTid)
         },
         async previousVideo() {
@@ -125,7 +109,10 @@ export default {
             if (this.currTrack.currIdx < 0) this.currTrack.currIdx = this.currTrackList.length - 1
 
             let clickedTrack = this.currTrackList[this.currTrack.currIdx]
-            let YTid = await this.queryYT(clickedTrack.title, clickedTrack.artists[0])
+
+            // let YTid = await ytService.queryYT(clickedTrack.title, clickedTrack.artists[0])
+            let YTid = 'ic8j13piAhQ'
+
             this.loadVideo(YTid)
         },
         loadVideo(YTid) {
@@ -139,7 +126,7 @@ export default {
             this.isRepeat = !this.isRepeat
         },
         toggleMute() {
-            if(this.isMute) {
+            if (this.isMute) {
                 this.isMute = false
                 this.$refs.youtubePlayer.unMute()
             } else {
@@ -148,7 +135,7 @@ export default {
             }
         },
         togglePlayPause() {
-            if(this.isPlaying) {
+            if (this.isPlaying) {
                 this.isPlaying = false
                 this.$refs.youtubePlayer.pauseVideo()
             } else {
@@ -174,27 +161,13 @@ export default {
 
             let clickedTrack = this.currTrackList[this.currTrack.currIdx]
 
-            let YTid = await this.queryYT(clickedTrack.title, clickedTrack.artists[0])
+            // let YTid = await ytService.queryYT(clickedTrack.title, clickedTrack.artists[0])
+            let YTid = "nyuo9-OjNNg"
+
             this.loadVideo(YTid)
-
         },
-        async queryYT(trackName, artists) {
-            const API_KEY = 'AIzaSyCy-U5zlHg4WobQ9TIYb_Y3d7uMvFqFv9A'
-            const SEARCH = trackName + ' ' + artists
-            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&videoEmbeddable=true&type=video&key=${API_KEY}&q=${SEARCH}`
-
-            try {
-                const response = await fetch(url)
-                const data = await response.json()
-                return data.items[0].id.videoId
-
-            } catch (error) {
-                console.error('Error fetching data:', error)
-            }
-        }
     },
 }
 
 </script>
-
 
