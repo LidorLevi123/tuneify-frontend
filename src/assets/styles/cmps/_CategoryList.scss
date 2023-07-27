@@ -1,7 +1,9 @@
 .category-list {
+
     margin-block-start: 1em;
 
     ul {
+        max-width: 119rem;
         display: grid;
         gap: 24px;
         grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
