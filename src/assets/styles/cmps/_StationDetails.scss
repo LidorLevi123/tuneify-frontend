@@ -18,17 +18,31 @@
         }
 
         h1 {
-            margin-block-start: 0.5rem;
+            margin-block-start: 0.9rem;
             margin-block-end: 2rem;
             font-weight: 900;
             font-size: 6rem;
             color: $clr2;
+            letter-spacing: -3px;
         }
-    }
 
-    span {
-        font-size: 0.875rem;
-        color: $clr2;
+        .logo {
+            font-weight: 700;
+        }
+
+        .songs-num {
+            color: $clr2;
+        }
+
+        span {
+            font-size: 0.875rem;
+            color: $clr2;
+        }
+
+        .songs-time {
+            color: $clr3;
+        }
+
     }
 
     .station-img {
@@ -40,12 +54,10 @@
     & .description {
         color: $clr3;
         font-size: 0.875rem;
+        margin-block-start: -10px;
     }
 
-    .songs-num {
-        color: $clr2;
-        font-size: 0.875rem;
-    }
+
 
     & .img-photo {
         align-self: end;

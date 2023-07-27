@@ -7,12 +7,13 @@
                 </section>
                 <section class="station-info">
                     <span>Playlist</span>
-                    <h1 @click="openStationEditor">{{ station.name }}</h1>
-                    <span class="description">{{ station.description }}</span>
+                    <h1 @click="openStationEditor">Classic Oldies</h1>
+                    <p class="description">{{ station.description }}</p>
                     <div>
                         <img src="../../public/favicon.svg" alt="">
-                        <span>Tunify ⚬</span>
-                        <span class="songs-num">{{ station.tracks.length }} songs</span>
+                        <span class="logo">Tunify ⚬</span>
+                        <span class="songs-num">{{ station.tracks?.length }} songs,</span>
+                        <span class="songs-time">about {{ formttedTime }} hours</span>
                     </div>
                 </section>
             </section>
@@ -50,6 +51,10 @@ export default {
     },
 
     computed: {
+        formttedTime() {
+            const hours = this.tracksTotalDuration / (1000 * 60 * 60)
+            return Math.floor(hours)
+        },
         stationId() {
             return this.$route.params.stationId
         },
@@ -61,13 +66,12 @@ export default {
     created() {
         this.loadStation()
     },
-    
+
     methods: {
         async loadStation() {
             await this.$store.dispatch({ type: 'setCurrStation', stationId: this.$route.params.stationId })
             this.setBackgroundClr()
             this.setTracksTotalDuration()
-            console.log(this.tracksTotalDuration)
         },
         setBackgroundClr() {
             const [randomColor, darkerColor, darkerDarkerColor] = utilService.generateColors()
