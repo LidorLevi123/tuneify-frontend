@@ -1,7 +1,7 @@
 .sidebar-list-container {
-    overflow: auto;
-    grid-column: 1;
+    overflow-y: auto;
     flex: 1;
+    grid-column: 1;
     width: 412px;
     background-color: $clr4;
     border-radius: 0.5rem;

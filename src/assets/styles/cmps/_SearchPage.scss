@@ -1,9 +1,14 @@
 .search-page {
+    border-radius: 0.5rem;
     background-color: $clr4;
     padding-inline-start: 1.4rem;
+    overflow-y: auto;
 
     .search-header {
-
+        z-index: 1;
+        background-color: $clr4;
+        position: sticky;
+        top: 0;
         display: flex;
         align-items: center;
         height: 4rem;
