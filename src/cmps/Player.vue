@@ -40,7 +40,6 @@
                 <input class="time-slider slider" @input="onChangetime" type="range" min="0" max="100" v-model="currVolume">
                 <span style="color:white;">{{ formattedTime }}</span>
             </section>
-formattedTime
         </section>
         <section class="vol-container">
             <button class="mute btn" @click="toggleMute" title="Mute">
