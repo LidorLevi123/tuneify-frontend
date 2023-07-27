@@ -11,16 +11,48 @@
             </section>
         </div>
         <span class="track-album">{{ track.album }}</span>
+        <span class="track-">{{ formattedDate }}</span>
+        <span class="track-album">{{ formattedTime }}</span>
     </article>
 </template>
 
 <script>
+import moment from 'moment'
 export default {
+    name: 'TrackPreview',
     props: {
         track: { type: Object },
     },
+    data() {
+        return {
+            trackTime: this.track.formalDuration,
+            dateStr: this.track.addedAt
+        }
+    },
+    computed: {
+        formattedTime() {
+            const totalSeconds = Math.floor(this.trackTime / 1000)
+            const hours = Math.floor(totalSeconds / 3600)
+            const minutes = Math.floor((totalSeconds % 3600) / 60)
+            const seconds = totalSeconds % 60;
+            const padZero = (num) => (num < 10 ? `0${num}` : num)
+            return `${minutes}:${padZero(seconds)}`
+        },
+        formattedDate() {
+            const now = moment()
+            const targetDate = moment(this.dateStr)
+            const diffInDays = now.diff(targetDate, 'days')
 
-    name: 'TrackPreview',
+            if (diffInDays < 7) {
+                if (diffInDays === 0) return "Today"
+                if (diffInDays === 1) return "Yesterday"
+                return `${diffInDays} days ago`
+            } else {
+                return targetDate.format("MMM D, YYYY")
+            }
+        }
+
+    }
 }
 </script>
 
