@@ -23,7 +23,6 @@
             font-weight: 900;
             font-size: 6rem;
             color: $clr2;
-            letter-spacing: -3px;
         }
 
         .logo {
@@ -46,8 +45,8 @@
     }
 
     .station-img {
-        height: 232px;
-        width: 232px;
+        height: 100%;
+        width: 14.5rem;
         box-shadow: 0 4px 60px rgba(0, 0, 0, 0.5);
     }
 

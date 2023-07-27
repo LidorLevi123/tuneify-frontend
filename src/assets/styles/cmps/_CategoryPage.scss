@@ -3,4 +3,12 @@
     background-image: linear-gradient(to bottom, #212121 0%, #121212 25%, #121212 25%, #121212 100%);
     padding: 1.5rem;
     overflow: auto;
+
+    h1 {
+        margin-block-start: 11rem;
+        margin-block-end: 2rem;
+        font-weight: 900;
+        font-size: 6rem;
+        color: $clr2;
+    }
 }

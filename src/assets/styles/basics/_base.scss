@@ -77,7 +77,8 @@ body {
     margin: 0;
     line-height: 1.6;
     background-color: #000000;
-    font-family: Circular;
+    font-family: Circular, Rubik;
+    user-select: none;
 }
 
 ::-webkit-scrollbar {

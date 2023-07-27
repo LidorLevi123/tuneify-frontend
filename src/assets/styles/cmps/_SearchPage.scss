@@ -4,6 +4,11 @@
     padding-inline-start: 1.4rem;
     overflow-y: auto;
 
+    h2 {
+        color: $clr2;
+        margin-block-start: 1.5rem;
+    }
+
     .search-header {
         z-index: 1;
         background-color: $clr4;
@@ -73,8 +78,3 @@
     }
 
 }
-
-// .big {
-//     height: 1000vh;
-//     background-color: aqua;
-// }
