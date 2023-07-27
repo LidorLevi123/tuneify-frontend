@@ -40,11 +40,14 @@
                 <input class="time-slider slider" @input="onChangetime" type="range" min="0" max="100" v-model="currVolume">
                 <span style="color:white;">{{ formattedTime }}</span>
             </section>
-formattedTime
         </section>
         <section class="vol-container">
-            <button class="mute btn" @click="toggleMute" title="Mute"><span
-                    class=" material-symbols-outlined vol-btn">volume_up</span></button>
+            <button class="mute btn" @click="toggleMute" title="Mute">
+                <span v-if="this.currVolume > 66.66" v-icon="'vol1'"></span>
+                <span v-if="this.currVolume > 33.33 && this.currVolume < 66.66" v-icon="'vol2'"></span>
+                <span v-if="this.currVolume > 1 && this.currVolume < 33.33" v-icon="'vol3'"></span>
+                <span v-if="this.currVolume == 0" v-icon="'vol4'"></span>
+            </button>
             <input class="vol-slider slider" @input="onChangeVolume" type="range" min="0" max="100" v-model="currVolume">
         </section>
     </section>
@@ -104,7 +107,7 @@ export default {
 
             if (this.currTrack.currIdx > this.currTrackList.length - 1) this.currTrack.currIdx = 0
 
-            let clickedTrack = this.currTrackList[this.currTrack.currIdx]
+            this.clickedTrack = this.currTrackList[this.currTrack.currIdx]
 
             // let YTid = await ytService.queryYT(this.clickedTrack.title, this.clickedTrack.artists[0])
             let YTid = 'UNZJQw8cr6o'
@@ -120,7 +123,7 @@ export default {
 
             if (this.currTrack.currIdx < 0) this.currTrack.currIdx = this.currTrackList.length - 1
 
-            let clickedTrack = this.currTrackList[this.currTrack.currIdx]
+            this.clickedTrack = this.currTrackList[this.currTrack.currIdx]
 
             // let YTid = await ytService.queryYT(this.clickedTrack.title, this.clickedTrack.artists[0])
             let YTid = 'ic8j13piAhQ'
@@ -193,7 +196,6 @@ export default {
         },
     }
 }
-
 
 </script>
 
