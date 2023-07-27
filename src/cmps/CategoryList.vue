@@ -2,7 +2,9 @@
     <section class="category-list">
         <ul v-if="categories" class="clean-list">
             <li v-for="category in categories" :key="category.id">
-                <CategoryPreview :category="category" />
+                <RouterLink :to="`/category/${category.id}/${category.name}`">
+                    <CategoryPreview :category="category" />
+                </RouterLink>
             </li>
         </ul>
     </section>
@@ -18,13 +20,8 @@ export default {
 
     components: {
         CategoryPreview,
-        CategoryPreview
     },
 
     name: 'CategoryList',
 }
 </script>
-
-<style lang="scss" scoped>
-.category-list {}
-</style>

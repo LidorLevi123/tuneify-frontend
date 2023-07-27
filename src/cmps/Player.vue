@@ -36,7 +36,7 @@
             </section>
 
             <section class="time-container">
-                <span style="color:white;">{{ formattedTime }}</span>
+                <span style="color:white;">{{ elapsedTime }}</span>
                 <input class="time-slider slider" @input="onChangetime" type="range" min="0" max="100" v-model="currVolume">
                 <span style="color:white;">{{ formattedTime }}</span>
             </section>
@@ -66,6 +66,9 @@ export default {
     data() {
         return {
             clickedTrack: {},
+            intervalId: null,
+            elapsedTime: '0:00',
+            lastPlayTime: 0,
             isPlaying: false,
             isShuffle: false,
             isRepeat: false,
@@ -133,6 +136,8 @@ export default {
         loadVideo(YTid) {
             this.currTrack.YTid = YTid
             this.isPlaying = true
+            this.lastPlayTime = new Date().getTime()
+            this.intervalId = setInterval(this.updateElapsedTime, 1000)
         },
         toggleShuffle() {
             this.isShuffle = !this.isShuffle
@@ -153,9 +158,12 @@ export default {
             if (this.isPlaying) {
                 this.isPlaying = false
                 this.$refs.youtubePlayer.pauseVideo()
+                this.lastPlayTime = new Date().getTime()
+                clearInterval(this.intervalId)
             } else {
                 this.isPlaying = true
                 this.$refs.youtubePlayer.playVideo()
+                this.intervalId = setInterval(this.updateElapsedTime, 1000)
             }
         },
         onChangeVolume() {
@@ -170,6 +178,17 @@ export default {
                 this.nextVideo()
             } else return
         },
+        updateElapsedTime() {
+            if (this.isPlaying) {
+                const currentTime = new Date().getTime()
+                const elapsedTimeSeconds = Math.floor((currentTime - this.lastPlayTime) / 1000)
+                const minutes = Math.floor(elapsedTimeSeconds / 60)
+                const seconds = elapsedTimeSeconds % 60
+                this.elapsedTime = `${minutes}:${seconds.toString().padStart(2, "0")}`
+
+                console.log("🚀 ~ file: Player.vue:193 ~ updateElapsedTime ~ this.elapsedTime:", this.elapsedTime)
+            }
+        },
         async onPlayTrack(trackId, tracks) {
             this.currTrackList = tracks
             this.currTrack.currIdx = this.currTrackList.findIndex(track => track.id === trackId)
@@ -180,6 +199,8 @@ export default {
             let YTid = "nyuo9-OjNNg"
 
             this.loadVideo(YTid)
+
+
         },
         beforeUnmounted() {
             eventBus.off('playTrack', this.onPlayTrack)
