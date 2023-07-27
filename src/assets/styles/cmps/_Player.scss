@@ -14,6 +14,7 @@
 .main-player-container .play {
     border: none;
     border-radius: 50%;
+    background-color: white;
 }
 
 .main-player-container .play span {
@@ -75,9 +76,8 @@
     margin-inline: 0.5rem;
 }
 
-/////////////////////////////////////////////
-///
-///
+//////////////////////////
+
 .vol-container {
     display: flex;
     margin-inline-end: 1.5rem;

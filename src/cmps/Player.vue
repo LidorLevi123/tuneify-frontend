@@ -1,5 +1,4 @@
 <template>
-    <h1 style="color:white; font-size: 30px;">Track {{ this.currTrack.currIdx + 1 }}</h1>
 
     <YouTube
         ref="youtubePlayer"
@@ -9,7 +8,7 @@
         style="display: none;"/>
 
     <section class="main-player-container">
-        <section></section>
+        <section><h1 style="color:white; font-size: 25px;">Track {{ this.currTrack.currIdx + 1 }}</h1></section>
         <section class="player-main-controls">
 
             <button
@@ -62,6 +61,7 @@
 
 import { utilService } from '../services/util.service.js'
 import { eventBus } from '../services/event-bus.service.js'
+import { ytService } from '../services/yt.service.js'
 
 import YouTube from 'vue3-youtube'
 
@@ -112,7 +112,10 @@ export default {
             if (this.currTrack.currIdx > this.currTrackList.length - 1) this.currTrack.currIdx = 0
 
             let clickedTrack = this.currTrackList[this.currTrack.currIdx]
-            let YTid = await this.queryYT(clickedTrack.title, clickedTrack.artists[0])
+
+            // let YTid = await ytService.queryYT(clickedTrack.title, clickedTrack.artists[0])
+            let YTid = 'UNZJQw8cr6o'
+
             this.loadVideo(YTid)
         },
         async previousVideo() {
@@ -125,7 +128,10 @@ export default {
             if (this.currTrack.currIdx < 0) this.currTrack.currIdx = this.currTrackList.length - 1
 
             let clickedTrack = this.currTrackList[this.currTrack.currIdx]
-            let YTid = await this.queryYT(clickedTrack.title, clickedTrack.artists[0])
+
+            // let YTid = await ytService.queryYT(clickedTrack.title, clickedTrack.artists[0])
+            let YTid = 'ic8j13piAhQ'
+
             this.loadVideo(YTid)
         },
         loadVideo(YTid) {
@@ -174,27 +180,13 @@ export default {
 
             let clickedTrack = this.currTrackList[this.currTrack.currIdx]
 
-            let YTid = await this.queryYT(clickedTrack.title, clickedTrack.artists[0])
+            // let YTid = await ytService.queryYT(clickedTrack.title, clickedTrack.artists[0])
+            let YTid = "nyuo9-OjNNg"
+
             this.loadVideo(YTid)
-
         },
-        async queryYT(trackName, artists) {
-            const API_KEY = 'AIzaSyCy-U5zlHg4WobQ9TIYb_Y3d7uMvFqFv9A'
-            const SEARCH = trackName + ' ' + artists
-            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&videoEmbeddable=true&type=video&key=${API_KEY}&q=${SEARCH}`
-
-            try {
-                const response = await fetch(url)
-                const data = await response.json()
-                return data.items[0].id.videoId
-
-            } catch (error) {
-                console.error('Error fetching data:', error)
-            }
-        }
     },
 }
 
 </script>
-
 
