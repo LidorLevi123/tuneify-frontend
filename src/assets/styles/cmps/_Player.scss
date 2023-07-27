@@ -1,14 +1,21 @@
 .main-player-container {
-    grid-column: 1/-1;
-    // position: fixed;
-    // bottom: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+
+    grid-column: 1 / -1;
     width: 100%;
     padding-block-start: 0.8rem;
     background-color: $clr1;
     height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+}
+
+.main-player-container >*:nth-child(2) {
+    justify-self: center;
+}
+
+.main-player-container >*:last-child {
+    justify-self: end;
 }
 
 .main-player-container .play {
