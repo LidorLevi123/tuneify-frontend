@@ -5,7 +5,7 @@
 
     grid-column: 1 / -1;
     width: 100%;
-    padding-block-start: 0.8rem;
+    // padding-block-start: 0.8rem;
     background-color: $clr1;
     height: 80px;
 }
@@ -79,6 +79,8 @@
 
 .player-main-controls {
     display: flex;
+    justify-content: center;
+    margin-block-end: 10px;
 }
 
 .player-main-controls .btn {
@@ -92,40 +94,50 @@
 .vol-container {
     display: flex;
     margin-inline-end: 1.5rem;
+    align-items: center;
 }
 
-.vol-slider {
+.slider {
     align-self: center;
     justify-self: end;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+}
+
+.time-slider {
+    // min-width: 40px;
+    width: 600px;
+    height: 4px;
+    border-radius: 50px;
+}
+.vol-slider {
     width: 93px;
     height: 4px;
     border-radius: 50px;
 }
 
-.vol-slider:hover {
+.slider:hover {
     background: $clr7;
 }
 
-.vol-slider:hover::-webkit-slider-thumb {
+.slider:hover::-webkit-slider-thumb {
     opacity: 1;
 }
 
 /* Style the slider track */
-.vol-slider::-webkit-slider-runnable-track {
-    height: px;
+.slider::-webkit-slider-runnable-track {
+    // height: px;
     border-radius: 5px;
 }
 
-.vol-slider-track {
+.slider-track {
     height: 10px;
     border-radius: 5px;
 }
 
 /* Style the slider thumb (dot) */
-.vol-slider::-webkit-slider-thumb {
+.slider::-webkit-slider-thumb {
     opacity: 0;
     -webkit-appearance: none;
     height: 12px;
@@ -142,4 +154,15 @@
 
 .enabled path {
     fill: $clr9;
+}
+
+.time-container {
+    display: flex;
+    font-size: 0.6875rem;
+    font-weight: 400;
+    gap: 8px;
+}
+
+.player-mid {
+    align-items: center;
 }
