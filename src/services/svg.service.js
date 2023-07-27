@@ -48,7 +48,6 @@ const TunifySvgs = {
   </path>
 </svg>`,
 
-
   play: `<svg role="img" height="16" width="16" aria-hidden="true"
   viewBox="0 0 16 16" data-encore-id="icon" class="Svg-sc-ytk21e-0 haNxPq">
   <path

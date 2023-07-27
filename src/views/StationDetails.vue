@@ -6,8 +6,8 @@
             </section>
             <section class="station-info">
                 <span>Playlist</span>
-                <h1 @click="openStationEditor">{{ station?.name }}</h1>
-                <p class="description">{{ station?.description }}</p>
+                <h1 @click="openStationEditor">{{ station.name }}</h1>
+                <p class="description">{{ station.description }}</p>
             </section>
         </section>
         <section class="details-player">
@@ -39,7 +39,7 @@ const fac = new FastAverageColor()
 export default {
     data() {
         return {
-            station: null
+            station: this.$store.getters.currStation
         }
     },
     computed: {
@@ -47,23 +47,16 @@ export default {
             return this.$route.params
         },
     },
-    // created() {
-    //     this.loadStation()
-    //     this.getAverageImageColor();
-    // },
     async mounted() {
         await this.loadStation()
         const clr = utilService.getRandomColor()
         document.querySelector('.station-details').style.backgroundImage = `linear-gradient(to bottom, ${clr} 0%, #121212 50%, #121212 100%)`;
-        // this.getAverageImageColor()
     },
-
 
     methods: {
         async loadStation() {
             const { stationId } = this.$route.params
-            if (!stationId)
-                return;
+            if (!stationId) return
             try {
                 this.station = await stationService.getById(stationId)
                 if(!this.station.owner) {
