@@ -1,6 +1,6 @@
 <template>
     <article class="track-preview track-preview-layout">
-        <span class="track-num">{{ track.idx }}</span>
+        <span class="track-num">{{ trackIdx }}</span>
         <div class="mini-prev">
             <section class="img-container">
                 <img :src="`${track.imgUrl}`" alt="">
@@ -22,6 +22,7 @@ export default {
     name: 'TrackPreview',
     props: {
         track: { type: Object },
+        trackIdx: { type: Number}
     },
     data() {
         return {

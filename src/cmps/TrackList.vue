@@ -10,8 +10,7 @@
         <hr>
         <ul v-if="tracks" class="clean-list">
             <li v-for="(track, idx) in tracks" :key="track.id" @click="playTrack(track.id)">
-                <template>{{ track.idx = idx + 1 }} </template>
-                <TrackPreview :track="track" />
+                <TrackPreview :track="track" :trackIdx="idx + 1" />
             </li>
         </ul>
     </section>
@@ -25,15 +24,15 @@ export default {
     props: {
         tracks: { type: Array },
     },
-
-    components: {
-        TrackPreview,
-    },
-
+    
     methods: {
         playTrack(trackId) {
             eventBus.emit('playTrack', trackId, this.tracks)
         }
+    },
+
+    components: {
+        TrackPreview,
     },
 
     name: 'TrackList',
