@@ -16,7 +16,6 @@ export const stationStore = {
             state.stations = stations
         },
         setCurrStation(state, { station }) {
-            console.log('station: ', station);
             state.currStation = station
         },
         addStation({ stations }, { stationToSave }) {
