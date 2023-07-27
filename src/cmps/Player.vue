@@ -136,6 +136,8 @@ export default {
         loadVideo(YTid) {
             this.currTrack.YTid = YTid
             this.isPlaying = true
+            this.lastPlayTime = new Date().getTime()
+            this.intervalId = setInterval(this.updateElapsedTime, 1000)
         },
         toggleShuffle() {
             this.isShuffle = !this.isShuffle
@@ -198,8 +200,7 @@ export default {
 
             this.loadVideo(YTid)
 
-            this.lastPlayTime = new Date().getTime()
-            this.intervalId = setInterval(this.updateElapsedTime, 1000)
+
         },
         beforeUnmounted() {
             eventBus.off('playTrack', this.onPlayTrack)
