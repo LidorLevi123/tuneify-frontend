@@ -164,5 +164,6 @@
 }
 
 .player-mid {
-    align-items: center;
+    display: grid;
+    align-content: center;
 }

@@ -36,15 +36,18 @@
             </section>
 
             <section class="time-container">
-                <span style="color:white;">{{ formattedTime }}</span>
+                <span style="color:white;">{{ elapsedTime }}</span>
                 <input class="time-slider slider" @input="onChangetime" type="range" min="0" max="100" v-model="currVolume">
                 <span style="color:white;">{{ formattedTime }}</span>
             </section>
-formattedTime
         </section>
         <section class="vol-container">
-            <button class="mute btn" @click="toggleMute" title="Mute"><span
-                    class=" material-symbols-outlined vol-btn">volume_up</span></button>
+            <button class="mute btn" @click="toggleMute" title="Mute">
+                <span v-if="this.currVolume > 66.66" v-icon="'vol1'"></span>
+                <span v-if="this.currVolume > 33.33 && this.currVolume < 66.66" v-icon="'vol2'"></span>
+                <span v-if="this.currVolume > 1 && this.currVolume < 33.33" v-icon="'vol3'"></span>
+                <span v-if="this.currVolume == 0" v-icon="'vol4'"></span>
+            </button>
             <input class="vol-slider slider" @input="onChangeVolume" type="range" min="0" max="100" v-model="currVolume">
         </section>
     </section>
@@ -63,6 +66,9 @@ export default {
     data() {
         return {
             clickedTrack: {},
+            intervalId: null,
+            elapsedTime: '0:00',
+            lastPlayTime: 0,
             isPlaying: false,
             isShuffle: false,
             isRepeat: false,
@@ -104,7 +110,7 @@ export default {
 
             if (this.currTrack.currIdx > this.currTrackList.length - 1) this.currTrack.currIdx = 0
 
-            let clickedTrack = this.currTrackList[this.currTrack.currIdx]
+            this.clickedTrack = this.currTrackList[this.currTrack.currIdx]
 
             // let YTid = await ytService.queryYT(this.clickedTrack.title, this.clickedTrack.artists[0])
             let YTid = 'UNZJQw8cr6o'
@@ -120,7 +126,7 @@ export default {
 
             if (this.currTrack.currIdx < 0) this.currTrack.currIdx = this.currTrackList.length - 1
 
-            let clickedTrack = this.currTrackList[this.currTrack.currIdx]
+            this.clickedTrack = this.currTrackList[this.currTrack.currIdx]
 
             // let YTid = await ytService.queryYT(this.clickedTrack.title, this.clickedTrack.artists[0])
             let YTid = 'ic8j13piAhQ'
@@ -130,6 +136,8 @@ export default {
         loadVideo(YTid) {
             this.currTrack.YTid = YTid
             this.isPlaying = true
+            this.lastPlayTime = new Date().getTime()
+            this.intervalId = setInterval(this.updateElapsedTime, 1000)
         },
         toggleShuffle() {
             this.isShuffle = !this.isShuffle
@@ -150,9 +158,12 @@ export default {
             if (this.isPlaying) {
                 this.isPlaying = false
                 this.$refs.youtubePlayer.pauseVideo()
+                this.lastPlayTime = new Date().getTime()
+                clearInterval(this.intervalId)
             } else {
                 this.isPlaying = true
                 this.$refs.youtubePlayer.playVideo()
+                this.intervalId = setInterval(this.updateElapsedTime, 1000)
             }
         },
         onChangeVolume() {
@@ -167,6 +178,17 @@ export default {
                 this.nextVideo()
             } else return
         },
+        updateElapsedTime() {
+            if (this.isPlaying) {
+                const currentTime = new Date().getTime()
+                const elapsedTimeSeconds = Math.floor((currentTime - this.lastPlayTime) / 1000)
+                const minutes = Math.floor(elapsedTimeSeconds / 60)
+                const seconds = elapsedTimeSeconds % 60
+                this.elapsedTime = `${minutes}:${seconds.toString().padStart(2, "0")}`
+
+                console.log("🚀 ~ file: Player.vue:193 ~ updateElapsedTime ~ this.elapsedTime:", this.elapsedTime)
+            }
+        },
         async onPlayTrack(trackId, tracks) {
             this.currTrackList = tracks
             this.currTrack.currIdx = this.currTrackList.findIndex(track => track.id === trackId)
@@ -177,6 +199,8 @@ export default {
             let YTid = "nyuo9-OjNNg"
 
             this.loadVideo(YTid)
+
+
         },
         beforeUnmounted() {
             eventBus.off('playTrack', this.onPlayTrack)
@@ -193,7 +217,6 @@ export default {
         },
     }
 }
-
 
 </script>
 

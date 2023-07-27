@@ -1,10 +1,9 @@
 .sidebar-list-container {
-    overflow: auto;
+    overflow-y: auto;
+    flex: 1;
     grid-column: 1;
     width: 412px;
-    height: 112px;
     background-color: $clr4;
-    height: calc(100vh - 224px);
     border-radius: 0.5rem;
     margin-block-start: 0.5rem;
     padding: 1.1rem;
