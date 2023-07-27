@@ -15,9 +15,9 @@
                 <span class="material-symbols-outlined">skip_previous</span>
             </button>
 
-            <button class="play btn" @click="togglePlayPause" title="play">
+            <button class="play btn" @click="togglePlayPause" title="Play">
                 <span v-if="!this.isPlaying" v-icon="'play'"></span>
-                <span v-if="this.isPlaying" v-icon="'pause'"></span>
+                <span v-else="this.isPlaying" v-icon="'pause'"></span>
             </button>
 
             <button class="next btn" @click="nextVideo" title="Next">
@@ -80,11 +80,9 @@ export default {
     },
     methods: {
         onPlayerReady(event) {
-            this.player = event.target
-            // event.target.playVideo()
         },
         async nextVideo() {
-            this.currTrack.currIdx += 1
+            this.currTrack.currIdx++
 
             if (this.isShuffle) {
                 this.currTrack.currIdx = utilService.getRandomIntInclusive(0, this.currTrackList.length - 1)
@@ -100,7 +98,7 @@ export default {
             this.loadVideo(YTid)
         },
         async previousVideo() {
-            this.currTrack.currIdx -= 1
+            this.currTrack.currIdx--
 
             if (this.isShuffle) {
                 this.currTrack.currIdx = utilService.getRandomIntInclusive(0, this.currTrackList.length - 1)
@@ -166,6 +164,9 @@ export default {
 
             this.loadVideo(YTid)
         },
+        beforeUnmounted() {
+            eventBus.off('playTrack', this.onPlayTrack)
+        }
     },
 }
 
