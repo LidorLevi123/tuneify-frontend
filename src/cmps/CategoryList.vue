@@ -2,31 +2,29 @@
     <section class="category-list">
         <ul v-if="categories" class="clean-list">
             <li v-for="category in categories" :key="category.id">
-                <pre>{{ category.name }}</pre>
+                <CategoryPreview :category="category" />
             </li>
         </ul>
     </section>
 </template>
 
 <script>
-// import TrackPreview from './TrackPreview.vue'
-
+import CategoryPreview from './CategoryPreview.vue'
 
 export default {
     props: {
         categories: { type: Array },
     },
 
-    // components: {
-    //     TrackPreview,
-    // },
+    components: {
+        CategoryPreview,
+        CategoryPreview
+    },
 
-    name: 'CategorykList',
+    name: 'CategoryList',
 }
 </script>
 
 <style lang="scss" scoped>
-.category-list {
-    
-}
+.category-list {}
 </style>

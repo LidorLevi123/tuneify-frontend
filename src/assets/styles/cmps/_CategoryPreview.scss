@@ -1,0 +1,22 @@
+.category-preview {
+    position: relative;
+    height: 180px;
+    font-size: 2rem;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+
+    h1 {
+        padding-inline-start: 0.5em;
+        padding-block-start: 0.5em;
+    }
+
+    img {
+        position: absolute;
+        bottom: 0;
+        right: -20px;
+
+        width: 100px;
+        rotate: 20deg;
+    }
+}
