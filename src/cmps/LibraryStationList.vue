@@ -1,12 +1,12 @@
 <template>
     <section class="library-station-list">
-            <ul class="clean-list">
-                <li @click="goToDetails(station._id)" v-for="station in libraryStations" :key="station.id">
-                    <LibraryStationPreview :station="station"/>
-                    <button @click="removeStation(station._id, $event)">X</button>
-                </li>
-            </ul>
-        </section>
+        <ul class="clean-list">
+            <li @click="goToDetails(station._id)" v-for="station in libraryStations" :key="station.id">
+                <LibraryStationPreview :station="station" />
+                <button @click="removeStation(station._id, $event)">❌</button>
+            </li>
+        </ul>
+    </section>
 </template>
 
 <script>

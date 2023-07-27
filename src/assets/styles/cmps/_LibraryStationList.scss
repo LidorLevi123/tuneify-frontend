@@ -1,5 +1,18 @@
 .library-station-list {
+    button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+    }
+
+    li {
+        display: flex;
+        justify-content: space-between;
+        cursor: pointer;
+    }
+
     ul {
+        margin-block-start: 2rem;
         display: grid;
         row-gap: 10px;
     }
