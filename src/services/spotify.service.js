@@ -30,9 +30,9 @@ async function getSpotifyItems(reqType, id) {
             case 'tracks':
                 cleanData = _cleanStationsTracksData(response.data)
                 break
-            case 'categories':
-              cleanData = _cleanCategoriesData(response.data)
-              break
+            // case 'categories':
+            //     cleanData = _cleanCategoriesData(response.data)
+            //     break
         }
         return cleanData
     } catch (error) {
@@ -76,21 +76,15 @@ async function getAccessToken(clientId, clientSecret) {
     }
 }
 
-// getSpotifyItems('categories')
-
-function _cleanCategoriesData(data) {
-    console.log(data)
-}
+// getSpotifyItems('categoryStations', '0JQ5DAqbMKFDXXwE9BDJAr')
 
 function _cleanCategoryStationsData(data) {
-    return data.playlists.items.map(item => {
-        return {
-            _id: item.id,
-            name: item.name,
-            imgUrl: item.images[0].url,
-            description: item.description,
-        }
-    })
+    return data.playlists.items.map(item => ({
+        _id: item.id,
+        name: item.name,
+        imgUrl: item.images[0].url,
+        description: item.description,
+    }))
 }
 
 function _cleanStationsTracksData(data) {

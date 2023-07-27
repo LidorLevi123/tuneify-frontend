@@ -2,7 +2,6 @@
     <section class="station-main-container">
         <Header />
         <RouterView />
-        <div></div>
         <!-- <Player /> -->
     </section>
 </template>

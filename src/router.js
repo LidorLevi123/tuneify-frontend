@@ -3,6 +3,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import StationIndex from './views/StationIndex.vue'
 import HomePage from './views/HomePage.vue'
 import SearchPage from './views/SearchPage.vue'
+import CategoryPage from './views/CategoryPage.vue'
 import StationDetails from './views/StationDetails.vue'
 
 const routes = [
@@ -20,6 +21,11 @@ const routes = [
         path: 'search',
         name: 'SearchPage',
         component: SearchPage,
+      },
+      {
+        path: 'category/:categoryId/:categoryName',
+        name: 'CategoryPage',
+        component: CategoryPage,
       },
       {
         path: 'station/:stationId',

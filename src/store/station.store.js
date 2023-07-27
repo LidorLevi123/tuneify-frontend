@@ -4,7 +4,7 @@ import { stationService } from '../services/station.service.local'
 export const stationStore = {
     state: {
         stations: [], // For now we hold all stations here until wo move to backend
-        currStation: null
+        currStation: null,
     },
     getters: {
         stations({ stations }) { return stations.filter(station => !station.owner) },

@@ -12,7 +12,8 @@ export const stationService = {
     remove,
     getEmptyStation,
     getStations,
-    getStationTracks
+    getStationTracks,
+    getCategoryStations
 }
 
 async function query(filterBy = { name: '' }) {
@@ -48,6 +49,7 @@ async function getStations() {
     let stations = utilService.loadFromStorage(STORAGE_KEY)
     if(stations) return stations
 
+    // For now we display some stations from Rock category for demo at HomePage
     stations = await spotifyService.getSpotifyItems('categoryStations', '0JQ5DAqbMKFDXXwE9BDJAr')
     utilService.saveToStorage(STORAGE_KEY, stations)
     return stations
@@ -57,6 +59,11 @@ async function getStationTracks(station) {
   if(station.owner) return
   const tracks = await spotifyService.getSpotifyItems('tracks', station._id)
   return tracks
+}
+
+async function getCategoryStations(categoryId) {
+  const stations = await spotifyService.getSpotifyItems('categoryStations', categoryId)
+  return stations
 }
 
 function getEmptyStation() {
