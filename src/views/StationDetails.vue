@@ -1,28 +1,37 @@
 <template>
     <section class="station-details" v-if="station">
-        <section class="img-photo">
-            <section class="img">
-                <img class="station-img" :src="station.imgUrl" alt="">
+        <div class="top-gradient">
+            <section class="img-photo">
+                <section class="img">
+                    <img class="station-img" :src="station.imgUrl" alt="">
+                </section>
+                <section class="station-info">
+                    <span>Playlist</span>
+                    <h1 @click="openStationEditor">{{ station.name }}</h1>
+                    <span class="description">{{ station.description }}</span>
+                    <div>
+                        <img src="../../public/favicon.svg" alt="">
+                        <span>Tunify ⚬</span>
+                        <span class="songs-num">{{ station.tracks.length }} songs</span>
+                    </div>
+                </section>
             </section>
-            <section class="station-info">
-                <span>Playlist</span>
-                <h1 @click="openStationEditor">{{ station.name }}</h1>
-                <p class="description">{{ station.description }}</p>
+        </div>
+        <div class="bottom-gradient">
+            <section class="details-player">
+                <button class="details-play">
+                    <span class="details-play" v-icon="'detailsPlay'"></span>
+                </button>
+                <button v-show="!station.owner" class="details-like">
+                    <span v-icon="'like'"></span>
+                </button>
+                <button class="btn details-edit">
+                    <span v-icon="'moreOptions'"></span>
+                </button>
             </section>
-        </section>
-        <section class="details-player">
-            <button class="details-play">
-                <span class="details-play" v-icon="'detailsPlay'"></span>
-            </button>
-            <button v-show="!station.owner" class="details-like">
-                <span v-icon="'like'"></span>
-            </button>
-            <button class="btn details-edit">
-                <span v-icon="'moreOptions'"></span>
-            </button>
-        </section>
+            <TrackList :tracks="station.tracks" />
+        </div>
         <StationEdit />
-        <TrackList :tracks="station.tracks" />
     </section>
 </template>
 
@@ -52,10 +61,11 @@ export default {
             this.setBackgroundClr()
         },
         setBackgroundClr() {
-            const clr = utilService.getRandomColor()
-
-            document.querySelector('.station-details').style.backgroundImage =
-                `linear-gradient(to bottom, ${clr} 0%, #121212 50%, #121212 100%)`
+            const [randomColor, darkerColor, darkerDarkerColor] = utilService.generateColors()
+            document.querySelector('.top-gradient').style.backgroundImage =
+                `linear-gradient(to bottom, ${randomColor} 0%, ${darkerColor} 100%)`
+            document.querySelector('.bottom-gradient').style.backgroundImage =
+                `linear-gradient(to bottom, ${darkerDarkerColor} 0%, #121212 6%, #121212 100%)`
         },
         openStationEditor() {
             if (!this.station.owner) return
@@ -75,3 +85,4 @@ export default {
     }
 }
 </script>
+
