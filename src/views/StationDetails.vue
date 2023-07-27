@@ -33,23 +33,32 @@ import StationEdit from '../cmps/StationEdit.vue'
 import TrackList from '../cmps/TrackList.vue'
 
 export default {
+
+    data() {
+        return {
+            tracksTotalDuration: 0
+        }
+    },
+
     computed: {
         stationId() {
             return this.$route.params.stationId
         },
         station() {
             return this.$store.getters.currStation
-        }
+        },
     },
 
     created() {
         this.loadStation()
     },
-
+    
     methods: {
         async loadStation() {
             await this.$store.dispatch({ type: 'setCurrStation', stationId: this.$route.params.stationId })
             this.setBackgroundClr()
+            this.setTracksTotalDuration()
+            console.log(this.tracksTotalDuration)
         },
         setBackgroundClr() {
             const clr = utilService.getRandomColor()
@@ -60,6 +69,9 @@ export default {
         openStationEditor() {
             if (!this.station.owner) return
             document.body.classList.add('modal-open')
+        },
+        setTracksTotalDuration() {
+            this.tracksTotalDuration = this.station.tracks?.reduce((sum, track) => sum = sum + track.formalDuration, 0)
         }
 
     },
