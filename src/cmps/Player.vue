@@ -3,8 +3,14 @@
         style="display: none;" />
 
     <section class="main-player-container">
-        <section>
-            <h1 style="color:white; font-size: 25px;">Track {{ this.currTrack.currIdx + 1 }}</h1>
+        <section v-if="clickedTrack" class="playing-track">
+            <section class="img-container">
+                <img :src="`${clickedTrack?.imgUrl}`" alt="">
+            </section>
+            <section>
+                <div style="color:white;">{{ clickedTrack?.title }}</div>
+                <div style="color:white;">artist</div>
+            </section>
         </section>
 
         <section class="player-mid">
@@ -199,13 +205,19 @@ export default {
         async onPlayTrack(trackId, station) {
 
             this.currTrackList = station.tracks
+            console.log("🚀 this.currTrackList:", this.currTrackList)
+
             this.currTrack.currIdx = this.currTrackList.findIndex(track => track.id === trackId)
 
             this.clickedTrack = this.currTrackList[this.currTrack.currIdx]
+            // console.log("🚀🚀🚀 this.clickedTrack:", this.clickedTrack)
+            console.log("🚀🚀🚀 this.clickedTrack:", this.clickedTrack.artists)
+
 
             let ytId
             if (this.clickedTrack.youtubeId) {
                 console.log('exists in local')
+
                 ytId = this.clickedTrack.youtubeId
             } else {
                 console.log('does not exist in local')
@@ -249,7 +261,11 @@ export default {
         },
         timeSigTosecs(TimeSig) {
 
+        },
+        artist() {
+            return this.clickedTrack.artists[0]
         }
+
     }
 }
 
@@ -266,3 +282,17 @@ export default {
 
 
 </script>
+
+<!--
+{
+    "addedAt": "2023-07-28T04:00:00Z",
+    "id": "2KReCz1L5XkGIBhDncQ5VZ",
+    "title": "BABY SAID",
+    "artists": [
+        "Måneskin"
+    ],
+    "imgUrl": "https://i.scdn.co/image/ab67616d0000b273c1b211b5fcdef31be5f806df",
+    "formalDuration": 164682,
+    "album": "RUSH!",
+    "youtubeId": "Z8NiouNEivo"
+} -->
