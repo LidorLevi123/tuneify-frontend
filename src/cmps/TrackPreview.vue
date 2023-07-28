@@ -28,10 +28,12 @@
 import moment from 'moment'
 export default {
     name: 'TrackPreview',
+
     props: {
         track: { type: Object },
         trackIdx: { type: Number }
     },
+
     data() {
         return {
             isHovered: false,
@@ -39,6 +41,7 @@ export default {
             dateStr: this.track.addedAt
         }
     },
+    
     computed: {
         formattedTime() {
             const totalSeconds = Math.floor(this.trackTime / 1000)
