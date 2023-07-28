@@ -6,7 +6,8 @@ export const utilService = {
     randomPastTime,
     saveToStorage,
     loadFromStorage,
-    getRandomColor
+    getRandomColor,
+    generateColors
 }
 
 function makeId(length = 6) {
@@ -72,3 +73,35 @@ function getRandomColor() {
     }
     return color;
 }
+
+function generateColors(hexColor) {
+
+    // Convert the hex color to RGB format
+    const r = parseInt(hexColor.substring(1, 3), 16)
+    const g = parseInt(hexColor.substring(3, 5), 16)
+    const b = parseInt(hexColor.substring(5, 7), 16)
+  
+    // Calculate the darker colors by reducing the RGB values by 23%
+    const darkerR = Math.floor(r * 0.77)
+    const darkerG = Math.floor(g * 0.77)
+    const darkerB = Math.floor(b * 0.77)
+    const darkerDarkerR = Math.floor(darkerR * 0.77)
+    const darkerDarkerG = Math.floor(darkerG * 0.77)
+    const darkerDarkerB = Math.floor(darkerB * 0.77)
+  
+    // Format the RGB values as hexadecimal color codes
+    const darkerColor = "#" + _componentToHex(darkerR) + _componentToHex(darkerG) + _componentToHex(darkerB)
+    const darkerDarkerColor = "#" + _componentToHex(darkerDarkerR) + _componentToHex(darkerDarkerG) + _componentToHex(darkerDarkerB)
+
+    return [darkerColor, darkerDarkerColor]
+  }
+  
+  function _componentToHex(c) {
+    const hex = c.toString(16)
+    return hex.length === 1 ? "0" + hex : hex
+  }
+  
+
+
+  
+ 

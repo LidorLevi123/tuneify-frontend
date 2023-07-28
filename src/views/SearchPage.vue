@@ -11,8 +11,8 @@
         </div>
       </div>
     </section>
-    <div class="big"></div>
-    <CategoryList :categories="categories"/>
+    <h2>Browse all</h2>
+    <CategoryList :categories="categories" />
   </section>
 </template>
   
@@ -21,25 +21,25 @@ import CategoryList from '../cmps/CategoryList.vue';
 import categoriesJson from '../data/categories.json' assert {type: 'json'};
 
 export default {
-    name: 'SearchPage',
-    data() {
-        return {
-          categories: categoriesJson,
-            filterBy: {
-                txt: '',
-            }
-        };
+  name: 'SearchPage',
+  data() {
+    return {
+      categories: categoriesJson,
+      filterBy: {
+        txt: '',
+      }
+    };
+  },
+  methods: {
+    onSetFilterBy() {
+      console.log(this.filterBy);
+      this.$emit('filter', this.filterBy);
     },
-    methods: {
-        onSetFilterBy() {
-            console.log(this.filterBy);
-            this.$emit('filter', this.filterBy);
-        },
-        onClearFilter() {
-            this.filterBy.txt = '';
-        }
-    },
-    components: { CategoryList }
+    onClearFilter() {
+      this.filterBy.txt = '';
+    }
+  },
+  components: { CategoryList }
 }
 </script>
   

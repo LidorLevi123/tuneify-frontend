@@ -8,8 +8,8 @@
             <span v-icon="'clock'"></span>
         </div>
         <hr>
-        <ul v-if="tracks" class="clean-list">
-            <li v-for="(track, idx) in tracks" :key="track.id" @click="playTrack(track.id)">
+        <ul v-if="station?.tracks" class="clean-list">
+            <li v-for="(track, idx) in station.tracks" :key="track.id" @click="playTrack(track.id)">
                 <TrackPreview :track="track" :trackIdx="idx + 1" />
             </li>
         </ul>
@@ -22,12 +22,12 @@ import { eventBus } from '../services/event-bus.service.js'
 
 export default {
     props: {
-        tracks: { type: Array },
+        station: { type: Object },
     },
-    
+
     methods: {
         playTrack(trackId) {
-            eventBus.emit('playTrack', trackId, this.tracks)
+            eventBus.emit('playTrack', trackId, this.station)
         }
     },
 

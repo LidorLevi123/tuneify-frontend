@@ -1,15 +1,16 @@
 .category-preview {
     position: relative;
-    height: 180px;
+    width: 11.9rem;
+    height: 11.9rem;
     font-size: 2rem;
-    border-radius: 8px;
+    border-radius: 0.5rem;
     overflow: hidden;
     cursor: pointer;
 
     h1 {
-        padding-inline-start: 0.5em;
-        padding-block-start: 0.5em;
-        color: white;
+        padding-inline-start: 0.5rem;
+        padding-block-start: 0.5rem;
+        color: $clr2;
         font-weight: normal;
     }
 
@@ -18,7 +19,8 @@
         bottom: 0;
         right: -20px;
 
-        width: 100px;
-        rotate: 20deg;
+        width: 6.48rem;
+        height: 6.48rem;
+        rotate: 25deg;
     }
 }

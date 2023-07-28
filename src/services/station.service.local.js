@@ -24,6 +24,7 @@ async function query(filterBy = { name: '' }) {
 async function getById(stationId) {
     let station = await storageService.get(STORAGE_KEY, stationId)
     station = JSON.parse(JSON.stringify(station))
+    if(station.tracks) return station
     station.tracks = await stationService.getStationTracks(station)
     return station
 }
@@ -74,26 +75,6 @@ function getEmptyStation() {
         imgUrl: '',
         owner: '',
         trackList: [
-            {
-                _id: 111,
-                title: "track1",
-                YTid: "hbkkJctZSLY",
-            },
-            {
-                _id: 222,
-                title: "track2",
-                YTid: "T4zgG3TlcZc",
-            },
-            {
-                _id: 333,
-                title: "track3",
-                YTid: "kXeSRsH3ibw",
-            },
-            {
-                _id: 444,
-                title: "track4",
-                YTid: "a-JlV44nqJ0",
-            },
         ]
     }
 }

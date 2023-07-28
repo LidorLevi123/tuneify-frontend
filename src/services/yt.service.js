@@ -3,10 +3,9 @@ export const ytService = {
     queryYT
 }
 
-async function queryYT(trackName, artists) {
+async function queryYT(term) {
     const API_KEY = 'AIzaSyCy-U5zlHg4WobQ9TIYb_Y3d7uMvFqFv9A'
-    const SEARCH = trackName + ' ' + artists
-    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&videoEmbeddable=true&type=video&key=${API_KEY}&q=${SEARCH}`
+    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&videoEmbeddable=true&type=video&key=${API_KEY}&q=${term}`
 
     try {
         const response = await fetch(url)

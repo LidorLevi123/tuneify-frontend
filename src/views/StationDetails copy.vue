@@ -63,7 +63,7 @@ export default {
         async loadStation() {
             const { stationId } = this.$route.params
             if (!stationId) return
-            
+
             try {
                 this.station = await stationService.getById(stationId)
                 if(!this.station.owner) {
@@ -112,7 +112,7 @@ export default {
             this.loadStation()
         },
     },
-    components: { 
+    components: {
         StationEdit,
         TrackList
     }

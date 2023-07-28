@@ -105,7 +105,7 @@
     appearance: none;
 }
 
-.time-slider {
+.playback-slider {
     // min-width: 40px;
     width: 600px;
     height: 4px;
@@ -156,7 +156,7 @@
     fill: $clr9;
 }
 
-.time-container {
+.playback-container {
     display: flex;
     font-size: 0.6875rem;
     font-weight: 400;
