@@ -42,7 +42,7 @@
 
             <section class="playback-container">
                 <span style="color:white;">{{ secsToTimeFormat(elapsedTime) }}</span>
-                <input class="playback-slider slider" @input="onTimeChange" type="range" min="0"
+                <input class="playback-slider slider" @input="onChangeTime" type="range" min="0"
                     :max="currTrack.duration" v-model="elapsedTime">
                 <span style="color:white;">{{ secsToTimeFormat(currTrack.duration) }}</span>
             </section>
@@ -75,7 +75,6 @@ export default {
         return {
             intervalId: null,
             elapsedTime: 0,
-            lastPlayTime: 0,
             isPlaying: false,
             isShuffle: false,
             isRepeat: false,
@@ -131,7 +130,6 @@ export default {
         loadVideo(ytId) {
             this.currTrack.ytId = ytId
             this.isPlaying = true
-            // this.lastPlayTime = new Date().getTime()
             this.handlePlaybackInterval(true)
         },
         toggleShuffle() {
@@ -159,20 +157,24 @@ export default {
                 this.$refs.youtubePlayer.pauseVideo()
                 this.currTrack.currTime = this.$refs.youtubePlayer.getCurrentTime()
 
-                this.lastPlayTime = new Date().getTime()
                 this.handlePlaybackInterval(false)
             } else {
                 this.isPlaying = true
                 this.$refs.youtubePlayer.playVideo()
                 this.handlePlaybackInterval(true)
-
-
             }
         },
         onChangeVolume() {
             this.$refs.youtubePlayer.setVolume(this.currVolume)
         },
-        onTimeChange() {
+        onChangeTime() {
+            console.log('time changed')
+            console.log('currTime', this.currTrack.currTime)
+            this.currTrack.currTime = this.elapsedTime
+            // console.log('1', this.$refs.youtubePlayer.getCurrentTime())
+            // console.log('2', this.elapsedTime)
+            // console.log('3')
+            this.$refs.youtubePlayer.seekTo(this.currTrack.currTime, true)
         },
         stopVideo() {
             this.isPlaying = false
@@ -189,13 +191,14 @@ export default {
                 console.log("duration format:", this.secsToTimeFormat(duration))
             } else return
         },
-        updateElapsedTime() {
+        async updateElapsedTime() {
             if (this.isPlaying) {
-                this.elapsedTime = this.$refs.youtubePlayer.getCurrentTime()
+                this.elapsedTime = await this.$refs.youtubePlayer.getCurrentTime()
                 // this.elapsedTimeString = this.secsToTimeFormat(elapsedTimeInSecs)
             }
         },
         async onPlayTrack(trackId, station) {
+        console.log("🚀 station:", station)
 
             this.currTrackList = station.tracks
 
@@ -211,16 +214,18 @@ export default {
             } else {
                 console.log('song doesn\'t have YT id in local')
 
-                // deep copy so we can update it
-                let stationCopy = JSON.parse(JSON.stringify(station))
-                // get ytId from YT
-                const term = this.clickedTrack.title + ' ' + this.clickedTrack.artists[0]
-                ytId = await ytService.queryYT(term)
-                // update deep copy with id
-                stationCopy.tracks[this.currTrack.currIdx].youtubeId = ytId
-                console.log(stationCopy.tracks[this.currTrack.currIdx])
-                // save deep copy to storage
-                await this.saveStationToLocal(stationCopy)
+                ytId = 'nyuo9-OjNNg'
+
+                // // deep copy so we can update it
+                // let stationCopy = JSON.parse(JSON.stringify(station))
+                // // get ytId from YT
+                // const term = this.clickedTrack.title + ' ' + this.clickedTrack.artists[0]
+                // ytId = await ytService.queryYT(term)
+                // // update deep copy with id
+                // stationCopy.tracks[this.currTrack.currIdx].youtubeId = ytId
+                // console.log(stationCopy.tracks[this.currTrack.currIdx])
+                // // save deep copy to storage
+                // await this.saveStationToLocal(stationCopy)
             }
 
             this.loadVideo(ytId)
