@@ -31,7 +31,6 @@
                 </button>
             </section>
             <TrackList :station="station" />
-            <!-- <TrackList :tracks="station.tracks" /> -->
         </div>
         <StationEdit />
     </section>
