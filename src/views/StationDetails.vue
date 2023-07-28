@@ -58,7 +58,6 @@ export default {
             await this.$store.dispatch({ type: 'setCurrStation', stationId: this.$route.params.stationId })
             this.setBackgroundClr()
             this.setTracksTotalDuration()
-            console.log(this.tracksTotalDuration)
         },
         setBackgroundClr() {
             const clr = utilService.getRandomColor()
