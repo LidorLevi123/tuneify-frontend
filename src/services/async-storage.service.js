@@ -21,7 +21,7 @@ function get(entityType, entityId) {
 
 function post(entityType, newEntity) {
     newEntity = JSON.parse(JSON.stringify(newEntity))    
-    newEntity._id = _makeId()
+    if(!newEntity._id) newEntity._id = _makeId()
     return query(entityType).then(entities => {
         entities.unshift(newEntity)
         _save(entityType, entities)

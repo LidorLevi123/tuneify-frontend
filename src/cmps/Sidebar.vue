@@ -22,7 +22,10 @@ export default {
         }
     },
     created() {
-        this.CreateLikedSongsStation()
+        // Fix this workaround later
+        setTimeout(()=> {
+            this.createLikedSongsStation()
+        }, 500)
     },
 
     methods: {
@@ -39,7 +42,7 @@ export default {
             this.$router.push(`/station/${station._id}`)
             this.canAddStation = true
         },
-        async CreateLikedSongsStation() {
+        async createLikedSongsStation() {
             const libraryStations = this.libraryStations
             const likedSongsExists = libraryStations.some(station => station.name === 'Liked Songs')
 
@@ -52,14 +55,14 @@ export default {
                     await this.$store.dispatch({ type: 'saveStation', stationToSave });
                 } catch (error) {
                     console.error('Error creating "Liked Songs" station:', error)
-                    throw new Error('cannot create Liked Songs Station')
+                    throw new Error('Cannot create Liked Songs Station')
                 }
             }
         }
     },
     computed: {
         libraryStations() {
-            return this.$store.getters.library
+            return this.$store.getters.libraryStations
         }
     },
 

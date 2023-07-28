@@ -10,7 +10,7 @@
                     <h1 @click="openStationEditor">{{ station.name }}</h1>
                     <p class="description">{{ station.description }}</p>
                     <div>
-                        <img src="../../public/favicon.svg" alt="">
+                        <img src="favicon.svg" alt="">
                         <span class="logo">Tunify ⚬</span>
                         <span class="songs-num">{{ station.tracks?.length }} songs,</span>
                         <span class="songs-time">about {{ formttedTime }} hours</span>
