@@ -16,8 +16,17 @@ import { stationService } from '../services/station.service.local';
 import LibraryStationList from './LibraryStationList.vue';
 
 export default {
+    data() {
+        return {
+            canAddStation: true
+        }
+    },
+
     methods: {
         async addStation() {
+            if(!this.canAddStation) return
+            
+            this.canAddStation = false
             const stationToSave = stationService.getEmptyStation()
 
             stationToSave.name = 'My Playlist #' + (this.libraryStations.length + 1)
@@ -25,6 +34,7 @@ export default {
 
             const station = await this.$store.dispatch({ type: 'saveStation', stationToSave })
             this.$router.push(`/station/${station._id}`)
+            this.canAddStation = true
         },
     },
 

@@ -2,39 +2,79 @@
     overflow: auto;
     border-radius: 0.5rem;
 
-    h1 {
-        font-weight: 900;
-        font-size: 6rem;
-        color: $clr2;
-        cursor: pointer;
-    }
+    .station-info {
+        img {
+            height: 1.5rem;
+        }
 
-    span {
-        font-size: 0.875rem;
-        color: $clr2;
-        font-weight: 700;
+        div {
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        div>* {
+            margin-right: 5px;
+        }
+
+        h1 {
+            margin-block-start: 0.9rem;
+            margin-block-end: 2rem;
+            font-weight: 900;
+            font-size: 6rem;
+            color: $clr2;
+        }
+
+        .logo {
+            font-weight: 700;
+        }
+
+        .songs-num {
+            color: $clr2;
+        }
+
+        span {
+            font-size: 0.875rem;
+            color: $clr2;
+        }
+
+        .songs-time {
+            color: $clr3;
+        }
+
     }
 
     .station-img {
-        height: 14.5rem;
+        height: 100%;
         width: 14.5rem;
         box-shadow: 0 4px 60px rgba(0, 0, 0, 0.5);
     }
 
     & .description {
-        color: $clr2;
+        color: $clr3;
+        font-size: 0.875rem;
+        margin-block-start: -10px;
     }
 
+
+
     & .img-photo {
+        align-self: end;
         display: flex;
-        gap: 2rem;
-        margin-block-start: 9rem;
+        gap: 1.5rem;
         margin-inline-start: 1.5rem;
+        align-items: end;
+        line-height: 1;
+        margin-block-end: 1.30rem;
+    }
+
+    .top-gradient {
+        height: 24.92rem;
+        display: flex;
     }
 
     & .details-player {
         display: flex;
-        // background-color: rgb(23, 106, 106);
         padding: 1.5rem;
 
         & .details-play {
@@ -63,9 +103,3 @@
         }
     }
 }
-
-// .station-details .track-list {
-//     display: grid;
-//     // grid-template-columns: [index] 16px [first] 4fr [var1] 2fr [last] minmax(120px, 1fr);
-//     padding: 1.5rem;
-// }

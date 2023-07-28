@@ -1,5 +1,32 @@
 .track-preview {
 
+    .small-like-dis {
+        border: none;
+        background-color: transparent;
+
+        &:hover {
+            svg {
+                path {
+                    fill: $clr2
+                }
+            }
+        }
+    }
+
+    .small-like-ena {
+        border: none;
+        background-color: transparent;
+    }
+
+    .small-play {
+        border: none;
+        background-color: transparent;
+
+        path {
+            fill: $clr2
+        }
+    }
+
     &:hover {
         background-color: #2c2d2a;
     }
