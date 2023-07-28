@@ -22,7 +22,7 @@ import { eventBus } from '../services/event-bus.service.js'
 
 export default {
     props: {
-        station: { type: Object},
+        station: { type: Object },
     },
 
     methods: {

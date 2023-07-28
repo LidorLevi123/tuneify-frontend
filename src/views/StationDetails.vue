@@ -30,10 +30,10 @@
                     <span v-icon="'moreOptions'"></span>
                 </button>
             </section>
-            <TrackList :tracks="station.tracks" />
+            <TrackList :station="station" />
+            <!-- <TrackList :tracks="station.tracks" /> -->
         </div>
         <StationEdit />
-        <TrackList :station="station"/>
     </section>
 </template>
 
