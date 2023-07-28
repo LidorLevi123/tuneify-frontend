@@ -22,7 +22,6 @@ import { eventBus } from '../services/event-bus.service.js'
 
 export default {
     props: {
-        // tracks: { type: Array },
         station: { type: Object},
     },
 
