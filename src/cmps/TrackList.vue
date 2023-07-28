@@ -9,7 +9,7 @@
         </div>
         <hr>
         <ul v-if="station?.tracks" class="clean-list">
-            <li v-for="(track, idx) in station.tracks" :key="track.id" @click="playTrack(track.id)">
+            <li v-for="(track, idx) in station.tracks" :key="track.id" @click="trackClicked(track.id)">
                 <TrackPreview :track="track" :trackIdx="idx + 1" />
             </li>
         </ul>
@@ -26,8 +26,8 @@ export default {
     },
 
     methods: {
-        playTrack(trackId) {
-            eventBus.emit('playTrack', trackId, this.station)
+        trackClicked(trackId) {
+            eventBus.emit('trackClicked', trackId, this.station)
         }
     },
 

@@ -1,15 +1,15 @@
 <template>
-    <YouTube ref="youtubePlayer" :src="currTrack.ytId" @ready="onPlayerReady" @state-change="onStateChange"
+    <YouTube ref="youtubePlayer" :src="currTrack.youtubeId" @ready="onPlayerReady" @state-change="onStateChange"
         style="display: none;" />
 
     <section class="main-player-container">
-        <section v-if="clickedTrack" class="playing-track">
+        <section v-if="currTrack" class="playing-track">
             <section class="img-container">
-                <img v-if="clickedTrack.imgUrl" :src="`${clickedTrack?.imgUrl}`" alt="">
+                <img v-if="currTrack.imgUrl" :src="`${currTrack?.imgUrl}`" alt="">
             </section>
             <section>
-                <div class="track-title">{{ clickedTrack?.title }}</div>
-                <div class="track-artist">{{ clickedTrack.artists?.length > 0 ? clickedTrack.artists[0] : '' }}</div>
+                <div class="track-title">{{ currTrack?.title }}</div>
+                <div class="track-artist">{{ currTrack.artists?.length > 0 ? currTrack.artists[0] : '' }}</div>
             </section>
         </section>
 
@@ -42,8 +42,8 @@
 
             <section class="playback-container">
                 <span style="color:white;">{{ secsToTimeFormat(elapsedTime) }}</span>
-                <input class="playback-slider slider" @input="onChangeTime" type="range" min="0"
-                    :max="currTrack.duration" v-model="elapsedTime">
+                <input class="playback-slider slider" @input="onChangeTime" type="range" min="0" :max="currTrack.duration"
+                    v-model="elapsedTime">
                 <span style="color:white;">{{ secsToTimeFormat(currTrack.duration) }}</span>
             </section>
         </section>
@@ -81,11 +81,11 @@ export default {
             isMute: false,
             lastVolume: 0,
             currVolume: 80,
-            clickedTrack: {},
+            currStation: {},
             currTrackList: [],
             currTrack: {
-                ytId: '',
-                currIdx: 0,
+                youtubeId: '',
+                idx: 0,
                 duration: 0,
                 currTime: 0,
                 trackId: null,
@@ -105,30 +105,30 @@ export default {
         YouTube,
     },
     created() {
-        eventBus.on('playTrack', this.onPlayTrack)
+        eventBus.on('trackClicked', this.onTrackClicked)
     },
     methods: {
         onPlayerReady(event) {
         },
         async previousNextVideo(diff) {
-            this.currTrack.currIdx = this.currTrack.currIdx + diff
+            this.currTrack.idx = this.currTrack.idx + diff
 
             if (this.isShuffle) {
-                this.currTrack.currIdx = utilService.getRandomIntInclusive(0, this.currTrackList.length - 1)
+                this.currTrack.idx = utilService.getRandomIntInclusive(0, this.currTrackList.length - 1)
             }
 
-            if (this.currTrack.currIdx > this.currTrackList.length - 1) this.currTrack.currIdx = 0
-            if (this.currTrack.currIdx < 0) this.currTrack.currIdx = this.currTrackList.length - 1
+            if (this.currTrack.idx > this.currTrackList.length - 1) this.currTrack.idx = 0
+            if (this.currTrack.idx < 0) this.currTrack.idx = this.currTrackList.length - 1
 
-            this.clickedTrack = this.currTrackList[this.currTrack.currIdx]
+            this.currTrack = this.currTrackList[this.currTrack.idx]
 
-            const term = this.clickedTrack.title + ' ' + this.clickedTrack.artists[0]
-            let ytId = await ytService.queryYT(term)
+            const term = this.currTrack.title + ' ' + this.currTrack.artists[0]
+            let youtubeId = await ytService.queryYT(term)
 
-            this.loadVideo(ytId)
+            this.loadVideo(youtubeId)
         },
-        loadVideo(ytId) {
-            this.currTrack.ytId = ytId
+        loadVideo(youtubeId) {
+            this.currTrack.youtubeId = youtubeId
             this.isPlaying = true
             this.handlePlaybackInterval(true)
         },
@@ -168,12 +168,7 @@ export default {
             this.$refs.youtubePlayer.setVolume(this.currVolume)
         },
         onChangeTime() {
-            console.log('time changed')
-            console.log('currTime', this.currTrack.currTime)
             this.currTrack.currTime = this.elapsedTime
-            // console.log('1', this.$refs.youtubePlayer.getCurrentTime())
-            // console.log('2', this.elapsedTime)
-            // console.log('3')
             this.$refs.youtubePlayer.seekTo(this.currTrack.currTime, true)
         },
         stopVideo() {
@@ -181,14 +176,12 @@ export default {
             this.$refs.youtubePlayer.stopVideo()
         },
         onStateChange(event) {
-            // console.log("event.data", event.data)
+
             if (event.data === this.playerStates.ENDED) {
                 this.previousNextVideo(1)
             } else if (event.data === this.playerStates.UNSTARTED) {
                 let duration = this.$refs.youtubePlayer.getDuration()
                 this.currTrack.duration = duration ? duration : 0
-                console.log("duration:", duration)
-                console.log("duration format:", this.secsToTimeFormat(duration))
             } else return
         },
         async updateElapsedTime() {
@@ -197,42 +190,35 @@ export default {
                 // this.elapsedTimeString = this.secsToTimeFormat(elapsedTimeInSecs)
             }
         },
-        async onPlayTrack(trackId, station) {
-        console.log("🚀 station:", station)
+        async onTrackClicked(trackId, station) {
+            // deep copy so we can edit
+            let stationCopy = JSON.parse(JSON.stringify(station))
+            this.updateData(trackId, stationCopy)
 
-            this.currTrackList = station.tracks
-
-            this.currTrack.currIdx = this.currTrackList.findIndex(track => track.id === trackId)
-
-            this.clickedTrack = this.currTrackList[this.currTrack.currIdx]
-
-            let ytId
-            if (this.clickedTrack.youtubeId) {
-                console.log('song has YT id in local')
-
-                ytId = this.clickedTrack.youtubeId
+            if (this.currTrack.youtubeId) {
+                console.log('song has youtubeId in local')
             } else {
-                console.log('song doesn\'t have YT id in local')
+                console.log('song doesn\'t have youtubeId in local')
 
-                ytId = 'nyuo9-OjNNg'
-
-                // // deep copy so we can update it
-                // let stationCopy = JSON.parse(JSON.stringify(station))
-                // // get ytId from YT
-                // const term = this.clickedTrack.title + ' ' + this.clickedTrack.artists[0]
-                // ytId = await ytService.queryYT(term)
-                // // update deep copy with id
-                // stationCopy.tracks[this.currTrack.currIdx].youtubeId = ytId
-                // console.log(stationCopy.tracks[this.currTrack.currIdx])
-                // // save deep copy to storage
-                // await this.saveStationToLocal(stationCopy)
+                await this.setTrackYoutubeId()
             }
 
-            this.loadVideo(ytId)
+            this.loadVideo(this.currTrack.youtubeId)
         },
-        async saveStationToLocal(station) {
+        updateData(trackId, stationCopy) {
+            this.currStation = stationCopy
+            this.currTrackList = this.currStation.tracks
+            this.currTrack = this.currStation.tracks.find((track) => track.id === trackId)
+            this.currTrack.idx = this.currTrackList.findIndex(track => track.id === trackId)
+        },
+        async setTrackYoutubeId() {
+
+            // get youtubeId from YT
+            const term = this.currTrack.title + ' ' + this.currTrack.artists[0]
+            this.currTrack.youtubeId = await ytService.queryYT(term)
+
             try {
-                await this.$store.dispatch({ type: 'saveStation', stationToSave: station })
+                await this.$store.dispatch({ type: 'saveStation', stationToSave: this.currStation })
             } catch (err) {
                 console.log(err.message)
             }
@@ -254,11 +240,11 @@ export default {
         },
     },
     beforeunmount() {
-        eventBus.off('playTrack', this.onPlayTrack)
+        eventBus.off('trackClicked', this.onTrackClicked)
     },
     computed: {
         formattedTime() {
-            const totalSeconds = Math.floor(this.clickedTrack.formalDuration / 1000)
+            const totalSeconds = Math.floor(this.currTrack.formalDuration / 1000)
             const hours = Math.floor(totalSeconds / 3600)
             const minutes = Math.floor((totalSeconds % 3600) / 60)
             const seconds = totalSeconds % 60
