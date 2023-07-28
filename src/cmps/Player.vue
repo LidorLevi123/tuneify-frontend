@@ -9,7 +9,6 @@
 
         <section class="player-mid">
 
-
             <section class="player-main-controls">
 
                 <button class="shuffle btn" @click="toggleShuffle" title="Shuffle">
@@ -143,6 +142,7 @@ export default {
             } else {
                 this.isMute = true
                 this.$refs.youtubePlayer.mute()
+
             }
         },
         togglePlayPause() {
@@ -210,7 +210,7 @@ export default {
             } else {
                 console.log('does not exist in local')
 
-                // deep copy so I can edit store:
+                // deep copy so we can edit store
                 let stationCopy = JSON.parse(JSON.stringify(station))
                 // get ytId from YT
                 const term = this.clickedTrack.title + ' ' + this.clickedTrack.artists[0]
@@ -244,7 +244,25 @@ export default {
             const padZero = (num) => (num < 10 ? `0${num}` : num)
             return `${minutes}:${padZero(seconds)}`
         },
+        timeSigToSecs(timeInSecs) {
+
+        },
+        timeSigTosecs(TimeSig) {
+
+        }
     }
 }
+
+
+// this.$refs.youtubePlayer.getCurrentTime() - Returns the elapsed time in seconds since the video started playing.
+
+// this.$refs.youtubePlayer.getDuration() - returns 0 til the metadata is loaded (mostly happens after vid starts playing).
+
+// this.$refs.youtubePlayer.seekTo(secs, false) - plays the song "secs" number of secs from the start (if was paused - stays paused)
+
+// best seekTo flow:
+// while user grabs the slider this.$refs.youtubePlayer.seekTo(5, false)
+// set to true while user lets releases the slider
+
 
 </script>
