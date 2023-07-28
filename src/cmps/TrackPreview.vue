@@ -1,7 +1,7 @@
 <template>
     <article class="track-preview track-preview-layout">
+
         <span class="track-num">{{ trackIdx }}</span>
-        <!-- <span v-show="track.isHovered" class="small-play" v-icon="`play`" title="Play"></span> -->
         <div class="mini-prev">
             <section class="img-container">
                 <img :src="`${track.imgUrl}`" alt="">
@@ -14,18 +14,27 @@
         <span class="track-album">{{ track.album }}</span>
         <div class="df sb">
             <span class="track-">{{ formattedDate }}</span>
-            <!-- <span class="material-symbols-outlined">favorite</span> -->
-            <!-- <button class="small-like-dis" v-if="title.isHovered && !track.isLiked"><span
-                    v-icon="`smallLikeDis`"></span></button>
-            <button class="small-like-ena" v-if="title.isHovered && track.isLiked"><span
-                    v-icon="`smallLikeEna`"></span></button> -->
         </div>
         <span class="track-album">{{ formattedTime }}</span>
+        
+        <!-- DEAR YARON - CHANGE THE SVG ICON NAMES TO LIKE / DISLIKE AND NOT SMALL-LIKE-DIS-ZIBI -->
+        <section class="track-actions">
+            <!-- <span v-show="isHovered" class="small-play" v-icon="`play`" title="Play"></span> -->
+            <!-- <span class="material-symbols-outlined">favorite</span> -->
+            <!-- <span v-icon="`smallLikeEna`"></span> -->
+            <!-- <button class="small-like-dis" v-if="title.isHovered && !track.isLiked">
+                <span v-icon="`smallLikeDis`"></span>
+            </button>
+            <button class="small-like-ena" v-if="title.isHovered && track.isLiked">
+            </button> -->
+        </section>
+
     </article>
 </template>
 
 <script>
 import moment from 'moment'
+
 export default {
     name: 'TrackPreview',
 
@@ -41,7 +50,7 @@ export default {
             dateStr: this.track.addedAt
         }
     },
-    
+
     computed: {
         formattedTime() {
             const totalSeconds = Math.floor(this.trackTime / 1000)

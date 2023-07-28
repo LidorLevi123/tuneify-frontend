@@ -3,7 +3,9 @@
         <ul class="clean-list">
             <li @click="goToDetails(station._id)" v-for="station in libraryStations" :key="station.id">
                 <LibraryStationPreview :station="station" />
-                <button @click="removeStation(station._id, $event)">❌</button>
+                <button v-if="station.name !== 'Liked Songs'" @click="removeStation(station._id, $event)">
+                    ❌
+                </button>
             </li>
         </ul>
     </section>
