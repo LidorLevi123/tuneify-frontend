@@ -41,10 +41,10 @@
             </section>
 
             <section class="playback-container">
-                <span style="color:white;">{{ elapsedTime }}</span>
+                <span style="color:white;">{{ secsToTimeFormat(elapsedTime) }}</span>
                 <input class="playback-slider slider" @input="onTimeChange" type="range" min="0"
-                    :max="currTrack.duration" v-model="elapsedTimeInSeconds">
-                <span style="color:white;">{{ secsToTimeSig(currTrack.duration) }}</span>
+                    :max="currTrack.duration" v-model="elapsedTime">
+                <span style="color:white;">{{ secsToTimeFormat(currTrack.duration) }}</span>
             </section>
         </section>
         <section class="vol-container">
@@ -73,18 +73,17 @@ import { storageService } from '../services/async-storage.service'
 export default {
     data() {
         return {
-            clickedTrack: {},
-            elapsedTimeInSeconds: 0,
             intervalId: null,
-            elapsedTime: '0:00',
+            elapsedTime: 0,
             lastPlayTime: 0,
             isPlaying: false,
             isShuffle: false,
             isRepeat: false,
             isMute: false,
-            currTrackList: [],
             lastVolume: 0,
             currVolume: 80,
+            clickedTrack: {},
+            currTrackList: [],
             currTrack: {
                 ytId: '',
                 currIdx: 0,
@@ -187,13 +186,13 @@ export default {
                 let duration = this.$refs.youtubePlayer.getDuration()
                 this.currTrack.duration = duration ? duration : 0
                 console.log("duration:", duration)
-                console.log("duration sig:", this.secsToTimeSig(duration))
+                console.log("duration format:", this.secsToTimeFormat(duration))
             } else return
         },
         updateElapsedTime() {
             if (this.isPlaying) {
-                let elapsedTimeInSecs = this.$refs.youtubePlayer.getCurrentTime()
-                this.elapsedTime = this.secsToTimeSig(elapsedTimeInSecs)
+                this.elapsedTime = this.$refs.youtubePlayer.getCurrentTime()
+                // this.elapsedTimeString = this.secsToTimeFormat(elapsedTimeInSecs)
             }
         },
         async onPlayTrack(trackId, station) {
@@ -237,13 +236,13 @@ export default {
             if (this.intervalId) clearInterval(this.intervalId)
             if (NewInterval) this.intervalId = setInterval(this.updateElapsedTime, 1000)
         },
-        secsToTimeSig(totalSeconds) {
+        secsToTimeFormat(totalSeconds) {
             const minutes = Math.floor(totalSeconds / 60)
             const seconds = Math.floor(totalSeconds % 60)
             return `${minutes}:${String(seconds).padStart(2, '0')}`
         },
-        timeSigToSecs(TimeSig) {
-            const [minutesStr, secondsStr] = TimeSig.split(':')
+        timeFormatToSecs(timeFormat) {
+            const [minutesStr, secondsStr] = timeFormat.split(':')
             const minutes = parseInt(minutesStr)
             const seconds = parseInt(secondsStr)
             return minutes * 60 + seconds
