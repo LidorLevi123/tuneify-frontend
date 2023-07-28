@@ -24,7 +24,7 @@ export default {
     props: {
         tracks: { type: Array },
     },
-    
+
     methods: {
         playTrack(trackId) {
             eventBus.emit('playTrack', trackId, this.tracks)
