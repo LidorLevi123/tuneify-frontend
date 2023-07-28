@@ -88,6 +88,8 @@ function _cleanCategoryStationsData(data) {
 }
 
 function _cleanStationsTracksData(data) {
+    // const test = getSpotifyItems('tracks', '37i9dQZF1DXcF6B6QPhFDv')
+    // console.log(test)
     return data.items.map(item => {
         return {
             addedAt: item.added_at,
@@ -107,5 +109,3 @@ function _cleanStationsTracksData(data) {
 function _cleanArtists(artists) {
     return artists.map((artist) => artist.name)
 }
-
-

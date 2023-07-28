@@ -22,7 +22,8 @@
             </button>
         </section>
         <StationEdit />
-        <TrackList :tracks="station.tracks" />
+        <!-- <TrackList :tracks="station.tracks" /> -->
+        <TrackList :station="station"/>
     </section>
 </template>
 
