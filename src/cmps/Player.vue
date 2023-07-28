@@ -5,11 +5,11 @@
     <section class="main-player-container">
         <section v-if="clickedTrack" class="playing-track">
             <section class="img-container">
-                <img :src="`${clickedTrack?.imgUrl}`" alt="">
+                <img v-if="clickedTrack.imgUrl" :src="`${clickedTrack?.imgUrl}`" alt="">
             </section>
             <section>
-                <div style="color:white;">{{ clickedTrack?.title }}</div>
-                <div style="color:white;">artist</div>
+                <div class="track-title">{{ clickedTrack?.title }}</div>
+                <div class="track-artist">{{ clickedTrack.artists?.length > 0 ? clickedTrack.artists[0] : '' }}</div>
             </section>
         </section>
 
@@ -43,8 +43,8 @@
             <section class="playback-container">
                 <span style="color:white;">{{ elapsedTime }}</span>
                 <input class="playback-slider slider" @input="onTimeChange" type="range" min="0"
-                    :max="clickedTrack.formalDuration" v-model="elapsedTimeInSeconds">
-                <span style="color:white;">{{ formattedTime }}</span>
+                    :max="currTrack.duration" v-model="elapsedTimeInSeconds">
+                <span style="color:white;">{{ secsToTimeSig(currTrack.duration) }}</span>
             </section>
         </section>
         <section class="vol-container">
@@ -83,12 +83,14 @@ export default {
             isRepeat: false,
             isMute: false,
             currTrackList: [],
+            lastVolume: 0,
             currVolume: 80,
             currTrack: {
                 ytId: '',
                 currIdx: 0,
-                name: '',
-                trackId: null
+                duration: 0,
+                currTime: 0,
+                trackId: null,
             },
             player: null,
             playerStates: {
@@ -130,10 +132,8 @@ export default {
         loadVideo(ytId) {
             this.currTrack.ytId = ytId
             this.isPlaying = true
-            this.lastPlayTime = new Date().getTime()
-            // if(this.intervalId) clearInterval(this.intervalId)
-            this.intervalId = setInterval(this.updateElapsedTime, 1000)
-
+            // this.lastPlayTime = new Date().getTime()
+            this.handlePlaybackInterval(true)
         },
         toggleShuffle() {
             this.isShuffle = !this.isShuffle
@@ -144,40 +144,36 @@ export default {
         toggleMute() {
             if (this.isMute) {
                 this.isMute = false
+                this.currVolume = this.lastVolume
+                this.lastVolume = 0
                 this.$refs.youtubePlayer.unMute()
             } else {
                 this.isMute = true
+                this.lastVolume = this.currVolume
+                this.currVolume = 0
                 this.$refs.youtubePlayer.mute()
-
             }
         },
         togglePlayPause() {
             if (this.isPlaying) {
                 this.isPlaying = false
                 this.$refs.youtubePlayer.pauseVideo()
+                this.currTrack.currTime = this.$refs.youtubePlayer.getCurrentTime()
 
                 this.lastPlayTime = new Date().getTime()
-                clearInterval(this.intervalId)
+                this.handlePlaybackInterval(false)
             } else {
                 this.isPlaying = true
                 this.$refs.youtubePlayer.playVideo()
+                this.handlePlaybackInterval(true)
 
-                // if(this.intervalId) clearInterval(this.intervalId)
-                this.intervalId = setInterval(this.updateElapsedTime, 1000)
+
             }
         },
         onChangeVolume() {
             this.$refs.youtubePlayer.setVolume(this.currVolume)
         },
         onTimeChange() {
-            if (this.player && this.player.getPlayerState() !== this.playerStates.UNSTARTED) {
-
-                const currentTimeInSeconds = parseInt(this.elapsedTimeInSeconds, 10)
-
-                this.$refs.youtubePlayer.seekTo(currentTimeInSeconds, true)
-                this.lastPlayTime = new Date().getTime() - currentTimeInSeconds * 1000
-                this.updateElapsedTime()
-            }
         },
         stopVideo() {
             this.isPlaying = false
@@ -188,41 +184,35 @@ export default {
             if (event.data === this.playerStates.ENDED) {
                 this.previousNextVideo(1)
             } else if (event.data === this.playerStates.UNSTARTED) {
-                console.log("????????", this.$refs.youtubePlayer.getDuration())
+                let duration = this.$refs.youtubePlayer.getDuration()
+                this.currTrack.duration = duration ? duration : 0
+                console.log("duration:", duration)
+                console.log("duration sig:", this.secsToTimeSig(duration))
             } else return
         },
         updateElapsedTime() {
             if (this.isPlaying) {
-                const currentTime = new Date().getTime()
-                const elapsedTimeSeconds = Math.floor((currentTime - this.lastPlayTime) / 1000)
-                const minutes = Math.floor(elapsedTimeSeconds / 60)
-                const seconds = elapsedTimeSeconds % 60
-                this.elapsedTime = `${minutes}:${seconds.toString().padStart(2, "0")}`
-
-                // console.log("🚀 ~ file: Player.vue:193 ~ updateElapsedTime ~ this.elapsedTime:", this.elapsedTime)
+                let elapsedTimeInSecs = this.$refs.youtubePlayer.getCurrentTime()
+                this.elapsedTime = this.secsToTimeSig(elapsedTimeInSecs)
             }
         },
         async onPlayTrack(trackId, station) {
 
             this.currTrackList = station.tracks
-            console.log("🚀 this.currTrackList:", this.currTrackList)
 
             this.currTrack.currIdx = this.currTrackList.findIndex(track => track.id === trackId)
 
             this.clickedTrack = this.currTrackList[this.currTrack.currIdx]
-            // console.log("🚀🚀🚀 this.clickedTrack:", this.clickedTrack)
-            console.log("🚀🚀🚀 this.clickedTrack:", this.clickedTrack.artists)
-
 
             let ytId
             if (this.clickedTrack.youtubeId) {
-                console.log('exists in local')
+                console.log('song has YT id in local')
 
                 ytId = this.clickedTrack.youtubeId
             } else {
-                console.log('does not exist in local')
+                console.log('song doesn\'t have YT id in local')
 
-                // deep copy so we can edit store
+                // deep copy so we can update it
                 let stationCopy = JSON.parse(JSON.stringify(station))
                 // get ytId from YT
                 const term = this.clickedTrack.title + ' ' + this.clickedTrack.artists[0]
@@ -242,7 +232,22 @@ export default {
             } catch (err) {
                 console.log(err.message)
             }
-        }
+        },
+        handlePlaybackInterval(NewInterval) {
+            if (this.intervalId) clearInterval(this.intervalId)
+            if (NewInterval) this.intervalId = setInterval(this.updateElapsedTime, 1000)
+        },
+        secsToTimeSig(totalSeconds) {
+            const minutes = Math.floor(totalSeconds / 60)
+            const seconds = Math.floor(totalSeconds % 60)
+            return `${minutes}:${String(seconds).padStart(2, '0')}`
+        },
+        timeSigToSecs(TimeSig) {
+            const [minutesStr, secondsStr] = TimeSig.split(':')
+            const minutes = parseInt(minutesStr)
+            const seconds = parseInt(secondsStr)
+            return minutes * 60 + seconds
+        },
     },
     beforeunmount() {
         eventBus.off('playTrack', this.onPlayTrack)
@@ -256,32 +261,23 @@ export default {
             const padZero = (num) => (num < 10 ? `0${num}` : num)
             return `${minutes}:${padZero(seconds)}`
         },
-        timeSigToSecs(timeInSecs) {
-
-        },
-        timeSigTosecs(TimeSig) {
-
-        },
-        artist() {
-            return this.clickedTrack.artists[0]
-        }
-
     }
 }
 
-
-// this.$refs.youtubePlayer.getCurrentTime() - Returns the elapsed time in seconds since the video started playing.
-
-// this.$refs.youtubePlayer.getDuration() - returns 0 til the metadata is loaded (mostly happens after vid starts playing).
-
-// this.$refs.youtubePlayer.seekTo(secs, false) - plays the song "secs" number of secs from the start (if was paused - stays paused)
-
-// best seekTo flow:
-// while user grabs the slider this.$refs.youtubePlayer.seekTo(5, false)
-// set to true while user lets releases the slider
-
-
 </script>
+
+
+<!--
+
+    this.$refs.youtubePlayer.getCurrentTime() - Returns the elapsed time in seconds since the video started playing.
+
+    this.$refs.youtubePlayer.seekTo(secs, false) - plays the song "secs" number of secs from the start (if was paused - stays paused)
+
+    this.$refs.youtubePlayer.getDuration() - returns 0 til the metadata is loaded (mostly happens after vid starts playing).
+
+    best seekTo flow:
+    while user grabs the slider this.$refs.youtubePlayer.seekTo(5, false)
+    set to true while user lets releases the slider -->
 
 <!--
 {
