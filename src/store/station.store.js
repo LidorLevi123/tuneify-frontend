@@ -8,8 +8,7 @@ export const stationStore = {
         currStation: null,
     },
     getters: {
-        stations({ stations }) { return stations.filter(station => !station.owner) },
-        library({ stations }) { return stations.filter(station => station.owner) },
+        libraryStations({ stations }) { return stations.filter(station => station.owner) },
         currStation({ currStation }) { return currStation },
         stationsForHome({ stationsForHome }) { return stationsForHome }
     },
@@ -27,7 +26,7 @@ export const stationStore = {
             stations.unshift(stationToSave)
         },
         updateStation({ stations }, { stationToSave }) {
-            const idx = stations.findIndex(s => s._id === stationToSave._id)
+            const idx = stations.findIndex(station => station._id === stationToSave._id)
             stations.splice(idx, 1, stationToSave)
         },
         removeStation({ stations }, { stationId }) {
@@ -69,6 +68,7 @@ export const stationStore = {
             try {
                 const station = await stationService.save(stationToSave)
                 commit({ type, stationToSave: station })
+                if(station.name === 'Liked Songs') return station
                 commit({ type: 'setCurrStation', station: { ...station } })
                 return station
             } catch (err) {

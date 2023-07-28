@@ -17,11 +17,21 @@ export default {
         libraryStations: { type: Array },
     },
 
+    data() {
+        return {
+            canRemoveStation: true
+        }
+    },
+
     methods: {
         async removeStation(stationId, ev) {
             ev.stopPropagation()
+            if (!this.canRemoveStation) return
+            this.canRemoveStation = false
+
             await this.$store.dispatch({ type: 'removeStation', stationId })
             if(stationId === this.$route.params.stationId) this.$router.push('/')
+            this.canRemoveStation = true
         },
         goToDetails(stationId) {
             this.$router.push(`/station/${stationId}`)

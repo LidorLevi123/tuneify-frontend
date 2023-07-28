@@ -39,16 +39,11 @@ export default {
     },
 
     methods: {
-        async loadStationToEdit() {
-            const { stationId } = this.$route.params
-            if (!stationId) return
-
-            try {
-                this.stationToEdit = await stationService.getById(stationId)
-            } catch (err) {
-                console.log('Cannot load station for edit', err.message)
-                this.$router.push('/')
-            }
+        // Fix this workaround later
+        loadStationToEdit() {
+            setTimeout(()=> {
+                this.stationToEdit = JSON.parse(JSON.stringify(this.$store.getters.currStation))
+            }, 500)
         },
         async save() {
             try {

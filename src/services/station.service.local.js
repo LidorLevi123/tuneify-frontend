@@ -17,18 +17,19 @@ export const stationService = {
 }
 
 async function query(filterBy = { name: '' }) {
-    var stations = await storageService.query(STORAGE_KEY)
+    const stations = await storageService.query(STORAGE_KEY)
     return stations
 }
 
 async function getById(stationId) {
+
     let station
 
     try {
         station = await storageService.get(STORAGE_KEY, stationId)
     } catch (error) {
-        station = spotifyService.getSpotifyItems('station', stationId)
-        save(station)
+        station = await spotifyService.getSpotifyItems('station', stationId)
+        await storageService.post(STORAGE_KEY, station)
     }
     return station
 }
@@ -67,11 +68,11 @@ function getEmptyStation() {
 }
 
 function _createStations() {
-    let visitedStations = utilService.loadFromStorage(STORAGE_KEY)
-    if(visitedStations) return
+    let stations = utilService.loadFromStorage(STORAGE_KEY)
+    if(stations) return
 
-    visitedStations = []
-    utilService.saveToStorage(STORAGE_KEY, visitedStations)
+    stations = []
+    utilService.saveToStorage(STORAGE_KEY, stations)
 }
 // Initial data
 // ;(async ()=>{
