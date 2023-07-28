@@ -4,16 +4,21 @@ import { stationService } from '../services/station.service.local'
 export const stationStore = {
     state: {
         stations: [], // For now we hold all stations here until wo move to backend
+        stationsForHome: [],
         currStation: null,
     },
     getters: {
         stations({ stations }) { return stations.filter(station => !station.owner) },
         library({ stations }) { return stations.filter(station => station.owner) },
-        currStation({ currStation }) { return currStation }
+        currStation({ currStation }) { return currStation },
+        stationsForHome({ stationsForHome }) { return stationsForHome }
     },
     mutations: {
-        setStations(state, { stations }) {
+        loadStations(state, { stations }) {
             state.stations = stations
+        },
+        setStationsForHome(state, { stations }) {
+            state.stationsForHome = stations
         },
         setCurrStation(state, { station }) {
             state.currStation = station
@@ -31,19 +36,20 @@ export const stationStore = {
         },
     },
     actions: {
-        async setStations( { commit }) {
+        async getStationsForHome({ commit }) {
             try {
-                const stations = await stationService.getStations()
-                commit({ type: 'setStations', stations })
+                // For now we display only workout stations at homepage
+                const stations = await stationService.getCategoryStations('0JQ5DAqbMKFAXlCG6QvYQ4')
+                commit({ type: 'setStationsForHome', stations })
             } catch (err) {
-                console.log('stationStore: Error in loadStations', err)
-                throw new Error('Could not load stations')
+                console.log('stationStore: Error in getStationsForHome', err)
+                throw new Error('Could not load stations for home page')
             }
         },
         async loadStations( { commit }) {
             try {
                 const stations = await stationService.query()
-                commit({ type: 'setStations', stations })
+                commit({ type: 'loadStations', stations })
             } catch (err) {
                 console.log('stationStore: Error in loadStations', err)
                 throw new Error('Could not load stations')

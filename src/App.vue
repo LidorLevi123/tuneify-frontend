@@ -10,10 +10,6 @@ import BackDrop from './cmps/BackDrop.vue'
 
 export default {
 
-  created() {
-    this.$store.dispatch({ type: 'setStations' })
-  },
-
   components: {
     UserMsg,
     BackDrop,

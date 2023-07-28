@@ -1,5 +1,5 @@
 <template>
-    <ul class="station-list clean-list">
+    <ul v-if="stations" class="station-list clean-list">
         <li v-for="station in stations" :key="station._id">
             <StationPreview :station="station" />
         </li>
