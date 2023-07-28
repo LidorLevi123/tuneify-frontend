@@ -5,11 +5,11 @@
     <section class="main-player-container">
         <section v-if="clickedTrack" class="playing-track">
             <section class="img-container">
-                <img :src="`${clickedTrack?.imgUrl}`" alt="">
+                <img v-if="clickedTrack.imgUrl" :src="`${clickedTrack?.imgUrl}`" alt="">
             </section>
             <section>
-                <div style="color:white;">{{ clickedTrack?.title }}</div>
-                <div style="color:white;">artist</div>
+                <div class="track-title">{{ clickedTrack?.title }}</div>
+                <div class="track-artist">{{ clickedTrack.artists?.length > 0 ? clickedTrack.artists[0] : '' }}</div>
             </section>
         </section>
 

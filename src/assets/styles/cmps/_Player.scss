@@ -8,13 +8,36 @@
     // padding-block-start: 0.8rem;
     background-color: $clr1;
     height: 80px;
+
+    .playing-track {
+        display: flex;
+        gap: 1rem;
+        padding-inline-start: 0.5rem;
+        align-items: center;
+
+        img {
+            border-radius: 0.2rem;
+            height: 3.5rem;
+            width: 3.5rem;
+        }
+
+        .track-title {
+            color: $clr2;
+            font-size: 0.875rem;
+        }
+
+        .track-artist {
+            color: $clr3;
+            font-size: 0.69rem;
+        }
+    }
 }
 
-.main-player-container >*:nth-child(2) {
+.main-player-container>*:nth-child(2) {
     justify-self: center;
 }
 
-.main-player-container >*:last-child {
+.main-player-container>*:last-child {
     justify-self: end;
 }
 
@@ -111,6 +134,7 @@
     height: 4px;
     border-radius: 50px;
 }
+
 .vol-slider {
     width: 93px;
     height: 4px;
