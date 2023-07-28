@@ -43,8 +43,8 @@
             <section class="playback-container">
                 <span style="color:white;">{{ elapsedTime }}</span>
                 <input class="playback-slider slider" @input="onTimeChange" type="range" min="0"
-                    :max="clickedTrack.formalDuration" v-model="elapsedTimeInSeconds">
-                <span style="color:white;">{{ formattedTime }}</span>
+                    :max="currTrack.duration" v-model="elapsedTimeInSeconds">
+                <span style="color:white;">{{ secsToTimeSig(currTrack.duration) }}</span>
             </section>
         </section>
         <section class="vol-container">
@@ -89,6 +89,7 @@ export default {
                 ytId: '',
                 currIdx: 0,
                 duration: 0,
+                currTime: 0,
                 trackId: null,
             },
             player: null,
@@ -131,9 +132,8 @@ export default {
         loadVideo(ytId) {
             this.currTrack.ytId = ytId
             this.isPlaying = true
-            this.lastPlayTime = new Date().getTime()
+            // this.lastPlayTime = new Date().getTime()
             this.handlePlaybackInterval(true)
-
         },
         toggleShuffle() {
             this.isShuffle = !this.isShuffle
@@ -158,6 +158,7 @@ export default {
             if (this.isPlaying) {
                 this.isPlaying = false
                 this.$refs.youtubePlayer.pauseVideo()
+                this.currTrack.currTime = this.$refs.youtubePlayer.getCurrentTime()
 
                 this.lastPlayTime = new Date().getTime()
                 this.handlePlaybackInterval(false)
@@ -165,20 +166,14 @@ export default {
                 this.isPlaying = true
                 this.$refs.youtubePlayer.playVideo()
                 this.handlePlaybackInterval(true)
+
+
             }
         },
         onChangeVolume() {
             this.$refs.youtubePlayer.setVolume(this.currVolume)
         },
         onTimeChange() {
-            if (this.player && this.player.getPlayerState() !== this.playerStates.UNSTARTED) {
-
-                const currentTimeInSeconds = parseInt(this.elapsedTimeInSeconds, 10)
-
-                this.$refs.youtubePlayer.seekTo(currentTimeInSeconds, true)
-                this.lastPlayTime = new Date().getTime() - currentTimeInSeconds * 1000
-                this.updateElapsedTime()
-            }
         },
         stopVideo() {
             this.isPlaying = false
@@ -190,17 +185,15 @@ export default {
                 this.previousNextVideo(1)
             } else if (event.data === this.playerStates.UNSTARTED) {
                 let duration = this.$refs.youtubePlayer.getDuration()
-                this.currTrack.duration = duration? duration : 0
-                console.log("duration:", this.$refs.youtubePlayer.getDuration())
+                this.currTrack.duration = duration ? duration : 0
+                console.log("duration:", duration)
+                console.log("duration sig:", this.secsToTimeSig(duration))
             } else return
         },
         updateElapsedTime() {
             if (this.isPlaying) {
-                const currentTime = new Date().getTime()
-                const elapsedTimeSeconds = Math.floor((currentTime - this.lastPlayTime) / 1000)
-                const minutes = Math.floor(elapsedTimeSeconds / 60)
-                const seconds = elapsedTimeSeconds % 60
-                this.elapsedTime = `${minutes}:${seconds.toString().padStart(2, "0")}`
+                let elapsedTimeInSecs = this.$refs.youtubePlayer.getCurrentTime()
+                this.elapsedTime = this.secsToTimeSig(elapsedTimeInSecs)
             }
         },
         async onPlayTrack(trackId, station) {
@@ -241,10 +234,20 @@ export default {
             }
         },
         handlePlaybackInterval(NewInterval) {
-            if(this.intervalId) clearInterval(this.intervalId)
-            if(NewInterval) this.intervalId = setInterval(this.updateElapsedTime, 1000)
-
-        }
+            if (this.intervalId) clearInterval(this.intervalId)
+            if (NewInterval) this.intervalId = setInterval(this.updateElapsedTime, 1000)
+        },
+        secsToTimeSig(totalSeconds) {
+            const minutes = Math.floor(totalSeconds / 60)
+            const seconds = Math.floor(totalSeconds % 60)
+            return `${minutes}:${String(seconds).padStart(2, '0')}`
+        },
+        timeSigToSecs(TimeSig) {
+            const [minutesStr, secondsStr] = TimeSig.split(':')
+            const minutes = parseInt(minutesStr)
+            const seconds = parseInt(secondsStr)
+            return minutes * 60 + seconds
+        },
     },
     beforeunmount() {
         eventBus.off('playTrack', this.onPlayTrack)
@@ -258,12 +261,6 @@ export default {
             const padZero = (num) => (num < 10 ? `0${num}` : num)
             return `${minutes}:${padZero(seconds)}`
         },
-        timeSigToSecs(timeInSecs) {
-
-        },
-        timeSigTosecs(TimeSig) {
-
-        },
     }
 }
 
@@ -271,11 +268,12 @@ export default {
 
 
 <!--
+
     this.$refs.youtubePlayer.getCurrentTime() - Returns the elapsed time in seconds since the video started playing.
 
-    this.$refs.youtubePlayer.getDuration() - returns 0 til the metadata is loaded (mostly happens after vid starts playing).
-
     this.$refs.youtubePlayer.seekTo(secs, false) - plays the song "secs" number of secs from the start (if was paused - stays paused)
+
+    this.$refs.youtubePlayer.getDuration() - returns 0 til the metadata is loaded (mostly happens after vid starts playing).
 
     best seekTo flow:
     while user grabs the slider this.$refs.youtubePlayer.seekTo(5, false)
