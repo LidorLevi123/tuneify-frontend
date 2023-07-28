@@ -9,9 +9,13 @@ import StationList from '../cmps/StationList.vue'
 
 export default {
 
+  created() {
+    this.$store.dispatch({ type: 'getStationsForHome' })
+  },
+
   computed: {
     stations() {
-      return this.$store.getters.stations
+      return this.$store.getters.stationsForHome
     }
   },
 

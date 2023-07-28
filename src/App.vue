@@ -11,7 +11,7 @@ import BackDrop from './cmps/BackDrop.vue'
 export default {
 
   created() {
-    this.$store.dispatch({ type: 'setStations' })
+    this.$store.dispatch({ type: 'loadStations' })
   },
 
   components: {

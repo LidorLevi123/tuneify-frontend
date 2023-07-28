@@ -34,6 +34,9 @@
         </div>
         <StationEdit />
     </section>
+    <section v-else>
+        <h1>Loading...</h1>
+    </section>
 </template>
 
 <script>
@@ -69,6 +72,10 @@ export default {
         this.loadStation()
     },
 
+    unmounted() {
+        this.$store.commit({ type: 'setCurrStation', station: null})
+    },
+
     methods: {
         async loadStation() {
             await this.$store.dispatch({ type: 'setCurrStation', stationId: this.$route.params.stationId })
@@ -99,9 +106,8 @@ export default {
                 throw new Error('cant get average color')
             }
         }
-
-
     },
+
     watch: {
         stationId() {
             if (!this.stationId) return

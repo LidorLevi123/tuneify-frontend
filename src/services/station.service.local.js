@@ -1,9 +1,11 @@
 import { storageService } from './async-storage.service.js'
 import { utilService } from './util.service.js'
 import { spotifyService } from './spotify.service.js'
-import { userService } from './user.service.js'
+// import { userService } from './user.service.js'
 
 const STORAGE_KEY = 'stationDB'
+
+_createStations()
 
 export const stationService = {
     query,
@@ -11,9 +13,7 @@ export const stationService = {
     save,
     remove,
     getEmptyStation,
-    getStations,
-    getStationTracks,
-    getCategoryStations
+    getCategoryStations,
 }
 
 async function query(filterBy = { name: '' }) {
@@ -22,10 +22,14 @@ async function query(filterBy = { name: '' }) {
 }
 
 async function getById(stationId) {
-    let station = await storageService.get(STORAGE_KEY, stationId)
-    station = JSON.parse(JSON.stringify(station))
-    if(station.tracks) return station
-    station.tracks = await stationService.getStationTracks(station)
+    let station
+
+    try {
+        station = await storageService.get(STORAGE_KEY, stationId)
+    } catch (error) {
+        station = spotifyService.getSpotifyItems('station', stationId)
+        save(station)
+    }
     return station
 }
 
@@ -46,25 +50,9 @@ async function save(station) {
     return savedStation
 }
 
-async function getStations() {
-    let stations = utilService.loadFromStorage(STORAGE_KEY)
-    if(stations) return stations
-
-    // For now we display some stations from Rock category for demo at HomePage
-    stations = await spotifyService.getSpotifyItems('categoryStations', '0JQ5DAqbMKFDXXwE9BDJAr')
-    utilService.saveToStorage(STORAGE_KEY, stations)
-    return stations
-}
-
-async function getStationTracks(station) {
-  if(station.owner) return
-  const tracks = await spotifyService.getSpotifyItems('tracks', station._id)
-  return tracks
-}
-
 async function getCategoryStations(categoryId) {
-  const stations = await spotifyService.getSpotifyItems('categoryStations', categoryId)
-  return stations
+    const stations = await spotifyService.getSpotifyItems('categoryStations', categoryId)
+    return stations
 }
 
 function getEmptyStation() {
@@ -74,34 +62,17 @@ function getEmptyStation() {
         description: '',
         imgUrl: '',
         owner: '',
-        trackList: [
-        ]
+        tracks: []
     }
 }
 
-function _createStations(amount) {
-    let stations = utilService.loadFromStorage(STORAGE_KEY)
-    if (!stations || !stations.length) {
-        stations = []
-        for (let i = 0; i < amount; i++) {
-            stations.push(_createStation())
-        }
+function _createStations() {
+    let visitedStations = utilService.loadFromStorage(STORAGE_KEY)
+    if(visitedStations) return
 
-        utilService.saveToStorage(STORAGE_KEY, stations)
-    }
+    visitedStations = []
+    utilService.saveToStorage(STORAGE_KEY, visitedStations)
 }
-
-function _createStation() {
-    const station = getEmptyStation()
-
-    station._id = utilService.makeId()
-    station.name = utilService.makeLorem(2)
-    station.description = utilService.makeLorem(3)
-    station.imgUrl = 'https://picsum.photos/170'
-
-    return station
-}
-
 // Initial data
 // ;(async ()=>{
 //     const station = _getDemoStation()

@@ -18,9 +18,10 @@ export default {
     },
 
     methods: {
-        removeStation(stationId, ev) {
+        async removeStation(stationId, ev) {
             ev.stopPropagation()
-            this.$store.dispatch({ type: 'removeStation', stationId })
+            await this.$store.dispatch({ type: 'removeStation', stationId })
+            if(stationId === this.$route.params.stationId) this.$router.push('/')
         },
         goToDetails(stationId) {
             this.$router.push(`/station/${stationId}`)

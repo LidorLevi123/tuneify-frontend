@@ -8,10 +8,9 @@ export const spotifyService = {
 }
 
 async function getSpotifyItems(reqType, id) {
-    // console.log('gAccessToken:', gAccessToken)
     const endpoints = {
-        categories: 'https://api.spotify.com/v1/browse/categories',
         categoryStations: `https://api.spotify.com/v1/browse/categories/${id}/playlists?country=il`,
+        station: `https://api.spotify.com/v1/playlists/${id}`,
         tracks: `https://api.spotify.com/v1/playlists/${id}/tracks`,
     }
     try {
@@ -30,9 +29,9 @@ async function getSpotifyItems(reqType, id) {
             case 'tracks':
                 cleanData = _cleanStationsTracksData(response.data)
                 break
-            // case 'categories':
-            //     cleanData = _cleanCategoriesData(response.data)
-            //     break
+            case 'station':
+                cleanData = _cleanStationData(response.data)
+                break
         }
         return cleanData
     } catch (error) {
@@ -76,7 +75,16 @@ async function getAccessToken(clientId, clientSecret) {
     }
 }
 
-// getSpotifyItems('categoryStations', '0JQ5DAqbMKFDXXwE9BDJAr')
+async function _cleanStationData(data) {
+    const station = {
+        _id: data.id,
+        name: data.name,
+        imgUrl: data.images[0].url,
+        description: data.description,
+        tracks: await getSpotifyItems('tracks', data.id)
+    }
+    return station
+}
 
 function _cleanCategoryStationsData(data) {
     return data.playlists.items.map(item => ({
@@ -87,9 +95,9 @@ function _cleanCategoryStationsData(data) {
     }))
 }
 
+// const test = getSpotifyItems('tracks', '37i9dQZF1DXcF6B6QPhFDv')
+// console.log(test)
 function _cleanStationsTracksData(data) {
-    // const test = getSpotifyItems('tracks', '37i9dQZF1DXcF6B6QPhFDv')
-    // console.log(test)
     return data.items.map(item => {
         return {
             addedAt: item.added_at,

@@ -20,7 +20,7 @@ export default {
 
     methods: {
         goToDetails(stationId) {
-            this.$router.push(`station/${stationId}`)
+            this.$router.push(`/station/${stationId}`)
         }
     },
 }
