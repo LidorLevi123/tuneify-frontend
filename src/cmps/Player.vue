@@ -1,5 +1,5 @@
 <template>
-    <YouTube ref="youtubePlayer" :src="currTrack.youtubeId" @ready="onPlayerReady" @state-change="onStateChange"
+    <YouTube ref="youtubePlayer" :src="currTrack?.youtubeId" @state-change="onStateChange"
         style="display: none;" />
 
     <section class="main-player-container">
@@ -42,9 +42,9 @@
 
             <section class="playback-container">
                 <span style="color:white;">{{ secsToTimeFormat(elapsedTime) }}</span>
-                <input class="playback-slider slider" @input="onChangeTime" type="range" min="0" :max="currTrack.duration"
+                <input class="playback-slider slider" @input="onChangeTime" type="range" min="0" :max="currTrackDuration"
                     v-model="elapsedTime">
-                <span style="color:white;">{{ secsToTimeFormat(currTrack.duration) }}</span>
+                <span style="color:white;">{{ secsToTimeFormat(currTrackDuration) }}</span>
             </section>
         </section>
         <section class="vol-container">
@@ -65,10 +65,8 @@
 import { utilService } from '../services/util.service.js'
 import { eventBus } from '../services/event-bus.service.js'
 import { ytService } from '../services/yt.service.js'
-import { stationStore } from '../store/station.store.js'
 
 import YouTube from 'vue3-youtube'
-import { storageService } from '../services/async-storage.service'
 
 export default {
     data() {
@@ -83,15 +81,11 @@ export default {
             currVolume: 80,
             currStation: {},
             currTrackList: [],
-            currTrack: {
-                youtubeId: '',
-                idx: 0,
-                duration: 0,
-                currTime: 0,
-                trackId: null,
-            },
-            player: null,
-            playerStates: {
+            currTrack: {},
+            playbackPos: 0,
+            currTrackDuration: 0,
+            currTrackIdx: -1,
+            youtubePlayerStates: {
                 UNSTARTED: -1,
                 ENDED: 0,
                 PLAYING: 1,
@@ -106,21 +100,20 @@ export default {
     },
     created() {
         eventBus.on('trackClicked', this.onTrackClicked)
+        this.currTrack.youtubeId = ''
     },
     methods: {
-        onPlayerReady(event) {
-        },
         async previousNextVideo(diff) {
-            this.currTrack.idx = this.currTrack.idx + diff
+            this.currTrackIdx = this.currTrackIdx + diff
 
             if (this.isShuffle) {
-                this.currTrack.idx = utilService.getRandomIntInclusive(0, this.currTrackList.length - 1)
+                this.currTrackIdx = utilService.getRandomIntInclusive(0, this.currTrackList.length - 1)
             }
 
-            if (this.currTrack.idx > this.currTrackList.length - 1) this.currTrack.idx = 0
-            if (this.currTrack.idx < 0) this.currTrack.idx = this.currTrackList.length - 1
+            if (this.currTrackIdx > this.currTrackList.length - 1) this.currTrackIdx = 0
+            if (this.currTrackIdx < 0) this.currTrackIdx = this.currTrackList.length - 1
 
-            this.currTrack = this.currTrackList[this.currTrack.idx]
+            this.currTrack = this.currTrackList[this.currTrackIdx]
 
             const term = this.currTrack.title + ' ' + this.currTrack.artists[0]
             let youtubeId = await ytService.queryYT(term)
@@ -155,7 +148,7 @@ export default {
             if (this.isPlaying) {
                 this.isPlaying = false
                 this.$refs.youtubePlayer.pauseVideo()
-                this.currTrack.currTime = this.$refs.youtubePlayer.getCurrentTime()
+                this.playbackPos = this.$refs.youtubePlayer.getCurrentTime()
 
                 this.handlePlaybackInterval(false)
             } else {
@@ -168,8 +161,8 @@ export default {
             this.$refs.youtubePlayer.setVolume(this.currVolume)
         },
         onChangeTime() {
-            this.currTrack.currTime = this.elapsedTime
-            this.$refs.youtubePlayer.seekTo(this.currTrack.currTime, true)
+            this.playbackPos = this.elapsedTime
+            this.$refs.youtubePlayer.seekTo(this.playbackPos, true)
         },
         stopVideo() {
             this.isPlaying = false
@@ -177,11 +170,11 @@ export default {
         },
         onStateChange(event) {
 
-            if (event.data === this.playerStates.ENDED) {
+            if (event.data === this.youtubePlayerStates.ENDED) {
                 this.previousNextVideo(1)
-            } else if (event.data === this.playerStates.UNSTARTED) {
+            } else if (event.data === this.youtubePlayerStates.UNSTARTED) {
                 let duration = this.$refs.youtubePlayer.getDuration()
-                this.currTrack.duration = duration ? duration : 0
+                this.currTrackDuration = duration ? duration : 0
             } else return
         },
         async updateElapsedTime() {
@@ -199,7 +192,6 @@ export default {
                 console.log('song has youtubeId in local')
             } else {
                 console.log('song doesn\'t have youtubeId in local')
-
                 await this.setTrackYoutubeId()
             }
 
@@ -209,7 +201,7 @@ export default {
             this.currStation = stationCopy
             this.currTrackList = this.currStation.tracks
             this.currTrack = this.currStation.tracks.find((track) => track.id === trackId)
-            this.currTrack.idx = this.currTrackList.findIndex(track => track.id === trackId)
+            this.currTrackIdx = this.currTrackList.findIndex(track => track.id === trackId)
         },
         async setTrackYoutubeId() {
 
@@ -243,14 +235,14 @@ export default {
         eventBus.off('trackClicked', this.onTrackClicked)
     },
     computed: {
-        formattedTime() {
-            const totalSeconds = Math.floor(this.currTrack.formalDuration / 1000)
-            const hours = Math.floor(totalSeconds / 3600)
-            const minutes = Math.floor((totalSeconds % 3600) / 60)
-            const seconds = totalSeconds % 60
-            const padZero = (num) => (num < 10 ? `0${num}` : num)
-            return `${minutes}:${padZero(seconds)}`
-        },
+        // formattedTime() {
+        //     const totalSeconds = Math.floor(this.currTrack.formalDuration / 1000)
+        //     const hours = Math.floor(totalSeconds / 3600)
+        //     const minutes = Math.floor((totalSeconds % 3600) / 60)
+        //     const seconds = totalSeconds % 60
+        //     const padZero = (num) => (num < 10 ? `0${num}` : num)
+        //     return `${minutes}:${padZero(seconds)}`
+        // },
     }
 }
 
