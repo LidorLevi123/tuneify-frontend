@@ -126,15 +126,27 @@ export default {
         async previousNextVideo(diff) {
             // if (!this.currStation.keys) return
 
+            if (this.repeatStateIdx === 2) {
+                this.$refs.youtubePlayer.stopVideo()
+                this.$refs.youtubePlayer.playVideo()
+                return
+            }
+
             this.currTrackIdx = this.currTrackIdx + diff
 
-            // if (this.isRepeat && this.currTrackIdx)
+            // if (
+            //     this.repeatStateIdx === 1
+            //     && this.currTrackIdx
+            //     && diff === 1)
 
             if (this.isShuffle) {
                 this.currTrackIdx = utilService.getRandomIntInclusive(0, this.currTrackList.length - 1)
             }
 
-            if (this.currTrackIdx > this.currTrackList.length - 1) this.currTrackIdx = 0
+            if (
+                (this.repeatStateIdx === 1) &&
+                (this.currTrackIdx > this.currTrackList.length - 1)) this.currTrackIdx = 0
+
             if (this.currTrackIdx < 0) this.currTrackIdx = this.currTrackList.length - 1
 
             this.currTrack = this.currTrackList[this.currTrackIdx]
@@ -155,7 +167,7 @@ export default {
         cycleRepeatStates() {
             // this.isRepeat = !this.isRepeat
             this.repeatStateIdx++
-            if(this.repeatStateIdx >= this.repeatStates.length) this.repeatStateIdx = 0
+            if (this.repeatStateIdx >= this.repeatStates.length) this.repeatStateIdx = 0
             console.log(this.repeatStateIdx)
         },
         toggleMute() {
@@ -183,8 +195,12 @@ export default {
             this.$refs.youtubePlayer.stopVideo()
         },
         onStateChange(event) {
-
             if (event.data === this.youtubePlayerStates.ENDED) {
+                // this.currStation.tracks.length - 1 is NAN check why
+
+                // console.log('this.currStation.length-1', (this.currStation.length)-1)
+                // console.log('this.repeatStateIdx', this.repeatStateIdx)
+                // if ((this.currTrackIdx === this.currStation.tracks.length - 1) && (this.repeatStateIdx === 1)) return
                 this.previousNextVideo(1)
             } else if (event.data === this.youtubePlayerStates.UNSTARTED) {
                 let duration = this.$refs.youtubePlayer.getDuration()
@@ -197,8 +213,12 @@ export default {
             }
         },
         async onTrackClicked(trackId, station) {
+
+            // station.tracks.trackId
+
             // deep copy so we can edit
             let stationCopy = JSON.parse(JSON.stringify(station))
+
             this.updateData(trackId, stationCopy)
 
             if (this.currTrack.youtubeId) {
@@ -208,25 +228,25 @@ export default {
                 await this.setTrackYoutubeId()
             }
 
+            this.saveStationToStore(this.currStation)
             this.loadVideo(this.currTrack.youtubeId)
         },
         updateData(trackId, stationCopy) {
+
             this.currStation = stationCopy
             this.currTrackList = this.currStation.tracks
             this.currTrack = this.currStation.tracks.find((track) => track.id === trackId)
             this.currTrackIdx = this.currTrackList.findIndex(track => track.id === trackId)
+            this.currTrack.isPlaying = true
+
         },
         async setTrackYoutubeId() {
+
 
             // get youtubeId from YT
             const term = this.currTrack.title + ' ' + this.currTrack.artists[0]
             this.currTrack.youtubeId = await ytService.queryYT(term)
 
-            try {
-                await this.$store.dispatch({ type: 'saveStation', stationToSave: this.currStation })
-            } catch (err) {
-                console.log(err.message)
-            }
         },
         handlePlaybackInterval(NewInterval) {
             if (this.intervalId) clearInterval(this.intervalId)
@@ -243,6 +263,14 @@ export default {
             const seconds = parseInt(secondsStr)
             return minutes * 60 + seconds
         },
+        async saveStationToStore(station) {
+
+            try {
+                await this.$store.dispatch({ type: 'saveStation', stationToSave: station })
+            } catch (err) {
+                console.log(err.message)
+            }
+        }
     },
     beforeunmount() {
         eventBus.off('trackClicked', this.onTrackClicked)
@@ -255,3 +283,6 @@ export default {
 }
 
 </script>
+
+
+
