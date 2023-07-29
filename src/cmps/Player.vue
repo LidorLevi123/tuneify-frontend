@@ -88,6 +88,7 @@ export default {
             currStation: {},
             currTrackList: [],
             currTrack: {},
+            prevTrack: {},
             playbackPos: 0,
             currTrackDuration: 0,
             currTrackIdx: -1,
@@ -126,11 +127,16 @@ export default {
         async previousNextVideo(diff) {
             // if (!this.currStation.keys) return
 
+
             if (this.repeatStateIdx === 2) {
                 this.$refs.youtubePlayer.stopVideo()
                 this.$refs.youtubePlayer.playVideo()
                 return
             }
+
+
+
+            this.currTrack.isPlaying = false
 
             this.currTrackIdx = this.currTrackIdx + diff
 
@@ -151,6 +157,8 @@ export default {
 
             this.currTrack = this.currTrackList[this.currTrackIdx]
 
+            this.currTrack.isPlaying = false
+
             const term = this.currTrack.title + ' ' + this.currTrack.artists[0]
             let youtubeId = await ytService.queryYT(term)
 
@@ -160,6 +168,7 @@ export default {
             this.currTrack.youtubeId = youtubeId
             this.isPlaying = true
             this.handlePlaybackInterval(true)
+
         },
         toggleShuffle() {
             this.isShuffle = !this.isShuffle
@@ -196,6 +205,9 @@ export default {
         },
         onStateChange(event) {
             if (event.data === this.youtubePlayerStates.ENDED) {
+
+                this.currTrack.isPlaying = false
+
                 // this.currStation.tracks.length - 1 is NAN check why
 
                 // console.log('this.currStation.length-1', (this.currStation.length)-1)
@@ -214,8 +226,6 @@ export default {
         },
         async onTrackClicked(trackId, station) {
 
-            // station.tracks.trackId
-
             // deep copy so we can edit
             let stationCopy = JSON.parse(JSON.stringify(station))
 
@@ -233,10 +243,13 @@ export default {
         },
         updateData(trackId, stationCopy) {
 
+            this.currTrack.isPlaying = false
+
             this.currStation = stationCopy
             this.currTrackList = this.currStation.tracks
             this.currTrack = this.currStation.tracks.find((track) => track.id === trackId)
             this.currTrackIdx = this.currTrackList.findIndex(track => track.id === trackId)
+
             this.currTrack.isPlaying = true
 
         },

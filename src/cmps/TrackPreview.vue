@@ -1,7 +1,7 @@
 <template>
 
     <article class="track-preview track-preview-layout">
-    <pre>{{ track }}</pre>
+    <!-- <pre>{{ track }}</pre> -->
         <span class="track-num">{{ trackIdx }}</span>
         <div class="mini-prev">
             <section class="img-container">

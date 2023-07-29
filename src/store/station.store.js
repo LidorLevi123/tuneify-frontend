@@ -21,6 +21,7 @@ export const stationStore = {
         },
         setCurrStation(state, { station }) {
             state.currStation = station
+            console.log('store tracks', state.currStation.tracks)
         },
         addStation({ stations }, { stationToSave }) {
             stations.unshift(stationToSave)
