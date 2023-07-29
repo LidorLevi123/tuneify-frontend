@@ -238,6 +238,8 @@ export default {
                 await this.setTrackYoutubeId()
             }
 
+            console.log('mashu')
+
             this.saveStationToStore(this.currStation)
             this.loadVideo(this.currTrack.youtubeId)
         },
