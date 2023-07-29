@@ -1,6 +1,6 @@
 <template>
 
-    <article class="track-preview track-preview-layout">
+    <article class="track-preview track-preview-layout" @click="foo">
     <!-- <pre>{{ track }}</pre> -->
         <span class="track-num">{{ trackIdx+1 }}</span>
         <div class="mini-prev">
@@ -18,7 +18,6 @@
         </div>
         <span class="track-album">{{ formattedTime }}</span>
 
-        <!-- DEAR YARON - CHANGE THE SVG ICON NAMES TO LIKE / DISLIKE AND NOT SMALL-LIKE-DIS-ZIBI -->
         <section class="track-actions">
             <!-- <span v-show="isHovered" class="small-play" v-icon="`play`" title="Play"></span> -->
             <!-- <span class="material-symbols-outlined">favorite</span> -->
@@ -51,8 +50,15 @@ export default {
             dateStr: this.track.addedAt
         }
     },
+    methods: {
+        foo() {
+            console.log('currentTrack:', this.currTrackIdx)
+            console.log('clickedTrack:', this.trackIdx)
+        }
+    },
 
     computed: {
+
         formattedTime() {
             const totalSeconds = Math.floor(this.trackTime / 1000)
             const hours = Math.floor(totalSeconds / 3600)
@@ -61,6 +67,7 @@ export default {
             const padZero = (num) => (num < 10 ? `0${num}` : num)
             return `${minutes}:${padZero(seconds)}`
         },
+
         formattedDate() {
             const now = moment()
             const targetDate = moment(this.dateStr)
@@ -74,12 +81,16 @@ export default {
                 return targetDate.format("MMM D, YYYY")
             }
         },
+
+        currTrackIdx() {
+            return this.$store.getters.currTrackIdx
+        },
+
         isPlaying() {
             return {
-                'track-playing': this.track.isPlaying
+                'track-playing': this.trackIdx === this.currTrackIdx
             }
         }
-
     }
 }
 </script>

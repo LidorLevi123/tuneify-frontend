@@ -105,3 +105,6 @@ export const stationStore = {
         }
     }
 }
+
+// In TrackPreview => computed of currTrackIdx
+// track-playing: currTrackIdx === this.track
