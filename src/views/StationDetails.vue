@@ -12,7 +12,7 @@
                     <div>
                         <img src="favicon.svg" alt="">
                         <span class="logo">Tunify </span>
-                        <span class="songs-num" v-if="station.tracks">⚬ {{ station.tracks?.length }} songs,</span>
+                        <span class="songs-num" v-if="station.tracks">&bull; {{ station.tracks?.length }} songs,</span>
                         <span class="songs-time" v-if="formttedTime">about {{ formttedTime }} hours</span>
                     </div>
                 </section>
