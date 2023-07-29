@@ -1,6 +1,7 @@
 .track-list {
     margin-inline: 1.5rem;
     max-width: 119rem;
+    min-height: 53.7vh;
 
     span {
         color: $clr3;
@@ -11,4 +12,7 @@
         border: 1px solid #343540;
     }
 
+    .list-header {
+        margin-block-start: 0.5em;
+    }
 }

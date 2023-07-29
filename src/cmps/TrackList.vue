@@ -38,12 +38,3 @@ export default {
     name: 'TrackList',
 }
 </script>
-
-<style lang="scss" scoped>
-.track-list {
-    .list-header {
-        margin-block-start: 0.5em;
-    }
-
-}
-</style>
