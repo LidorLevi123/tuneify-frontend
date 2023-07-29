@@ -6,11 +6,13 @@ export const stationStore = {
         stations: [], // For now we hold all stations here until wo move to backend
         stationsForHome: [],
         currStation: null,
+        currTrackIdx: -1
     },
     getters: {
         libraryStations({ stations }) { return stations.filter(station => station.owner) },
+        stationsForHome({ stationsForHome }) { return stationsForHome },
         currStation({ currStation }) { return currStation },
-        stationsForHome({ stationsForHome }) { return stationsForHome }
+        currTrackIdx({ currTrackIdx }) { return currTrackIdx }
     },
     mutations: {
         loadStations(state, { stations }) {
@@ -21,7 +23,9 @@ export const stationStore = {
         },
         setCurrStation(state, { station }) {
             state.currStation = station
-            console.log('store tracks', state.currStation.tracks)
+        },
+        setCurrTrackIdx(state, { trackIdx }) {
+            state.currTrackIdx = trackIdx
         },
         addStation({ stations }, { stationToSave }) {
             stations.unshift(stationToSave)
@@ -29,6 +33,9 @@ export const stationStore = {
         updateStation({ stations }, { stationToSave }) {
             const idx = stations.findIndex(station => station._id === stationToSave._id)
             stations.splice(idx, 1, stationToSave)
+        },
+        updateTrack({ currStation, currTrackIdx }, { youtubeId }) {
+            currStation.tracks[currTrackIdx].youtubeId = youtubeId
         },
         removeStation({ stations }, { stationId }) {
             const idx = stations.findIndex(station => station._id === stationId)
@@ -86,5 +93,15 @@ export const stationStore = {
                 throw new Error('Could not remove station')
             }
         },
+        async updateTrack({ commit, state }, { youtubeId }) {
+            try {
+                commit({ type: 'updateTrack', youtubeId })
+                await stationService.save(state.currStation)
+                console.log(state.currStation)
+            } catch (err) {
+                console.log(err.message)
+                throw new Error('Could not save station')
+            }
+        }
     }
 }

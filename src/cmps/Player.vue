@@ -1,14 +1,15 @@
 <template>
     <YouTube ref="youtubePlayer" :src="currTrack?.youtubeId" @state-change="onStateChange" style="display: none;" />
+    <!-- <YouTube ref="youtubePlayer" :src="'nyuo9-OjNNg'" @state-change="onStateChange" style="display: none;" /> -->
 
     <section class="main-player-container">
-        <section v-if="currTrack" class="playing-track">
+        <section class="playing-track">
             <section class="img-container">
-                <img v-if="currTrack.imgUrl" :src="`${currTrack?.imgUrl}`" alt="">
+                <img v-if="currTrack" :src="`${currTrack.imgUrl}`" alt="">
             </section>
             <section>
-                <div class="track-title">{{ currTrack?.title }}</div>
-                <div class="track-artist">{{ currTrack.artists?.length > 0 ? currTrack.artists[0] : '' }}</div>
+                <div v-if="currTrack" class="track-title">{{ currTrack.title }}</div>
+                <div v-if="currTrack" class="track-artist">{{ currTrack.artists?.length > 0 ? currTrack.artists[0] : '' }}</div>
             </section>
         </section>
 
@@ -85,13 +86,12 @@ export default {
             isMute: false,
             lastVolume: 0,
             currVolume: 80,
-            currStation: {},
-            currTrackList: [],
-            currTrack: {},
-            prevTrack: {},
+            // currStation: {},
+            // currTrackIdx: -1,
+            // currTrackList: [],
+            // currTrack: {},
             playbackPos: 0,
             currTrackDuration: 0,
-            currTrackIdx: -1,
             youtubePlayerStates: {
                 UNSTARTED: -1,
                 ENDED: 0,
@@ -107,9 +107,12 @@ export default {
     },
     created() {
         eventBus.on('trackClicked', this.onTrackClicked)
-        this.currTrack.youtubeId = ''
+        // this.currTrack.youtubeId = ''
     },
     methods: {
+        updateCurrTrackIdx(trackIdx) {
+            this.$store.commit({ type: 'setCurrTrackIdx', trackIdx})
+        },
         togglePlayPause() {
             // if (!this.currStation.keys) return
 
@@ -126,19 +129,14 @@ export default {
         },
         async previousNextVideo(diff) {
             // if (!this.currStation.keys) return
-
-
             if (this.repeatStateIdx === 2) {
                 this.$refs.youtubePlayer.stopVideo()
                 this.$refs.youtubePlayer.playVideo()
                 return
             }
 
-
-
-            this.currTrack.isPlaying = false
-
-            this.currTrackIdx = this.currTrackIdx + diff
+            // this.currTrack.isPlaying = false
+            this.updateCurrTrackIdx(this.currTrackIdx + diff)
 
             // if (
             //     this.repeatStateIdx === 1
@@ -146,29 +144,32 @@ export default {
             //     && diff === 1)
 
             if (this.isShuffle) {
-                this.currTrackIdx = utilService.getRandomIntInclusive(0, this.currTrackList.length - 1)
+                const randomIdx = utilService.getRandomIntInclusive(0, this.currTrackList.length - 1)
+                this.updateCurrTrackIdx(randomIdx)
             }
 
             if (
                 (this.repeatStateIdx === 1) &&
-                (this.currTrackIdx > this.currTrackList.length - 1)) this.currTrackIdx = 0
+                (this.currTrackIdx > this.currTrackList.length - 1)) this.updateCurrTrackIdx(0)
 
-            if (this.currTrackIdx < 0) this.currTrackIdx = this.currTrackList.length - 1
+            if (this.currTrackIdx < 0) this.updateCurrTrackIdx(this.currTrackList.length - 1)
 
-            this.currTrack = this.currTrackList[this.currTrackIdx]
+            // this.currTrack = this.currTrackList[this.currTrackIdx]
+            // this.currTrack.isPlaying = false
 
-            this.currTrack.isPlaying = false
-
-            const term = this.currTrack.title + ' ' + this.currTrack.artists[0]
-            let youtubeId = await ytService.queryYT(term)
-
-            this.loadVideo(youtubeId)
+            if (this.currTrack.youtubeId) {
+                console.log('song has youtubeId in local')
+                this.loadVideo()
+            } else {
+                console.log('song doesn\'t have youtubeId in local')
+                await this.setTrackYoutubeId()
+                this.loadVideo()
+            }
         },
-        loadVideo(youtubeId) {
-            this.currTrack.youtubeId = youtubeId
+        loadVideo() {
+            // this.currTrack.youtubeId = youtubeId
             this.isPlaying = true
             this.handlePlaybackInterval(true)
-
         },
         toggleShuffle() {
             this.isShuffle = !this.isShuffle
@@ -224,44 +225,23 @@ export default {
                 this.elapsedTime = await this.$refs.youtubePlayer.getCurrentTime()
             }
         },
-        async onTrackClicked(trackId, station) {
-
-            // deep copy so we can edit
-            let stationCopy = JSON.parse(JSON.stringify(station))
-
-            this.updateData(trackId, stationCopy)
-
+        async onTrackClicked() {
+            console.log(this.currTrack)
             if (this.currTrack.youtubeId) {
                 console.log('song has youtubeId in local')
+                this.loadVideo()
             } else {
                 console.log('song doesn\'t have youtubeId in local')
                 await this.setTrackYoutubeId()
+                this.loadVideo()
             }
-
-            console.log('mashu')
-
-            this.saveStationToStore(this.currStation)
-            this.loadVideo(this.currTrack.youtubeId)
-        },
-        updateData(trackId, stationCopy) {
-
-            this.currTrack.isPlaying = false
-
-            this.currStation = stationCopy
-            this.currTrackList = this.currStation.tracks
-            this.currTrack = this.currStation.tracks.find((track) => track.id === trackId)
-            this.currTrackIdx = this.currTrackList.findIndex(track => track.id === trackId)
-
-            this.currTrack.isPlaying = true
-
         },
         async setTrackYoutubeId() {
-
-
             // get youtubeId from YT
             const term = this.currTrack.title + ' ' + this.currTrack.artists[0]
-            this.currTrack.youtubeId = await ytService.queryYT(term)
-
+            const youtubeId = await ytService.queryYT(term)
+            // const youtubeId = 'nyuo9-OjNNg'
+            this.$store.dispatch({ type: 'updateTrack', youtubeId })
         },
         handlePlaybackInterval(NewInterval) {
             if (this.intervalId) clearInterval(this.intervalId)
@@ -278,23 +258,29 @@ export default {
             const seconds = parseInt(secondsStr)
             return minutes * 60 + seconds
         },
-        async saveStationToStore(station) {
-
-            try {
-                await this.$store.dispatch({ type: 'saveStation', stationToSave: station })
-            } catch (err) {
-                console.log(err.message)
-            }
-        }
     },
+
     beforeunmount() {
         eventBus.off('trackClicked', this.onTrackClicked)
     },
+
     computed: {
         repeatState() {
-            return this.repeatStates[this.repeatStateIdx];
+            return this.repeatStates[this.repeatStateIdx]
         },
-    }
+        currStation() {
+            return this.$store.getters.currStation
+        },
+        currTrackIdx() {
+            return this.$store.getters.currTrackIdx
+        },
+        currTrackList() {
+            return this.currStation?.tracks
+        },
+        currTrack() {
+            return this.currStation?.tracks[this.currTrackIdx]
+        },
+    },
 }
 
 </script>
