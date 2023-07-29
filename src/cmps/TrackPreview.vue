@@ -22,9 +22,11 @@
         <section class="track-actions">
             <!-- <span v-show="isHovered" class="small-play" v-icon="`play`" title="Play"></span> -->
             <!-- <span class="material-symbols-outlined">favorite</span> -->
-            <!-- <span v-icon="`smallLikeEna`"></span> -->
+            <button class="small-like-dis" @click="toggleLike(trackIdx-1)">
+                <span v-if="this.isLiked" v-icon="`smallLikeEna`"></span>
+                <span v-else v-icon="`smallLikeDis`"></span>
+            </button>
             <!-- <button class="small-like-dis" v-if="title.isHovered && !track.isLiked">
-                <span v-icon="`smallLikeDis`"></span>
             </button>
             <button class="small-like-ena" v-if="title.isHovered && track.isLiked">
             </button> -->
@@ -46,8 +48,14 @@ export default {
 
     data() {
         return {
+<<<<<<< HEAD
+=======
+            isLiked: this.track.isLiked,
+            isHovered: false,
+>>>>>>> 323739dc20200f016aca76e06f3c480fdde8a2e6
             trackTime: this.track.formalDuration,
-            dateStr: this.track.addedAt
+            dateStr: this.track.addedAt,
+            currStation: JSON.parse(JSON.stringify(this.$store.getters.currStation))
         }
     },
 
@@ -73,7 +81,30 @@ export default {
                 return targetDate.format("MMM D, YYYY")
             }
         },
+<<<<<<< HEAD
+=======
+        isPlaying() {
+            return {
+                'track-playing': this.track.isPlaying
+            }
+        }
+    },
+>>>>>>> 323739dc20200f016aca76e06f3c480fdde8a2e6
 
+    methods: {
+        async toggleLike(trackIdx) {
+            this.isLiked = !this.isLiked
+            this.currStation.tracks[trackIdx].isLiked = this.isLiked
+            // const likedSongsId = this.$store.getters.likedSongsId
+
+            // try {
+            //     await this.$store.dispatch({ type: 'saveStation', stationToSave: this.currStation })
+            //     // await this.$store.dispatch({ type: 'addTrack', trackToSave: this.track, stationId: likedSongsId })
+            // } catch (err) {
+            //     console.log(err.message)
+            // }
+            // console.log(this.track.isLiked)
+        },
     }
 }
 </script>
