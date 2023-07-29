@@ -1,4 +1,8 @@
 .track-preview {
+    .eq {
+        height: 0.875rem;
+        width: 0.875rem;
+    }
 
     .small-like-dis {
         border: none;
@@ -60,6 +64,10 @@
 
         .track-name {
             color: $clr2;
+
+            &.track-playing {
+                color: $clr9
+            }
         }
 
         .track-artist {
@@ -67,8 +75,4 @@
             font-size: 0.875rem;
         }
     }
-}
-
-.track-playing {
-    color: green;
 }

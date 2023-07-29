@@ -1,4 +1,5 @@
 .station-list {
+    margin-block-start: 10rem;
     max-width: 119rem;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));

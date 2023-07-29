@@ -1,19 +1,9 @@
 <template>
-  <section class="search-page">
-    <section class="search-header">
-      <button class="nav-btn" title="Go back"><span class="material-symbols-outlined">chevron_left</span></button>
-      <button class="nav-btn" title="Go forward"><span class="material-symbols-outlined">chevron_right</span></button>
-      <div class="search-input-container">
-        <span class="material-symbols-outlined">search</span>
-        <input type="text" v-model="filterBy.txt" @input="onSetFilterBy" placeholder="What do you want to listen to?">
-        <div v-if="filterBy.txt">
-          <span class="material-symbols-outlined search-clear" @click="onClearFilter"> close </span>
-        </div>
-      </div>
-      <button class="profile-btn" title="Logout"><span v-icon="`profile`"></span></button>
-    </section>
-    <h2>Browse all</h2>
-    <CategoryList :categories="categories" />
+  <section class="categories-container">
+    <div>
+      <h2>Browse all</h2>
+      <CategoryList :categories="categories" />
+    </div>
   </section>
 </template>
   

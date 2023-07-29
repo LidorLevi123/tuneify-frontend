@@ -1,14 +1,14 @@
 <template>
-
     <article class="track-preview track-preview-layout">
-    <pre>{{ track }}</pre>
-        <span class="track-num">{{ trackIdx }}</span>
+        <img class="eq" v-show="track.isPlaying"
+            src="https://res.cloudinary.com/dmmsf57ko/image/upload/v1683729372/Song_hoitzd.gif" alt="">
+        <span v-show="!track.isPlaying" class="track-num">{{ trackIdx }}</span>
         <div class="mini-prev">
             <section class="img-container">
                 <img :src="`${track.imgUrl}`" alt="">
             </section>
             <section>
-                <div class="track-name" :class="isPlaying">{{ track.title }}</div>
+                <div class="track-name" :class="{ 'track-playing': track.isPlaying }">{{ track.title }}</div>
                 <div class="track-artist">{{ track.artists[0] }}</div>
             </section>
         </div>
@@ -46,7 +46,6 @@ export default {
 
     data() {
         return {
-            isHovered: false,
             trackTime: this.track.formalDuration,
             dateStr: this.track.addedAt
         }
@@ -74,11 +73,6 @@ export default {
                 return targetDate.format("MMM D, YYYY")
             }
         },
-        isPlaying() {
-            return {
-                'track-playing': this.track.isPlaying
-            }
-        }
 
     }
 }

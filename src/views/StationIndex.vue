@@ -1,23 +1,31 @@
 <template>
     <section class="station-main-container">
-        <Header />
-        <RouterView />
+        <Nav />
+        <MainHeader />
+        <RouterView class="router" />
         <Player />
     </section>
 </template>
 
 <script>
 import Player from '../cmps/Player.vue'
-import Header from '../cmps/Header.vue'
-import Sidebar from '../cmps/Sidebar.vue'
+import Nav from '../cmps/Nav.vue'
+import MainHeader from '../cmps/MainHeader.vue'
 
 export default {
 
     components: {
         Player,
-        Header,
-        Sidebar
+        Nav,
+        MainHeader
     }
 }
 
 </script>
+
+<style>
+.router {
+    grid-column: 2;
+    grid-row: 1;
+}
+</style>

@@ -1,5 +1,5 @@
 <template>
-    <section class="main-header-container">
+    <section class="nav-container">
         <nav>
             <RouterLink to="/">
                 <div :class="{ 'isActive': $route.path === '/' }">
