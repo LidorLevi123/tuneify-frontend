@@ -21,16 +21,16 @@
                 </button>
 
                 <button class="previous btn" @click="previousNextVideo(-1)" title="Previous">
-                    <span class="material-symbols-outlined">skip_previous</span>
+                    <span v-icon="'previous'"></span>
                 </button>
 
                 <button class="play btn" @click="togglePlayPause" title="Play">
                     <span v-if="!this.isPlaying" v-icon="'play'"></span>
-                    <span v-else="this.isPlaying" v-icon="'pause'"></span>
+                    <span v-else v-icon="'pause'"></span>
                 </button>
 
                 <button class="next btn" @click="previousNextVideo(1)" title="Next">
-                    <span class="material-symbols-outlined">skip_next</span>
+                    <span v-icon="'next'"></span>
                 </button>
 
                 <button class="repeat btn" @click="cycleRepeatStates" title="Repeat" :class="{
@@ -38,7 +38,8 @@
                     'repeat-playlist': repeatStateIdx === 1,
                     'repeat-song': repeatStateIdx === 2
                 }">
-                    <span v-icon="'repeat'"></span>
+                    <span v-if="this.repeatStateIdx === 2" v-icon="'repeatSong'"></span>
+                    <span v-else v-icon="'repeat'"></span>
                 </button>
 
             </section>
@@ -80,7 +81,6 @@ export default {
             isShuffle: false,
             isRepeat: false,
             repeatStates: ['noRepeat', 'repeatPlaylist', 'repeatSong'],
-            // repeatState: 'noRepeat',
             repeatStateIdx: 0,
             isMute: false,
             lastVolume: 0,
@@ -194,7 +194,6 @@ export default {
         async updateElapsedTime() {
             if (this.isPlaying) {
                 this.elapsedTime = await this.$refs.youtubePlayer.getCurrentTime()
-                // this.elapsedTimeString = this.secsToTimeFormat(elapsedTimeInSecs)
             }
         },
         async onTrackClicked(trackId, station) {
@@ -252,42 +251,7 @@ export default {
         repeatState() {
             return this.repeatStates[this.repeatStateIdx];
         },
-        // formattedTime() {
-        //     const totalSeconds = Math.floor(this.currTrack.formalDuration / 1000)
-        //     const hours = Math.floor(totalSeconds / 3600)
-        //     const minutes = Math.floor((totalSeconds % 3600) / 60)
-        //     const seconds = totalSeconds % 60
-        //     const padZero = (num) => (num < 10 ? `0${num}` : num)
-        //     return `${minutes}:${padZero(seconds)}`
-        // },
     }
 }
 
 </script>
-
-
-<!--
-
-    this.$refs.youtubePlayer.getCurrentTime() - Returns the elapsed time in seconds since the video started playing.
-
-    this.$refs.youtubePlayer.seekTo(secs, false) - plays the song "secs" number of secs from the start (if was paused - stays paused)
-
-    this.$refs.youtubePlayer.getDuration() - returns 0 til the metadata is loaded (mostly happens after vid starts playing).
-
-    best seekTo flow:
-    while user grabs the slider this.$refs.youtubePlayer.seekTo(5, false)
-    set to true while user lets releases the slider -->
-
-<!--
-{
-    "addedAt": "2023-07-28T04:00:00Z",
-    "id": "2KReCz1L5XkGIBhDncQ5VZ",
-    "title": "BABY SAID",
-    "artists": [
-        "Måneskin"
-    ],
-    "imgUrl": "https://i.scdn.co/image/ab67616d0000b273c1b211b5fcdef31be5f806df",
-    "formalDuration": 164682,
-    "album": "RUSH!",
-    "youtubeId": "Z8NiouNEivo"
-} -->
