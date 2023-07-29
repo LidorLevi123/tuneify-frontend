@@ -130,8 +130,8 @@
 
 .playback-slider {
     // min-width: 40px;
-    width: 600px;
-    height: 4px;
+    width: 39.12rem;
+    height: 0.25rem;
     border-radius: 50px;
 }
 
@@ -176,7 +176,12 @@
     font-size: 1rem
 }
 
-.enabled path {
+
+.repeat-playlist path {
+    fill: $clr9;
+}
+
+.repeat-song path {
     fill: $clr9;
 }
 

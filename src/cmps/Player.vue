@@ -1,6 +1,5 @@
 <template>
-    <YouTube ref="youtubePlayer" :src="currTrack?.youtubeId" @state-change="onStateChange"
-        style="display: none;" />
+    <YouTube ref="youtubePlayer" :src="currTrack?.youtubeId" @state-change="onStateChange" style="display: none;" />
 
     <section class="main-player-container">
         <section v-if="currTrack" class="playing-track">
@@ -34,7 +33,11 @@
                     <span class="material-symbols-outlined">skip_next</span>
                 </button>
 
-                <button class="repeat btn" @click="toggleRepeat" title="Repeat" :class="{ 'enabled': this.isRepeat }">
+                <button class="repeat btn" @click="cycleRepeatStates" title="Repeat" :class="{
+                    'no-repeat': repeatStateIdx === 0,
+                    'repeat-playlist': repeatStateIdx === 1,
+                    'repeat-song': repeatStateIdx === 2
+                }">
                     <span v-icon="'repeat'"></span>
                 </button>
 
@@ -76,6 +79,9 @@ export default {
             isPlaying: false,
             isShuffle: false,
             isRepeat: false,
+            repeatStates: ['noRepeat', 'repeatPlaylist', 'repeatSong'],
+            // repeatState: 'noRepeat',
+            repeatStateIdx: 0,
             isMute: false,
             lastVolume: 0,
             currVolume: 80,
@@ -103,8 +109,26 @@ export default {
         this.currTrack.youtubeId = ''
     },
     methods: {
+        togglePlayPause() {
+            // if (!this.currStation.keys) return
+
+            if (this.isPlaying) {
+                this.isPlaying = false
+                this.$refs.youtubePlayer.pauseVideo()
+                this.playbackPos = this.$refs.youtubePlayer.getCurrentTime()
+                this.handlePlaybackInterval(false)
+            } else {
+                this.isPlaying = true
+                this.$refs.youtubePlayer.playVideo()
+                this.handlePlaybackInterval(true)
+            }
+        },
         async previousNextVideo(diff) {
+            // if (!this.currStation.keys) return
+
             this.currTrackIdx = this.currTrackIdx + diff
+
+            // if (this.isRepeat && this.currTrackIdx)
 
             if (this.isShuffle) {
                 this.currTrackIdx = utilService.getRandomIntInclusive(0, this.currTrackList.length - 1)
@@ -128,8 +152,11 @@ export default {
         toggleShuffle() {
             this.isShuffle = !this.isShuffle
         },
-        toggleRepeat() {
-            this.isRepeat = !this.isRepeat
+        cycleRepeatStates() {
+            // this.isRepeat = !this.isRepeat
+            this.repeatStateIdx++
+            if(this.repeatStateIdx >= this.repeatStates.length) this.repeatStateIdx = 0
+            console.log(this.repeatStateIdx)
         },
         toggleMute() {
             if (this.isMute) {
@@ -142,19 +169,6 @@ export default {
                 this.lastVolume = this.currVolume
                 this.currVolume = 0
                 this.$refs.youtubePlayer.mute()
-            }
-        },
-        togglePlayPause() {
-            if (this.isPlaying) {
-                this.isPlaying = false
-                this.$refs.youtubePlayer.pauseVideo()
-                this.playbackPos = this.$refs.youtubePlayer.getCurrentTime()
-
-                this.handlePlaybackInterval(false)
-            } else {
-                this.isPlaying = true
-                this.$refs.youtubePlayer.playVideo()
-                this.handlePlaybackInterval(true)
             }
         },
         onChangeVolume() {
@@ -235,6 +249,9 @@ export default {
         eventBus.off('trackClicked', this.onTrackClicked)
     },
     computed: {
+        repeatState() {
+            return this.repeatStates[this.repeatStateIdx];
+        },
         // formattedTime() {
         //     const totalSeconds = Math.floor(this.currTrack.formalDuration / 1000)
         //     const hours = Math.floor(totalSeconds / 3600)
