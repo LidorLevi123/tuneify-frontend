@@ -10,6 +10,7 @@ export const spotifyService = {
 async function getSpotifyItems(reqType, id) {
     const endpoints = {
         categoryStations: `https://api.spotify.com/v1/browse/categories/${id}/playlists?country=il`,
+        categories: `https://api.spotify.com/v1/browse/categories?country=US&offset=0&limit=50`,
         station: `https://api.spotify.com/v1/playlists/${id}`,
         tracks: `https://api.spotify.com/v1/playlists/${id}/tracks`,
     }

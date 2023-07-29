@@ -28,7 +28,7 @@ export default {
     methods: {
         trackClicked(trackId) {
             eventBus.emit('trackClicked', trackId, this.station)
-        }
+        },
     },
 
     components: {
