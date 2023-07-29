@@ -1,16 +1,18 @@
-
-
 .alert {
-    background-color: lightgray;
+
+    background-color: #0d72ea;
     position: fixed;
-    top: 0;
-    right: 0.5em;
-    padding: 1em;
+    bottom: 7rem;
+    right: 50%;
+    padding: 1rem 1.5rem 1rem 1.5rem;
+    border-radius: 0.5rem;
+    color: $clr2;
+
     &.alert-success {
-        background-color: lightgreen;
+        background-color: #0d72ea;
     }
+
     &.alert-error {
         background-color: lightcoral;
     }
 }
-

@@ -11,9 +11,9 @@
                     <p class="description">{{ station.description }}</p>
                     <div>
                         <img src="favicon.svg" alt="">
-                        <span class="logo">Tunify ⚬</span>
-                        <span class="songs-num">{{ station.tracks?.length }} songs,</span>
-                        <span class="songs-time">about {{ formttedTime }} hours</span>
+                        <span class="logo">Tunify </span>
+                        <span class="songs-num" v-if="station.tracks">⚬ {{ station.tracks?.length }} songs,</span>
+                        <span class="songs-time" v-if="formttedTime">about {{ formttedTime }} hours</span>
                     </div>
                 </section>
             </section>
@@ -73,7 +73,7 @@ export default {
     },
 
     unmounted() {
-        this.$store.commit({ type: 'setCurrStation', station: null})
+        this.$store.commit({ type: 'setCurrStation', station: null })
     },
 
     methods: {
@@ -88,7 +88,7 @@ export default {
             document.querySelector('.top-gradient').style.backgroundImage =
                 `linear-gradient(to bottom, ${avgColor} 0%, ${darkerColor} 100%)`
             document.querySelector('.bottom-gradient').style.backgroundImage =
-                `linear-gradient(to bottom, ${darkerDarkerColor} 0%, #121212 6%, #121212 100%)`
+                `linear-gradient(to bottom, ${darkerDarkerColor} 0%, #121212 14.5rem, #121212 100%)`
         },
         openStationEditor() {
             if (!this.station.owner) return

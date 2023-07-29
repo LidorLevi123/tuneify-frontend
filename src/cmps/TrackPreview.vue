@@ -16,7 +16,7 @@
             <span class="track-">{{ formattedDate }}</span>
         </div>
         <span class="track-album">{{ formattedTime }}</span>
-        
+
         <!-- DEAR YARON - CHANGE THE SVG ICON NAMES TO LIKE / DISLIKE AND NOT SMALL-LIKE-DIS-ZIBI -->
         <section class="track-actions">
             <!-- <span v-show="isHovered" class="small-play" v-icon="`play`" title="Play"></span> -->
