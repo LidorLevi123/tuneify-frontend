@@ -1,6 +1,5 @@
 <template>
     <YouTube ref="youtubePlayer" :src="currTrack?.youtubeId" @state-change="onStateChange" style="display: none;" />
-    <!-- <YouTube ref="youtubePlayer" :src="'nyuo9-OjNNg'" @state-change="onStateChange" style="display: none;" /> -->
 
     <section class="main-player-container">
         <section class="playing-track">
@@ -129,13 +128,13 @@ export default {
         },
         async previousNextVideo(diff) {
             // if (!this.currStation.keys) return
+
             if (this.repeatStateIdx === 2) {
                 this.$refs.youtubePlayer.stopVideo()
                 this.$refs.youtubePlayer.playVideo()
                 return
             }
 
-            // this.currTrack.isPlaying = false
             this.updateCurrTrackIdx(this.currTrackIdx + diff)
 
             // if (
@@ -153,9 +152,6 @@ export default {
                 (this.currTrackIdx > this.currTrackList.length - 1)) this.updateCurrTrackIdx(0)
 
             if (this.currTrackIdx < 0) this.updateCurrTrackIdx(this.currTrackList.length - 1)
-
-            // this.currTrack = this.currTrackList[this.currTrackIdx]
-            // this.currTrack.isPlaying = false
 
             if (this.currTrack.youtubeId) {
                 console.log('song has youtubeId in local')
@@ -178,7 +174,6 @@ export default {
             // this.isRepeat = !this.isRepeat
             this.repeatStateIdx++
             if (this.repeatStateIdx >= this.repeatStates.length) this.repeatStateIdx = 0
-            console.log(this.repeatStateIdx)
         },
         toggleMute() {
             if (this.isMute) {
@@ -284,6 +279,3 @@ export default {
 }
 
 </script>
-
-
-

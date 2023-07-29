@@ -176,12 +176,15 @@
     font-size: 1rem
 }
 
-
 .repeat-playlist path {
     fill: $clr9;
 }
 
 .repeat-song path {
+    fill: $clr9;
+}
+
+.enabled path {
     fill: $clr9;
 }
 
