@@ -2,14 +2,16 @@
     <section class="main-header-container">
         <nav>
             <RouterLink to="/">
-                <div>
-                    <span v-icon="'home'"></span>
+                <div :class="{ 'isActive': $route.path === '/' }">
+                    <span v-if="$route.path === '/'" v-icon="'homeActive'"></span>
+                    <span v-else v-icon="'home'"></span>
                     Home
                 </div>
             </RouterLink>
             <RouterLink to="/search">
-                <div>
-                    <span v-icon="'search'"></span>
+                <div :class="{ 'isActive': $route.path === '/search' }">
+                    <span v-if="$route.path === '/search'" v-icon="'searchActive'"></span>
+                    <span v-else v-icon="'search'"></span>
                     Search
                 </div>
             </RouterLink>

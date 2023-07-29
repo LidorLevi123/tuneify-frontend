@@ -10,6 +10,7 @@
           <span class="material-symbols-outlined search-clear" @click="onClearFilter"> close </span>
         </div>
       </div>
+      <button class="profile-btn" title="Logout"><span v-icon="`profile`"></span></button>
     </section>
     <h2>Browse all</h2>
     <CategoryList :categories="categories" />

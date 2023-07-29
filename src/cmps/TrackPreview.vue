@@ -1,13 +1,14 @@
 <template>
-    <article class="track-preview track-preview-layout">
 
+    <article class="track-preview track-preview-layout">
+    <pre>{{ track }}</pre>
         <span class="track-num">{{ trackIdx }}</span>
         <div class="mini-prev">
             <section class="img-container">
                 <img :src="`${track.imgUrl}`" alt="">
             </section>
             <section>
-                <div class="track-name">{{ track.title }}</div>
+                <div class="track-name" :class="isPlaying">{{ track.title }}</div>
                 <div class="track-artist">{{ track.artists[0] }}</div>
             </section>
         </div>
@@ -75,6 +76,11 @@ export default {
                 return `${diffInDays} days ago`
             } else {
                 return targetDate.format("MMM D, YYYY")
+            }
+        },
+        isPlaying() {
+            return {
+                'track-playing': this.track.isPlaying
             }
         }
     },

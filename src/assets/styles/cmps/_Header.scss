@@ -26,10 +26,19 @@
             align-items: center;
             padding: 0.25rem 0.75rem 0.25rem 0.75rem;
 
+            &.isActive {
+                color: $clr2;
+            }
+
+            span {
+                padding-top: 0.5rem;
+            }
+
             &:hover {
                 color: $clr2;
 
                 .icon {
+
                     path {
                         fill: $clr2;
                     }
