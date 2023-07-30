@@ -9,11 +9,15 @@
 
 @font-face {
     font-family: Circular;
-    src: url("/src/assets/fonts/Circular/CircularStd-Book.otf");
+    src: url("/src/assets/fonts/Circular/CircularSp-Book.woff2");
+}
+
+@font-face {
+    font-family: CircularSpTitle;
+    src: url("/src/assets/fonts/Circular/CircularSpTitle-Black.woff2");
 }
 
 @font-face {
     font-family: Rubik;
-    src: url("/src/assets/fonts/Rubik/Rubik-Regular.ttf");
-    // unicode-range: U+0000-052F, U+1E00-1EFF, U+2000-2FFF, U+FB1D-FB4F;
+    src: url("/src/assets/fonts/Circular/CircularSp-Hebr-Book.woff2");
 }

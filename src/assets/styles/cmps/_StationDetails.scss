@@ -20,6 +20,7 @@
         }
 
         h1 {
+            font-family: CircularSpTitle;
             margin-block-start: 0.9rem;
             margin-block-end: 2rem;
             font-weight: 900;
@@ -36,9 +37,15 @@
             color: $clr2;
         }
 
-        span {
+        .pl {
             font-size: 0.875rem;
             color: $clr2;
+            font-family: CircularSpTitle;
+        }
+
+        span {
+            font-size: 0.875rem;
+            color: $clr2
         }
 
         .songs-time {

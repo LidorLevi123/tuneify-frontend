@@ -6,7 +6,7 @@
                     <img crossorigin="anonymous" class="station-img" :src="station.imgUrl" alt="">
                 </section>
                 <section class="station-info">
-                    <span>Playlist</span>
+                    <span class="pl">Playlist</span>
                     <h1 @click="openStationEditor">{{ station.name }}</h1>
                     <p class="description">{{ station.description }}</p>
                     <div>

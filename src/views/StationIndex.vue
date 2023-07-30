@@ -15,8 +15,12 @@ import MainHeader from '../cmps/MainHeader.vue'
 export default {
     methods: {
         handleScroll({ target }) {
+            const station = document.querySelector('.station-header')
             const elMainHeader = document.querySelector('.main-header')
-            elMainHeader.style.backgroundColor = target.scrollTop > 1 ? '#121212' : 'transparent'
+            const playBtn = document.querySelector('.play-btn-header')
+            elMainHeader.style.backgroundColor = target.scrollTop > 50 ? '#121212' : 'transparent'
+            playBtn.style.opacity = target.scrollTop > 50 ? '1' : '0'
+            station.style.opacity = target.scrollTop > 50 ? '1' : '0'
         }
     },
     components: {
