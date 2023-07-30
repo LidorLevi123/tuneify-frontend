@@ -73,10 +73,6 @@ export default {
         this.loadStation()
     },
 
-    unmounted() {
-        this.$store.commit({ type: 'setCurrStation', station: null })
-    },
-
     methods: {
         async loadStation() {
             await this.$store.dispatch({ type: 'setCurrStation', stationId: this.$route.params.stationId })
