@@ -156,7 +156,7 @@ export default {
 
             if (this.currTrackIdx < 0) this.updateCurrTrackIdx(this.currTrackList.length - 1)
 
-            if (this.currTrack.youtubeId) {
+            if (this.currTrack?.youtubeId) {
                 console.log('song has youtubeId in local')
                 this.loadVideo()
             } else {
@@ -225,7 +225,7 @@ export default {
         },
         async onTrackClicked() {
             console.log(this.currTrack)
-            if (this.currTrack.youtubeId) {
+            if (this.currTrack?.youtubeId) {
                 console.log('song has youtubeId in local')
                 this.loadVideo()
             } else {

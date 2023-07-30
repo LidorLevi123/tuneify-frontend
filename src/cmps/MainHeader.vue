@@ -17,6 +17,11 @@
 
 export default {
     name: 'SearchPage',
+
+    props: {
+        davar: { type: Object }
+    },
+
     data() {
         return {
             filterBy: {

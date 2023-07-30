@@ -49,20 +49,15 @@ export const stationStore = {
             stations.splice(idx, 1)
         },
         addTrack({ stations }, { trackToSave, stationId }) {
-            const idx = stations.findIndex(station => station._id === stationId)
-            stations[idx].tracks.unshift(trackToSave)
-        },
-        addTrackToLikedSongs({ stations }, { trackToSave }) {
             trackToSave = JSON.parse(JSON.stringify(trackToSave))
-            const idx = stations.findIndex(station => station.name === 'Liked Songs')
-            stations[idx].tracks.unshift(trackToSave)
-            console.log(stations[idx])
-        },
-        updateTrack({ stations }, { trackToSave, stationId }) {
             const idx = stations.findIndex(station => station._id === stationId)
-            const trackIdx = stations[idx].tracks.findIndex(track => track._id === trackToSave._id)
-            stations[idx].tracks.splice(trackIdx, 1, trackToSave)
+            stations[idx].tracks.unshift(trackToSave)
         },
+        // updateTrack({ stations }, { trackToSave, stationId }) {
+        //     const idx = stations.findIndex(station => station._id === stationId)
+        //     const trackIdx = stations[idx].tracks.findIndex(track => track._id === trackToSave._id)
+        //     stations[idx].tracks.splice(trackIdx, 1, trackToSave)
+        // },
         removeTrack({ stations }, { trackId, stationId }) {
             const idx = stations.findIndex(station => station._id === stationId)
             const trackIdx = stations[idx].tracks.findIndex(track => track._id === trackId)
@@ -116,6 +111,15 @@ export const stationStore = {
             try {
                 await stationService.remove(payload.stationId)
                 commit(payload)
+            } catch (err) {
+                console.log(err.message)
+                throw new Error('Could not remove station')
+            }
+        },
+        async addTrack({ commit }, { trackToSave, stationId }) {
+            try {
+                await stationService.save(stationId)
+                commit({ type: 'addTrack', trackToSave, stationId })
             } catch (err) {
                 console.log(err.message)
                 throw new Error('Could not remove station')
