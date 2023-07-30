@@ -23,7 +23,7 @@
                 <button class="details-play">
                     <span class="details-play" v-icon="'detailsPlay'"></span>
                 </button>
-                <button v-show="!station.owner" class="details-like">
+                <button v-show="!station.owner && station.owner !== 'Tunify'" class="details-like" @click="addStation">
                     <span v-icon="'like'"></span>
                 </button>
                 <button class="btn details-edit">
@@ -89,6 +89,14 @@ export default {
                 console.log('Could not set current station')
             }
         },
+        async addStation() {
+            try {
+                await this.$store.dispatch({ type: 'saveStation', stationToSave: this.station })
+                this.canAddStation = true
+            } catch (err) {
+                console.log('Could not add station')
+            } 
+        },
         async getAvgImgClr() {
             try {
                 const { hex } = await fac.getColorAsync(document.querySelector('.station-img'))
@@ -97,25 +105,6 @@ export default {
                 console.log(err)
                 throw new Error('cant get average color')
             }
-        },
-        setBackgroundClr(avgColor) {
-            const [darkerColor, darkerDarkerColor] = utilService.generateColors(avgColor)
-
-            document.querySelector('.top-gradient').style.backgroundImage =
-                `linear-gradient(to bottom, ${avgColor} 0%, ${darkerColor} 100%)`
-            document.querySelector('.bottom-gradient').style.backgroundImage =
-                `linear-gradient(to bottom, ${darkerDarkerColor} 0%, #121212 14.5rem, #121212 100%)`
-        },
-        setTracksTotalDuration() {
-            this.tracksTotalDuration = this.station.tracks?.reduce((sum, track) => sum = sum + track.formalDuration, 0)
-        },
-        openStationEditor() {
-            if (!this.station.owner) return
-            document.body.classList.add('modal-open')
-        },
-        clickTrack(trackIdx) {
-            this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
-            eventBus.emit('trackClicked')
         },
         async likeTrack(trackToSave) {
             try {
@@ -144,6 +133,25 @@ export default {
             } catch (err) {
                 console.log('Could not dislike track')
             }
+        },
+        setBackgroundClr(avgColor) {
+            const [darkerColor, darkerDarkerColor] = utilService.generateColors(avgColor)
+
+            document.querySelector('.top-gradient').style.backgroundImage =
+                `linear-gradient(to bottom, ${avgColor} 0%, ${darkerColor} 100%)`
+            document.querySelector('.bottom-gradient').style.backgroundImage =
+                `linear-gradient(to bottom, ${darkerDarkerColor} 0%, #121212 14.5rem, #121212 100%)`
+        },
+        setTracksTotalDuration() {
+            this.tracksTotalDuration = this.station.tracks?.reduce((sum, track) => sum = sum + track.formalDuration, 0)
+        },
+        openStationEditor() {
+            if (!this.station.owner) return
+            document.body.classList.add('modal-open')
+        },
+        clickTrack(trackIdx) {
+            this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
+            eventBus.emit('trackClicked')
         },
     },
 
