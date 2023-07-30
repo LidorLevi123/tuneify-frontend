@@ -127,7 +127,7 @@
     -moz-appearance: none;
     appearance: none;
 
-    background-color: hsla(0, 0%, 100%, .3)
+    background-color: $clr10
 }
 
 .playback-slider {
@@ -143,9 +143,7 @@
     border-radius: 50px;
 }
 
-.slider:hover {
-    background: $clr9;
-}
+
 
 .slider:hover::-webkit-slider-thumb {
     opacity: 1;
@@ -217,28 +215,26 @@
 
     &:hover {
         &.no-repeat {
-          fill: lighten($clr2, 10%)
+            fill: lighten($clr2, 10%)
         }
+
         &.repeat-playlist,
         &.repeat-song {
-          fill: lighten($clr9, 10%)
+            fill: lighten($clr9, 10%)
         }
     }
 }
 
-
-
-
-.repeat.no-repeat {
-    // background-color: black
-}
-
 .svg-fill {
-    fill: hsla(0, 0%, 100%, .7);
+    fill: $clr11;
 }
 
 .svg-fill {
     &:hover {
         fill: lighten($clr2, 10%)
     }
+}
+
+.slider:hover {
+    // background: $clr9;
 }

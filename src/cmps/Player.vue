@@ -8,7 +8,8 @@
             </section>
             <section>
                 <div v-if="currTrack" class="track-title">{{ currTrack.title }}</div>
-                <div v-if="currTrack" class="track-artist">{{ currTrack.artists?.length > 0 ? currTrack.artists[0] : '' }}</div>
+                <div v-if="currTrack" class="track-artist">{{ currTrack.artists?.length > 0 ? currTrack.artists[0] : '' }}
+                </div>
             </section>
         </section>
 
@@ -25,7 +26,7 @@
                 </button>
 
                 <button class="play btn" @click="togglePlayPause" title="Play">
-                    <span v-if="!this.isPlaying" v-icon="'play'"></span>
+                    <span v-if="!isPlaying" v-icon="'play'"></span>
                     <span v-else v-icon="'pause'"></span>
                 </button>
 
@@ -47,7 +48,8 @@
             <section class="playback-container">
                 <span style="color:white;">{{ secsToTimeFormat(elapsedTime) }}</span>
                 <input class="playback-slider slider" @input="onChangeTime" type="range" min="0" :max="currTrackDuration"
-                    v-model="elapsedTime">
+                    v-model="elapsedTime"
+                    :style="{ background: `linear-gradient(to right, white ${currProgressPercentage}%, hsla(0, 0%, 100%, .3) ${currProgressPercentage}%);`}">
                 <span style="color:white;">{{ secsToTimeFormat(currTrackDuration) }}</span>
             </section>
         </section>
@@ -75,9 +77,10 @@ import YouTube from 'vue3-youtube'
 export default {
     data() {
         return {
+            currProgressPercentage: 0,
             intervalId: null,
             elapsedTime: 0,
-            isPlaying: false,
+            // isPlaying: false,
             isShuffle: false,
             isRepeat: false,
             repeatStates: ['noRepeat', 'repeatPlaylist', 'repeatSong'],
@@ -110,18 +113,18 @@ export default {
     },
     methods: {
         updateCurrTrackIdx(trackIdx) {
-            this.$store.commit({ type: 'setCurrTrackIdx', trackIdx})
+            this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
         },
         togglePlayPause() {
             // if (!this.currStation.keys) return
 
             if (this.isPlaying) {
-                this.isPlaying = false
+                this.$store.commit({ type: 'setIsPlaying', isPlaying: false })
                 this.$refs.youtubePlayer.pauseVideo()
                 this.playbackPos = this.$refs.youtubePlayer.getCurrentTime()
                 this.handlePlaybackInterval(false)
             } else {
-                this.isPlaying = true
+                this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
                 this.$refs.youtubePlayer.playVideo()
                 this.handlePlaybackInterval(true)
             }
@@ -164,7 +167,7 @@ export default {
         },
         loadVideo() {
             // this.currTrack.youtubeId = youtubeId
-            this.isPlaying = true
+            this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
             this.handlePlaybackInterval(true)
         },
         toggleShuffle() {
@@ -194,15 +197,15 @@ export default {
         onChangeTime() {
             this.playbackPos = this.elapsedTime
             this.$refs.youtubePlayer.seekTo(this.playbackPos, true)
+
+            this.currProgressPercentage = (this.elapsedTime / this.currTrackDuration) * 100
         },
         stopVideo() {
-            this.isPlaying = false
+            this.$store.commit({ type: 'setIsPlaying', isPlaying: false })
             this.$refs.youtubePlayer.stopVideo()
         },
         onStateChange(event) {
             if (event.data === this.youtubePlayerStates.ENDED) {
-
-                this.currTrack.isPlaying = false
 
                 // this.currStation.tracks.length - 1 is NAN check why
 
@@ -275,6 +278,9 @@ export default {
         currTrack() {
             return this.currStation?.tracks[this.currTrackIdx]
         },
+        isPlaying() {
+            return this.$store.getters.isCurrTrackPlaying
+        }
     },
 }
 
