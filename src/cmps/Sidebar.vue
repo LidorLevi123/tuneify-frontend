@@ -21,12 +21,6 @@ export default {
             canAddStation: true
         }
     },
-    created() {
-        // Fix this workaround later
-        setTimeout(()=> {
-            this.createLikedSongsStation()
-        }, 500)
-    },
 
     methods: {
         async addStation() {
@@ -42,23 +36,6 @@ export default {
             this.$router.push(`/station/${station._id}`)
             this.canAddStation = true
         },
-        async createLikedSongsStation() {
-            const libraryStations = this.libraryStations
-            const likedSongsExists = libraryStations.some(station => station.name === 'Liked Songs')
-
-            if (!likedSongsExists) {
-                const stationToSave = stationService.getEmptyStation()
-                stationToSave.name = 'Liked Songs'
-                stationToSave.imgUrl = 'https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png'
-
-                try {
-                    await this.$store.dispatch({ type: 'saveStation', stationToSave });
-                } catch (error) {
-                    console.error('Error creating "Liked Songs" station:', error)
-                    throw new Error('Cannot create Liked Songs Station')
-                }
-            }
-        }
     },
     computed: {
         libraryStations() {

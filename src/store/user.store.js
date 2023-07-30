@@ -1,7 +1,6 @@
 import { userService } from '../services/user.service.local'
 // import { userService } from '../services/user.service'
 
-
 export const userStore = {
     state: {
         loggedinUser: null,
