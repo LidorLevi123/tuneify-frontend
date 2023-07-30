@@ -30,13 +30,8 @@
                     <span v-icon="'moreOptions'"></span>
                 </button>
             </section>
-            <TrackList 
-            @track-clicked="clickTrack"
-            @track-add="addTrack"
-            @track-remove="removeTrack"
-            @track-like="likeTrack"
-            @track-dislike="dislikeTrack"
-            :station="station" />
+            <TrackList @track-clicked="clickTrack" @track-add="addTrack" @track-remove="removeTrack" @track-like="likeTrack"
+                @track-dislike="dislikeTrack" :station="station" />
         </div>
         <StationEdit />
     </section>
@@ -49,7 +44,7 @@
 import { FastAverageColor } from 'fast-average-color'
 const fac = new FastAverageColor()
 import { utilService } from '../services/util.service'
-import { eventBus } from '../services/event-bus.service.js'
+import { eventBus, showSuccessMsg } from '../services/event-bus.service.js'
 
 import StationEdit from '../cmps/StationEdit.vue'
 import TrackList from '../cmps/TrackList.vue'
@@ -95,7 +90,7 @@ export default {
                 this.canAddStation = true
             } catch (err) {
                 console.log('Could not add station')
-            } 
+            }
         },
         async getAvgImgClr() {
             try {
@@ -109,6 +104,7 @@ export default {
         async likeTrack(trackToSave) {
             try {
                 await this.$store.dispatch({ type: 'addTrack', trackToSave, stationId: 'liked101' })
+                showSuccessMsg('Added to your Liked Songs')
             } catch (err) {
                 console.log('Could not like track')
             }
@@ -116,6 +112,7 @@ export default {
         async dislikeTrack(track) {
             try {
                 await this.$store.dispatch({ type: 'removeTrack', track, stationId: 'liked101' })
+                showSuccessMsg('Removed from your Liked Songs')
             } catch (err) {
                 console.log('Could not dislike track')
             }

@@ -1,7 +1,7 @@
 <template>
-        <section :class="msg.type" v-if="msg.txt" class="user-msg">
-            {{ msg.txt }}
-        </section>
+	<section :class="msg.type" v-if="msg.txt" class="user-msg">
+		{{ msg.txt }}
+	</section>
 </template>
  
 <script>
