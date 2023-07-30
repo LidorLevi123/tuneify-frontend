@@ -2,14 +2,82 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     align-items: center;
-
     grid-column: 1 / -1;
     width: 100%;
     // padding-block-start: 0.8rem;
     background-color: $clr1;
     height: 80px;
 
-    .playing-track {
+    >*:last-child {
+        justify-self: end;
+    }
+
+    h1 {
+        padding-inline-start: 0.5rem;
+    }
+
+    .player-mid-container {
+        display: grid;
+        align-content: center;
+
+        .track-controls-container {
+            display: flex;
+            justify-content: center;
+            margin-block-end: 10px;
+
+            .btn {
+                height: 2rem;
+                width: 2rem;
+                margin-inline: 0.5rem;
+            }
+
+            .repeat, .shuffle {
+                margin-inline: 0rem;
+            }
+
+            .play {
+                border: none;
+                border-radius: 50%;
+                background-color: white;
+            }
+
+            .play:hover {
+                scale: 104%;
+            }
+
+            .repeat-playlist path {
+                fill: $clr9;
+            }
+
+            .repeat-song path {
+                fill: $clr9;
+            }
+
+            .enabled path {
+                fill: $clr9;
+            }
+        }
+
+        .playback-container {
+            display: flex;
+            font-size: 0.6875rem;
+            font-weight: 400;
+            gap: 8px;
+
+            span {
+                color: white;
+            }
+        }
+    }
+
+    .vol-container {
+        display: flex;
+        margin-inline-end: 1.5rem;
+        align-items: center;
+    }
+
+
+    .track-info-container {
         display: flex;
         gap: 1rem;
         padding-inline-start: 0.5rem;
@@ -31,199 +99,34 @@
             font-size: 0.69rem;
         }
     }
+
+
 }
 
-.main-player-container>*:nth-child(2) {
-    justify-self: center;
-}
+// .repeat {
+//     &.no-repeat {
+//         fill: $clr2;
+//     }
 
-.main-player-container>*:last-child {
-    justify-self: end;
-}
+//     &.repeat-playlist {
+//         fill: $clr9;
+//     }
 
-.main-player-container h1 {
-    padding-inline-start: 0.5rem;
-}
+//     &.repeat-song {
+//         fill: $clr9;
+//     }
 
-.main-player-container .play {
-    border: none;
-    border-radius: 50%;
-    background-color: white;
-}
+//     &:hover {
+//         &.no-repeat {
+//             fill: lighten($clr2, 10%)
+//         }
 
-.main-player-container .play span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.main-player-container .next,
-.previous,
-.shuffle,
-.repeat {
-    color: $clr3;
-    border: none;
-    height: 2rem;
-    background-color: transparent
-}
-
-.main-player-container .mute {
-    background-color: transparent;
-    border: none;
-}
-
-.main-player-container .play:hover {
-    scale: 104%;
-}
-
-.main-player-container .next:hover,
-.previous:hover,
-.no-repeat:hover,
-.repeat-playlist:hover,
-.repeat-song:hover,
-.mute:hover,
-.shuffle:hover {
-    color: $clr2;
-}
-
-.main-player-container .material-symbols-outlined {
-    font-variation-settings:
-        'FILL' 1,
-        'wght' 700,
-        'GRAD' 200,
-        'opsz' 48
-}
-
-
-
-.main-player-container .btn:hover .icon path {
-    fill: $clr2
-}
-
-.player-main-controls {
-    display: flex;
-    justify-content: center;
-    margin-block-end: 10px;
-}
-
-.player-main-controls .btn {
-    height: 2rem;
-    width: 2rem;
-    margin-inline: 0.5rem;
-}
-
-//////////////////////////
-
-.vol-container {
-    display: flex;
-    margin-inline-end: 1.5rem;
-    align-items: center;
-}
-
-.slider {
-    align-self: center;
-    justify-self: end;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-
-    background-color: $clr10
-}
-
-.playback-slider {
-    // min-width: 40px;
-    width: 39.12rem;
-    height: 0.25rem;
-    border-radius: 50px;
-}
-
-.vol-slider {
-    width: 93px;
-    height: 4px;
-    border-radius: 50px;
-}
-
-
-
-.slider:hover::-webkit-slider-thumb {
-    opacity: 1;
-}
-
-/* Style the slider track */
-.slider::-webkit-slider-runnable-track {
-    // height: px;
-    border-radius: 5px;
-}
-
-.slider-track {
-    height: 10px;
-    border-radius: 5px;
-}
-
-/* Style the slider thumb (dot) */
-.slider::-webkit-slider-thumb {
-    opacity: 0;
-    -webkit-appearance: none;
-    height: 12px;
-    width: 12px;
-    border-radius: 50%;
-    background: $clr2;
-}
-
-.main-player-container .vol-btn {
-    color: $clr2;
-    align-self: center;
-    font-size: 1rem
-}
-
-.repeat-playlist path {
-    fill: $clr9;
-}
-
-.repeat-song path {
-    fill: $clr9;
-}
-
-.enabled path {
-    fill: $clr9;
-}
-
-.playback-container {
-    display: flex;
-    font-size: 0.6875rem;
-    font-weight: 400;
-    gap: 8px;
-}
-
-.player-mid {
-    display: grid;
-    align-content: center;
-}
-
-.repeat {
-    &.no-repeat {
-        fill: $clr2;
-    }
-
-    &.repeat-playlist {
-        fill: $clr9;
-    }
-
-    &.repeat-song {
-        fill: $clr9;
-    }
-
-    &:hover {
-        &.no-repeat {
-            fill: lighten($clr2, 10%)
-        }
-
-        &.repeat-playlist,
-        &.repeat-song {
-            fill: lighten($clr9, 10%)
-        }
-    }
-}
+//         &.repeat-playlist,
+//         &.repeat-song {
+//             fill: lighten($clr9, 10%)
+//         }
+//     }
+// }
 
 .svg-fill {
     fill: $clr11;
@@ -235,6 +138,47 @@
     }
 }
 
+
+// not nested for debugging purposes:
+
+.slider {
+    align-self: center;
+    justify-self: end;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    background-color: $clr10;
+    height: 0.25rem;
+    border-radius: 50px;
+}
+
 .slider:hover {
-    // background: $clr9;
+    background: $clr9;
+}
+
+.slider:hover::-webkit-slider-thumb {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-runnable-track {
+    border-radius: 5px;
+}
+
+/* Slider ball */
+.slider::-webkit-slider-thumb {
+    opacity: 0;
+    -webkit-appearance: none;
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    background: $clr2;
+}
+
+.playback-slider {
+    width: 39.12rem;
+}
+
+.vol-slider {
+    width: 5.8125rem;
 }

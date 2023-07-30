@@ -2,7 +2,7 @@
     <YouTube ref="youtubePlayer" v-if="currTrack?.youtubeId" :src="currTrack.youtubeId" @state-change="onStateChange" style="display: none;" />
 
     <section class="main-player-container">
-        <section class="playing-track">
+        <section class="track-info-container">
             <section class="img-container">
                 <img v-if="currTrack" :src="`${currTrack.imgUrl}`" alt="">
             </section>
@@ -13,9 +13,9 @@
             </section>
         </section>
 
-        <section class="player-mid">
+        <section class="player-mid-container">
 
-            <section class="player-main-controls">
+            <section class="track-controls-container">
 
                 <button class="shuffle btn" @click="toggleShuffle" title="Shuffle">
                     <span v-icon="'shuffle'" :class="{ 'enabled': this.isShuffle }"></span>
@@ -46,11 +46,11 @@
             </section>
 
             <section class="playback-container">
-                <span style="color:white;">{{ secsToTimeFormat(elapsedTime) }}</span>
+                <span>{{ secsToTimeFormat(elapsedTime) }}</span>
                 <input class="playback-slider slider" @input="onChangeTime" type="range" min="0" :max="currTrackDuration"
                     v-model="elapsedTime"
                     :style="{ background: `linear-gradient(to right, white ${currProgressPercentage}%, hsla(0, 0%, 100%, .3) ${currProgressPercentage}%)`}">
-                <span style="color:white;">{{ secsToTimeFormat(currTrackDuration) }}</span>
+                <span>{{ secsToTimeFormat(currTrackDuration) }}</span>
             </section>
         </section>
         <section class="vol-container">
@@ -80,7 +80,6 @@ export default {
             currProgressPercentage: 0,
             intervalId: null,
             elapsedTime: 0,
-            // isPlaying: false,
             isShuffle: false,
             isRepeat: false,
             repeatStates: ['noRepeat', 'repeatPlaylist', 'repeatSong'],
@@ -88,10 +87,6 @@ export default {
             isMute: false,
             lastVolume: 0,
             currVolume: 80,
-            // currStation: {},
-            // currTrackIdx: -1,
-            // currTrackList: [],
-            // currTrack: {},
             playbackPos: 0,
             currTrackDuration: 0,
             youtubePlayerStates: {
@@ -109,7 +104,6 @@ export default {
     },
     created() {
         eventBus.on('trackClicked', this.onTrackClicked)
-        // this.currTrack.youtubeId = ''
     },
     methods: {
         updateCurrTrackIdx(trackIdx) {
@@ -121,7 +115,6 @@ export default {
             if (this.isPlaying) {
                 this.$store.commit({ type: 'setIsPlaying', isPlaying: false })
                 this.$refs.youtubePlayer.pauseVideo()
-                this.playbackPos = this.$refs.youtubePlayer.getCurrentTime()
                 this.handlePlaybackInterval(false)
             } else {
                 this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
@@ -132,6 +125,7 @@ export default {
         async previousNextVideo(diff) {
             // if (!this.currStation.keys) return
 
+
             if (this.repeatStateIdx === 2) {
                 this.$refs.youtubePlayer.stopVideo()
                 this.$refs.youtubePlayer.playVideo()
@@ -140,10 +134,7 @@ export default {
 
             this.updateCurrTrackIdx(this.currTrackIdx + diff)
 
-            // if (
-            //     this.repeatStateIdx === 1
-            //     && this.currTrackIdx
-            //     && diff === 1)
+            // if ((this.currTrackIdx === this.currStation.tracks.length - 1) && (this.repeatStateIdx === 1)) return
 
             if (this.isShuffle) {
                 const randomIdx = utilService.getRandomIntInclusive(0, this.currTrackList.length - 1)
@@ -174,30 +165,30 @@ export default {
             this.isShuffle = !this.isShuffle
         },
         cycleRepeatStates() {
-            // this.isRepeat = !this.isRepeat
             this.repeatStateIdx++
             if (this.repeatStateIdx >= this.repeatStates.length) this.repeatStateIdx = 0
         },
         toggleMute() {
             if (this.isMute) {
-                this.isMute = false
                 this.currVolume = this.lastVolume
                 this.lastVolume = 0
                 this.$refs.youtubePlayer.unMute()
             } else {
-                this.isMute = true
                 this.lastVolume = this.currVolume
                 this.currVolume = 0
                 this.$refs.youtubePlayer.mute()
             }
+            this.isMute = !this.isMute
         },
         onChangeVolume() {
             this.$refs.youtubePlayer.setVolume(this.currVolume)
+            if(this.currVolume > 0 && this.isMute === true) {
+                this.isMute = false
+                this.$refs.youtubePlayer.unMute()
+            }
         },
         onChangeTime() {
-            this.playbackPos = this.elapsedTime
-            this.$refs.youtubePlayer.seekTo(this.playbackPos, true)
-
+            this.$refs.youtubePlayer.seekTo(this.elapsedTime, true)
             this.currProgressPercentage = (this.elapsedTime / this.currTrackDuration) * 100
         },
         stopVideo() {
@@ -207,11 +198,8 @@ export default {
         onStateChange(event) {
             if (event.data === this.youtubePlayerStates.ENDED) {
 
-                // this.currStation.tracks.length - 1 is NAN check why
-
-                // console.log('this.currStation.length-1', (this.currStation.length)-1)
-                // console.log('this.repeatStateIdx', this.repeatStateIdx)
                 // if ((this.currTrackIdx === this.currStation.tracks.length - 1) && (this.repeatStateIdx === 1)) return
+
                 this.previousNextVideo(1)
             } else if (event.data === this.youtubePlayerStates.UNSTARTED) {
                 let duration = this.$refs.youtubePlayer.getDuration()
