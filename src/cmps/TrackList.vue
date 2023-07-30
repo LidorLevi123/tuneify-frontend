@@ -4,7 +4,7 @@
             <span>#</span>
             <span>Title</span>
             <span>Album</span>
-            <span>Date Added</span>
+            <span>Date added</span>
             <span v-icon="'clock'"></span>
         </div>
         <hr>

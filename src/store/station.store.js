@@ -6,18 +6,19 @@ export const stationStore = {
         stations: [], // For now we hold all stations here until wo move to backend
         stationsForHome: [],
         currStation: null,
-        currTrackIdx: -1
+        currTrackIdx: -1,
+        isCurrTrackPlaying: null,
     },
     getters: {
         libraryStations({ stations }) { return stations.filter(station => station.owner) },
         stationsForHome({ stationsForHome }) { return stationsForHome },
         currStation({ currStation }) { return currStation },
-        currTrackIdx({ currTrackIdx }) { return currTrackIdx }
+        currTrackIdx({ currTrackIdx }) { return currTrackIdx },
+        isCurrTrackPlaying({ isCurrTrackPlaying }) { return isCurrTrackPlaying }
     },
     mutations: {
         loadStations(state, { stations }) {
             state.stations = stations
-            console.log(state.stations);
         },
         setStationsForHome(state, { stations }) {
             state.stationsForHome = stations
@@ -28,10 +29,13 @@ export const stationStore = {
         setCurrTrackIdx(state, { trackIdx }) {
             state.currTrackIdx = trackIdx
         },
+        setIsPlaying(state, { isPlaying }) {
+            state.isCurrTrackPlaying = isPlaying
+        },
         addStation({ stations }, { stationToSave }) {
             const station = stations.find(station => station._id === stationToSave._id)
             if(station) return
-            stations.unshift(stationToSave)
+            stations.push(stationToSave)
         },
         updateStation({ stations }, { stationToSave }) {
             const idx = stations.findIndex(station => station._id === stationToSave._id)
@@ -88,7 +92,6 @@ export const stationStore = {
         async setCurrStation({ commit }, { stationId }) {
             try {
                 const station = await stationService.getById(stationId)
-                console.log(station)
                 commit({ type: 'setCurrStation', station })
                 if(!station.owner) commit({ type: 'addStation', stationToSave: station })
             } catch (err) {
@@ -120,6 +123,3 @@ export const stationStore = {
         },
     }
 }
-
-// In TrackPreview => computed of currTrackIdx
-// track-playing: currTrackIdx === this.track
