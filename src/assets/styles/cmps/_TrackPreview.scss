@@ -51,6 +51,7 @@
         align-items: center;
     }
 
+    .track-time,
     .track-artist,
     .track-date,
     .track-album {
@@ -84,7 +85,7 @@
 
     .track-actions {
 
-        btn-options {
+        .btn-options {
             path {
                 fill: white;
             }
@@ -123,4 +124,19 @@
         background-color: $clr6;
         width: max-content;
     }
+
+    .time-actions {
+        display: flex;
+        align-items: center;
+
+    }
+}
+
+.btn-options,
+.btn-dislike,
+.btn-like {
+    display: flex;
+    align-self: center;
+    margin-left: 0.5rem;
+
 }

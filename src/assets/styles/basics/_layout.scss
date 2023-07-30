@@ -43,7 +43,7 @@
 
 .track-preview-layout {
     display: grid;
-    grid-template-columns: 16px 6fr 4fr 3fr minmax(120px, 1fr);
+    grid-template-columns: 16px 6fr 4fr 3fr 2rem auto;
     column-gap: 1rem;
     padding: 0 16px;
     align-items: center;
