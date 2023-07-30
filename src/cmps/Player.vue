@@ -225,7 +225,6 @@ export default {
             // get youtubeId from YT
             const term = this.currTrack.title + ' ' + this.currTrack.artists[0]
             const youtubeId = await ytService.queryYT(term)
-            // const youtubeId = 'nyuo9-OjNNg'
             this.$store.dispatch({ type: 'updateTrack', youtubeId })
         },
         handlePlaybackInterval(NewInterval) {

@@ -4,9 +4,8 @@
     align-items: center;
     grid-column: 1 / -1;
     width: 100%;
-    // padding-block-start: 0.8rem;
     background-color: $clr1;
-    height: 80px;
+    height: 72px;
 
     >*:last-child {
         justify-self: end;
@@ -72,7 +71,7 @@
 
     .vol-container {
         display: flex;
-        margin-inline-end: 1.5rem;
+        margin-inline-end: 0.5rem;
         align-items: center;
     }
 
@@ -130,9 +129,7 @@
 
 .svg-fill {
     fill: $clr11;
-}
 
-.svg-fill {
     &:hover {
         fill: lighten($clr2, 10%)
     }
@@ -176,7 +173,8 @@
 }
 
 .playback-slider {
-    width: 39.12rem;
+    // width: 39.12rem;
+    width: 100%;
 }
 
 .vol-slider {
