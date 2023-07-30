@@ -2,6 +2,10 @@
     <section class="main-header">
         <button class="nav-btn" title="Go back"><span v-icon="`navBack`"></span></button>
         <button class="nav-btn" title="Go forward"><span v-icon="`navNext`"></span></button>
+        <button v-if="$route.path.startsWith('/station/')" class="play-btn-header">
+            <span v-icon="'play'"></span>
+        </button>
+        <span v-if="$route.path.startsWith('/station/')" class="station-header">{{ currStation?.name }}</span>
         <div v-if="$route.path === '/search'" class="search-input-container">
             <span class="material-symbols-outlined">search</span>
             <input type="text" v-model="filterBy.txt" @input="onSetFilterBy" placeholder="What do you want to listen to?">
@@ -17,12 +21,16 @@
 
 export default {
     name: 'SearchPage',
+
+    props: {
+        davar: { type: Object }
+    },
+
     data() {
         return {
             filterBy: {
                 txt: '',
             },
-            topOfPage: true
         }
     },
     methods: {
@@ -33,7 +41,13 @@ export default {
         onClearFilter() {
             this.filterBy.txt = ''
         },
+
     },
+    computed: {
+        currStation() {
+            return this.$store.getters.currStation
+        }
+    }
 }
 </script>
 

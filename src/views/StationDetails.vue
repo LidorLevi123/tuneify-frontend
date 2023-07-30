@@ -6,7 +6,7 @@
                     <img crossorigin="anonymous" class="station-img" :src="station.imgUrl" alt="">
                 </section>
                 <section class="station-info">
-                    <span>Playlist</span>
+                    <span class="pl">Playlist</span>
                     <h1 @click="openStationEditor">{{ station.name }}</h1>
                     <p class="description">{{ station.description }}</p>
                     <div>
@@ -23,14 +23,20 @@
                 <button class="details-play">
                     <span class="details-play" v-icon="'detailsPlay'"></span>
                 </button>
-                <button v-show="!station.owner" class="details-like">
+                <button v-show="!station.owner && station.owner !== 'Tunify'" class="details-like" @click="addStation">
                     <span v-icon="'like'"></span>
                 </button>
                 <button class="btn details-edit">
                     <span v-icon="'moreOptions'"></span>
                 </button>
             </section>
-            <TrackList @track-clicked="onClickTrack" :station="station" />
+            <TrackList 
+            @track-clicked="clickTrack"
+            @track-add="addTrack"
+            @track-remove="removeTrack"
+            @track-like="likeTrack"
+            @track-dislike="dislikeTrack"
+            :station="station" />
         </div>
         <StationEdit />
     </section>
@@ -75,9 +81,21 @@ export default {
 
     methods: {
         async loadStation() {
-            await this.$store.dispatch({ type: 'setCurrStation', stationId: this.$route.params.stationId })
-            this.getAvgImgClr()
-            this.setTracksTotalDuration()
+            try {
+                await this.$store.dispatch({ type: 'setCurrStation', stationId: this.$route.params.stationId })
+                this.getAvgImgClr()
+                this.setTracksTotalDuration()
+            } catch (err) {
+                console.log('Could not set current station')
+            }
+        },
+        async addStation() {
+            try {
+                await this.$store.dispatch({ type: 'saveStation', stationToSave: this.station })
+                this.canAddStation = true
+            } catch (err) {
+                console.log('Could not add station')
+            } 
         },
         async getAvgImgClr() {
             try {
@@ -86,6 +104,34 @@ export default {
             } catch (err) {
                 console.log(err)
                 throw new Error('cant get average color')
+            }
+        },
+        async likeTrack(trackToSave) {
+            try {
+                await this.$store.dispatch({ type: 'addTrack', trackToSave, stationId: 'liked101' })
+            } catch (err) {
+                console.log('Could not like track')
+            }
+        },
+        async dislikeTrack(track) {
+            try {
+                await this.$store.dispatch({ type: 'removeTrack', track, stationId: 'liked101' })
+            } catch (err) {
+                console.log('Could not dislike track')
+            }
+        },
+        async addTrack(trackToSave, stationId) {
+            try {
+                await this.$store.dispatch({ type: 'addTrack', trackToSave, stationId })
+            } catch (err) {
+                console.log('Could not add track')
+            }
+        },
+        async removeTrack(track) {
+            try {
+                await this.$store.dispatch({ type: 'removeTrack', track, stationId: this.station._id })
+            } catch (err) {
+                console.log('Could not dislike track')
             }
         },
         setBackgroundClr(avgColor) {
@@ -103,10 +149,10 @@ export default {
             if (!this.station.owner) return
             document.body.classList.add('modal-open')
         },
-        onClickTrack(trackIdx) {
+        clickTrack(trackIdx) {
             this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
             eventBus.emit('trackClicked')
-        }
+        },
     },
 
     watch: {

@@ -51,6 +51,7 @@
         align-items: center;
     }
 
+    .track-time,
     .track-artist,
     .track-date,
     .track-album {
@@ -81,4 +82,61 @@
             color: $clr9;
         }
     }
+
+    .track-actions {
+
+        .btn-options {
+            path {
+                fill: white;
+            }
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            background-color: $clr6;
+            color: white;
+            width: max-content;
+
+            display: grid;
+            gap: 5px;
+            padding: 0.5rem;
+
+            .dropdown-item {
+                cursor: pointer;
+
+                &:hover .sub-dropdown {
+                    display: grid;
+                }
+            }
+        }
+    }
+
+    .sub-dropdown {
+        position: absolute;
+        bottom: 50%;
+        left: 90%;
+
+        display: grid;
+        gap: 5px;
+        padding: 0.5rem;
+
+        background-color: $clr6;
+        width: max-content;
+    }
+
+    .time-actions {
+        display: flex;
+        align-items: center;
+
+    }
+}
+
+.btn-options,
+.btn-dislike,
+.btn-like {
+    display: flex;
+    align-self: center;
+    margin-left: 0.5rem;
+
 }

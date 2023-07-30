@@ -14,7 +14,9 @@ export const stationService = {
     remove,
     getEmptyStation,
     getCategoryStations,
-    createLikedSongs
+    createLikedSongs,
+    saveTrack,
+    removeTrack
 }
 
 async function query(filterBy = { name: '' }) {
@@ -50,6 +52,19 @@ async function save(station) {
         savedStation = await storageService.post(STORAGE_KEY, station)
     }
     return savedStation
+}
+
+async function saveTrack(track, stationId) {
+    const station = await storageService.get(STORAGE_KEY, stationId)
+    station.tracks.push(track)
+    await save(station)
+}
+
+async function removeTrack(track, stationId) {
+    const station = await storageService.get(STORAGE_KEY, stationId)
+    const idx = station.tracks.findIndex(currTrack => currTrack.id === track.id)
+    station.tracks.splice(idx, 1)
+    await save(station)
 }
 
 async function getCategoryStations(categoryId) {
