@@ -32,9 +32,14 @@ export default {
             stationToSave.name = 'My Playlist #' + (this.libraryStations.length)
             stationToSave.imgUrl = 'https://picsum.photos/' + (this.libraryStations.length + 232)
 
-            const station = await this.$store.dispatch({ type: 'saveStation', stationToSave })
-            this.$router.push(`/station/${station._id}`)
-            this.canAddStation = true
+            try {
+                const station = await this.$store.dispatch({ type: 'saveStation', stationToSave })
+                this.$router.push(`/station/${station._id}`)
+            } catch (err) {
+                console.log('Could not add station')
+            } finally {
+                this.canAddStation = true
+            }
         },
     },
     computed: {

@@ -23,6 +23,7 @@ export const stationStore = {
     mutations: {
         loadStations(state, { stations }) {
             state.stations = stations
+            console.log(state.stations);
         },
         setStationsForHome(state, { stations }) {
             state.stationsForHome = stations
@@ -37,7 +38,7 @@ export const stationStore = {
             state.isCurrTrackPlaying = isPlaying
         },
         addStation({ stations }, { stationToSave }) {
-            const station = stations.find(station => station._id === stationToSave._id)
+            const station = stations.filter(station => station.owner).find(station => station._id === stationToSave._id)
             if (station) return
             stations.push(stationToSave)
         },
@@ -97,13 +98,21 @@ export const stationStore = {
                 throw new Error('Could not set current station')
             }
         },
-        async saveStation({ commit }, { stationToSave }) {
-            const type = stationToSave._id ? 'updateStation' : 'addStation'
+        async saveStation({ commit, state }, { stationToSave }) {
+            stationToSave = JSON.parse(JSON.stringify(stationToSave))
+
+            let type = stationToSave._id ? 'updateStation' : 'addStation'
+            if(stationToSave._id === state.currStation._id) {
+                stationToSave.owner = 'Tunify'
+            }
+            console.log(stationToSave)
+
             try {
                 const station = await stationService.save(stationToSave)
                 commit({ type, stationToSave: station })
-                // if(station.name === 'Liked Songs') return station
-                commit({ type: 'setCurrStation', station: { ...station } })
+                if(station._id !== state.currStation._id) {
+                    commit({ type: 'setCurrStation', station: { ...station } })
+                }
                 return station
             } catch (err) {
                 console.log(err.message)
