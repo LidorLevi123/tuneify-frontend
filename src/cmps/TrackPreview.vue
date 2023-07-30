@@ -1,13 +1,16 @@
 <template>
-    <article class="track-preview track-preview-layout">
-    <!-- <pre>{{ track }}</pre> -->
-        <span class="track-num">{{ trackIdx+1 }}</span>
+    <article class="track-preview track-preview-layout" @mouseover="onMouseOver" @mouseleave="onMouseLeave">
+
+        <img v-if="isTrackPlaying" class="eq" src="https://res.cloudinary.com/dmmsf57ko/image/upload/v1683729372/Song_hoitzd.gif" alt="">
+        <span v-else-if="isHovered" class="small-play" v-icon="`play`" title="Play"></span>
+        <span v-else class="track-num">{{ trackIdx+1 }}</span>
+
         <div class="mini-prev">
             <section class="img-container">
                 <img :src="`${track.imgUrl}`" alt="">
             </section>
             <section>
-                <div class="track-name">{{ track.title }}</div>
+                <div class="track-name" :class="isPlaying">{{ track.title }}</div>
                 <div class="track-artist">{{ track.artists[0] }}</div>
             </section>
         </div>
@@ -18,7 +21,6 @@
         <span class="track-album">{{ formattedTime }}</span>
 
         <section class="track-actions">
-            <!-- <span v-show="isHovered" class="small-play" v-icon="`play`" title="Play"></span> -->
             <!-- <span class="material-symbols-outlined">favorite</span> -->
             <!-- <button class="small-like-dis" @click="toggleLike(trackIdx - 1)">
                 <span v-if="this.isLiked" v-icon="`smallLikeEna`"></span>
@@ -46,14 +48,13 @@ export default {
 
     data() {
         return {
+            isHovered: false,
             trackTime: this.track.formalDuration,
             dateStr: this.track.addedAt,
-            currStation: JSON.parse(JSON.stringify(this.$store.getters.currStation))
         }
     },
 
     computed: {
-
         formattedTime() {
             const totalSeconds = Math.floor(this.trackTime / 1000)
             const hours = Math.floor(totalSeconds / 3600)
@@ -77,19 +78,28 @@ export default {
             }
         },
 
+        currStation() {
+            return this.$store.getters.currStation
+        },
+
         currTrackIdx() {
             return this.$store.getters.currTrackIdx
         },
 
-        currTrackId() {
-            return this.$store.getters.currStation?.tracks[this.currTrackIdx]?.id
+        isTrackPlaying() {
+            return this.$store.getters.isCurrTrackPlaying && this.trackIdx === this.currTrackIdx
         },
 
         isPlaying() {
             return {
-                'track-playing': this.track.id === this.currTrackId,
+                'track-playing': this.isTrackPlaying,
             }
         }
+    },
+
+    methods: {
+        onMouseOver() { this.isHovered = true },
+        onMouseLeave() { this.isHovered = false }
     }
 }
 
