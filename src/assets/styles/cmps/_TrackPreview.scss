@@ -46,11 +46,13 @@
         align-items: center;
     }
 
+    .track-artist,
+    .track-date,
     .track-album {
         color: $clr3;
         font-size: 0.875rem;
-        font-weight: 400;
     }
+
 
     .img-container {
         display: flex;
@@ -68,11 +70,6 @@
             &.track-playing {
                 color: $clr9
             }
-        }
-
-        .track-artist {
-            color: $clr3;
-            font-size: 0.875rem;
         }
     }
 }

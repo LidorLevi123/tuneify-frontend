@@ -2,7 +2,7 @@
     <section class="station-main-container">
         <Nav />
         <MainHeader />
-        <RouterView class="router" />
+        <RouterView class="RouterView" @scroll="handleScroll" />
         <Player />
     </section>
 </template>
@@ -13,19 +13,16 @@ import Nav from '../cmps/Nav.vue'
 import MainHeader from '../cmps/MainHeader.vue'
 
 export default {
-
+    methods: {
+        handleScroll({ target }) {
+            const elMainHeader = document.querySelector('.main-header')
+            elMainHeader.style.backgroundColor = target.scrollTop > 1 ? '#121212' : 'transparent'
+        }
+    },
     components: {
         Player,
         Nav,
         MainHeader
     }
 }
-
 </script>
-
-<style>
-.router {
-    grid-column: 2;
-    grid-row: 1;
-}
-</style>

@@ -1,31 +1,30 @@
 <template>
     <article class="track-preview track-preview-layout">
-        <img class="eq" v-show="track.isPlaying"
-            src="https://res.cloudinary.com/dmmsf57ko/image/upload/v1683729372/Song_hoitzd.gif" alt="">
+        <!-- <img class="eq" src="https://res.cloudinary.com/dmmsf57ko/image/upload/v1683729372/Song_hoitzd.gif" alt=""> -->
         <span v-show="!track.isPlaying" class="track-num">{{ trackIdx }}</span>
         <div class="mini-prev">
             <section class="img-container">
                 <img :src="`${track.imgUrl}`" alt="">
             </section>
             <section>
-                <div class="track-name" :class="{ 'track-playing': track.isPlaying }">{{ track.title }}</div>
+                <div class="track-name">{{ track.title }}</div>
                 <div class="track-artist">{{ track.artists[0] }}</div>
             </section>
         </div>
         <span class="track-album">{{ track.album }}</span>
         <div class="df sb">
-            <span class="track-">{{ formattedDate }}</span>
+            <span class="track-date">{{ formattedDate }}</span>
         </div>
         <span class="track-album">{{ formattedTime }}</span>
 
-        <!-- DEAR YARON - CHANGE THE SVG ICON NAMES TO LIKE / DISLIKE AND NOT SMALL-LIKE-DIS-ZIBI -->
+
         <section class="track-actions">
             <!-- <span v-show="isHovered" class="small-play" v-icon="`play`" title="Play"></span> -->
             <!-- <span class="material-symbols-outlined">favorite</span> -->
-            <button class="small-like-dis" @click="toggleLike(trackIdx-1)">
+            <!-- <button class="small-like-dis" @click="toggleLike(trackIdx - 1)">
                 <span v-if="this.isLiked" v-icon="`smallLikeEna`"></span>
                 <span v-else v-icon="`smallLikeDis`"></span>
-            </button>
+            </button> -->
             <!-- <button class="small-like-dis" v-if="title.isHovered && !track.isLiked">
             </button>
             <button class="small-like-ena" v-if="title.isHovered && track.isLiked">
@@ -48,11 +47,6 @@ export default {
 
     data() {
         return {
-<<<<<<< HEAD
-=======
-            isLiked: this.track.isLiked,
-            isHovered: false,
->>>>>>> 323739dc20200f016aca76e06f3c480fdde8a2e6
             trackTime: this.track.formalDuration,
             dateStr: this.track.addedAt,
             currStation: JSON.parse(JSON.stringify(this.$store.getters.currStation))
@@ -81,20 +75,11 @@ export default {
                 return targetDate.format("MMM D, YYYY")
             }
         },
-<<<<<<< HEAD
-=======
-        isPlaying() {
-            return {
-                'track-playing': this.track.isPlaying
-            }
-        }
-    },
->>>>>>> 323739dc20200f016aca76e06f3c480fdde8a2e6
 
-    methods: {
-        async toggleLike(trackIdx) {
-            this.isLiked = !this.isLiked
-            this.currStation.tracks[trackIdx].isLiked = this.isLiked
+        methods: {
+            // async toggleLike(trackIdx) {
+            //     this.isLiked = !this.isLiked
+            //     this.currStation.tracks[trackIdx].isLiked = this.isLiked
             // const likedSongsId = this.$store.getters.likedSongsId
 
             // try {
@@ -107,5 +92,6 @@ export default {
         },
     }
 }
+
 </script>
 
