@@ -23,7 +23,6 @@ export const stationStore = {
     mutations: {
         loadStations(state, { stations }) {
             state.stations = stations
-            console.log(state.stations);
         },
         setStationsForHome(state, { stations }) {
             state.stationsForHome = stations
@@ -159,7 +158,6 @@ export const stationStore = {
             try {
                 commit({ type: 'updateTrack', youtubeId })
                 await stationService.save(state.currStation)
-                console.log(state.currStation)
             } catch (err) {
                 console.log(err.message)
                 throw new Error('Could not update track')
