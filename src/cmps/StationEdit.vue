@@ -48,7 +48,6 @@ export default {
         async save() {
             try {
                 await this.$store.dispatch({ type: 'saveStation', stationToSave: this.stationToEdit })
-                this.stationToEdit = stationService.getEmptyStation()
                 this.onCloseModal()
             } catch (err) {
                 console.log(err.message);
