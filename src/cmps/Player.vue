@@ -207,8 +207,8 @@ export default {
             } else return
         },
         async updateElapsedTime() {
-            if (this.isPlaying) {
-                this.elapsedTime = await this.$refs.youtubePlayer.getCurrentTime()
+            if (youtubePlayer && this.isPlaying) {
+                this.elapsedTime = await this.$refs.youtubePlayer?.getCurrentTime()
             }
         },
         async onTrackClicked() {
