@@ -30,7 +30,13 @@
                     <span v-icon="'moreOptions'"></span>
                 </button>
             </section>
-            <TrackList @track-clicked="onClickTrack" :station="station" />
+            <TrackList 
+            @track-clicked="clickTrack"
+            @track-add="addTrack"
+            @track-remove="removeTrack"
+            @track-like="likeTrack"
+            @track-dislike="dislikeTrack"
+            :station="station" />
         </div>
         <StationEdit />
     </section>
@@ -75,9 +81,13 @@ export default {
 
     methods: {
         async loadStation() {
-            await this.$store.dispatch({ type: 'setCurrStation', stationId: this.$route.params.stationId })
-            this.getAvgImgClr()
-            this.setTracksTotalDuration()
+            try {
+                await this.$store.dispatch({ type: 'setCurrStation', stationId: this.$route.params.stationId })
+                this.getAvgImgClr()
+                this.setTracksTotalDuration()
+            } catch (err) {
+                console.log('Could not set current station')
+            }
         },
         async getAvgImgClr() {
             try {
@@ -103,10 +113,38 @@ export default {
             if (!this.station.owner) return
             document.body.classList.add('modal-open')
         },
-        onClickTrack(trackIdx) {
+        clickTrack(trackIdx) {
             this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
             eventBus.emit('trackClicked')
-        }
+        },
+        async likeTrack(trackToSave) {
+            try {
+                await this.$store.dispatch({ type: 'addTrack', trackToSave, stationId: 'liked101' })
+            } catch (err) {
+                console.log('Could not like track')
+            }
+        },
+        async dislikeTrack(track) {
+            try {
+                await this.$store.dispatch({ type: 'removeTrack', track, stationId: 'liked101' })
+            } catch (err) {
+                console.log('Could not dislike track')
+            }
+        },
+        async addTrack(trackToSave, stationId) {
+            try {
+                await this.$store.dispatch({ type: 'addTrack', trackToSave, stationId })
+            } catch (err) {
+                console.log('Could not add track')
+            }
+        },
+        async removeTrack(track) {
+            try {
+                await this.$store.dispatch({ type: 'removeTrack', track, stationId: this.station._id })
+            } catch (err) {
+                console.log('Could not dislike track')
+            }
+        },
     },
 
     watch: {

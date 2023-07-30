@@ -81,4 +81,46 @@
             color: $clr9;
         }
     }
+
+    .track-actions {
+
+        btn-options {
+            path {
+                fill: white;
+            }
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            background-color: $clr6;
+            color: white;
+            width: max-content;
+
+            display: grid;
+            gap: 5px;
+            padding: 0.5rem;
+
+            .dropdown-item {
+                cursor: pointer;
+
+                &:hover .sub-dropdown {
+                    display: grid;
+                }
+            }
+        }
+    }
+
+    .sub-dropdown {
+        position: absolute;
+        bottom: 50%;
+        left: 90%;
+
+        display: grid;
+        gap: 5px;
+        padding: 0.5rem;
+
+        background-color: $clr6;
+        width: max-content;
+    }
 }

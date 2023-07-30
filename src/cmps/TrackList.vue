@@ -9,11 +9,14 @@
         </div>
         <hr>
         <ul v-if="station?.tracks" class="clean-list">
-            <li v-for="(track, idx) in station.tracks" :key="track.id" @click="trackClicked(idx)">
-                <TrackPreview :track="track" :trackIdx="idx" />
-                <section class="track-actions">
-                    <span class="btn-like" v-icon="`smallLikeDis`" @click="onLikeTrack(track)"></span>
-                </section>
+            <li v-for="(track, idx) in station.tracks" :key="track.id" @click="onTrackClicked(idx)">
+                <TrackPreview 
+                @track-add="onAddTrack"
+                @track-remove="onRemoveTrack"
+                @track-like="onLikeTrack"
+                @track-dislike="onDislikeTrack"
+                :track="track" 
+                :trackIdx="idx"/>
             </li>
         </ul>
     </section>
@@ -28,13 +31,21 @@ export default {
     },
 
     methods: {
-        trackClicked(trackIdx) {
+        onTrackClicked(trackIdx) {
             this.$emit('track-clicked', trackIdx)
+        },
+        onAddTrack(track, stationId) {
+            this.$emit('track-add', track, stationId)
+        },
+        onRemoveTrack(track) {
+            this.$emit('track-remove', track)
         },
         onLikeTrack(track) {
             this.$emit('track-like', track)
-            console.log(track)
-        }
+        },
+        onDislikeTrack(track) {
+            this.$emit('track-dislike', track)
+        },
     },
 
     components: {
