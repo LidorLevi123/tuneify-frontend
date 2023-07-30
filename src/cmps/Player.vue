@@ -1,5 +1,5 @@
 <template>
-    <YouTube ref="youtubePlayer" v-if="currTrack?.youtubeId" :src="currTrack.youtubeId" @state-change="onStateChange" style="display: none;" />
+    <YouTube ref="youtubePlayer" v-if="currTrack?.youtubeId" :src="currTrack.youtubeId" @state-change="onStateChange" style="display: none;"/>
 
     <section class="main-player-container">
         <section class="track-info-container">
@@ -110,15 +110,15 @@ export default {
             this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
         },
         togglePlayPause() {
-            // if (!this.currStation.keys) return
+            if (!this.currTrack) return
 
             if (this.isPlaying) {
                 this.$store.commit({ type: 'setIsPlaying', isPlaying: false })
-                this.$refs.youtubePlayer.pauseVideo()
+                this.$refs.youtubePlayer?.pauseVideo()
                 this.handlePlaybackInterval(false)
             } else {
                 this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
-                this.$refs.youtubePlayer.playVideo()
+                this.$refs.youtubePlayer?.playVideo()
                 this.handlePlaybackInterval(true)
             }
         },
@@ -157,9 +157,11 @@ export default {
             }
         },
         loadVideo() {
-            // this.currTrack.youtubeId = youtubeId
             this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
-            this.handlePlaybackInterval(true)
+            setTimeout(()=> { // Fix this workaround later
+                this.$refs.youtubePlayer?.playVideo()
+                this.handlePlaybackInterval(true)
+            }, 700)
         },
         toggleShuffle() {
             this.isShuffle = !this.isShuffle
@@ -202,17 +204,17 @@ export default {
 
                 this.previousNextVideo(1)
             } else if (event.data === this.youtubePlayerStates.UNSTARTED) {
-                let duration = this.$refs.youtubePlayer.getDuration()
+                let duration = this.$refs.youtubePlayer?.getDuration()
                 this.currTrackDuration = duration ? duration : 0
             } else return
         },
         async updateElapsedTime() {
             if (this.isPlaying) {
-                this.elapsedTime = await this.$refs.youtubePlayer.getCurrentTime()
+                this.elapsedTime = await this.$refs.youtubePlayer?.getCurrentTime()
             }
         },
         async onTrackClicked() {
-            if (this.currTrack.youtubeId) {
+            if (this.currTrack?.youtubeId) {
                 console.log('song has youtubeId in local')
                 this.loadVideo()
             } else {
@@ -223,9 +225,10 @@ export default {
         },
         async setTrackYoutubeId() {
             // get youtubeId from YT
-            const term = this.currTrack.title + ' ' + this.currTrack.artists[0]
-            const youtubeId = await ytService.queryYT(term)
-            this.$store.dispatch({ type: 'updateTrack', youtubeId })
+            // const term = this.currTrack.title + ' ' + this.currTrack.artists[0]
+            // const youtubeId = await ytService.queryYT(term)
+            const youtubeId = 'nyuo9-OjNNg'
+            return await this.$store.dispatch({ type: 'updateTrack', youtubeId })
         },
         handlePlaybackInterval(NewInterval) {
             if (this.intervalId) clearInterval(this.intervalId)
