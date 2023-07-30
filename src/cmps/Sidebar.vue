@@ -1,7 +1,7 @@
 <template>
     <section class="sidebar-list-container">
         <section class="sidebar-top">
-            <button class="collapse btn"><span v-icon="'collapse'"></span>
+            <button class="collapse"><span v-icon="'collapse'"></span>
                 <div class="one">Your Library</div>
             </button>
             <button @click="addStation" title="Create playlist" class="add-station btn"><span

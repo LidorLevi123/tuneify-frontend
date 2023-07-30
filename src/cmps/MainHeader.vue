@@ -1,7 +1,7 @@
 <template>
     <section class="main-header">
-        <button class="nav-btn" title="Go back"><span class="material-symbols-outlined">chevron_left</span></button>
-        <button class="nav-btn" title="Go forward"><span class="material-symbols-outlined">chevron_right</span></button>
+        <button class="nav-btn" title="Go back"><span v-icon="`navBack`"></span></button>
+        <button class="nav-btn" title="Go forward"><span v-icon="`navNext`"></span></button>
         <div v-if="$route.path === '/search'" class="search-input-container">
             <span class="material-symbols-outlined">search</span>
             <input type="text" v-model="filterBy.txt" @input="onSetFilterBy" placeholder="What do you want to listen to?">

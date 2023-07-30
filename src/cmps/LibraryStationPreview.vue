@@ -2,9 +2,8 @@
     <article class="library-station-preview">
         <img :src="station.imgUrl" alt="">
         <h5>{{ stationName }}</h5>
-        <small>Playlist &bull; 
-            <span v-if="station._id === 'liked101'">{{ station.tracks.length }} songs</span>
-            <span v-else>{{ station.owner }}</span>
+        <small><span>{{ station.tracks.length }} songs</span> &bull;
+            <span>{{ station.owner }}</span>
         </small>
     </article>
 </template>

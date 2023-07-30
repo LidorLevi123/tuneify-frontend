@@ -9,11 +9,15 @@
         display: flex;
         justify-content: space-between;
         cursor: pointer;
+
+        &:hover {
+            background-color: rgba(211, 211, 211, 0.096);
+            border-radius: 0.5rem;
+        }
     }
 
     ul {
         margin-block-start: 2rem;
         display: grid;
-        row-gap: 10px;
     }
 }
