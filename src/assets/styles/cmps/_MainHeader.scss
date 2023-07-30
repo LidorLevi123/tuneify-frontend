@@ -9,7 +9,6 @@
     grid-row: 1;
     z-index: 3;
     height: 4rem;
-    transition: 0.1s;
 
     .profile-btn {
         border: none;
@@ -50,12 +49,35 @@
         height: 2rem;
         width: 2rem;
         background-color: $clr1;
+    }
 
-        .material-symbols-outlined {
-            display: flex;
-            justify-content: center;
-            color: $clr2;
+    .play-btn-header {
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: $clr7;
+        height: 3rem;
+        width: 3rem;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        opacity: 0;
+        transform: translateY(0);
+        transition: opacity 0.4s;
+        box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+
+        &:hover {
+            transition: 0.2s;
+            transform: scale(1.04);
         }
+    }
+
+    .station-header {
+        transition: opacity 0.4s;
+        font-size: 1.5rem;
+        color: $clr2;
+        font-weight: 900;
     }
 
     .search-input-container {

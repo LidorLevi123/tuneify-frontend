@@ -1,5 +1,5 @@
 <template>
-    <YouTube ref="youtubePlayer" :src="currTrack?.youtubeId" @state-change="onStateChange" style="display: none;" />
+    <YouTube ref="youtubePlayer" v-if="currTrack?.youtubeId" :src="currTrack.youtubeId" @state-change="onStateChange" style="display: none;" />
 
     <section class="main-player-container">
         <section class="playing-track">
@@ -49,7 +49,7 @@
                 <span style="color:white;">{{ secsToTimeFormat(elapsedTime) }}</span>
                 <input class="playback-slider slider" @input="onChangeTime" type="range" min="0" :max="currTrackDuration"
                     v-model="elapsedTime"
-                    :style="{ background: `linear-gradient(to right, white ${currProgressPercentage}%, hsla(0, 0%, 100%, .3) ${currProgressPercentage}%);`}">
+                    :style="{ background: `linear-gradient(to right, white ${currProgressPercentage}%, hsla(0, 0%, 100%, .3) ${currProgressPercentage}%)`}">
                 <span style="color:white;">{{ secsToTimeFormat(currTrackDuration) }}</span>
             </section>
         </section>
@@ -224,8 +224,7 @@ export default {
             }
         },
         async onTrackClicked() {
-            console.log(this.currTrack)
-            if (this.currTrack?.youtubeId) {
+            if (this.currTrack.youtubeId) {
                 console.log('song has youtubeId in local')
                 this.loadVideo()
             } else {
