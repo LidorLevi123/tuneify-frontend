@@ -8,9 +8,11 @@
         }
 
         div {
-            margin-top: 1rem;
+            margin-block-start: 1rem;
+            margin-block-end: 0.2rem;
             display: flex;
             align-items: center;
+
         }
 
         div>* {
@@ -23,6 +25,7 @@
             font-weight: 900;
             font-size: 6rem;
             color: $clr2;
+            margin-inline-start: -0.25rem;
         }
 
         .logo {
