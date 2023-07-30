@@ -4,23 +4,21 @@
             <h1>Edit details</h1>
             <span v-icon="'close'" @click="onCloseModal()"></span>
         </header>
-        
-        <div>
-            <img :src="stationToEdit.imgUrl" alt="">
-            <form>
-                <!-- <legend>Name</legend> -->
-                <input type="text" v-model="stationToEdit.name" placeholder="Add a name">
+        <section class="edit">
 
-                <!-- <legend>Description</legend> -->
-                <textarea v-model="stationToEdit.description" placeholder="Add an optional description"></textarea>
-            </form>
-        </div>
+            <img class="album-image" :src="stationToEdit.imgUrl" alt="">
 
-        <button @click="save" type="submit">Save</button>
+            <input class="title" type="text" v-model="stationToEdit.name" placeholder="Add a name">
 
-        <small>By proceeding, you agree to give Tuneify access to the image you choose to upload. <br> 
-            Please make sure you have the right to upload the image.
-        </small>
+            <textarea v-model="stationToEdit.description" placeholder="Add an optional description"></textarea>
+
+
+            <button class="save-btn" @click="save" type="submit">Save</button>
+
+            <small class="disclaimer">By proceeding, you agree to give Tuneify access to the image you choose to upload.
+                Please make sure you have the right to upload the image.
+            </small>
+        </section>
     </section>
 </template>
 
@@ -41,7 +39,7 @@ export default {
     methods: {
         // Fix this workaround later
         loadStationToEdit() {
-            setTimeout(()=> {
+            setTimeout(() => {
                 this.stationToEdit = JSON.parse(JSON.stringify(this.$store.getters.currStation))
             }, 500)
         },
