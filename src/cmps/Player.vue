@@ -54,10 +54,10 @@
         </section>
         <section class="vol-container">
             <button class="mute btn" @click="toggleMute" title="Mute">
-                <span v-if="this.currVolume > 66.66" v-icon="'vol1'"></span>
-                <span v-if="this.currVolume > 33.33 && this.currVolume < 66.66" v-icon="'vol2'"></span>
-                <span v-if="this.currVolume > 1 && this.currVolume < 33.33" v-icon="'vol3'"></span>
-                <span v-if="this.currVolume == 0" v-icon="'vol4'"></span>
+                <span v-if="this.currVolume >= 66.66" v-icon="'vol1'"></span>
+                <span v-if="this.currVolume >= 33.33 && this.currVolume < 66.66" v-icon="'vol2'"></span>
+                <span v-if="this.currVolume >= 1 && this.currVolume < 33.33" v-icon="'vol3'"></span>
+                <span v-if="this.currVolume <= 0" v-icon="'vol4'"></span>
             </button>
             <input class="vol-slider slider" @input="onChangeVolume" type="range" min="0" max="100" v-model="currVolume">
         </section>
