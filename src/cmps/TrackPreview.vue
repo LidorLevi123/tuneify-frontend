@@ -1,6 +1,6 @@
 <template>
 
-    <article class="track-preview track-preview-layout" @click="foo">
+    <article class="track-preview track-preview-layout">
     <!-- <pre>{{ track }}</pre> -->
         <span class="track-num">{{ trackIdx+1 }}</span>
         <div class="mini-prev">
@@ -50,12 +50,6 @@ export default {
             dateStr: this.track.addedAt
         }
     },
-    methods: {
-        foo() {
-            console.log('currentTrack:', this.currTrackIdx)
-            console.log('clickedTrack:', this.trackIdx)
-        }
-    },
 
     computed: {
 
@@ -86,9 +80,13 @@ export default {
             return this.$store.getters.currTrackIdx
         },
 
+        currTrackId() {
+            return this.$store.getters.currStation?.tracks[this.currTrackIdx]?.id
+        },
+
         isPlaying() {
             return {
-                'track-playing': this.trackIdx === this.currTrackIdx
+                'track-playing': this.track.id === this.currTrackId,
             }
         }
     }

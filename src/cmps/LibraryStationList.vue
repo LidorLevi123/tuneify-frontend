@@ -3,7 +3,7 @@
         <ul class="clean-list">
             <li @click="goToDetails(station._id)" v-for="station in libraryStations" :key="station.id">
                 <LibraryStationPreview :station="station" />
-                <button v-if="station.name !== 'Liked Songs'" @click="removeStation(station._id, $event)">
+                <button v-if="station._id !== 'liked101'" @click="removeStation(station._id, $event)">
                     ❌
                 </button>
             </li>
@@ -47,9 +47,3 @@ export default {
     name: 'LibraryStationList',
 }
 </script>
-
-<style>
-.station-list {
-    grid-template-columns: repeat(auto-fill, 15rem)
-}
-</style>

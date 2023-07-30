@@ -17,6 +17,7 @@ export const stationStore = {
     mutations: {
         loadStations(state, { stations }) {
             state.stations = stations
+            console.log(state.stations);
         },
         setStationsForHome(state, { stations }) {
             state.stationsForHome = stations
