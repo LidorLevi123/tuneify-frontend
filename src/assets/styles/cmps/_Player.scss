@@ -78,7 +78,9 @@
 
 .main-player-container .next:hover,
 .previous:hover,
-.repeat:hover,
+.no-repeat:hover,
+.repeat-playlist:hover,
+.repeat-song:hover,
 .mute:hover,
 .shuffle:hover {
     color: $clr2;
@@ -92,9 +94,7 @@
         'opsz' 48
 }
 
-.main-player-container .icon {
-    fill: $clr3
-}
+
 
 .main-player-container .btn:hover .icon path {
     fill: $clr2
@@ -126,6 +126,8 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+
+    background-color: hsla(0, 0%, 100%, .3)
 }
 
 .playback-slider {
@@ -142,7 +144,7 @@
 }
 
 .slider:hover {
-    background: $clr7;
+    background: $clr9;
 }
 
 .slider:hover::-webkit-slider-thumb {
@@ -176,12 +178,15 @@
     font-size: 1rem
 }
 
-
 .repeat-playlist path {
     fill: $clr9;
 }
 
 .repeat-song path {
+    fill: $clr9;
+}
+
+.enabled path {
     fill: $clr9;
 }
 
@@ -195,4 +200,45 @@
 .player-mid {
     display: grid;
     align-content: center;
+}
+
+.repeat {
+    &.no-repeat {
+        fill: $clr2;
+    }
+
+    &.repeat-playlist {
+        fill: $clr9;
+    }
+
+    &.repeat-song {
+        fill: $clr9;
+    }
+
+    &:hover {
+        &.no-repeat {
+          fill: lighten($clr2, 10%)
+        }
+        &.repeat-playlist,
+        &.repeat-song {
+          fill: lighten($clr9, 10%)
+        }
+    }
+}
+
+
+
+
+.repeat.no-repeat {
+    // background-color: black
+}
+
+.svg-fill {
+    fill: hsla(0, 0%, 100%, .7);
+}
+
+.svg-fill {
+    &:hover {
+        fill: lighten($clr2, 10%)
+    }
 }

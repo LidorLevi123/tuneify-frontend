@@ -14,6 +14,7 @@ export const stationService = {
     remove,
     getEmptyStation,
     getCategoryStations,
+    createLikedSongs
 }
 
 async function query(filterBy = { name: '' }) {
@@ -67,13 +68,30 @@ function getEmptyStation() {
     }
 }
 
+async function createLikedSongs() {
+
+    let station
+    try {
+        station = await storageService.get(STORAGE_KEY, 'liked101')
+    } catch (error) {
+        station = getEmptyStation()
+
+        station._id = 'liked101'
+        station.name = 'Liked Songs'
+        station.imgUrl = 'https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png'
+        station.owner = 'Guest'
+        await storageService.post(STORAGE_KEY, station)
+    }
+}
+
 function _createStations() {
     let stations = utilService.loadFromStorage(STORAGE_KEY)
-    if(stations) return
+    if (stations) return
 
     stations = []
     utilService.saveToStorage(STORAGE_KEY, stations)
 }
+
 // Initial data
 // ;(async ()=>{
 //     const station = _getDemoStation()

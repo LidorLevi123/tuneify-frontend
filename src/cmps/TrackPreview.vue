@@ -1,7 +1,7 @@
 <template>
     <article class="track-preview track-preview-layout">
-        <!-- <img class="eq" src="https://res.cloudinary.com/dmmsf57ko/image/upload/v1683729372/Song_hoitzd.gif" alt=""> -->
-        <span v-show="!track.isPlaying" class="track-num">{{ trackIdx }}</span>
+    <!-- <pre>{{ track }}</pre> -->
+        <span class="track-num">{{ trackIdx+1 }}</span>
         <div class="mini-prev">
             <section class="img-container">
                 <img :src="`${track.imgUrl}`" alt="">
@@ -16,7 +16,6 @@
             <span class="track-date">{{ formattedDate }}</span>
         </div>
         <span class="track-album">{{ formattedTime }}</span>
-
 
         <section class="track-actions">
             <!-- <span v-show="isHovered" class="small-play" v-icon="`play`" title="Play"></span> -->
@@ -54,6 +53,7 @@ export default {
     },
 
     computed: {
+
         formattedTime() {
             const totalSeconds = Math.floor(this.trackTime / 1000)
             const hours = Math.floor(totalSeconds / 3600)
@@ -62,6 +62,7 @@ export default {
             const padZero = (num) => (num < 10 ? `0${num}` : num)
             return `${minutes}:${padZero(seconds)}`
         },
+
         formattedDate() {
             const now = moment()
             const targetDate = moment(this.dateStr)
@@ -76,20 +77,19 @@ export default {
             }
         },
 
-        methods: {
-            // async toggleLike(trackIdx) {
-            //     this.isLiked = !this.isLiked
-            //     this.currStation.tracks[trackIdx].isLiked = this.isLiked
-            // const likedSongsId = this.$store.getters.likedSongsId
-
-            // try {
-            //     await this.$store.dispatch({ type: 'saveStation', stationToSave: this.currStation })
-            //     // await this.$store.dispatch({ type: 'addTrack', trackToSave: this.track, stationId: likedSongsId })
-            // } catch (err) {
-            //     console.log(err.message)
-            // }
-            // console.log(this.track.isLiked)
+        currTrackIdx() {
+            return this.$store.getters.currTrackIdx
         },
+
+        currTrackId() {
+            return this.$store.getters.currStation?.tracks[this.currTrackIdx]?.id
+        },
+
+        isPlaying() {
+            return {
+                'track-playing': this.track.id === this.currTrackId,
+            }
+        }
     }
 }
 

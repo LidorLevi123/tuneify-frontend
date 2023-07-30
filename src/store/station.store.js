@@ -6,22 +6,27 @@ export const stationStore = {
         stations: [], // For now we hold all stations here until wo move to backend
         stationsForHome: [],
         currStation: null,
+        currTrackIdx: -1
     },
     getters: {
         libraryStations({ stations }) { return stations.filter(station => station.owner) },
-        currStation({ currStation }) { return currStation },
         stationsForHome({ stationsForHome }) { return stationsForHome },
-        likedSongsId({ stations }) { return stations.filter(station => station.name === 'Liked Songs')[0]._id}
+        currStation({ currStation }) { return currStation },
+        currTrackIdx({ currTrackIdx }) { return currTrackIdx }
     },
     mutations: {
         loadStations(state, { stations }) {
             state.stations = stations
+            console.log(state.stations);
         },
         setStationsForHome(state, { stations }) {
             state.stationsForHome = stations
         },
         setCurrStation(state, { station }) {
             state.currStation = station
+        },
+        setCurrTrackIdx(state, { trackIdx }) {
+            state.currTrackIdx = trackIdx
         },
         addStation({ stations }, { stationToSave }) {
             const station = stations.find(station => station._id === stationToSave._id)
@@ -31,6 +36,9 @@ export const stationStore = {
         updateStation({ stations }, { stationToSave }) {
             const idx = stations.findIndex(station => station._id === stationToSave._id)
             stations.splice(idx, 1, stationToSave)
+        },
+        updateTrack({ currStation, currTrackIdx }, { youtubeId }) {
+            currStation.tracks[currTrackIdx].youtubeId = youtubeId
         },
         removeStation({ stations }, { stationId }) {
             const idx = stations.findIndex(station => station._id === stationId)
@@ -110,21 +118,8 @@ export const stationStore = {
                 throw new Error('Could not remove station')
             }
         },
-        async addTrack({ commit }, { trackToSave, stationId }) {
-            console.log(stationId)
-            console.log(trackToSave)
-            try {
-                const station = await stationService.getById(stationId)
-                
-                // commit({ type: 'updateTrack', trackToSave: track, stationId: station._id })
-                // await trackService.save(trackToSave)
-                // if(station.name === 'Liked Songs') return track
-                // commit({ type: 'setCurrtrack', station: { ...track } })
-                // return track
-            } catch (err) {
-                console.log(err.message)
-                throw new Error('Could not save track')
-            }
-        },
     }
 }
+
+// In TrackPreview => computed of currTrackIdx
+// track-playing: currTrackIdx === this.track

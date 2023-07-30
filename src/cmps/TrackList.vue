@@ -9,8 +9,8 @@
         </div>
         <hr>
         <ul v-if="station?.tracks" class="clean-list">
-            <li v-for="(track, idx) in station.tracks" :key="track.id" @click="trackClicked(track.id)">
-                <TrackPreview :track="track" :trackIdx="idx + 1" />
+            <li v-for="(track, idx) in station.tracks" :key="track.id" @click="trackClicked(idx)">
+                <TrackPreview :track="track" :trackIdx="idx" />
             </li>
         </ul>
     </section>
@@ -18,7 +18,6 @@
 
 <script>
 import TrackPreview from './TrackPreview.vue'
-import { eventBus } from '../services/event-bus.service.js'
 
 export default {
     props: {
@@ -26,9 +25,9 @@ export default {
     },
 
     methods: {
-        trackClicked(trackId) {
-            eventBus.emit('trackClicked', trackId, this.station)
-        },
+        trackClicked(trackIdx) {
+            this.$emit('track-clicked', trackIdx)
+        }
     },
 
     components: {

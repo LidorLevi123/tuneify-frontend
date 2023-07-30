@@ -30,7 +30,7 @@
                     <span v-icon="'moreOptions'"></span>
                 </button>
             </section>
-            <TrackList :station="station" />
+            <TrackList @track-clicked="onClickTrack" :station="station" />
         </div>
         <StationEdit />
     </section>
@@ -43,6 +43,7 @@
 import { FastAverageColor } from 'fast-average-color'
 const fac = new FastAverageColor()
 import { utilService } from '../services/util.service'
+import { eventBus } from '../services/event-bus.service.js'
 
 import StationEdit from '../cmps/StationEdit.vue'
 import TrackList from '../cmps/TrackList.vue'
@@ -82,21 +83,6 @@ export default {
             this.getAvgImgClr()
             this.setTracksTotalDuration()
         },
-        setBackgroundClr(avgColor) {
-            const [darkerColor, darkerDarkerColor] = utilService.generateColors(avgColor)
-
-            document.querySelector('.top-gradient').style.backgroundImage =
-                `linear-gradient(to bottom, ${avgColor} 0%, ${darkerColor} 100%)`
-            document.querySelector('.bottom-gradient').style.backgroundImage =
-                `linear-gradient(to bottom, ${darkerDarkerColor} 0%, #121212 14.5rem, #121212 100%)`
-        },
-        openStationEditor() {
-            if (!this.station.owner) return
-            document.body.classList.add('modal-open')
-        },
-        setTracksTotalDuration() {
-            this.tracksTotalDuration = this.station.tracks?.reduce((sum, track) => sum = sum + track.formalDuration, 0)
-        },
         async getAvgImgClr() {
             try {
                 const { hex } = await fac.getColorAsync(document.querySelector('.station-img'))
@@ -105,6 +91,25 @@ export default {
                 console.log(err)
                 throw new Error('cant get average color')
             }
+        },
+        setBackgroundClr(avgColor) {
+            const [darkerColor, darkerDarkerColor] = utilService.generateColors(avgColor)
+
+            document.querySelector('.top-gradient').style.backgroundImage =
+                `linear-gradient(to bottom, ${avgColor} 0%, ${darkerColor} 100%)`
+            document.querySelector('.bottom-gradient').style.backgroundImage =
+                `linear-gradient(to bottom, ${darkerDarkerColor} 0%, #121212 14.5rem, #121212 100%)`
+        },
+        setTracksTotalDuration() {
+            this.tracksTotalDuration = this.station.tracks?.reduce((sum, track) => sum = sum + track.formalDuration, 0)
+        },
+        openStationEditor() {
+            if (!this.station.owner) return
+            document.body.classList.add('modal-open')
+        },
+        onClickTrack(trackIdx) {
+            this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
+            eventBus.emit('trackClicked')
         }
     },
 
