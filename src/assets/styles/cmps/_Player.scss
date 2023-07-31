@@ -72,6 +72,11 @@
             font-weight: 400;
             gap: 8px;
 
+            .playback-slider {
+                // width: 39.12rem;
+                width: 100%;
+            }
+
             span {
                 color: lighten($clr12, 25%);
             }
@@ -82,6 +87,19 @@
         display: flex;
         margin-inline-end: 0.5rem;
         align-items: center;
+
+        .vol-slider {
+            width: 5.8125rem;
+        }
+
+        .mute {
+            &:hover ~ .vol-slider {
+                background-color: $clr9;
+            }
+            &:hover ~ .vol-slider::-webkit-slider-thumb {
+                opacity: 1;
+            }
+        }
     }
 
     .track-info-container {
@@ -115,34 +133,6 @@
 
 }
 
-// .repeat {
-//     &.no-repeat {
-//         fill: $clr2;
-//     }
-
-//     &.repeat-playlist {
-//         fill: $clr9;
-//     }
-
-//     &.repeat-song {
-//         fill: $clr9;
-//     }
-
-//     &:hover {
-//         &.no-repeat {
-//             fill: lighten($clr2, 10%)
-//         }
-
-//         &.repeat-playlist,
-//         &.repeat-song {
-//             fill: lighten($clr9, 10%)
-//         }
-//     }
-// }
-
-
-// not nested for debugging purposes:
-
 .slider {
     align-self: center;
     justify-self: end;
@@ -151,37 +141,36 @@
     appearance: none;
 
     background-color: $clr10;
+    background-color: white;
     height: 0.25rem;
     border-radius: 50px;
+
+    &:hover {
+        background-color: $clr9;
+    }
+
+    &:hover::-webkit-slider-thumb {
+        opacity: 1;
+    }
+
+    &::-webkit-slider-thumb {
+        opacity: 0;
+        -webkit-appearance: none;
+        height: 12px;
+        width: 12px;
+        border-radius: 50%;
+        background: $clr2;
+    }
+
+    &::-webkit-slider-runnable-track {
+        border-radius: 5px;
+    }
 }
 
-.slider:hover {
-    background: $clr9;
-}
 
-.slider:hover::-webkit-slider-thumb {
-    opacity: 1;
-}
-
-.slider::-webkit-slider-runnable-track {
-    border-radius: 5px;
-}
-
-/* Slider ball */
-.slider::-webkit-slider-thumb {
-    opacity: 0;
-    -webkit-appearance: none;
-    height: 12px;
-    width: 12px;
-    border-radius: 50%;
-    background: $clr2;
-}
-
-.playback-slider {
-    // width: 39.12rem;
-    width: 100%;
-}
-
-.vol-slider {
-    width: 5.8125rem;
+// not working atm
+.repeat-playlist {
+    &:hover .svg-fill {
+        fill: lighten($clr9, 20%)
+    }
 }

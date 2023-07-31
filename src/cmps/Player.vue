@@ -1,7 +1,7 @@
 <template>
-    <YouTube ref="youtubePlayer" 
-        v-if="currTrack?.youtubeId" 
-        :src="currTrack.youtubeId" 
+    <YouTube ref="youtubePlayer"
+        v-if="currTrack?.youtubeId"
+        :src="currTrack.youtubeId"
         @state-change="onStateChange"
         @ready="playVideo"
         style="display: none;" />
@@ -54,7 +54,7 @@
                 <span>{{ secsToTimeFormat(elapsedTime) }}</span>
                 <input class="playback-slider slider" @input="onChangeTime" type="range" min="0" :max="currTrackDuration"
                     v-model="elapsedTime"
-                    :style="{ background: `linear-gradient(to right, white ${currProgressPercentage}%, hsla(0, 0%, 100%, .3) ${currProgressPercentage}%)` }">
+                    :style="{ backgroundImage: `linear-gradient(to right, rgba(0,0,0,0) ${playbackProgressPercentage}%, rgb(77,77,77) ${playbackProgressPercentage}%)` }">
                 <span>{{ secsToTimeFormat(currTrackDuration) }}</span>
             </section>
         </section>
@@ -65,7 +65,8 @@
                 <span v-if="this.currVolume >= 1 && this.currVolume < 33.33" v-icon="'vol3'"></span>
                 <span v-if="this.currVolume <= 0" v-icon="'vol4'"></span>
             </button>
-            <input class="vol-slider slider" @input="onChangeVolume" type="range" min="0" max="100" v-model="currVolume">
+            <input class="vol-slider slider" @input="onChangeVolume" type="range" min="0" max="100" v-model="currVolume"
+                :style="{ backgroundImage: `linear-gradient(to right, rgba(0,0,0,0) ${currVolume}%, rgb(77,77,77) ${currVolume}%)` }">
         </section>
     </section>
 </template>
@@ -83,7 +84,8 @@ export default {
     data() {
         return {
             idIdx: 0,
-            currProgressPercentage: 0,
+            playbackProgressPercentage: 0,
+            volProgressPercentage: 0,
             intervalId: null,
             elapsedTime: 0,
             isShuffle: false,
@@ -206,7 +208,13 @@ export default {
         },
         onChangeTime() {
             this.$refs.youtubePlayer.seekTo(this.elapsedTime, true)
-            this.currProgressPercentage = (this.elapsedTime / this.currTrackDuration) * 100
+            this.updatePlaybackProgress()
+        },
+        updatePlaybackProgress() {
+            this.playbackProgressPercentage = (this.elapsedTime / this.currTrackDuration) * 100
+        },
+        updateVolProgress() {
+            // this.volProgressPercentage = (this.elapsedTime / this.currTrackDuration) * 100
         },
         stopVideo() {
             this.$store.commit({ type: 'setIsPlaying', isPlaying: false })
@@ -233,6 +241,7 @@ export default {
             if (this.isPlaying) {
                 this.elapsedTime = await this.$refs.youtubePlayer?.getCurrentTime()
             }
+            this.updatePlaybackProgress()
             // if (youtubePlayer && this.isPlaying) {
             //     this.elapsedTime = await this.$refs.youtubePlayer?.getCurrentTime()
             // }
