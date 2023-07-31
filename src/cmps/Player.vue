@@ -1,5 +1,10 @@
 <template>
-    <YouTube ref="youtubePlayer" v-if="currTrack?.youtubeId" :src="currTrack.youtubeId" @state-change="onStateChange" style="display: none;"/>
+    <YouTube ref="youtubePlayer" 
+        v-if="currTrack?.youtubeId" 
+        :src="currTrack.youtubeId" 
+        @state-change="onStateChange"
+        @ready="playVideo"
+        style="display: none;" />
 
     <section class="main-player-container">
         <section class="track-info-container">
@@ -49,7 +54,7 @@
                 <span>{{ secsToTimeFormat(elapsedTime) }}</span>
                 <input class="playback-slider slider" @input="onChangeTime" type="range" min="0" :max="currTrackDuration"
                     v-model="elapsedTime"
-                    :style="{ background: `linear-gradient(to right, white ${currProgressPercentage}%, hsla(0, 0%, 100%, .3) ${currProgressPercentage}%)`}">
+                    :style="{ background: `linear-gradient(to right, white ${currProgressPercentage}%, hsla(0, 0%, 100%, .3) ${currProgressPercentage}%)` }">
                 <span>{{ secsToTimeFormat(currTrackDuration) }}</span>
             </section>
         </section>
@@ -77,6 +82,7 @@ import YouTube from 'vue3-youtube'
 export default {
     data() {
         return {
+            idIdx: 0,
             currProgressPercentage: 0,
             intervalId: null,
             elapsedTime: 0,
@@ -103,7 +109,7 @@ export default {
         YouTube,
     },
     created() {
-        eventBus.on('trackClicked', this.onTrackClicked)
+        eventBus.on('trackClicked', this.loadVideo)
     },
     methods: {
         updateCurrTrackIdx(trackIdx) {
@@ -124,7 +130,6 @@ export default {
         },
         async previousNextVideo(diff) {
             // if (!this.currStation.keys) return
-
 
             if (this.repeatStateIdx === 2) {
                 this.$refs.youtubePlayer.stopVideo()
@@ -147,21 +152,31 @@ export default {
 
             if (this.currTrackIdx < 0) this.updateCurrTrackIdx(this.currTrackList.length - 1)
 
+            this.loadVideo()
+        },
+        async loadVideo() {
             if (this.currTrack?.youtubeId) {
-                console.log('song has youtubeId in local')
-                this.loadVideo()
-            } else {
-                console.log('song doesn\'t have youtubeId in local')
-                await this.setTrackYoutubeId()
-                this.loadVideo()
+                console.log('Got yt id from storage')
+                this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
+                return
+            }
+            // get youtubeId from YT
+            try {
+                // const youtubeId = 'nyuo9-OjNNg'
+                console.log('Sending request to yt id...')
+                // const term = this.currTrack.title + ' ' + this.currTrack.artists[0]
+                // const youtubeId = await ytService.queryYT(term)
+                const youtubeId = this.getDemoYoutubeId()
+                await this.$store.dispatch({ type: 'updateTrack', youtubeId })
+                this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
+            } catch (err) {
+                console.log('Could not set track youtube id')
             }
         },
-        loadVideo() {
-            this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
-            setTimeout(()=> { // Fix this workaround later
-                this.$refs.youtubePlayer?.playVideo()
-                this.handlePlaybackInterval(true)
-            }, 700)
+        getDemoYoutubeId() {
+            if(this.idIdx > 3) this.idIdx = 0
+            const ids = ['UNZJQw8cr6o', 'nyuo9-OjNNg', 'ic8j13piAhQ', 'EfWmWlW2PvM']
+            return ids[this.idIdx++]
         },
         toggleShuffle() {
             this.isShuffle = !this.isShuffle
@@ -184,7 +199,7 @@ export default {
         },
         onChangeVolume() {
             this.$refs.youtubePlayer.setVolume(this.currVolume)
-            if(this.currVolume > 0 && this.isMute === true) {
+            if (this.currVolume > 0 && this.isMute === true) {
                 this.isMute = false
                 this.$refs.youtubePlayer.unMute()
             }
@@ -195,7 +210,13 @@ export default {
         },
         stopVideo() {
             this.$store.commit({ type: 'setIsPlaying', isPlaying: false })
-            this.$refs.youtubePlayer.stopVideo()
+            this.$refs.youtubePlayer?.stopVideo()
+            this.handlePlaybackInterval(false)
+        },
+        playVideo() {
+            this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
+            this.$refs.youtubePlayer?.playVideo()
+            this.handlePlaybackInterval(true)
         },
         onStateChange(event) {
             if (event.data === this.youtubePlayerStates.ENDED) {
@@ -216,23 +237,6 @@ export default {
             //     this.elapsedTime = await this.$refs.youtubePlayer?.getCurrentTime()
             // }
         },
-        async onTrackClicked() {
-            if (this.currTrack?.youtubeId) {
-                console.log('song has youtubeId in local')
-                this.loadVideo()
-            } else {
-                console.log('song doesn\'t have youtubeId in local')
-                await this.setTrackYoutubeId()
-                this.loadVideo()
-            }
-        },
-        async setTrackYoutubeId() {
-            // get youtubeId from YT
-            // const term = this.currTrack.title + ' ' + this.currTrack.artists[0]
-            // const youtubeId = await ytService.queryYT(term)
-            const youtubeId = 'nyuo9-OjNNg'
-            return await this.$store.dispatch({ type: 'updateTrack', youtubeId })
-        },
         handlePlaybackInterval(NewInterval) {
             if (this.intervalId) clearInterval(this.intervalId)
             if (NewInterval) this.intervalId = setInterval(this.updateElapsedTime, 1000)
@@ -251,7 +255,7 @@ export default {
     },
 
     beforeunmount() {
-        eventBus.off('trackClicked', this.onTrackClicked)
+        eventBus.off('trackClicked', this.loadVideo)
     },
 
     computed: {
