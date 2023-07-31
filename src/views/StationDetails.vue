@@ -20,7 +20,20 @@
         </div>
         <div class="bottom-gradient">
             <section class="details-player">
-                <button class="details-play" v-icon="'detailsPlay'" v-show="hasTracks"></button>
+                <button v-if="!isPlaying"
+                    class="details-play" 
+                    v-icon="'detailsPlay'" 
+                    v-show="hasTracks"
+                    @click="clickTrack(0)">
+                </button>
+
+                <button v-else
+                    class="details-play" 
+                    v-icon="'detailsPause'" 
+                    v-show="hasTracks"
+                    @click="pauseTrack">
+                </button>
+
                 <button 
                     class="details-like"
                     v-icon="'like'" 
@@ -87,6 +100,9 @@ export default {
         isOwner() {
             return this.station.owner !== 'Tuneify'
         },
+        isPlaying() {
+            return this.$store.getters.isCurrTrackPlaying
+        }
     },
 
     created() {

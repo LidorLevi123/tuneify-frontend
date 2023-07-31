@@ -2,7 +2,10 @@
     <section class="main-header" :style="{ backgroundColor: this.scrollPosition > 50 ? '#121212' : 'transparent' }">
         <button v-icon="`navBack`" class="nav-btn" title="Go back"></button>
         <button v-icon="`navNext`" class="nav-btn" title="Go forward"></button>
-        <button v-icon="'play'" v-if="$route.path.startsWith('/station/')" class="play-btn-header"
+        <button v-icon="'play'" v-if="$route.path.startsWith('/station/') && !isPlaying" class="play-btn-header" @click="playStation(0)"
+            :style="{ opacity: this.scrollPosition > 50 ? '1' : '0' }">
+        </button>
+        <button v-icon="'pause'" v-else class="play-btn-header" @click="playStation(0)"
             :style="{ opacity: this.scrollPosition > 50 ? '1' : '0' }">
         </button>
         <span v-if="$route.path.startsWith('/station/')" class="station-header"
@@ -52,12 +55,19 @@ export default {
         },
         logScroll({ scrollTop }) {
             this.scrollPosition = scrollTop
+        },
+        playStation(trackIdx) {
+            this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
+            eventBus.emit('trackClicked')
         }
 
     },
     computed: {
         currStation() {
             return this.$store.getters.currStation
+        },
+        isPlaying() {
+            return this.$store.getters.isCurrTrackPlaying
         }
     }
 }
