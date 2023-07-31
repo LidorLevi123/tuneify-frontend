@@ -102,18 +102,18 @@ export const userStore = {
                 throw err
             }
         },
-        async addTrack({ commit, state }, { user }) {
-            try {
-                user = await userService.update(user)
-                commit({ type: 'setUser', user })
-                if(state.loggedinUser._id === user._id) {
-                    commit({ type: 'setLoggedinUser', user })
-                }
-            } catch (err) {
-                console.log('userStore: Error in updateUser', err)
-                throw err
-            }
-        },
+        // async addTrack({ commit, state }, { user }) {
+        //     try {
+        //         user = await userService.update(user)
+        //         commit({ type: 'setUser', user })
+        //         if(state.loggedinUser._id === user._id) {
+        //             commit({ type: 'setLoggedinUser', user })
+        //         }
+        //     } catch (err) {
+        //         console.log('userStore: Error in updateUser', err)
+        //         throw err
+        //     }
+        // },
         async increaseScore({ commit }) {
             try {
                 const score = await userService.changeScore(100)

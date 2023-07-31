@@ -10,7 +10,7 @@ export const stationStore = {
         isCurrTrackPlaying: null,
     },
     getters: {
-        libraryStations({ stations }) { return stations },
+        libraryStations({ stations }) { return stations.filter(station => station.owner !== 'Tuneify') },
         stationsForHome({ stationsForHome }) { return stationsForHome },
         currStation({ currStation }) { return currStation },
         currTrackIdx({ currTrackIdx }) { return currTrackIdx },
@@ -70,7 +70,8 @@ export const stationStore = {
         async getStationsForHome({ commit }) {
             try {
                 // For now we display only workout stations at homepage
-                const stations = await stationService.getCategoryStations('0JQ5DAqbMKFAXlCG6QvYQ4')
+                // const stations = await stationService.getCategoryStations('0JQ5DAqbMKFAXlCG6QvYQ4')
+                const stations = await stationService.getStationsForHome()
                 commit({ type: 'setStationsForHome', stations })
             } catch (err) {
                 console.log('stationStore: Error in getStationsForHome', err)
@@ -127,7 +128,7 @@ export const stationStore = {
             if (isTrackExist) return
 
             try {
-                trackToSave = JSON.parse(JSON.stringify(trackToSave))
+                // trackToSave = JSON.parse(JSON.stringify(trackToSave))
                 await stationService.saveTrack(trackToSave, stationId)
                 commit({ type: 'addTrack', trackToSave, stationId })
             } catch (err) {

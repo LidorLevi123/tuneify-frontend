@@ -13,6 +13,7 @@ export default {
 
   async created() {
     await stationService.createLikedSongs()
+    this.$store.dispatch({ type: 'getStationsForHome' })
     this.$store.dispatch({ type: 'loadStations' })
     this.$store.dispatch({ type: 'loadUsers' })
   },

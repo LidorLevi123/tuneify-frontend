@@ -36,7 +36,7 @@
                 </button>
                 <!-- <button v-icon="'moreOptions'" class="btn details-edit"></button> -->
             </section>
-            <TrackList @track-clicked="clickTrack" @track-add="addTrack" @track-remove="removeTrack" @track-like="likeTrack"
+            <TrackList @track-clicked="clickTrack" @track-add="addTrack" @track-remove="removeTrack"
                 @track-dislike="dislikeTrack" :station="station" />
         </div>
         <StationEdit />
@@ -129,19 +129,10 @@ export default {
                 throw new Error('cant get average color')
             }
         },
-        async likeTrack(trackToSave) {
-            try {
-                await this.$store.dispatch({ type: 'addTrack', trackToSave, stationId: 'liked101' })
-                await this.$store.dispatch({ type: 'updateUser', trackId: track.id })
-                showSuccessMsg('Added to your Liked Songs')
-            } catch (err) {
-                showErrorMsg('Could not like track')
-            }
-        },
         async dislikeTrack(track) {
             try {
                 await this.$store.dispatch({ type: 'removeTrack', track, stationId: 'liked101' })
-                showSuccessMsg('Removed from your Liked Songs')
+                showSuccessMsg('Removed from Your Library')
             } catch (err) {
                 showErrorMsg('Could not dislike track')
             }
@@ -149,6 +140,11 @@ export default {
         async addTrack(trackToSave, stationId) {
             try {
                 await this.$store.dispatch({ type: 'addTrack', trackToSave, stationId })
+                if(stationId !== 'liked101') {
+                    showSuccessMsg('Saved to station')
+                } else {
+                    showSuccessMsg('Saved to Your Library')
+                }
             } catch (err) {
                 showErrorMsg('Could not add track')
             }
