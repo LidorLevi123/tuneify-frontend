@@ -54,18 +54,17 @@ export const stationStore = {
         },
         addTrack({ stations }, { trackToSave, stationId }) {
             const idx = stations.findIndex(station => station._id === stationId)
-            stations[idx].tracks.unshift(trackToSave)
+            stations[idx].tracks.push(trackToSave)
         },
         removeTrack({ stations, currStation }, { trackId, stationId }) {
             const idx = stations.findIndex(station => station._id === stationId)
-            const trackIdx = stations[idx].tracks.findIndex(track => track._id === trackId)
+            const trackIdx = stations[idx].tracks.findIndex(track => track.id === trackId)
             stations[idx].tracks.splice(trackIdx, 1)
 
-            if (stations[idx]._id === 'liked101' && currStation._id === 'liked101' ||
-                stations[idx]._id === currStation._id) {
+            if (stations[idx]._id === 'liked101' && currStation._id === 'liked101') {
                 this.commit({ type: 'setCurrStation', station: stations[idx] })
             }
-        },
+        }
     },
     actions: {
         async getStationsForHome({ commit }) {
@@ -104,7 +103,6 @@ export const stationStore = {
             if(stationToSave._id === state.currStation._id) {
                 stationToSave.owner = 'Tunify'
             }
-            console.log(stationToSave)
 
             try {
                 const station = await stationService.save(stationToSave)

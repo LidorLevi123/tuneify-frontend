@@ -30,8 +30,13 @@
                     <span v-icon="'moreOptions'"></span>
                 </button>
             </section>
-            <TrackList @track-clicked="clickTrack" @track-add="addTrack" @track-remove="removeTrack" @track-like="likeTrack"
-                @track-dislike="dislikeTrack" :station="station" />
+            <TrackList 
+                @track-clicked="clickTrack" 
+                @track-add="addTrack" 
+                @track-remove="removeTrack" 
+                @track-like="likeTrack"
+                @track-dislike="dislikeTrack" 
+                :station="station" />
         </div>
         <StationEdit />
     </section>
@@ -44,7 +49,7 @@
 import { FastAverageColor } from 'fast-average-color'
 const fac = new FastAverageColor()
 import { utilService } from '../services/util.service'
-import { eventBus, showSuccessMsg } from '../services/event-bus.service.js'
+import { eventBus, showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
 
 import StationEdit from '../cmps/StationEdit.vue'
 import TrackList from '../cmps/TrackList.vue'
@@ -81,7 +86,7 @@ export default {
                 this.getAvgImgClr()
                 this.setTracksTotalDuration()
             } catch (err) {
-                console.log('Could not set current station')
+                showErrorMsg('Could not set current station')
             }
         },
         async addStation() {
@@ -89,7 +94,7 @@ export default {
                 await this.$store.dispatch({ type: 'saveStation', stationToSave: this.station })
                 this.canAddStation = true
             } catch (err) {
-                console.log('Could not add station')
+                showErrorMsg('Could not add station')
             }
         },
         async getAvgImgClr() {
@@ -106,7 +111,7 @@ export default {
                 await this.$store.dispatch({ type: 'addTrack', trackToSave, stationId: 'liked101' })
                 showSuccessMsg('Added to your Liked Songs')
             } catch (err) {
-                console.log('Could not like track')
+                showErrorMsg('Could not like track')
             }
         },
         async dislikeTrack(track) {
@@ -114,21 +119,21 @@ export default {
                 await this.$store.dispatch({ type: 'removeTrack', track, stationId: 'liked101' })
                 showSuccessMsg('Removed from your Liked Songs')
             } catch (err) {
-                console.log('Could not dislike track')
+                showErrorMsg('Could not dislike track')
             }
         },
         async addTrack(trackToSave, stationId) {
             try {
                 await this.$store.dispatch({ type: 'addTrack', trackToSave, stationId })
             } catch (err) {
-                console.log('Could not add track')
+                showErrorMsg('Could not add track')
             }
         },
         async removeTrack(track) {
             try {
                 await this.$store.dispatch({ type: 'removeTrack', track, stationId: this.station._id })
             } catch (err) {
-                console.log('Could not dislike track')
+                showErrorMsg('Could not dislike track')
             }
         },
         setBackgroundClr(avgColor) {
