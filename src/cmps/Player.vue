@@ -1,6 +1,6 @@
 <template>
     <YouTube ref="youtubePlayer" v-if="currTrack?.youtubeId" :src="currTrack.youtubeId" @state-change="onStateChange"
-        @ready="playVideo" style="display: none;" />
+        @ready="playVideo" style="display: none;"/>
 
     <section class="main-player-container">
         <section class="track-info-container">
@@ -108,7 +108,8 @@ export default {
         YouTube,
     },
     created() {
-        eventBus.on('trackClicked', () => { this.loadVideo() })
+        eventBus.on('trackClicked', this.loadVideo)
+        eventBus.on('trackPaused', this.pauseVideo)
     },
     methods: {
         updateCurrTrackIdx(trackIdx) {
@@ -150,11 +151,10 @@ export default {
         },
         async loadVideo() {
             // if (isSetCurrStation) this.currStation = JSON.parse(JSON.stringify(this.$store.getters.currStation))
-            console.log(this.currTrackIdx)
 
             if (this.currTrack?.youtubeId) {
                 console.log('Got yt id from storage')
-                this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
+                this.playVideo()
                 return
             }
             // get youtubeId from YT
@@ -164,9 +164,8 @@ export default {
                 // const term = this.currTrack.title + ' ' + this.currTrack.artists[0]
                 // const youtubeId = await ytService.queryYT(term)
                 const youtubeId = this.getDemoYoutubeId()
-                console.log(youtubeId)
                 await this.$store.dispatch({ type: 'updateTrack', youtubeId })
-                this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
+                this.playVideo()
             } catch (err) {
                 console.log('Could not set track youtube id')
             }
