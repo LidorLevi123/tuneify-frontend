@@ -1,7 +1,9 @@
 .nav-container {
-
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    overflow-y: auto;
+    grid-template-rows: auto 1fr;
+    // display: flex;
+    // flex-direction: column;
     background-color: $clr1;
     grid-column: 1;
     grid-row: 1;

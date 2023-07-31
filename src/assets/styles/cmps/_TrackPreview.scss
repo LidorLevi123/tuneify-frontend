@@ -91,6 +91,7 @@
             }
         }
 
+
         .dropdown {
             position: relative;
             display: inline-block;
@@ -130,13 +131,12 @@
         align-items: center;
 
     }
-}
 
-.btn-options,
-.btn-dislike,
-.btn-like {
-    display: flex;
-    align-self: center;
-    margin-left: 0.5rem;
-
+    .btn-options,
+    .btn-dislike,
+    .btn-like {
+        display: flex;
+        align-self: center;
+        margin-left: 0.5rem;
+    }
 }

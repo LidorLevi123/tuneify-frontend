@@ -16,6 +16,21 @@
         align-items: center;
         padding: 1.5rem;
 
+        span {
+            cursor: pointer;
+            display: grid;
+            align-content: center;
+            justify-content: center;
+
+            height: 2rem;
+            width: 2rem;
+            border-radius: 50%;
+
+            &:hover {
+                background-color: #3e3e3e;
+            }
+        }
+
         h1 {
             font-size: 1.5rem;
             color: $clr2;
@@ -81,13 +96,6 @@
         font-family: Circular;
     }
 
-    >* {
-        border-radius: 0.25rem;
-        background: #ffffff1a;
-        border: none;
-        color: $clr2;
-
-    }
 
     .save-btn {
         grid-row: 3;
