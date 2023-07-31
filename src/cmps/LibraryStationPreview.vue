@@ -3,7 +3,7 @@
         <img :src="station.imgUrl" alt="">
         <h5>{{ stationName }}</h5>
         <small><span>{{ station.tracks.length }} songs</span> &bull;
-            <span>{{ station.owner }}</span>
+            <span>{{ stationBelonging }}</span>
         </small>
     </article>
 </template>
@@ -17,6 +17,12 @@ export default {
     computed: {
         stationName() {
             return this.station.name || `My Playlist`
+        },
+        loggedinUser() {
+            return this.$store.getters.loggedinUser
+        },
+        stationBelonging() {
+            return this.station.owner === 'Tuneify' ? this.station.owner : this.loggedinUser.fullname
         }
     },
 

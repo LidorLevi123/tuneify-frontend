@@ -10,7 +10,7 @@ export const stationStore = {
         isCurrTrackPlaying: null,
     },
     getters: {
-        libraryStations({ stations }) { return stations.filter(station => station.owner) },
+        libraryStations({ stations }) { return stations.filter(station => station.owner !== 'Tuneify') },
         stationsForHome({ stationsForHome }) { return stationsForHome },
         currStation({ currStation }) { return currStation },
         currTrackIdx({ currTrackIdx }) { return currTrackIdx },
@@ -70,7 +70,8 @@ export const stationStore = {
         async getStationsForHome({ commit }) {
             try {
                 // For now we display only workout stations at homepage
-                const stations = await stationService.getCategoryStations('0JQ5DAqbMKFAXlCG6QvYQ4')
+                // const stations = await stationService.getCategoryStations('0JQ5DAqbMKFAXlCG6QvYQ4')
+                const stations = await stationService.getStationsForHome()
                 commit({ type: 'setStationsForHome', stations })
             } catch (err) {
                 console.log('stationStore: Error in getStationsForHome', err)
@@ -96,20 +97,16 @@ export const stationStore = {
                 throw new Error('Could not set current station')
             }
         },
-        async saveStation({ commit, state }, { stationToSave }) {
+        async saveStation({ commit }, { stationToSave }) {
             stationToSave = JSON.parse(JSON.stringify(stationToSave))
 
             let type = stationToSave._id ? 'updateStation' : 'addStation'
-            if(stationToSave._id === state.currStation._id) {
-                stationToSave.owner = 'Tunify'
-            }
+            if(stationToSave.owner === 'Tuneify') type = 'addStation'
 
             try {
                 const station = await stationService.save(stationToSave)
                 commit({ type, stationToSave: station })
-                if(station._id !== state.currStation._id) {
-                    commit({ type: 'setCurrStation', station: { ...station } })
-                }
+                commit({ type: 'setCurrStation', station: { ...station } })
                 return station
             } catch (err) {
                 console.log(err.message)
@@ -131,7 +128,7 @@ export const stationStore = {
             if (isTrackExist) return
 
             try {
-                trackToSave = JSON.parse(JSON.stringify(trackToSave))
+                // trackToSave = JSON.parse(JSON.stringify(trackToSave))
                 await stationService.saveTrack(trackToSave, stationId)
                 commit({ type: 'addTrack', trackToSave, stationId })
             } catch (err) {

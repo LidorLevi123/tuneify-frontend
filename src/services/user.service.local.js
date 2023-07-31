@@ -1,6 +1,5 @@
 import { storageService } from './async-storage.service'
 
-
 const STORAGE_KEY_LOGGEDIN_USER = 'loggedinUser'
 
 export const userService = {
@@ -31,15 +30,28 @@ function remove(userId) {
     return storageService.remove('user', userId)
 }
 
-async function update({_id, score}) {
+async function update({ _id, likedStations, likedTracks }) {
     const user = await storageService.get('user', _id)
-    user.score = score
+
+    user.likedStations = likedStations
+    user.likedTracks = likedTracks
+
     await storageService.put('user', user)
 
     // Handle case in which admin updates other user's details
     if (getLoggedinUser()._id === user._id) saveLocalUser(user)
     return user
 }
+
+// async function update({ _id, score }) {
+//     const user = await storageService.get('user', _id)
+//     user.score = score
+//     await storageService.put('user', user)
+
+//     // Handle case in which admin updates other user's details
+//     if (getLoggedinUser()._id === user._id) saveLocalUser(user)
+//     return user
+// }
 
 async function login(userCred) {
     const users = await storageService.query('user')
@@ -50,7 +62,9 @@ async function login(userCred) {
 }
 
 async function signup(userCred) {
-    userCred.score = 10000
+    const users = await getUsers()
+    if(users.some(u => u.username === userCred.username)) return
+    
     if (!userCred.imgUrl) userCred.imgUrl = 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png'
     const user = await storageService.post('user', userCred)
     return saveLocalUser(user)
@@ -69,7 +83,14 @@ async function changeScore(by) {
 }
 
 function saveLocalUser(user) {
-    user = {_id: user._id, fullname: user.fullname, imgUrl: user.imgUrl, score: user.score}
+    user =
+    {
+        _id: user._id,
+        fullname: user.fullname,
+        imgUrl: user.imgUrl,
+        likedStations: user.likedStations,
+        likedTracks: user.likedTracks
+    }
     sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(user))
     return user
 }
@@ -80,7 +101,7 @@ function getLoggedinUser() {
 
 // Initial data
 // ;(async ()=>{
-//     await userService.signup({fullname: 'Puki Norma', username: 'puki', password:'123',score: 10000, isAdmin: false})
-//     await userService.signup({fullname: 'Master Adminov', username: 'admin', password:'123', score: 10000, isAdmin: true})
-//     await userService.signup({fullname: 'Muki G', username: 'muki', password:'123', score: 10000})
+    // await userService.signup({fullname: 'Puki Norma', username: 'puki', password:'123',score: 10000, isAdmin: false})
+    // await userService.signup({fullname: 'Master Adminov', username: 'admin', password:'123', score: 10000, isAdmin: true})
+    await userService.signup({fullname: 'Muki G', username: 'muki', password:'123', likedStations: [], likedTracks: []})
 // })()

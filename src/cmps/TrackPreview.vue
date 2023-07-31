@@ -18,7 +18,7 @@
         <span class="track-album">{{ track.album }}</span>
         <div class="df sb">
             <span class="track-date">{{ formattedDate }}</span>
-            <span v-show="isHovered" v-if="!isLiked(track.id)" @click="onLikeTrack(track, $event)" class="btn-like"
+            <span v-show="isHovered" v-if="!isLiked(track.id)" @click="onAddTrack(track, 'liked101', $event)" class="btn-like"
                 v-icon="`smallLikeDis`"></span>
             <span v-else @click="onDislikeTrack(track, $event)" class="btn-dislike" v-icon="`smallLikeEna`"></span>
         </div>
@@ -134,16 +134,12 @@ export default {
             ev.stopPropagation()
             this.$emit('track-remove', track)
         },
-        onLikeTrack(track, ev) {
-            ev.stopPropagation()
-            this.$emit('track-like', track)
-        },
         onDislikeTrack(track, ev) {
             ev.stopPropagation()
             this.$emit('track-dislike', track)
         },
         isLiked(trackId) {
-            return this.likedTracks?.some(currTrack => currTrack.id === trackId)
+            return this.likedTracks?.some(track => track.id === trackId)
         },
         toggleDropdown(ev) {
             ev.stopPropagation()

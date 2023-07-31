@@ -1,4 +1,5 @@
 <template>
+    <h1>{{ stations[0]?.category }}</h1>
     <ul v-if="stations" class="station-list clean-list">
         <li v-for="station in stations" :key="station._id">
             <StationPreview :station="station" />

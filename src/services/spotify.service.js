@@ -9,8 +9,8 @@ export const spotifyService = {
 
 async function getSpotifyItems(reqType, id) {
     const endpoints = {
-        categoryStations: `https://api.spotify.com/v1/browse/categories/${id}/playlists?country=il`,
-        categories: `https://api.spotify.com/v1/browse/categories?country=US&offset=0&limit=50`,
+        categoryStations: `https://api.spotify.com/v1/browse/categories/${id}/playlists?country=il&limit=8`,
+        categories: `https://api.spotify.com/v1/browse/categories?country=US&offset=0&limit=20`,
         station: `https://api.spotify.com/v1/playlists/${id}`,
         tracks: `https://api.spotify.com/v1/playlists/${id}/tracks`,
     }
@@ -82,7 +82,8 @@ async function _cleanStationData(data) {
         name: data.name,
         imgUrl: data.images[0].url,
         description: data.description,
-        tracks: await getSpotifyItems('tracks', data.id)
+        owner: 'Tuneify',
+        tracks: await getSpotifyItems('tracks', data.id),
     }
     return station
 }

@@ -12,7 +12,6 @@
 
             <textarea v-model="stationToEdit.description" placeholder="Add an optional description"></textarea>
 
-
             <button class="save-btn" @click="save" type="submit">Save</button>
 
             <small class="disclaimer">By proceeding, you agree to give Tuneify access to the image you choose to upload.
@@ -23,6 +22,7 @@
 </template>
 
 <script>
+import { showErrorMsg } from '../services/event-bus.service'
 import { stationService } from '../services/station.service.local'
 
 export default {
@@ -32,23 +32,22 @@ export default {
         }
     },
 
-    created() {
-        this.loadStationToEdit()
-    },
-
     methods: {
-        // Fix this workaround later
-        loadStationToEdit() {
-            setTimeout(() => {
-                this.stationToEdit = JSON.parse(JSON.stringify(this.$store.getters.currStation))
-            }, 500)
+        async loadStationToEdit() {
+            try {
+                const station = await stationService.getById(this.stationId)
+                this.stationToEdit = station
+            } catch (err) {
+                showErrorMsg('Could not save station')
+            }
         },
+
         async save() {
             try {
                 await this.$store.dispatch({ type: 'saveStation', stationToSave: this.stationToEdit })
                 this.onCloseModal()
             } catch (err) {
-                console.log(err.message);
+                console.log(err.message)
             }
         },
         onCloseModal() {
@@ -58,12 +57,13 @@ export default {
 
     computed: {
         stationId() {
-            return this.$route.params
-        }
+            return this.$route.params.stationId
+        },
     },
 
     watch: {
         stationId() {
+            if (!this.stationId) return
             this.loadStationToEdit()
         },
     }

@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import { showSuccessMsg } from '../services/event-bus.service';
 import { stationService } from '../services/station.service.local';
 import LibraryStationList from './LibraryStationList.vue';
 
@@ -31,9 +32,13 @@ export default {
 
             stationToSave.name = 'My Playlist #' + (this.libraryStations.length)
             stationToSave.imgUrl = 'https://picsum.photos/' + (this.libraryStations.length + 232)
+            stationToSave.owner = this.loggedinUser
+
+            console.log(stationToSave);
 
             try {
                 const station = await this.$store.dispatch({ type: 'saveStation', stationToSave })
+                showSuccessMsg('Saved to Your Library')
                 this.$router.push(`/station/${station._id}`)
             } catch (err) {
                 console.log('Could not add station')
@@ -45,7 +50,10 @@ export default {
     computed: {
         libraryStations() {
             return this.$store.getters.libraryStations
-        }
+        },
+        loggedinUser() {
+            return this.$store.getters.loggedinUser
+        },
     },
 
     components: { LibraryStationList }
