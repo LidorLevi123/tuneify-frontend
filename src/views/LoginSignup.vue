@@ -9,7 +9,7 @@
     <section class="form-container">
       <section class="login-form">
         <section class="google-login">
-          <h1>Log in to Tuniefy</h1>
+          <h1>Log in to Tuneify</h1>
           <button class="google-btn">
             <img src="https://accounts.scdn.co/sso/images/new-google-icon.72fd940a229bc94cf9484a3320b3dccb.svg" alt="">
             <span>Continue with Google</span>
