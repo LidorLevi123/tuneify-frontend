@@ -15,6 +15,9 @@
             </div>
         </div>
         <button v-icon="`profile`" class=" profile-btn" title="Logout"></button>
+        <RouterLink to="/login">
+            <button class="login-btn">Log in</button>
+        </RouterLink>
     </section>
 </template>
 

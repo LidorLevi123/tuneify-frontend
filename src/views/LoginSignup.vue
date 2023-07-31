@@ -1,6 +1,34 @@
 <template>
-  <div class="container about">
-    <p>{{ msg }}</p>
+  <div class="login-view">
+    <header>
+      <section class="login-logo">
+        <img src="../../public/favicon.svg" alt="">
+        <h2>Tuniefy</h2>
+      </section>
+    </header>
+    <section class="form-container">
+      <section class="login-form">
+        <section class="google-login">
+          <h1>Log in to Tuniefy</h1>
+          <button class="google-btn">
+            <img src="https://accounts.scdn.co/sso/images/new-google-icon.72fd940a229bc94cf9484a3320b3dccb.svg" alt="">
+            <span>Continue with Google</span>
+          </button>
+          <hr>
+        </section>
+        <form action="">
+          <span>Username</span>
+          <input type="text" v-model="loginCred.username" placeholder="User name">
+          <span>Password</span>
+          <input type="password" v-model="loginCred.password" placeholder="Password">
+          <button class="login-btn">Log In</button>
+
+        </form>
+        <hr>
+      </section>
+    </section>
+
+    <!-- <p>{{ msg }}</p>
 
     <div v-if="loggedinUser">
       <h3>
@@ -16,12 +44,8 @@
           <option value="">Select User</option>
           <option v-for="user in users" :key="user._id" :value="user.username">{{ user.fullname }}</option>
         </select>
-        <!-- <input type="text" v-model="loginCred.username" placeholder="User name" />
-        <input
-          type="text"
-          v-model="loginCred.password"
-          placeholder="Password"
-        /> -->
+        <input type="text" v-model="loginCred.username" placeholder="User name" />
+        <input type="text" v-model="loginCred.password" placeholder="Password" />
         <button>Login</button>
       </form>
       <p class="mute">user1 or admin, pass:123 </p>
@@ -46,7 +70,7 @@
           <button @click="removeUser(user._id)">x</button>
         </li>
       </ul>
-    </details>
+    </details> -->
   </div>
 </template>
 
@@ -60,7 +84,7 @@ export default {
     return {
       msg: '',
       loginCred: { username: 'user1', password: '123' },
-      signupCred: { username: '', password: '', fullname: '', imgUrl : '' },
+      signupCred: { username: '', password: '', fullname: '', imgUrl: '' },
     }
   },
   computed: {
