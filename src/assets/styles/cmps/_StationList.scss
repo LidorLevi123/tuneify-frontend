@@ -1,9 +1,18 @@
 .station-list {
-    margin-block-start: 10rem;
-    // max-width: 119rem;
+
+    max-width: 119rem;
     display: grid;
-    // grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
     gap: 1.5rem;
     grid-template-columns: repeat(auto-fit, minmax(10.625rem, 1fr));
     min-width: 372px;
+
+}
+
+.station-list-hor {
+
+    max-width: 119rem;
+    display: grid;
+    grid-gap: 1rem 1.5rem;
+    grid-template: auto/repeat(auto-fill, minmax(max(16.875rem, 25%), 1fr));
+
 }

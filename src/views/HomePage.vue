@@ -1,13 +1,13 @@
 <template>
   <section class="container home-page text-center">
-    <StationList v-if="stations" :stations="popStations" />
+    <StationList v-if="stations" :stations="summerStations" :horizontalDesign="true" />
+    <StationList v-if="stations" :stations="travelStations" />
     <StationList v-if="stations" :stations="workoutStations" />
     <StationList v-if="stations" :stations="decadesStations" />
-    <StationList v-if="stations" :stations="classicalStations" />
+    <StationList v-if="stations" :stations="popStations" />
     <StationList v-if="stations" :stations="tastemakersStations" />
-    <StationList v-if="stations" :stations="summerStations" />
+    <StationList v-if="stations" :stations="classicalStations" />
     <StationList v-if="stations" :stations="gamingStations" />
-    <StationList v-if="stations" :stations="travelStations" />
   </section>
 </template>
 
