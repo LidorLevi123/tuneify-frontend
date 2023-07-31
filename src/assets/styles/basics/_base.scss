@@ -96,3 +96,9 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background-color: #8f8f8f;
 }
+
+button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

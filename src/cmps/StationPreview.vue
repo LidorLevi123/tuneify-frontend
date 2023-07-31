@@ -2,9 +2,7 @@
     <article @click="goToDetails(station._id)" class="main-preview-container">
         <div class="prev-img-container">
             <img :src="`${station.imgUrl}`" alt="">
-            <button class="play-btn">
-                <span v-icon="'play'"></span>
-            </button>
+            <button class="play-btn" v-icon="'play'"></button>
         </div>
 
         <h4>{{ station.name }}</h4>

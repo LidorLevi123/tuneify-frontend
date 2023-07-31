@@ -1,10 +1,9 @@
 <template>
     <section class="main-header" :style="{ backgroundColor: this.scrollPosition > 50 ? '#121212' : 'transparent' }">
-        <button class="nav-btn" title="Go back"><span v-icon="`navBack`"></span></button>
-        <button class="nav-btn" title="Go forward"><span v-icon="`navNext`"></span></button>
-        <button v-if="$route.path.startsWith('/station/')" class="play-btn-header"
+        <button v-icon="`navBack`" class="nav-btn" title="Go back"></button>
+        <button v-icon="`navNext`" class="nav-btn" title="Go forward"></button>
+        <button v-icon="'play'" v-if="$route.path.startsWith('/station/')" class="play-btn-header"
             :style="{ opacity: this.scrollPosition > 50 ? '1' : '0' }">
-            <span v-icon="'play'"></span>
         </button>
         <span v-if="$route.path.startsWith('/station/')" class="station-header"
             :style="{ opacity: this.scrollPosition > 50 ? '1' : '0' }">{{ currStation?.name }}</span>
@@ -15,7 +14,7 @@
                 <span class="material-symbols-outlined search-clear" @click="onClearFilter"> close </span>
             </div>
         </div>
-        <button class="profile-btn" title="Logout"><span v-icon="`profile`"></span></button>
+        <button v-icon="`profile`" class=" profile-btn" title="Logout"></button>
     </section>
 </template>
 

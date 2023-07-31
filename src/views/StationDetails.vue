@@ -20,23 +20,14 @@
         </div>
         <div class="bottom-gradient">
             <section class="details-player">
-                <button class="details-play">
-                    <span class="details-play" v-icon="'detailsPlay'"></span>
-                </button>
-                <button v-show="!station.owner && station.owner !== 'Tunify'" class="details-like" @click="addStation">
-                    <span v-icon="'like'"></span>
-                </button>
-                <button class="btn details-edit">
-                    <span v-icon="'moreOptions'"></span>
-                </button>
+                <button class="details-play" v-icon="'detailsPlay'"></button>
+                <button v-icon="'like'" v-show="!station.owner && station.owner !== 'Tunify'" class="details-like"
+                    @click="addStation"></button>
+                <button v-icon="'unlike'" class="details-unlike"></button>
+                <!-- <button v-icon="'moreOptions'" class="btn details-edit"></button> -->
             </section>
-            <TrackList 
-                @track-clicked="clickTrack" 
-                @track-add="addTrack" 
-                @track-remove="removeTrack" 
-                @track-like="likeTrack"
-                @track-dislike="dislikeTrack" 
-                :station="station" />
+            <TrackList @track-clicked="clickTrack" @track-add="addTrack" @track-remove="removeTrack" @track-like="likeTrack"
+                @track-dislike="dislikeTrack" :station="station" />
         </div>
         <StationEdit />
     </section>
@@ -140,9 +131,9 @@ export default {
             const [darkerColor, darkerDarkerColor] = utilService.generateColors(avgColor)
 
             document.querySelector('.top-gradient').style.backgroundImage =
-                `linear-gradient(to bottom, ${avgColor} 0%, ${darkerColor} 100%)`
+                `linear-gradient(to bottom, ${avgColor} 0%, ${darkerColor})`
             document.querySelector('.bottom-gradient').style.backgroundImage =
-                `linear-gradient(to bottom, ${darkerDarkerColor} 0%, #121212 14.5rem, #121212 100%)`
+                `linear-gradient(to bottom, ${darkerDarkerColor} 0%, #121212 14.5rem, #121212)`
         },
         setTracksTotalDuration() {
             this.tracksTotalDuration = this.station.tracks?.reduce((sum, track) => sum = sum + track.formalDuration, 0)

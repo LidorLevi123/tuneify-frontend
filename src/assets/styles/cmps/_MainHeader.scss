@@ -15,7 +15,7 @@
         border-radius: 50%;
         height: 2rem;
         width: 2rem;
-        background-color: rgba(0, 0, 0, 0.752);
+        background-color: rgba(29, 29, 29, 0.457);
         cursor: pointer;
         margin-left: auto;
         margin-right: 1.5rem;
@@ -48,7 +48,7 @@
         border: none;
         height: 2rem;
         width: 2rem;
-        background-color: $clr1;
+        background-color: rgba(29, 29, 29, 0.457)
     }
 
     .play-btn-header {
@@ -112,10 +112,6 @@
             color: $clr2;
             font-size: 0.875rem;
             width: 20rem;
-        }
-
-        .material-symbols-outlined {
-            color: $clr2;
         }
 
         div {

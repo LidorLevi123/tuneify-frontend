@@ -1,4 +1,6 @@
 .library-station-list {
+    overflow-y: hidden;
+
     button {
         background-color: transparent;
         border: none;
@@ -19,5 +21,7 @@
     ul {
         margin-block-start: 2rem;
         display: grid;
+        overflow-y: auto;
+        height: 100%;
     }
 }

@@ -1,4 +1,6 @@
 .station-details {
+    display: grid;
+    grid-template-rows: auto 1fr;
     overflow: auto;
     border-radius: 0.5rem;
 
@@ -98,19 +100,19 @@
             border: none;
             border-radius: 50%;
             cursor: pointer;
+            margin-inline-end: 1.6rem;
 
             &:hover {
                 transform: scale(1.04);
             }
         }
 
-        & .details-like {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        & .details-like,
+        .details-unlike {
             border: none;
             cursor: pointer;
             background-color: transparent;
         }
+
     }
 }

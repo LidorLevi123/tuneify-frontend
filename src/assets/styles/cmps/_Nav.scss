@@ -1,14 +1,14 @@
 .nav-container {
     display: grid;
-    overflow-y: auto;
     grid-template-rows: auto 1fr;
-    // display: flex;
-    // flex-direction: column;
+    overflow-y: hidden;
+    height: 100%;
     background-color: $clr1;
     grid-column: 1;
     grid-row: 1;
     width: 412px;
     color: $clr2;
+
 
     nav {
         border-radius: 0.5rem;

@@ -5,8 +5,10 @@
     flex-direction: column;
     border-radius: 0.5rem;
     background-color: $clr5;
-    width: 11.875rem;
-    height: 17.5rem;
+    // height: 100%;
+    // width: 11.875rem;
+    // height: 17.5rem;
+    aspect-ratio: 0.6785;
     padding: 1rem;
     cursor: pointer;
     transition: ease-in-out 0.3s;
@@ -34,6 +36,7 @@
         font-size: 0.81rem;
         color: $clr3;
         overflow: hidden;
+        flex: 1;
     }
 
     .play-btn {

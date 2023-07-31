@@ -1,7 +1,9 @@
 .station-list {
     margin-block-start: 10rem;
-    max-width: 119rem;
+    // max-width: 119rem;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-    gap: 24px;
+    // grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(10.625rem, 1fr));
+    min-width: 372px;
 }
