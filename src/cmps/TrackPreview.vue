@@ -143,7 +143,7 @@ export default {
             this.$emit('track-dislike', track)
         },
         isLiked(trackId) {
-            return this.likedTracks?.some(currTrack => currTrack.id === trackId)
+            return this.likedTracks?.some(track => track.id === trackId)
         },
         toggleDropdown(ev) {
             ev.stopPropagation()

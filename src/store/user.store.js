@@ -3,7 +3,7 @@ import { userService } from '../services/user.service.local'
 
 export const userStore = {
     state: {
-        loggedinUser: null,
+        loggedinUser: userService.getLoggedinUser(),
         users: [],
         isLoading: false
     },
@@ -20,10 +20,14 @@ export const userStore = {
     mutations: {
         setLoggedinUser(state, { user }) {
             // Yaron: needed this workaround as score not reactive from birth
-            state.loggedinUser = (user)? {...user} : null
+            state.loggedinUser = (user) ? { ...user } : null
         },
         setUsers(state, { users }) {
             state.users = users
+        },
+        setUser(state, { user }) {
+            const idx = state.users.findIndex(u => u._id === user._id)
+            state.users.splice(idx, 1, user)
         },
         setIsLoading(state, { isLoading }) {
             state.isLoading = isLoading
@@ -86,15 +90,29 @@ export const userStore = {
                 throw err
             }
         },
-        async updateUser({ commit }, { user }) {
+        async updateUser({ commit, state }, { user }) {
             try {
                 user = await userService.update(user)
                 commit({ type: 'setUser', user })
+                if(state.loggedinUser._id === user._id) {
+                    commit({ type: 'setLoggedinUser', user })
+                }
             } catch (err) {
                 console.log('userStore: Error in updateUser', err)
                 throw err
             }
-
+        },
+        async addTrack({ commit, state }, { user }) {
+            try {
+                user = await userService.update(user)
+                commit({ type: 'setUser', user })
+                if(state.loggedinUser._id === user._id) {
+                    commit({ type: 'setLoggedinUser', user })
+                }
+            } catch (err) {
+                console.log('userStore: Error in updateUser', err)
+                throw err
+            }
         },
         async increaseScore({ commit }) {
             try {

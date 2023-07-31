@@ -1,6 +1,7 @@
 import { storageService } from './async-storage.service.js'
 import { utilService } from './util.service.js'
 import { spotifyService } from './spotify.service.js'
+import { userService } from './user.service.local.js'
 // import { userService } from './user.service.js'
 
 const STORAGE_KEY = 'stationDB'
@@ -46,9 +47,9 @@ async function save(station) {
     if (station._id) {
         savedStation = await storageService.put(STORAGE_KEY, station)
     } else {
+        console.log(station._id)
         // Later, owner is set by the backend
         // station.owner = userService.getLoggedinUser()
-        station.owner = 'Guest'
         savedStation = await storageService.post(STORAGE_KEY, station)
     }
     return savedStation
@@ -94,7 +95,8 @@ async function createLikedSongs() {
         station._id = 'liked101'
         station.name = 'Liked Songs'
         station.imgUrl = 'https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png'
-        station.owner = 'Guest'
+        station.owner = userService.getLoggedinUser()
+        
         await storageService.post(STORAGE_KEY, station)
     }
 }
