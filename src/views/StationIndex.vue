@@ -11,16 +11,12 @@
 import Player from '../cmps/Player.vue'
 import Nav from '../cmps/Nav.vue'
 import MainHeader from '../cmps/MainHeader.vue'
+import { eventBus } from '../services/event-bus.service'
 
 export default {
     methods: {
         handleScroll({ target }) {
-            const station = document.querySelector('.station-header')
-            const elMainHeader = document.querySelector('.main-header')
-            const playBtn = document.querySelector('.play-btn-header')
-            elMainHeader.style.backgroundColor = target.scrollTop > 50 ? '#121212' : 'transparent'
-            playBtn.style.opacity = target.scrollTop > 50 ? '1' : '0'
-            station.style.opacity = target.scrollTop > 50 ? '1' : '0'
+            eventBus.emit('handleScroll', target)
         }
     },
     components: {

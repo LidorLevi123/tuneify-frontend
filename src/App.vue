@@ -19,6 +19,7 @@ export default {
   components: {
     UserMsg,
     BackDrop,
+    UserMsg
   }
 }
 </script>

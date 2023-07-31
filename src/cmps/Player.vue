@@ -212,6 +212,9 @@ export default {
             if (this.isPlaying) {
                 this.elapsedTime = await this.$refs.youtubePlayer?.getCurrentTime()
             }
+            // if (youtubePlayer && this.isPlaying) {
+            //     this.elapsedTime = await this.$refs.youtubePlayer?.getCurrentTime()
+            // }
         },
         async onTrackClicked() {
             if (this.currTrack?.youtubeId) {
