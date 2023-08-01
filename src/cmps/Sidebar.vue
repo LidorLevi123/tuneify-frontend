@@ -34,8 +34,6 @@ export default {
             stationToSave.imgUrl = 'https://picsum.photos/' + (this.libraryStations.length + 232)
             stationToSave.owner = this.loggedinUser
 
-            console.log(stationToSave);
-
             try {
                 const station = await this.$store.dispatch({ type: 'saveStation', stationToSave })
                 showSuccessMsg('Saved to Your Library')

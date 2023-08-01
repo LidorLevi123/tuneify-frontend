@@ -12,8 +12,8 @@
                 <div v-if="currTrack" class="track-artist">{{ currTrack.artists?.length > 0 ? currTrack.artists[0] : '' }}
                 </div>
             </section>
-            <span class="btn-like" v-icon="`smallLikeDis`" @click="onAddTrack(track, 'liked101', $event)" ></span>
-            <span class="btn-dislike" v-icon="`smallLikeEna`" @click="onDislikeTrack(track, $event)"></span>
+            <span v-if="!hasLiked(currTrack?.id) && currTrack" class="btn-like" v-icon="`smallLikeDis`" @click="likeTrack(currTrack)" ></span>
+            <span v-else-if="hasLiked(currTrack?.id) && currTrack" class="btn-dislike" v-icon="`smallLikeEna`" @click="dislikeTrack(currTrack.id)"></span>
         </section>
 
         <section class="player-mid-container">
@@ -73,7 +73,7 @@
 <script>
 
 import { utilService } from '../services/util.service.js'
-import { eventBus } from '../services/event-bus.service.js'
+import { eventBus, showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
 import { ytService } from '../services/yt.service.js'
 
 import YouTube from 'vue3-youtube'
@@ -172,6 +172,27 @@ export default {
                 console.log('Could not set track youtube id')
             }
         },
+        async likeTrack(trackToSave) {
+            try {
+                await this.$store.dispatch({ type: 'addTrack', trackToSave, stationId: this.user.likedId })
+                if(this.currStation._id !== this.user.likedId) {
+                    showSuccessMsg('Saved to station')
+                } else {
+                    showSuccessMsg('Saved to Your Library')
+                }
+            } catch (err) {
+                console.log(err.message)
+                showErrorMsg('Could not like track')
+            }
+        },
+        async dislikeTrack(trackId) {
+            try {
+                await this.$store.dispatch({ type: 'removeTrack', trackId, stationId: this.user.likedId })
+                showSuccessMsg('Removed from station')
+            } catch (err) {
+                showErrorMsg('Could not dislike track')
+            }
+        },
         getDemoYoutubeId() {
             if (this.idIdx > 3) this.idIdx = 0
             const ids = ['UNZJQw8cr6o', 'nyuo9-OjNNg', 'ic8j13piAhQ', 'EfWmWlW2PvM']
@@ -268,16 +289,8 @@ export default {
             const seconds = parseInt(secondsStr)
             return minutes * 60 + seconds
         },
-        isLiked(trackId) {
+        hasLiked(trackId) {
             return this.likedTracks?.some(track => track.id === trackId)
-        },
-        onAddTrack(track, stationId, ev) {
-            ev.stopPropagation()
-            this.$emit('track-add', track, stationId)
-        },
-        onDislikeTrack(track, ev) {
-            ev.stopPropagation()
-            this.$emit('track-dislike', track)
         },
     },
 
@@ -303,7 +316,13 @@ export default {
         },
         isPlaying() {
             return this.$store.getters.isCurrTrackPlaying
-        }
+        },
+        user() {
+            return this.$store.getters.loggedinUser
+        },
+        likedTracks() {
+            return this.$store.getters.likedTracks
+        },
     },
 }
 

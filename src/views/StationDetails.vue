@@ -38,7 +38,7 @@
                     class="details-like"
                     v-icon="'like'"
                     v-show="!hasLiked && !isOwner"
-                    @click="addStation">
+                    @click="likeStation">
                 </button>
 
                 <button
@@ -88,7 +88,7 @@ export default {
             return this.$store.getters.currStation
         },
         stationOwner() {
-            return this.station.owner.fullname ? this.station.owner.fullname : this.station.owner
+            return this.station.owner.fullname
         },
         hasLiked() {
             const libraryStations = this.$store.getters.libraryStations
@@ -98,13 +98,16 @@ export default {
             return this.station.tracks.length > 0
         },
         isOwner() {
-            return this.station.owner !== 'Tuneify'
+            return this.station.owner._id === this.user._id
         },
         isPlaying() {
             return this.$store.getters.isCurrTrackPlaying
         },
         currTrackIdx() {
             return this.$store.getters.currTrackIdx
+        },
+        user() {
+            return this.$store.getters.loggedinUser
         }
     },
 
@@ -123,11 +126,13 @@ export default {
                 showErrorMsg('Could not set current station')
             }
         },
-        async addStation() {
+        async likeStation(stationId) {
+            // dispatch to user store and push stationId to stations array
+            // then dispatch to store and getbyid to station id
+            // push it to stations array
             try {
                 await this.$store.dispatch({ type: 'saveStation', stationToSave: this.station })
                 showSuccessMsg('Saved to Your Library')
-                this.canAddStation = true
             } catch (err) {
                 showErrorMsg('Could not add station')
             }
@@ -149,9 +154,9 @@ export default {
                 throw new Error('cant get average color')
             }
         },
-        async dislikeTrack(track) {
+        async dislikeTrack(trackId) {
             try {
-                await this.$store.dispatch({ type: 'removeTrack', track, stationId: 'liked101' })
+                await this.$store.dispatch({ type: 'removeTrack', trackId, stationId: this.user.likedId })
                 showSuccessMsg('Removed from Your Library')
             } catch (err) {
                 showErrorMsg('Could not dislike track')
@@ -160,7 +165,7 @@ export default {
         async addTrack(trackToSave, stationId) {
             try {
                 await this.$store.dispatch({ type: 'addTrack', trackToSave, stationId })
-                if(stationId !== 'liked101') {
+                if(stationId !== this.user.likedId) {
                     showSuccessMsg('Saved to station')
                 } else {
                     showSuccessMsg('Saved to Your Library')
@@ -169,9 +174,10 @@ export default {
                 showErrorMsg('Could not add track')
             }
         },
-        async removeTrack(track) {
+        async removeTrack(trackId) {
             try {
-                await this.$store.dispatch({ type: 'removeTrack', track, stationId: this.station._id })
+                await this.$store.dispatch({ type: 'removeTrack', trackId, stationId: this.station._id })
+                showSuccessMsg('Removed from station')
             } catch (err) {
                 showErrorMsg('Could not dislike track')
             }

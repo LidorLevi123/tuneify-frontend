@@ -18,9 +18,9 @@
         <span class="track-album">{{ track.album }}</span>
         <div class="df sb">
             <span class="track-date">{{ formattedDate }}</span>
-            <span v-show="isHovered" v-if="!isLiked(track.id)" @click="onAddTrack(track, 'liked101', $event)" class="btn-like"
+            <span v-show="isHovered" v-if="!isLiked(track.id)" @click="onAddTrack(track, user.likedId, $event)" class="btn-like"
                 v-icon="`smallLikeDis`"></span>
-            <span v-else @click="onDislikeTrack(track, $event)" class="btn-dislike" v-icon="`smallLikeEna`"></span>
+            <span v-else @click="onDislikeTrack(track.id, $event)" class="btn-dislike" v-icon="`smallLikeEna`"></span>
         </div>
         <div class="time-actions">
             <span class="track-time">{{ formattedTime }}</span>
@@ -41,7 +41,7 @@
                             </div>
                         </div>
                     </div>
-                    <div v-else class="dropdown-item" @click="onRemoveTrack(track, $event)">
+                    <div v-else class="dropdown-item" @click="onRemoveTrack(track.id, $event)">
                         <span>Remove from playlist</span>
                     </div>
                 </div>
@@ -110,14 +110,17 @@ export default {
         },
         isStationOwner() {
             const currStation = this.$store.getters.currStation
-            return currStation.owner === undefined ? false : true
+            return currStation.owner.fullname === this.user.fullname
         },
         likedTracks() {
             return this.$store.getters.likedTracks
         },
         createdStations() {
-            return this.$store.getters.libraryStations.filter(station => station._id !== 'liked101')
+            return this.$store.getters.libraryStations.filter(station => station._id !== this.user.likedId)
         },
+        user() {
+            return this.$store.getters.loggedinUser
+        }
     },
 
     methods: {
@@ -130,13 +133,13 @@ export default {
             ev.stopPropagation()
             this.$emit('track-add', track, stationId)
         },
-        onRemoveTrack(track, ev) {
+        onRemoveTrack(trackId, ev) {
             ev.stopPropagation()
-            this.$emit('track-remove', track)
+            this.$emit('track-remove', trackId)
         },
-        onDislikeTrack(track, ev) {
+        onDislikeTrack(trackId, ev) {
             ev.stopPropagation()
-            this.$emit('track-dislike', track)
+            this.$emit('track-dislike', trackId)
         },
         isLiked(trackId) {
             return this.likedTracks?.some(track => track.id === trackId)

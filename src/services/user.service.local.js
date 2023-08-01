@@ -1,4 +1,5 @@
 import { storageService } from './async-storage.service'
+import { stationService } from './station.service.local'
 
 const STORAGE_KEY_LOGGEDIN_USER = 'loggedinUser'
 
@@ -30,11 +31,10 @@ function remove(userId) {
     return storageService.remove('user', userId)
 }
 
-async function update({ _id, likedStations, likedTracks }) {
+async function update({ _id, stationsId }) {
     const user = await storageService.get('user', _id)
 
-    user.likedStations = likedStations
-    user.likedTracks = likedTracks
+    user.stationsId = stationsId
 
     await storageService.put('user', user)
 
@@ -64,9 +64,21 @@ async function login(userCred) {
 async function signup(userCred) {
     const users = await getUsers()
     if(users.some(u => u.username === userCred.username)) return
+
+    const station = stationService.getEmptyStation()
+    station.name = 'Liked Songs'
+    station.imgUrl = 'https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png'
+    const likedSongsStation = await stationService.save(station)
     
     if (!userCred.imgUrl) userCred.imgUrl = 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png'
+    userCred.likedId = likedSongsStation._id
+    userCred.stationIds = []
+    
     const user = await storageService.post('user', userCred)
+
+    likedSongsStation.owner = { _id: user._id, fullname: user.fullname, imgUrl: user.imgUrl }
+    await stationService.save(likedSongsStation)
+
     return saveLocalUser(user)
 }
 
@@ -88,20 +100,24 @@ function saveLocalUser(user) {
         _id: user._id,
         fullname: user.fullname,
         imgUrl: user.imgUrl,
-        stations: user.stations,
-        likedTracks: user.likedTracks
+        stationIds: user.stationIds,
+        likedId: user.likedId
     }
+
     sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(user))
     return user
 }
 
 function getLoggedinUser() {
-    return JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER))
+    const user = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER))
+    return user
 }
 
 // Initial data
 // ;(async ()=>{
     // await userService.signup({fullname: 'Puki Norma', username: 'puki', password:'123',score: 10000, isAdmin: false})
     // await userService.signup({fullname: 'Master Adminov', username: 'admin', password:'123', score: 10000, isAdmin: true})
-    await userService.signup({fullname: 'Muki G', username: 'muki', password:'123', stations: [], likedTracks: []})
+    // setTimeout(()=> {
+    //     userService.signup({fullname: 'Guest', username: 'guest', password:'123' })
+    // },200)
 // })()
