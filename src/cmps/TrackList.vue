@@ -1,6 +1,6 @@
 <template>
     <section class="track-list">
-        <Container dragClass="dragging" >
+
             <div class="list-header track-preview-layout">
                 <span>#</span>
                 <span>Title</span>
@@ -10,15 +10,15 @@
             </div>
             <hr />
             <ul v-if="station?.tracks" class="clean-list">
-                <Draggable v-for="(track, idx) in station.tracks" :key="track.id" :elementData="track" :draggable="true"
-                    @drop="onDrop">
+            <Container orientation="vertical" dragClass="dragging" @drop="onDrop">
+                <Draggable v-for="(track, idx) in station.tracks" :key="track.id">
                     <li @click="onTrackClicked(idx)">
                         <TrackPreview @track-add="onAddTrack" @track-remove="onRemoveTrack" @track-like="onLikeTrack"
                             @track-dislike="onDislikeTrack" :track="track" :trackIdx="idx" />
                     </li>
                 </Draggable>
+            </Container>
             </ul>
-        </Container>
     </section>
 </template>
 
@@ -38,19 +38,33 @@ export default {
         }
     },
     methods: {
-        onDrop({ removedIndex, addedIndex }) {
-            if (removedIndex !== null && addedIndex !== null) {
-                console.log('addedIndex', addedIndex)
-                console.log('removedIndex', removedIndex)
-                const tracksCopy = [...this.station.tracks]
-                const [removedTrack] = tracksCopy.splice(removedIndex, 1)
-                tracksCopy.splice(addedIndex, 0, removedTrack)
-
-                const updatedStation = { ...this.station, tracks: tracksCopy }
-                console.log('updatedStation', updatedStation)
-                this.updateStation(updatedStation)
-            }
+        onDrop(dropResult) {
+            console.log('dropResult', dropResult)
+            this.items = this.applyDrag(this.station.tracks, dropResult)
         },
+
+        applyDrag(arr, dragResult) {
+            console.log('arr', arr)
+            console.log('dragResult', dragResult)
+        const { removedIndex, addedIndex, payload } = dragResult
+        if (removedIndex === null && addedIndex === null) return arr
+
+        const result = [...arr]
+        let itemToAdd = payload
+
+        if (removedIndex !== null) {
+        itemToAdd = result.splice(removedIndex, 1)[0]
+        }
+
+        if (addedIndex !== null) {
+            result.splice(addedIndex, 0, itemToAdd)
+        }
+            const updatedStation = { ...this.station, tracks: result }
+            this.updateStation(updatedStation)
+
+            return result
+        },
+
         async updateStation(updatedStation) {
             try {
                 await this.$store.dispatch({ type: 'saveStation', stationToSave: updatedStation })
@@ -58,24 +72,6 @@ export default {
             } catch (err) {
                 console.log(err.message)
             }
-        },
-        shouldAcceptDrop(sourceContainerOptions, payload) {
-            return sourceContainerOptions.groupName === "track-list";
-        },
-        onDragStart(dragResult) {
-            console.log("Drag started!", dragResult)
-        },
-        onDragEnd(dragResult) {
-            console.log("Drag ended!", dragResult)
-        },
-        onDragEnter(dragResult) {
-            console.log("Drag ended!", dragResult)
-        },
-        getChildPayload (index) {
-            console.log('index', index)
-        return {
-            // generate custom payload data here
-         }
         },
 
         onTrackClicked(trackIdx) {
@@ -104,5 +100,7 @@ export default {
     name: 'TrackList',
 }
 </script>
+
+
 
 
