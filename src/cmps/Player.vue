@@ -1,6 +1,6 @@
 <template>
     <YouTube ref="youtubePlayer" v-if="currTrack?.youtubeId" :src="currTrack.youtubeId" @state-change="onStateChange"
-        @ready="playVideo" style="display: none;"/>
+        @ready="playVideo" style="display: none;" />
 
     <section class="main-player-container">
         <section class="track-info-container">
@@ -12,6 +12,8 @@
                 <div v-if="currTrack" class="track-artist">{{ currTrack.artists?.length > 0 ? currTrack.artists[0] : '' }}
                 </div>
             </section>
+            <span v-icon="`smallLikeDis`" @click="onAddTrack(track, 'liked101', $event)" class="btn-like"></span>
+            <span v-icon="`smallLikeEna`" @click="onDislikeTrack(track, $event)"></span>
         </section>
 
         <section class="player-mid-container">
@@ -265,6 +267,17 @@ export default {
             const minutes = parseInt(minutesStr)
             const seconds = parseInt(secondsStr)
             return minutes * 60 + seconds
+        },
+        isLiked(trackId) {
+            return this.likedTracks?.some(track => track.id === trackId)
+        },
+        onAddTrack(track, stationId, ev) {
+            ev.stopPropagation()
+            this.$emit('track-add', track, stationId)
+        },
+        onDislikeTrack(track, ev) {
+            ev.stopPropagation()
+            this.$emit('track-dislike', track)
         },
     },
 
