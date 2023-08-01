@@ -13,8 +13,6 @@ export default {
   async created() {
 
     try {
-      const userCred = { fullname: 'Guest', username: 'guest', password: '123' }
-      await this.$store.dispatch({ type: 'signup', userCred })
       await this.$store.dispatch({ type: 'getStationsForHome' })
       await this.$store.dispatch({ type: 'loadStations' })
       await this.$store.dispatch({ type: 'loadUsers' })

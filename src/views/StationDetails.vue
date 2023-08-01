@@ -12,8 +12,8 @@
                     <div>
                         <img src="favicon.svg" alt="">
                         <span class="logo">{{ stationOwner }}</span>
-                        <span class="songs-num" v-if="station.tracks">&bull; {{ station.tracks?.length }} songs,</span>
-                        <span class="songs-time" v-if="formttedTime">about {{ formttedTime }} hours</span>
+                        <span class="songs-num" v-if="station.tracks">&bull; {{ station.tracks?.length }} songs</span>
+                        <span class="songs-time" v-if="formttedTime">, about {{ formttedTime }} hours</span>
                     </div>
                 </section>
             </section>
@@ -78,7 +78,7 @@ export default {
             return this.$store.getters.currStation
         },
         stationOwner() {
-            return this.station.owner.fullname
+            return this.station.owner?.fullname
         },
         hasLiked() {
             const libraryStations = this.$store.getters.libraryStations

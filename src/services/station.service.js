@@ -101,7 +101,6 @@ async function getStationsForHome() {
 
 function getEmptyStation() {
     return {
-        _id: '',
         name: '',
         description: '',
         imgUrl: '',

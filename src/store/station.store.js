@@ -14,7 +14,7 @@ export const stationStore = {
             const user = userService.getLoggedinUser()
             
             return stations.filter(station => 
-                station.owner._id === user._id
+                station.owner._id === user?._id
             ) 
         },
         stationsForHome({ stationsForHome }) { return stationsForHome },
@@ -22,7 +22,7 @@ export const stationStore = {
         currTrackIdx({ currTrackIdx }) { return currTrackIdx },
         isCurrTrackPlaying({ isCurrTrackPlaying }) { return isCurrTrackPlaying },
         likedTracks({ stations }) {
-            const likedSongsStation = stations?.find(station => station._id === userService.getLoggedinUser().likedId)
+            const likedSongsStation = stations?.find(station => station._id === userService.getLoggedinUser()?.likedId)
             return likedSongsStation?.tracks
         }
     },
