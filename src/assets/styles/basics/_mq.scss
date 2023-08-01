@@ -1,0 +1,22 @@
+/* SMALL */
+@media (min-width: 640px) {
+
+    .vol-container {
+        display: none;
+    }
+
+    .nav-container {
+        display: none;
+    }
+
+}
+
+/* MEDIUM */
+@media (min-width: 800px) {
+    .nav-container {
+        display: block;
+    }
+}
+
+/* LARGE */
+@media (min-width: 1020px) {}

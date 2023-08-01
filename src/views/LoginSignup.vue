@@ -2,8 +2,10 @@
   <div class="login-view">
     <header>
       <section class="login-logo">
-        <img src="../../public/favicon.svg" alt="">
-        <h2>Tuniefy</h2>
+        <RouterLink class="df" to="/">
+          <img src="../../public/favicon.svg" alt="">
+          <h2>Tuniefy</h2>
+        </RouterLink>
       </section>
     </header>
     <section class="form-container">

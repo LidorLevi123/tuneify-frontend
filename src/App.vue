@@ -17,6 +17,32 @@ export default {
     this.$store.dispatch({ type: 'loadStations' })
     this.$store.dispatch({ type: 'loadUsers' })
   },
+  computed: {
+    currTrackIdx() {
+      return this.$store.getters.currTrackIdx
+    },
+    currStation() {
+      return this.$store.getters.currStation
+    },
+    currTrack() {
+      return this.currStation?.tracks[this.currTrackIdx]
+    },
+  },
+
+  watch: {
+    currTrack: {
+      immediate: true,
+      handler(newTrack, oldTrack) {
+        if (newTrack) {
+          console.log('Current Track:', newTrack)
+          document.title = `${newTrack.title} • ${newTrack.artists[0]}`
+        } else {
+          console.log('No track is currently playing.')
+          document.title = 'Tuneify'
+        }
+      },
+    }
+  },
 
   components: {
     UserMsg,
