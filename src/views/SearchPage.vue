@@ -10,6 +10,7 @@
 <script>
 import CategoryList from '../cmps/CategoryList.vue'
 import { utilService } from '../services/util.service.js'
+import historyTracker from '../services/history.service'
 
 // get categories to here please
 
@@ -22,6 +23,9 @@ export default {
         txt: '',
       }
     };
+  },
+  created() {
+    historyTracker.push(this.$route.fullPath)
   },
   methods: {
     onSetFilterBy() {

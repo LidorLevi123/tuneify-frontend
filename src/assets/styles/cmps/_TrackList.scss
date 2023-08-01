@@ -2,7 +2,6 @@
     margin-inline: 1.5rem;
     max-width: 119rem;
 
-
     span {
         color: $clr3;
         font-weight: 400;
@@ -10,11 +9,22 @@
 
     hr {
         border: 1px solid #343540;
+
+        @include for-mobile-layout {
+            display: none;
+        }
     }
 
     .list-header {
         // position: sticky;
+        grid-template-columns: [index] 1rem [first] 6fr [var1] 4fr [var2] 3fr [last] minmax(7.5rem, 1fr);
         top: 4rem;
         margin-block-start: 0.5em;
+
+        @include for-mobile-layout {
+            display: none;
+        }
     }
+
+
 }

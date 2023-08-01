@@ -1,14 +1,15 @@
 <template>
     <section class="track-list">
-            <div class="list-header track-preview-layout">
-                <span>#</span>
-                <span>Title</span>
-                <span>Album</span>
-                <span>Date added</span>
-                <span v-icon="'clock'"></span>
-            </div>
-            <hr />
-            <ul v-if="station?.tracks" class="clean-list">
+
+        <div class="list-header track-preview-layout">
+            <span>#</span>
+            <span>Title</span>
+            <span class="mq">Album</span>
+            <span class="mq">Date added</span>
+            <span v-icon="'clock'"></span>
+        </div>
+        <hr />
+        <ul v-if="station?.tracks" class="clean-list">
             <Container orientation="vertical" dragClass="dragging" @drop="onDrop">
                 <Draggable v-for="(track, idx) in station.tracks" :key="track.id">
                     <li @click="onTrackClicked(idx)">
@@ -17,7 +18,7 @@
                     </li>
                 </Draggable>
             </Container>
-            </ul>
+        </ul>
     </section>
 </template>
 
@@ -45,19 +46,19 @@ export default {
         applyDrag(arr, dragResult) {
             console.log('arr', arr)
             console.log('dragResult', dragResult)
-        const { removedIndex, addedIndex, payload } = dragResult
-        if (removedIndex === null && addedIndex === null) return arr
+            const { removedIndex, addedIndex, payload } = dragResult
+            if (removedIndex === null && addedIndex === null) return arr
 
-        const result = [...arr]
-        let itemToAdd = payload
+            const result = [...arr]
+            let itemToAdd = payload
 
-        if (removedIndex !== null) {
-        itemToAdd = result.splice(removedIndex, 1)[0]
-        }
+            if (removedIndex !== null) {
+                itemToAdd = result.splice(removedIndex, 1)[0]
+            }
 
-        if (addedIndex !== null) {
-            result.splice(addedIndex, 0, itemToAdd)
-        }
+            if (addedIndex !== null) {
+                result.splice(addedIndex, 0, itemToAdd)
+            }
             const updatedStation = { ...this.station, tracks: result }
             this.updateStation(updatedStation)
 

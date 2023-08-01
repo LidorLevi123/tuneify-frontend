@@ -1,6 +1,5 @@
-import { stationService } from '../services/station.service.local'
-import { userService } from '../services/user.service.local'
-// import { stationService } from '../services/station.service'
+import { userService } from '../services/user.service'
+import { stationService } from '../services/station.service'
 
 export const stationStore = {
     state: {

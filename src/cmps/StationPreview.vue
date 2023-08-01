@@ -3,7 +3,7 @@
         :class="{ 'main-preview-container': !horizontalDesign, 'main-preview-container-hor': horizontalDesign }">
         <div class="prev-img-container">
             <img :src="`${station.imgUrl}`" alt="">
-            <button class="play-btn" v-icon="'play'"></button>
+            <button class="play-btn" v-icon="'mPlay'"></button>
         </div>
 
         <h4>{{ station.name }}</h4>

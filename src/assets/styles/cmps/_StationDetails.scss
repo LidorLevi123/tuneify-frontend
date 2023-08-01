@@ -7,6 +7,10 @@
     .station-info {
         img {
             height: 1.5rem;
+
+            @include for-mobile-layout {
+                margin-block-start: 1rem;
+            }
         }
 
         div {
@@ -28,6 +32,10 @@
             font-weight: 900;
             font-size: 6rem;
             color: $clr2;
+
+            @include for-mobile-layout {
+                font-size: 2rem;
+            }
 
         }
 
@@ -72,6 +80,11 @@
 
 
     & .img-photo {
+
+        @include for-mobile-layout {
+            margin-block-start: 1.5rem;
+        }
+
         align-self: end;
         display: flex;
         gap: 1.5rem;
@@ -84,6 +97,10 @@
     .top-gradient {
         height: 24.92rem;
         display: flex;
+
+        @include for-mobile-layout {
+            height: fit-content;
+        }
     }
 
     & .details-player {

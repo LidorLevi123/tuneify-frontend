@@ -3,13 +3,15 @@
         <header>
             <h1>{{ categoryName }}</h1>
         </header>
-        <StationList v-if="categoryStations" :stations="categoryStations"/>
+        <StationList v-if="categoryStations" :stations="categoryStations" />
     </section>
 </template>
-    
+
 <script>
-import { stationService } from '../services/station.service.local';
+// import { stationService } from '../services/station.service.local';
+import { stationService } from '../services/station.service';
 import StationList from '../cmps/StationList.vue'
+import historyTracker from '../services/history.service';
 
 export default {
 
@@ -30,6 +32,7 @@ export default {
 
     created() {
         this.loadCategoryStations()
+        historyTracker.push(this.$route.fullPath)
     },
 
     methods: {
@@ -50,4 +53,3 @@ export default {
     name: 'CategoryPage',
 }
 </script>
-    

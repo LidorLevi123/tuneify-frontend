@@ -1,7 +1,7 @@
 import { httpService } from './http.service.js'
 import { userService } from './user.service.js'
 
-const BASE_URL = '/api/station/'
+const BASE_URL = 'station/'
 
 export const stationService = {
     query,
@@ -12,14 +12,16 @@ export const stationService = {
     saveTrack,
     removeTrack,
     getCategoryStations,
-    getStationsForHome
+    getStationsForHome,
     // addStationMsg
 }
 
 window.cs = stationService // for console usage
 
 async function query(filterBy = {}) {
+
     const stations = await httpService.get(BASE_URL, filterBy)
+    console.log('stations after get', stations)
     return stations
 }
 

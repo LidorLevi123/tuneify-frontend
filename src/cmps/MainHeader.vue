@@ -1,8 +1,8 @@
 <template>
     <section class="main-header" :style="{ backgroundColor: this.scrollPosition > 50 ? '#121212' : 'transparent' }">
-        <button v-icon="`navBack`" class="nav-btn" title="Go back"></button>
-        <button v-icon="`navNext`" class="nav-btn" title="Go forward"></button>
-        <button v-icon="'play'" v-if="showPlay" class="play-btn-header" @click="playStation(currTrackIdx)"
+        <button @click="goBack" v-icon="`navBack`" class="nav-btn" title="Go back"></button>
+        <button @click="goNext" v-icon="`navNext`" class="nav-btn" title="Go forward"></button>
+        <button v-icon="'mPlay'" v-if="showPlay" class="play-btn-header" @click="playStation(currTrackIdx)"
             :style="{ opacity: this.scrollPosition > 50 ? '1' : '0' }">
         </button>
         <button v-icon="'pause'" v-if="showPause" class="play-btn-header" @click="pauseStation"
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import historyTracker from '../services/history.service'
 import { eventBus } from '../services/event-bus.service'
 export default {
     name: 'SearchPage',
@@ -62,6 +63,18 @@ export default {
         },
         pauseStation() {
             eventBus.emit('trackPaused')
+        },
+        goBack() {
+            const previousPath = historyTracker.back()
+            if (previousPath) {
+                this.$router.push(previousPath)
+            }
+        },
+        goNext() {
+            const nextPath = historyTracker.next()
+            if (nextPath) {
+                this.$router.push(nextPath)
+            }
         },
 
     },
