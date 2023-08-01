@@ -7,12 +7,12 @@
 <script>
 import UserMsg from './cmps/UserMsg.vue'
 import BackDrop from './cmps/BackDrop.vue'
-import { stationService } from './services/station.service.local'
+// import { stationService } from './services/station.service.local'
+import { stationService } from './services/station.service'
 
 export default {
 
   async created() {
-    await stationService.createLikedSongs()
     this.$store.dispatch({ type: 'getStationsForHome' })
     this.$store.dispatch({ type: 'loadStations' })
     this.$store.dispatch({ type: 'loadUsers' })

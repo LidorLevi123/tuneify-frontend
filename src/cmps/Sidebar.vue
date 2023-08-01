@@ -13,7 +13,8 @@
 
 <script>
 import { showSuccessMsg } from '../services/event-bus.service';
-import { stationService } from '../services/station.service.local';
+// import { stationService } from '../services/station.service.local';
+import { stationService } from '../services/station.service'
 import LibraryStationList from './LibraryStationList.vue';
 
 export default {

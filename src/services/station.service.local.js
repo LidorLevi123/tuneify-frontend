@@ -75,22 +75,22 @@ async function getCategoryStations(categoryId) {
 }
 
 async function getStationsForHome() {
-    const categories = [ 
-        { id: '0JQ5DAqbMKFEC4WFtoNRpw', name: 'Pop'},
-        { id: '0JQ5DAqbMKFAXlCG6QvYQ4', name: 'Workout'},
-        { id: '0JQ5DAqbMKFIVNxQgRNSg0', name: 'Decades'},
-        { id: '0JQ5DAqbMKFPrEiAOxgac3', name: 'Classical'},
-        { id: '0JQ5DAqbMKFRKBHIxJ5hMm', name: 'Tastemakers'},
-        { id: '0JQ5DAqbMKFLVaM30PMBm4', name: 'Summer'},
-        { id: '0JQ5DAqbMKFCfObibaOZbv', name: 'Gaming'},
-        { id: '0JQ5DAqbMKFAQy4HL4XU2D', name: 'Travel'},
+    const categories = [
+        { id: '0JQ5DAqbMKFEC4WFtoNRpw', name: 'Pop' },
+        { id: '0JQ5DAqbMKFAXlCG6QvYQ4', name: 'Workout' },
+        { id: '0JQ5DAqbMKFIVNxQgRNSg0', name: 'Decades' },
+        { id: '0JQ5DAqbMKFPrEiAOxgac3', name: 'Classical' },
+        { id: '0JQ5DAqbMKFRKBHIxJ5hMm', name: 'Tastemakers' },
+        { id: '0JQ5DAqbMKFLVaM30PMBm4', name: 'Summer' },
+        { id: '0JQ5DAqbMKFCfObibaOZbv', name: 'Gaming' },
+        { id: '0JQ5DAqbMKFAQy4HL4XU2D', name: 'Travel' },
     ]
 
     const res = []
 
     for (let i = 0; i < categories.length; i++) {
         let stations = await spotifyService.getSpotifyItems('categoryStations', categories[i].id)
-        stations = stations.map(station => ({ ...station, category: categories[i].name}))
+        stations = stations.map(station => ({ ...station, category: categories[i].name }))
         res.push(...stations)
     }
     return res
@@ -119,7 +119,7 @@ async function createLikedSongs() {
         station.name = 'Liked Songs'
         station.imgUrl = 'https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png'
         station.owner = userService.getLoggedinUser()
-        
+
         await storageService.post(STORAGE_KEY, station)
     }
 }

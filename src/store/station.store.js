@@ -1,5 +1,5 @@
-import { stationService } from '../services/station.service.local'
-// import { stationService } from '../services/station.service'
+// import { stationService } from '../services/station.service.local'
+import { stationService } from '../services/station.service'
 
 export const stationStore = {
     state: {
@@ -10,7 +10,9 @@ export const stationStore = {
         isCurrTrackPlaying: null,
     },
     getters: {
-        libraryStations({ stations }) { return stations.filter(station => station.owner !== 'Tuneify') },
+        libraryStations({ stations }) {
+            return stations
+         },
         stationsForHome({ stationsForHome }) { return stationsForHome },
         currStation({ currStation }) { return currStation },
         currTrackIdx({ currTrackIdx }) { return currTrackIdx },

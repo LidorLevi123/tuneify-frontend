@@ -23,7 +23,8 @@
 
 <script>
 import { showErrorMsg } from '../services/event-bus.service'
-import { stationService } from '../services/station.service.local'
+// import { stationService } from '../services/station.service.local'
+import { stationService } from '../services/station.service'
 
 export default {
     data() {
