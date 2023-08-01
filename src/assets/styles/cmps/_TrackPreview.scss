@@ -51,6 +51,13 @@
         align-items: center;
     }
 
+    .track-date,
+    .track-album {
+        @include for-mobile-layout {
+            display: none;
+        }
+    }
+
     .track-time,
     .track-artist,
     .track-date,

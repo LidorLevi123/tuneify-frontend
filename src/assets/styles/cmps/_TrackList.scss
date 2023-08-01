@@ -17,4 +17,10 @@
         top: 4rem;
         margin-block-start: 0.5em;
     }
+
+    .mq {
+        @include for-mobile-layout {
+            display: none;
+        }
+    }
 }

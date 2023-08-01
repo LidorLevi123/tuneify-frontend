@@ -1,4 +1,8 @@
 .nav-container {
+    @include for-mobile-layout {
+        display: none;
+    }
+
     display: grid;
     grid-template-rows: auto 1fr;
     overflow-y: hidden;

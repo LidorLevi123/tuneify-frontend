@@ -5,7 +5,7 @@
 
 // // Basics
 @import "basics/helpers";
-@import "basics/layout";
+// @import "basics/layout";
 // @import "basics/base";
 // @import "basics/links";
 // @import "basics/forms";
@@ -20,11 +20,11 @@
 // BASICS
 @import 'basics/Base';
 @import 'basics/Layout';
-@import 'basics/mq';
 
 // SETUP
 @import 'setup/variables';
 @import 'setup/typography';
+@import 'setup/mixins';
 
 // COMPONENTS
 @import 'cmps/BackDrop';
