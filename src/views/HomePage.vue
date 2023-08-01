@@ -13,9 +13,11 @@
 
 <script>
 import StationList from '../cmps/StationList.vue'
-
+import historyTracker from '../services/history.service'
 export default {
-
+  created() {
+    historyTracker.push(this.$route.fullPath);
+  },
   computed: {
     stations() {
       return this.$store.getters.stationsForHome

@@ -20,32 +20,17 @@
         </div>
         <div class="bottom-gradient">
             <section class="details-player">
-                <button v-if="!isPlaying"
-                    class="details-play"
-                    v-icon="'detailsPlay'"
-                    v-show="hasTracks"
+                <button v-if="!isPlaying" class="details-play" v-icon="'detailsPlay'" v-show="hasTracks"
                     @click="clickTrack(currTrackIdx)">
                 </button>
 
-                <button v-else
-                    class="details-play"
-                    v-icon="'detailsPause'"
-                    v-show="hasTracks"
-                    @click="pauseTrack">
+                <button v-else class="details-play" v-icon="'detailsPause'" v-show="hasTracks" @click="pauseTrack">
                 </button>
 
-                <button
-                    class="details-like"
-                    v-icon="'like'"
-                    v-show="!hasLiked && !isOwner"
-                    @click="addStation">
+                <button class="details-like" v-icon="'like'" v-show="!hasLiked && !isOwner" @click="addStation">
                 </button>
 
-                <button
-                    class="details-unlike"
-                    v-icon="'unlike'"
-                    v-show="hasLiked && !isOwner"
-                    @click="removeStation">
+                <button class="details-unlike" v-icon="'unlike'" v-show="hasLiked && !isOwner" @click="removeStation">
                 </button>
                 <!-- <button v-icon="'moreOptions'" class="btn details-edit"></button> -->
             </section>
@@ -60,6 +45,7 @@
 </template>
 
 <script>
+import historyTracker from '../services/history.service'
 import { FastAverageColor } from 'fast-average-color'
 const fac = new FastAverageColor()
 import { utilService } from '../services/util.service'
@@ -110,6 +96,7 @@ export default {
 
     created() {
         this.loadStation()
+        historyTracker.push(this.$route.fullPath)
     },
 
     methods: {
@@ -160,7 +147,7 @@ export default {
         async addTrack(trackToSave, stationId) {
             try {
                 await this.$store.dispatch({ type: 'addTrack', trackToSave, stationId })
-                if(stationId !== 'liked101') {
+                if (stationId !== 'liked101') {
                     showSuccessMsg('Saved to station')
                 } else {
                     showSuccessMsg('Saved to Your Library')
