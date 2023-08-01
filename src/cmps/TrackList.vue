@@ -80,14 +80,14 @@ export default {
         onAddTrack(track, stationId) {
             this.$emit('track-add', track, stationId)
         },
-        onRemoveTrack(track) {
-            this.$emit('track-remove', track)
+        onRemoveTrack(trackId) {
+            this.$emit('track-remove', trackId)
         },
         onLikeTrack(track) {
             this.$emit('track-like', track)
         },
-        onDislikeTrack(track) {
-            this.$emit('track-dislike', track)
+        onDislikeTrack(trackId) {
+            this.$emit('track-dislike', trackId)
         },
     },
 

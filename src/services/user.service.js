@@ -15,6 +15,11 @@ export const userService = {
     changeScore
 }
 
+;(async () => {
+    await signup({ fullname: 'Guest', username: 'guest', password: '123' })
+    // await login({ username: 'guest', password: '123' })
+})()
+
 window.userService = userService
 
 function getUsers() {
@@ -32,7 +37,7 @@ function remove(userId) {
 
 async function update(user) {
     user = await httpService.put(`user/${user._id}`, user)
-  
+
     // Handle case in which admin updates other user's details
     if (getLoggedinUser()._id === user._id) saveLocalUser(user)
     return user
@@ -41,21 +46,22 @@ async function update(user) {
 async function login(userCred) {
     const user = await httpService.post('auth/login', userCred)
     if (user) {
-        socketService.login(user._id)
+        // socketService.login(user._id)
         return saveLocalUser(user)
     }
 }
 
 async function signup(userCred) {
     if (!userCred.imgUrl) userCred.imgUrl = 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png'
+
     const user = await httpService.post('auth/signup', userCred)
-    socketService.login(user._id)
+    // socketService.login(user._id)
     return saveLocalUser(user)
 }
 
 async function logout() {
     sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER)
-    socketService.logout()
+    // socketService.logout()
     return await httpService.post('auth/logout')
 }
 
@@ -69,7 +75,13 @@ async function changeScore(by) {
 
 
 function saveLocalUser(user) {
-    user = {_id: user._id, fullname: user.fullname, imgUrl: user.imgUrl, score: user.score}
+    user = {
+        _id: user._id,
+        fullname: user.fullname,
+        imgUrl: user.imgUrl,
+        stationIds: user.stationIds,
+        likedId: user.likedId
+    }
     sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(user))
     return user
 }

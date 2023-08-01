@@ -7,15 +7,18 @@
 <script>
 import UserMsg from './cmps/UserMsg.vue'
 import BackDrop from './cmps/BackDrop.vue'
-import { stationService } from './services/station.service.local'
 
 export default {
 
   async created() {
-    await stationService.createLikedSongs()
-    this.$store.dispatch({ type: 'getStationsForHome' })
-    this.$store.dispatch({ type: 'loadStations' })
-    this.$store.dispatch({ type: 'loadUsers' })
+
+    try {
+      await this.$store.dispatch({ type: 'getStationsForHome' })
+      await this.$store.dispatch({ type: 'loadStations' })
+      await this.$store.dispatch({ type: 'loadUsers' })
+    } catch (err) {
+      console.log('Something went wrong at App', err.message)
+    }
   },
   computed: {
     currTrackIdx() {

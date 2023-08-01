@@ -126,9 +126,16 @@
 
         & .details-like,
         .details-unlike {
-            border: none;
             cursor: pointer;
+            border: none;
             background-color: transparent;
+        }
+
+        .details-like:hover {
+            path {
+                fill: $clr2;
+            }
+            scale: 104%;
         }
 
     }

@@ -1,4 +1,4 @@
-import { userService } from '../services/user.service.local'
+import { userService } from '../services/user.service'
 // import { userService } from '../services/user.service'
 
 export const userStore = {
@@ -53,6 +53,7 @@ export const userStore = {
         async signup({ commit }, { userCred }) {
             try {
                 const user = await userService.signup(userCred)
+                if(!user) return
                 commit({ type: 'setLoggedinUser', user })
                 return user
             } catch (err) {

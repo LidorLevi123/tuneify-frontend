@@ -6,9 +6,10 @@
         <StationList v-if="categoryStations" :stations="categoryStations" />
     </section>
 </template>
-    
+
 <script>
-import { stationService } from '../services/station.service.local';
+// import { stationService } from '../services/station.service.local';
+import { stationService } from '../services/station.service';
 import StationList from '../cmps/StationList.vue'
 import historyTracker from '../services/history.service';
 
@@ -52,4 +53,3 @@ export default {
     name: 'CategoryPage',
 }
 </script>
-    

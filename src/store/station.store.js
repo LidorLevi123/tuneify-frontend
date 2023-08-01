@@ -1,5 +1,5 @@
-import { stationService } from '../services/station.service.local'
-// import { stationService } from '../services/station.service'
+import { userService } from '../services/user.service'
+import { stationService } from '../services/station.service'
 
 export const stationStore = {
     state: {
@@ -10,13 +10,19 @@ export const stationStore = {
         isCurrTrackPlaying: null,
     },
     getters: {
-        libraryStations({ stations }) { return stations.filter(station => station.owner !== 'Tuneify') },
+        libraryStations({ stations }) { 
+            const user = userService.getLoggedinUser()
+            
+            return stations.filter(station => 
+                station.owner._id === user?._id
+            ) 
+        },
         stationsForHome({ stationsForHome }) { return stationsForHome },
         currStation({ currStation }) { return currStation },
         currTrackIdx({ currTrackIdx }) { return currTrackIdx },
         isCurrTrackPlaying({ isCurrTrackPlaying }) { return isCurrTrackPlaying },
         likedTracks({ stations }) {
-            const likedSongsStation = stations?.find(station => station._id === 'liked101')
+            const likedSongsStation = stations?.find(station => station._id === userService.getLoggedinUser()?.likedId)
             return likedSongsStation?.tracks
         }
     },
@@ -134,14 +140,14 @@ export const stationStore = {
                 throw new Error('Could not add track')
             }
         },
-        async removeTrack({ commit, state }, { track, stationId }) {
+        async removeTrack({ commit, state }, { trackId, stationId }) {
             const station = state.stations.find(station => station._id === stationId)
-            const isTrackExist = station.tracks.some(currTrack => currTrack.id === track.id)
+            const isTrackExist = station.tracks.some(currTrack => currTrack.id === trackId)
             if (!isTrackExist) return
 
             try {
-                await stationService.removeTrack(track, stationId)
-                commit({ type: 'removeTrack', trackId: track.id, stationId })
+                await stationService.removeTrack(trackId, stationId)
+                commit({ type: 'removeTrack', trackId, stationId })
             } catch (err) {
                 console.log(err.message)
                 throw new Error('Could not remove track')

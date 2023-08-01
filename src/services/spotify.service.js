@@ -82,7 +82,7 @@ async function _cleanStationData(data) {
         name: data.name,
         imgUrl: data.images[0].url,
         description: data.description,
-        owner: 'Tuneify',
+        owner: { fullname: 'Tuneify' } ,
         tracks: await getSpotifyItems('tracks', data.id),
     }
     return station

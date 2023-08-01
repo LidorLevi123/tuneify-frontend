@@ -3,7 +3,7 @@
         <ul class="clean-list">
             <li @click="goToDetails(station._id)" v-for="station in libraryStations" :key="station.id">
                 <LibraryStationPreview :station="station" />
-                <button v-if="station._id !== 'liked101'" @click="removeStation(station._id, $event)">
+                <button v-if="station._id !== user?.likedId" @click="removeStation(station._id, $event)">
                     ❌
                 </button>
             </li>
@@ -30,6 +30,9 @@ export default {
         currStation() {
             return this.$store.getters.currStation
         },
+        user() {
+            return this.$store.getters.loggedinUser
+        }
     },
 
     methods: {

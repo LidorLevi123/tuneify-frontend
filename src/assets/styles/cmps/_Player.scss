@@ -72,6 +72,23 @@
                 }
             }
 
+            .repeat-playlist, .repeat-song {
+                position: relative;
+                    &::after {
+                        content: "•";
+                        position: absolute;
+                        bottom: -8px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        color: $clr9;
+                        font-size: 1rem;
+
+                    &:hover {
+                        fill: lighten($clr9, 10%);
+                    }
+                }
+            }
+
             .repeat-playlist path {
                 fill: $clr9;
             }
@@ -82,6 +99,24 @@
 
             .enabled path {
                 fill: $clr9;
+            }
+            .enabled .svg-fill:hover, .repeat-playlist .svg-fill:hover, .repeat-song .svg-fill:hover {
+                path {
+                    fill: lighten($clr9, 10%);
+                }
+            }
+
+            .enabled {
+                position: relative;
+                    &::after {
+                        content: "•";
+                        position: absolute;
+                        bottom: -16px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        color: $clr9;
+                        font-size: 1rem;
+                }
             }
         }
 

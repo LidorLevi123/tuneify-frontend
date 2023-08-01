@@ -33,6 +33,10 @@ export default {
         }
     },
 
+    created() {
+        this.loadStationToEdit()
+    },
+
     methods: {
         async loadStationToEdit() {
             try {

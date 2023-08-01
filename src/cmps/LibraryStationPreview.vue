@@ -18,11 +18,11 @@ export default {
         stationName() {
             return this.station.name || `My Playlist`
         },
-        loggedinUser() {
+        user() {
             return this.$store.getters.loggedinUser
         },
         stationBelonging() {
-            return this.station.owner === 'Tuneify' ? this.station.owner : this.loggedinUser.fullname
+            return this.station.owner === 'Tuneify' ? this.station.owner : this.user?.fullname
         }
     },
 
