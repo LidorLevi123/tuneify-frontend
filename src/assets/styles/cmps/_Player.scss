@@ -1,6 +1,11 @@
 .main-player-container {
     display: grid;
     grid-template-columns: 2fr 2.36fr 2fr;
+
+    @include for-mobile-layout {
+        grid-template-columns: 1fr;
+    }
+
     align-items: center;
     grid-column: 1 / -1;
     width: 100%;
@@ -55,6 +60,7 @@
 
 
             }
+
             .repeat,
             .shuffle,
             .play,
@@ -101,6 +107,10 @@
         margin-inline-end: 0.4rem;
         align-items: center;
 
+        @include for-mobile-layout {
+            display: none;
+        }
+
         .vol-slider {
             width: 5.8125rem;
         }
@@ -110,6 +120,7 @@
                 display: flex;
                 align-items: center;
             }
+
             &:hover~.vol-slider {
                 background-color: $clr9;
             }
@@ -125,6 +136,10 @@
         gap: 1rem;
         padding-inline-start: 0.5rem;
         align-items: center;
+
+        @include for-mobile-layout {
+            display: none;
+        }
 
         .img-container {
             display: flex;
@@ -152,13 +167,13 @@
         }
 
         .btn-like {
-                display: flex;
-                align-items: center;
+            display: flex;
+            align-items: center;
         }
 
         .btn-dislike {
-                display: flex;
-                align-items: center;
+            display: flex;
+            align-items: center;
         }
     }
 }
