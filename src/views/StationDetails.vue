@@ -21,27 +21,27 @@
         <div class="bottom-gradient">
             <section class="details-player">
                 <button v-if="!isPlaying"
-                    class="details-play" 
-                    v-icon="'detailsPlay'" 
+                    class="details-play"
+                    v-icon="'detailsPlay'"
                     v-show="hasTracks"
-                    @click="clickTrack(0)">
+                    @click="clickTrack(currTrackIdx)">
                 </button>
 
                 <button v-else
-                    class="details-play" 
-                    v-icon="'detailsPause'" 
+                    class="details-play"
+                    v-icon="'detailsPause'"
                     v-show="hasTracks"
                     @click="pauseTrack">
                 </button>
 
-                <button 
+                <button
                     class="details-like"
-                    v-icon="'like'" 
-                    v-show="!hasLiked && !isOwner" 
+                    v-icon="'like'"
+                    v-show="!hasLiked && !isOwner"
                     @click="addStation">
                 </button>
 
-                <button 
+                <button
                     class="details-unlike"
                     v-icon="'unlike'"
                     v-show="hasLiked && !isOwner"
@@ -102,6 +102,9 @@ export default {
         },
         isPlaying() {
             return this.$store.getters.isCurrTrackPlaying
+        },
+        currTrackIdx() {
+            return this.$store.getters.currTrackIdx
         }
     },
 
@@ -113,6 +116,7 @@ export default {
         async loadStation() {
             try {
                 await this.$store.dispatch({ type: 'setCurrStation', stationId: this.$route.params.stationId })
+                this.$store.commit({ type: 'setCurrTrackIdx', trackIdx: 0 })
                 this.getAvgImgClr()
                 this.setTracksTotalDuration()
             } catch (err) {
@@ -191,6 +195,9 @@ export default {
             this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
             eventBus.emit('trackClicked')
         },
+        pauseTrack() {
+            eventBus.emit('trackPaused')
+        }
     },
 
     watch: {
