@@ -6,16 +6,18 @@
     </div>
   </section>
 </template>
-  
+
 <script>
-import CategoryList from '../cmps/CategoryList.vue';
-import categoriesJson from '../data/categories.json' assert {type: 'json'};
+import CategoryList from '../cmps/CategoryList.vue'
+import { utilService } from '../services/util.service.js'
+
+// get categories to here please
 
 export default {
   name: 'SearchPage',
   data() {
     return {
-      categories: categoriesJson,
+      categories: utilService.getCategoriesJson(),
       filterBy: {
         txt: '',
       }
@@ -33,4 +35,3 @@ export default {
   components: { CategoryList }
 }
 </script>
-  

@@ -1,3 +1,5 @@
+import categoriesJson from '../data/categories.json' assert {type: 'json'}
+
 export const utilService = {
     makeId,
     makeLorem,
@@ -7,7 +9,12 @@ export const utilService = {
     saveToStorage,
     loadFromStorage,
     getRandomColor,
-    generateColors
+    generateColors,
+    getCategoriesJson
+}
+
+function getCategoriesJson() {
+    return categoriesJson
 }
 
 function makeId(length = 6) {
