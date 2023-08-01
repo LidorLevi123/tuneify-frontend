@@ -1,10 +1,6 @@
 <template>
-    <YouTube ref="youtubePlayer"
-        v-if="currTrack?.youtubeId"
-        :src="currTrack.youtubeId"
-        @state-change="onStateChange"
-        @ready="playVideo"
-        style="display: none;" />
+    <YouTube ref="youtubePlayer" v-if="currTrack?.youtubeId" :src="currTrack.youtubeId" @state-change="onStateChange"
+        @ready="playVideo" style="display: none;"/>
 
     <section class="main-player-container">
         <section class="track-info-container">
@@ -83,6 +79,7 @@ import YouTube from 'vue3-youtube'
 export default {
     data() {
         return {
+            // currStation: null,
             idIdx: 0,
             playbackProgressPercentage: 0,
             volProgressPercentage: 0,
@@ -112,6 +109,7 @@ export default {
     },
     created() {
         eventBus.on('trackClicked', this.loadVideo)
+        eventBus.on('trackPaused', this.pauseVideo)
     },
     methods: {
         updateCurrTrackIdx(trackIdx) {
@@ -120,46 +118,43 @@ export default {
         togglePlayPause() {
             if (!this.currTrack) return
 
-            if (this.isPlaying) {
-                this.$store.commit({ type: 'setIsPlaying', isPlaying: false })
-                this.$refs.youtubePlayer?.pauseVideo()
-                this.handlePlaybackInterval(false)
-            } else {
-                this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
-                this.$refs.youtubePlayer?.playVideo()
-                this.handlePlaybackInterval(true)
-            }
+            if (this.isPlaying) this.pauseVideo()
+            else this.playVideo()
         },
         async previousNextVideo(diff) {
-            // if (!this.currStation.keys) return
 
-            if (this.repeatStateIdx === 2) {
-                this.$refs.youtubePlayer.stopVideo()
-                this.$refs.youtubePlayer.playVideo()
+            if (this.currTrackIdx === this.currStation.tracks.length - 1 && diff === 1) {
+                if (this.repeatStateIdx === 2) {
+                    this.replayVideo()
+                    return
+                }
+                else if (this.repeatStateIdx === 0) {
+                    this.stopVideo()
+                    return
+                } else if (this.repeatStateIdx === 1) {
+                    this.updateCurrTrackIdx(-1)
+                }
+
+            } else if (this.currTrackIdx === 0 && diff === -1) {
+                this.replayVideo()
                 return
             }
 
             this.updateCurrTrackIdx(this.currTrackIdx + diff)
-
-            // if ((this.currTrackIdx === this.currStation.tracks.length - 1) && (this.repeatStateIdx === 1)) return
 
             if (this.isShuffle) {
                 const randomIdx = utilService.getRandomIntInclusive(0, this.currTrackList.length - 1)
                 this.updateCurrTrackIdx(randomIdx)
             }
 
-            if (
-                (this.repeatStateIdx === 1) &&
-                (this.currTrackIdx > this.currTrackList.length - 1)) this.updateCurrTrackIdx(0)
-
-            if (this.currTrackIdx < 0) this.updateCurrTrackIdx(this.currTrackList.length - 1)
-
             this.loadVideo()
         },
         async loadVideo() {
+            // if (isSetCurrStation) this.currStation = JSON.parse(JSON.stringify(this.$store.getters.currStation))
+
             if (this.currTrack?.youtubeId) {
                 console.log('Got yt id from storage')
-                this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
+                this.playVideo()
                 return
             }
             // get youtubeId from YT
@@ -170,13 +165,13 @@ export default {
                 // const youtubeId = await ytService.queryYT(term)
                 const youtubeId = this.getDemoYoutubeId()
                 await this.$store.dispatch({ type: 'updateTrack', youtubeId })
-                this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
+                this.playVideo()
             } catch (err) {
                 console.log('Could not set track youtube id')
             }
         },
         getDemoYoutubeId() {
-            if(this.idIdx > 3) this.idIdx = 0
+            if (this.idIdx > 3) this.idIdx = 0
             const ids = ['UNZJQw8cr6o', 'nyuo9-OjNNg', 'ic8j13piAhQ', 'EfWmWlW2PvM']
             return ids[this.idIdx++]
         },
@@ -219,6 +214,13 @@ export default {
         stopVideo() {
             this.$store.commit({ type: 'setIsPlaying', isPlaying: false })
             this.$refs.youtubePlayer?.stopVideo()
+            this.playbackProgressPercentage = 0
+            this.elapsedTime = 0
+            this.handlePlaybackInterval(false)
+        },
+        pauseVideo() {
+            this.$store.commit({ type: 'setIsPlaying', isPlaying: false })
+            this.$refs.youtubePlayer?.pauseVideo()
             this.handlePlaybackInterval(false)
         },
         playVideo() {
@@ -226,12 +228,15 @@ export default {
             this.$refs.youtubePlayer?.playVideo()
             this.handlePlaybackInterval(true)
         },
+        replayVideo() {
+            this.$refs.youtubePlayer.stopVideo()
+            this.$refs.youtubePlayer.playVideo()
+        },
         onStateChange(event) {
             if (event.data === this.youtubePlayerStates.ENDED) {
 
-                // if ((this.currTrackIdx === this.currStation.tracks.length - 1) && (this.repeatStateIdx === 1)) return
-
                 this.previousNextVideo(1)
+
             } else if (event.data === this.youtubePlayerStates.UNSTARTED) {
                 let duration = this.$refs.youtubePlayer?.getDuration()
                 this.currTrackDuration = duration ? duration : 0

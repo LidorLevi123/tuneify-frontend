@@ -2,7 +2,10 @@
     <section class="main-header" :style="{ backgroundColor: this.scrollPosition > 50 ? '#121212' : 'transparent' }">
         <button v-icon="`navBack`" class="nav-btn" title="Go back"></button>
         <button v-icon="`navNext`" class="nav-btn" title="Go forward"></button>
-        <button v-icon="'play'" v-if="$route.path.startsWith('/station/')" class="play-btn-header"
+        <button v-icon="'play'" v-if="showPlay" class="play-btn-header" @click="playStation(currTrackIdx)"
+            :style="{ opacity: this.scrollPosition > 50 ? '1' : '0' }">
+        </button>
+        <button v-icon="'pause'" v-if="showPause" class="play-btn-header" @click="pauseStation"
             :style="{ opacity: this.scrollPosition > 50 ? '1' : '0' }">
         </button>
         <span v-if="$route.path.startsWith('/station/')" class="station-header"
@@ -15,6 +18,9 @@
             </div>
         </div>
         <button v-icon="`profile`" class=" profile-btn" title="Logout"></button>
+        <RouterLink to="/login">
+            <button class="login-btn">Log in</button>
+        </RouterLink>
     </section>
 </template>
 
@@ -49,12 +55,31 @@ export default {
         },
         logScroll({ scrollTop }) {
             this.scrollPosition = scrollTop
-        }
+        },
+        playStation(trackIdx) {
+            this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
+            eventBus.emit('trackClicked')
+        },
+        pauseStation() {
+            eventBus.emit('trackPaused')
+        },
 
     },
     computed: {
         currStation() {
             return this.$store.getters.currStation
+        },
+        currTrackIdx() {
+            return this.$store.getters.currTrackIdx
+        },
+        isPlaying() {
+            return this.$store.getters.isCurrTrackPlaying
+        },
+        showPlay() {
+            return this.$route.path.startsWith('/station/') && !this.isPlaying
+        },
+        showPause() {
+            return this.$route.path.startsWith('/station/') && this.isPlaying
         }
     }
 }

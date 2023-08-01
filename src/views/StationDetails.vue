@@ -11,7 +11,7 @@
                     <p class="description">{{ station.description }}</p>
                     <div>
                         <img src="favicon.svg" alt="">
-                        <span class="logo">Tunify </span>
+                        <span class="logo">{{ stationOwner }}</span>
                         <span class="songs-num" v-if="station.tracks">&bull; {{ station.tracks?.length }} songs,</span>
                         <span class="songs-time" v-if="formttedTime">about {{ formttedTime }} hours</span>
                     </div>
@@ -20,13 +20,36 @@
         </div>
         <div class="bottom-gradient">
             <section class="details-player">
-                <button class="details-play" v-icon="'detailsPlay'"></button>
-                <button v-icon="'like'" v-show="!station.owner && station.owner !== 'Tunify'" class="details-like"
-                    @click="addStation"></button>
-                <button v-icon="'unlike'" class="details-unlike"></button>
+                <button v-if="!isPlaying"
+                    class="details-play" 
+                    v-icon="'detailsPlay'" 
+                    v-show="hasTracks"
+                    @click="clickTrack(currTrackIdx)">
+                </button>
+
+                <button v-else
+                    class="details-play" 
+                    v-icon="'detailsPause'" 
+                    v-show="hasTracks"
+                    @click="pauseTrack">
+                </button>
+
+                <button 
+                    class="details-like"
+                    v-icon="'like'" 
+                    v-show="!hasLiked && !isOwner" 
+                    @click="addStation">
+                </button>
+
+                <button 
+                    class="details-unlike"
+                    v-icon="'unlike'"
+                    v-show="hasLiked && !isOwner"
+                    @click="removeStation">
+                </button>
                 <!-- <button v-icon="'moreOptions'" class="btn details-edit"></button> -->
             </section>
-            <TrackList @track-clicked="clickTrack" @track-add="addTrack" @track-remove="removeTrack" @track-like="likeTrack"
+            <TrackList @track-clicked="clickTrack" @track-add="addTrack" @track-remove="removeTrack"
                 @track-dislike="dislikeTrack" :station="station" />
         </div>
         <StationEdit />
@@ -64,6 +87,25 @@ export default {
         station() {
             return this.$store.getters.currStation
         },
+        stationOwner() {
+            return this.station.owner.fullname ? this.station.owner.fullname : this.station.owner
+        },
+        hasLiked() {
+            const libraryStations = this.$store.getters.libraryStations
+            return libraryStations.some(station => station._id === this.stationId)
+        },
+        hasTracks() {
+            return this.station.tracks.length > 0
+        },
+        isOwner() {
+            return this.station.owner !== 'Tuneify'
+        },
+        isPlaying() {
+            return this.$store.getters.isCurrTrackPlaying
+        },
+        currTrackIdx() {
+            return this.$store.getters.currTrackIdx
+        }
     },
 
     created() {
@@ -74,6 +116,7 @@ export default {
         async loadStation() {
             try {
                 await this.$store.dispatch({ type: 'setCurrStation', stationId: this.$route.params.stationId })
+                this.$store.commit({ type: 'setCurrTrackIdx', trackIdx: 0 })
                 this.getAvgImgClr()
                 this.setTracksTotalDuration()
             } catch (err) {
@@ -83,9 +126,18 @@ export default {
         async addStation() {
             try {
                 await this.$store.dispatch({ type: 'saveStation', stationToSave: this.station })
+                showSuccessMsg('Saved to Your Library')
                 this.canAddStation = true
             } catch (err) {
                 showErrorMsg('Could not add station')
+            }
+        },
+        async removeStation() {
+            try {
+                await this.$store.dispatch({ type: 'removeStation', stationId: this.station._id })
+                showSuccessMsg('Removed from Your Library')
+            } catch (err) {
+                showErrorMsg('Could not remove station')
             }
         },
         async getAvgImgClr() {
@@ -97,18 +149,10 @@ export default {
                 throw new Error('cant get average color')
             }
         },
-        async likeTrack(trackToSave) {
-            try {
-                await this.$store.dispatch({ type: 'addTrack', trackToSave, stationId: 'liked101' })
-                showSuccessMsg('Added to your Liked Songs')
-            } catch (err) {
-                showErrorMsg('Could not like track')
-            }
-        },
         async dislikeTrack(track) {
             try {
                 await this.$store.dispatch({ type: 'removeTrack', track, stationId: 'liked101' })
-                showSuccessMsg('Removed from your Liked Songs')
+                showSuccessMsg('Removed from Your Library')
             } catch (err) {
                 showErrorMsg('Could not dislike track')
             }
@@ -116,6 +160,11 @@ export default {
         async addTrack(trackToSave, stationId) {
             try {
                 await this.$store.dispatch({ type: 'addTrack', trackToSave, stationId })
+                if(stationId !== 'liked101') {
+                    showSuccessMsg('Saved to station')
+                } else {
+                    showSuccessMsg('Saved to Your Library')
+                }
             } catch (err) {
                 showErrorMsg('Could not add track')
             }
@@ -139,13 +188,16 @@ export default {
             this.tracksTotalDuration = this.station.tracks?.reduce((sum, track) => sum = sum + track.formalDuration, 0)
         },
         openStationEditor() {
-            if (!this.station.owner) return
+            if (!this.station.owner.fullname) return
             document.body.classList.add('modal-open')
         },
         clickTrack(trackIdx) {
             this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
             eventBus.emit('trackClicked')
         },
+        pauseTrack() {
+            eventBus.emit('trackPaused')
+        }
     },
 
     watch: {

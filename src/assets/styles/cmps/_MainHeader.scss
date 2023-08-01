@@ -15,7 +15,7 @@
         border-radius: 50%;
         height: 2rem;
         width: 2rem;
-        background-color: rgba(29, 29, 29, 0.457);
+        background-color: rgba(20, 20, 20, 0.811);
         cursor: pointer;
         margin-left: auto;
         margin-right: 1.5rem;
@@ -25,6 +25,23 @@
             scale: 104%;
         }
 
+    }
+
+    .login-btn {
+        border-radius: 500px;
+        border: none;
+        background-color: $clr2;
+        height: 3rem;
+        width: 6.875rem;
+        margin-inline-end: 2rem;
+        font-weight: 700;
+        font-family: CircularSpTitle;
+        font-size: 1rem;
+        cursor: pointer;
+
+        &:hover {
+            scale: 104%;
+        }
     }
 
     h2 {
@@ -48,7 +65,9 @@
         border: none;
         height: 2rem;
         width: 2rem;
-        background-color: rgba(29, 29, 29, 0.457)
+        opacity: 0.6;
+        background-color: rgba(23, 23, 23, 0.457);
+        background-color: $clr4;
     }
 
     .play-btn-header {

@@ -1,5 +1,6 @@
 <template>
-    <article @click="goToDetails(station._id)" class="main-preview-container">
+    <article @click="goToDetails(station._id)"
+        :class="{ 'main-preview-container': !horizontalDesign, 'main-preview-container-hor': horizontalDesign }">
         <div class="prev-img-container">
             <img :src="`${station.imgUrl}`" alt="">
             <button class="play-btn" v-icon="'play'"></button>
@@ -14,6 +15,10 @@ export default {
     name: 'StationPreview',
     props: {
         station: { type: Object, required: true },
+        horizontalDesign: {
+            type: Boolean,
+            default: false
+        }
     },
 
     methods: {

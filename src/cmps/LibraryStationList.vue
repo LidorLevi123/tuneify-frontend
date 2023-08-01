@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service'
 import LibraryStationPreview from './LibraryStationPreview.vue'
 
 export default {
@@ -25,15 +26,29 @@ export default {
         }
     },
 
+    computed: {
+        currStation() {
+            return this.$store.getters.currStation
+        },
+    },
+
     methods: {
         async removeStation(stationId, ev) {
             ev.stopPropagation()
             if (!this.canRemoveStation) return
             this.canRemoveStation = false
 
-            await this.$store.dispatch({ type: 'removeStation', stationId })
-            if(stationId === this.$route.params.stationId) this.$router.push('/')
-            this.canRemoveStation = true
+            try {
+                await this.$store.dispatch({ type: 'removeStation', stationId })
+                if (stationId === this.$route.params.stationId &&
+                    this.currStation.owner !== 'Tuneify') this.$router.push('/')
+
+                showSuccessMsg('Removed from Your Library')
+                this.canRemoveStation = true
+            } catch (err) {
+                showErrorMsg('Could not remove station')
+            }
+
         },
         goToDetails(stationId) {
             this.$router.push(`/station/${stationId}`)

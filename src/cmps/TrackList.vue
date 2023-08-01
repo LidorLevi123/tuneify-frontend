@@ -88,9 +88,6 @@ export default {
         onRemoveTrack(track) {
             this.$emit('track-remove', track)
         },
-        onLikeTrack(track) {
-            this.$emit('track-like', track)
-        },
         onDislikeTrack(track) {
             this.$emit('track-dislike', track)
         },
