@@ -80,6 +80,11 @@
 
 
     & .img-photo {
+
+        @include for-mobile-layout {
+            margin-block-start: 1.5rem;
+        }
+
         align-self: end;
         display: flex;
         gap: 1.5rem;
