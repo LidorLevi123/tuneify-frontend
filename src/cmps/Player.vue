@@ -13,7 +13,7 @@
                 </div>
             </section>
             <span class="btn-like" v-icon="`smallLikeDis`" @click="onAddTrack(track, 'liked101', $event)" ></span>
-            <span class="btn-dislike" v-icon="`smallLikeEna`" @click="onDislikeTrack(track, $event)"></span>
+            <!-- <span class="btn-dislike" v-icon="`smallLikeEna`" @click="onDislikeTrack(track, $event)"></span> -->
         </section>
 
         <section class="player-mid-container">
