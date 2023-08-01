@@ -88,7 +88,7 @@ function saveLocalUser(user) {
         _id: user._id,
         fullname: user.fullname,
         imgUrl: user.imgUrl,
-        likedStations: user.likedStations,
+        stations: user.stations,
         likedTracks: user.likedTracks
     }
     sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(user))
@@ -103,5 +103,5 @@ function getLoggedinUser() {
 // ;(async ()=>{
     // await userService.signup({fullname: 'Puki Norma', username: 'puki', password:'123',score: 10000, isAdmin: false})
     // await userService.signup({fullname: 'Master Adminov', username: 'admin', password:'123', score: 10000, isAdmin: true})
-    await userService.signup({fullname: 'Muki G', username: 'muki', password:'123', likedStations: [], likedTracks: []})
+    await userService.signup({fullname: 'Muki G', username: 'muki', password:'123', stations: [], likedTracks: []})
 // })()

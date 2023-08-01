@@ -69,8 +69,6 @@ export const stationStore = {
     actions: {
         async getStationsForHome({ commit }) {
             try {
-                // For now we display only workout stations at homepage
-                // const stations = await stationService.getCategoryStations('0JQ5DAqbMKFAXlCG6QvYQ4')
                 const stations = await stationService.getStationsForHome()
                 commit({ type: 'setStationsForHome', stations })
             } catch (err) {
