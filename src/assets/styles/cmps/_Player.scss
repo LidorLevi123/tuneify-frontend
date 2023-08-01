@@ -54,7 +54,6 @@
 
 
             }
-
             .repeat,
             .shuffle,
             .play,
@@ -98,7 +97,7 @@
 
     .vol-container {
         display: flex;
-        margin-inline-end: 0.5rem;
+        margin-inline-end: 0.4rem;
         align-items: center;
 
         .vol-slider {
@@ -106,6 +105,11 @@
         }
 
         .mute {
+
+            span {
+                display: flex;
+                align-items: center;
+            }
             &:hover~.vol-slider {
                 background-color: $clr9;
             }
@@ -113,6 +117,7 @@
             &:hover~.vol-slider::-webkit-slider-thumb {
                 opacity: 1;
             }
+
         }
     }
 
