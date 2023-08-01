@@ -11,7 +11,6 @@ const historyTracker = {
         this.history = this.history.slice(0, this.currentIndex + 1)
         this.history.push(path)
         this.currentIndex++;
-        console.log(this.history)
     },
 
     back() {
@@ -23,7 +22,6 @@ const historyTracker = {
     },
   
     next() {
-        console.log('hhhh');
       if (this.currentIndex < this.history.length - 1) {
         this.currentIndex++
         return this.history[this.currentIndex]

@@ -4,8 +4,9 @@
             <button class="collapse"><span v-icon="'collapse'"></span>
                 <div class="one">Your Library</div>
             </button>
-            <button @click="addStation" title="Create playlist" class="add-station btn"><span
-                    v-icon="'createList'"></span></button>
+            <button @click="addStation" title="Create playlist" class="add-station btn">
+                <span v-icon="'createList'"></span>
+            </button>
         </section>
         <LibraryStationList :libraryStations="libraryStations" />
     </section>

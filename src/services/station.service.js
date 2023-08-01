@@ -1,5 +1,6 @@
 import { httpService } from './http.service.js'
 import { userService } from './user.service.js'
+import { spotifyService } from './spotify.service.js'
 
 const BASE_URL = 'station/'
 
@@ -26,7 +27,17 @@ async function query(filterBy = {}) {
 }
 
 async function getById(stationId) {
-    const station = await httpService.get(BASE_URL + stationId)
+    // const station = await httpService.get(BASE_URL + stationId)
+    // return station
+
+    let station
+
+    try {
+        station = await httpService.get(BASE_URL + stationId)
+    } catch (error) {
+        station = await spotifyService.getSpotifyItems('station', stationId)
+        await httpService.post(BASE_URL, station)
+    }
     return station
 }
 
@@ -56,8 +67,9 @@ async function removeTrack(track, stationId) {
 }
 
 async function getCategoryStations(categoryId) {
-    // const stations = await spotifyService.getSpotifyItems('categoryStations', categoryId)
-    return httpService.get('spotify', categoryId)
+    const stations = await spotifyService.getSpotifyItems('categoryStations', categoryId)
+    return stations
+    // return httpService.get('spotify', categoryId)
 }
 
 async function getStationsForHome() {
@@ -74,14 +86,12 @@ async function getStationsForHome() {
 
     const res = []
 
-    console.log('Getting stations for home page...')
-
-    // for (let i = 0; i < categories.length; i++) {
-    //     let stations = await spotifyService.getSpotifyItems('categoryStations', categories[i].id)
-    //     stations = stations.map(station => ({ ...station, category: categories[i].name}))
-    //     res.push(...stations)
-    // }
-    // return res
+    for (let i = 0; i < categories.length; i++) {
+        let stations = await spotifyService.getSpotifyItems('categoryStations', categories[i].id)
+        stations = stations.map(station => ({ ...station, category: categories[i].name}))
+        res.push(...stations)
+    }
+    return res
 }
 
 // async function addStationMsg(stationId, txt) {
