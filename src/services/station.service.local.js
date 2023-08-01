@@ -93,7 +93,6 @@ async function getStationsForHome() {
         stations = stations.map(station => ({ ...station, category: categories[i].name}))
         res.push(...stations)
     }
-
     return res
 }
 

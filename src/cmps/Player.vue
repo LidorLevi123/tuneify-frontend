@@ -7,13 +7,13 @@
             <section class="img-container">
                 <img v-if="currTrack" :src="`${currTrack.imgUrl}`" alt="">
             </section>
-            <section>
+            <section class="text-container">
                 <div v-if="currTrack" class="track-title">{{ currTrack.title }}</div>
                 <div v-if="currTrack" class="track-artist">{{ currTrack.artists?.length > 0 ? currTrack.artists[0] : '' }}
                 </div>
             </section>
-            <span v-icon="`smallLikeDis`" @click="onAddTrack(track, 'liked101', $event)" class="btn-like"></span>
-            <span v-icon="`smallLikeEna`" @click="onDislikeTrack(track, $event)"></span>
+            <span class="btn-like" v-icon="`smallLikeDis`" @click="onAddTrack(track, 'liked101', $event)" ></span>
+            <span class="btn-dislike" v-icon="`smallLikeEna`" @click="onDislikeTrack(track, $event)"></span>
         </section>
 
         <section class="player-mid-container">

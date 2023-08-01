@@ -34,10 +34,8 @@ export default {
       immediate: true,
       handler(newTrack, oldTrack) {
         if (newTrack) {
-          console.log('Current Track:', newTrack)
           document.title = `${newTrack.title} • ${newTrack.artists[0]}`
         } else {
-          console.log('No track is currently playing.')
           document.title = 'Tuneify'
         }
       },
