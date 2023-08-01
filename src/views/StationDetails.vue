@@ -21,27 +21,27 @@
         <div class="bottom-gradient">
             <section class="details-player">
                 <button v-if="!isPlaying"
-                    class="details-play" 
-                    v-icon="'detailsPlay'" 
+                    class="details-play"
+                    v-icon="'detailsPlay'"
                     v-show="hasTracks"
                     @click="clickTrack(currTrackIdx)">
                 </button>
 
                 <button v-else
-                    class="details-play" 
-                    v-icon="'detailsPause'" 
+                    class="details-play"
+                    v-icon="'detailsPause'"
                     v-show="hasTracks"
                     @click="pauseTrack">
                 </button>
 
-                <button 
+                <button
                     class="details-like"
-                    v-icon="'like'" 
-                    v-show="!hasLiked && !isOwner" 
+                    v-icon="'like'"
+                    v-show="!hasLiked && !isOwner"
                     @click="addStation">
                 </button>
 
-                <button 
+                <button
                     class="details-unlike"
                     v-icon="'unlike'"
                     v-show="hasLiked && !isOwner"

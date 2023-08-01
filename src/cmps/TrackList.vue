@@ -1,7 +1,6 @@
 <template>
     <section class="track-list">
-        <Container dragClass="dragging" @drop="onDrop" :should-accept-drop="shouldAcceptDrop" @drag-start="onDragStart"
-            @drag-end="onDragEnd" @drag-enter="onDragEnter" :get-child-payload="getChildPayload">
+        <Container dragClass="dragging" >
             <div class="list-header track-preview-layout">
                 <span>#</span>
                 <span>Title</span>
@@ -87,6 +86,9 @@ export default {
         },
         onRemoveTrack(track) {
             this.$emit('track-remove', track)
+        },
+        onLikeTrack(track) {
+            this.$emit('track-like', track)
         },
         onDislikeTrack(track) {
             this.$emit('track-dislike', track)
