@@ -8,10 +8,6 @@ a {
     border: none;
 }
 
-svg {
-    cursor: pointer;
-}
-
 * {
     box-sizing: border-box;
 }
@@ -43,7 +39,7 @@ body {
     margin: 0;
     line-height: 1.6;
     background-color: #000000;
-    font-family: Circular, Rubik;
+    font-family: Circular, CircularSpHeb;
     user-select: none;
 }
 
