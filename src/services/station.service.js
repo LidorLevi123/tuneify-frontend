@@ -26,14 +26,13 @@ async function query(filterBy = {}) {
 }
 
 async function getById(stationId) {
-    // const station = await httpService.get(BASE_URL + stationId)
-    // return station
     let station = await httpService.get(BASE_URL + stationId)
     
     if (!station) {
         station = await spotifyService.getSpotifyItems('station', stationId)
         station = await httpService.post(BASE_URL, station)
     }
+
     return station
 }
 
@@ -43,13 +42,14 @@ async function remove(stationId) {
 }
 
 async function save(station) {
-    if(station.isEmpty) {
-        return await httpService.post(BASE_URL, station)
-    }
+    // if(station.isEmpty) {
+    //     return await httpService.post(BASE_URL, station)
+    // }
 
     if (station._id) {
         return await httpService.put(BASE_URL + station._id, station)
     }
+    station._id = utilService.makeId()
     return await httpService.post(BASE_URL, station)
 }
 
@@ -101,11 +101,10 @@ async function getStationsForHome() {
 
 function getEmptyStation() {
     return {
-        _id: utilService.makeId(),
+        _id: '',
         name: '',
         description: '',
         imgUrl: '',
-        owner: userService.getLoggedinUser(),
         tracks: [],
         isEmpty: true
     }

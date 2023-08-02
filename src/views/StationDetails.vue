@@ -3,7 +3,8 @@
         <div class="top-gradient">
             <section class="img-photo">
                 <section class="img">
-                    <img crossorigin="anonymous" class="station-img" :src="station.imgUrl" alt="">
+                    <img crossorigin="anonymous" class="station-img" :src="station.imgUrl" alt=""
+                     @load="getAvgImgClr" ref="stationImg">
                 </section>
                 <section class="station-info">
                     <span class="pl">Playlist</span>
@@ -62,20 +63,18 @@ export default {
 
     data() {
         return {
+            station: null,
             tracksTotalDuration: 0
         }
     },
 
     computed: {
-        formttedTime() {
-            const hours = this.tracksTotalDuration / (1000 * 60 * 60)
-            return Math.floor(hours)
-        },
         stationId() {
             return this.$route.params.stationId
         },
-        station() {
-            return this.$store.getters.currStation
+        formttedTime() {
+            const hours = this.tracksTotalDuration / (1000 * 60 * 60)
+            return Math.floor(hours)
         },
         stationOwner() {
             return this.station.owner?.fullname
@@ -93,6 +92,9 @@ export default {
         isPlaying() {
             return this.$store.getters.isCurrTrackPlaying
         },
+        currStation() {
+            return this.$store.getters.currStation
+        },
         currTrackIdx() {
             return this.$store.getters.currTrackIdx
         },
@@ -109,8 +111,8 @@ export default {
     methods: {
         async loadStation() {
             try {
-                await this.$store.dispatch({ type: 'setCurrStation', stationId: this.$route.params.stationId })
-                this.getAvgImgClr()
+                const station = await this.$store.dispatch({ type: 'getStation', stationId: this.$route.params.stationId })
+                this.station = station
                 this.setTracksTotalDuration()
             } catch (err) {
                 showErrorMsg('Could not set current station')
@@ -137,7 +139,8 @@ export default {
         },
         async getAvgImgClr() {
             try {
-                const { hex } = await fac.getColorAsync(document.querySelector('.station-img'))
+                const elImg = this.$refs.stationImg
+                const { hex } = await fac.getColorAsync(elImg)
                 this.setBackgroundClr(hex)
             } catch (err) {
                 console.log(err)
@@ -188,6 +191,9 @@ export default {
             document.body.classList.add('modal-open')
         },
         clickTrack(trackIdx) {
+            if(this.currStation?._id !== this.station._id) {
+                this.$store.commit({ type: 'setCurrStation', station: this.station })
+            }
             this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
             eventBus.emit('trackClicked')
         },

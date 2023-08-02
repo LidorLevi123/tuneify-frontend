@@ -40,18 +40,18 @@ export default {
     methods: {
         async loadStationToEdit() {
             try {
-                // this.stationToEdit = JSON.parse(JSON.stringify(this.currStation))
                 const station = await stationService.getById(this.stationId)
                 this.stationToEdit = station
             } catch (err) {
-                // showErrorMsg('Could not save station')
+                console.log(err.message)
+                showErrorMsg('Could not save station')
             }
         },
 
         async save() {
             try {
                 const station = await this.$store.dispatch({ type: 'saveStation', stationToSave: this.stationToEdit })
-                this.$store.commit({ type: 'setCurrStation', station })
+                this.stationToEdit = station
                 this.onCloseModal()
             } catch (err) {
                 console.log(err.message)
@@ -71,9 +71,6 @@ export default {
         stationId() {
             return this.$route.params.stationId
         },
-        currStation() {
-            return this.$store.getters.currStation
-        }
     },
 
     watch: {

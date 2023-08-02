@@ -83,7 +83,6 @@ import YouTube from 'vue3-youtube'
 export default {
     data() {
         return {
-            // currStation: null,
             idIdx: 0,
             playbackProgressPercentage: 0,
             volProgressPercentage: 0,
@@ -161,8 +160,6 @@ export default {
             this.loadVideo()
         },
         async loadVideo() {
-            // if (isSetCurrStation) this.currStation = JSON.parse(JSON.stringify(this.$store.getters.currStation))
-
             if (this.currTrack?.youtubeId) {
                 console.log('Got yt id from storage')
                 this.playVideo()
@@ -171,23 +168,19 @@ export default {
             // get youtubeId from YT
             try {
                 console.log('Sending request to yt id...')
-                const term = this.currTrack.title + ' ' + this.currTrack.artists[0]
-                const youtubeId = await ytService.queryYT(term)
-                // const youtubeId = this.getDemoYoutubeId()
+                // const term = this.currTrack.title + ' ' + this.currTrack.artists[0]
+                // const youtubeId = await ytService.queryYT(term)
+                const youtubeId = this.getDemoYoutubeId()
                 await this.$store.dispatch({ type: 'updateTrack', youtubeId })
                 this.playVideo()
             } catch (err) {
-                console.log('Could not set track youtube id')
+                console.log('Could not set track youtube id', err.message)
             }
         },
         async likeTrack(trackToSave) {
             try {
                 await this.$store.dispatch({ type: 'addTrack', trackToSave, stationId: this.user.likedId })
-                if (this.currStation._id !== this.user.likedId) {
-                    showSuccessMsg('Added to your Liked Songs')
-                } else {
-                    showSuccessMsg('Saved to Your Library')
-                }
+                showSuccessMsg('Added to your Liked Songs')
             } catch (err) {
                 console.log(err.message)
                 showErrorMsg('Could not like track')
@@ -262,6 +255,7 @@ export default {
         replayVideo() {
             this.$refs.youtubePlayer.stopVideo()
             this.$refs.youtubePlayer.playVideo()
+            this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
         },
         onStateChange(event) {
             if (event.data === this.youtubePlayerStates.ENDED) {

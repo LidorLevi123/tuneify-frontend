@@ -97,11 +97,11 @@ export default {
         currStation() {
             return this.$store.getters.currStation
         },
-        currTrackIdx() {
-            return this.$store.getters.currTrackIdx
+        currTrack() {
+            return this.$store.getters.currTrack
         },
         isTrackPlaying() {
-            return this.$store.getters.isCurrTrackPlaying && this.trackIdx === this.currTrackIdx
+            return this.$store.getters.isCurrTrackPlaying && this.track.id === this.currTrack.id
         },
         isPlaying() {
             return {

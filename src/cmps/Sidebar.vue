@@ -38,6 +38,7 @@ export default {
 
             try {
                 const station = await this.$store.dispatch({ type: 'saveStation', stationToSave })
+                console.log(station)
                 showSuccessMsg('Saved to Your Library')
                 this.$router.push(`/station/${station._id}`)
             } catch (err) {

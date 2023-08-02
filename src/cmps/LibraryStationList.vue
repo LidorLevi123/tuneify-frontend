@@ -21,12 +21,6 @@ export default {
         libraryStations: { type: Array },
     },
 
-    data() {
-        return {
-            canRemoveStation: true
-        }
-    },
-
     computed: {
         currStation() {
             return this.$store.getters.currStation
@@ -39,17 +33,14 @@ export default {
     methods: {
         async removeStation(stationId, ev) {
             ev.stopPropagation()
-            if (!this.canRemoveStation) return
-            this.canRemoveStation = false
 
             try {
                 await this.$store.dispatch({ type: 'removeStation', stationId })
-                if (stationId === this.$route.params.stationId &&
-                    this.currStation.owner !== 'Tuneify') this.$router.push('/')
+                if (stationId === this.$route.params.stationId) this.$router.push('/')
 
                 showSuccessMsg('Removed from Your Library')
-                this.canRemoveStation = true
             } catch (err) {
+                console.log(err.message)
                 showErrorMsg('Could not remove station')
             }
 
