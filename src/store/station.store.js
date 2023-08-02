@@ -43,8 +43,6 @@ export const stationStore = {
             state.isCurrTrackPlaying = isPlaying
         },
         addStation({ stations }, { stationToSave }) {
-            const station = stations.filter(station => station.owner).find(station => station._id === stationToSave._id)
-            if (station) return
             stations.push(stationToSave)
         },
         updateStation({ stations }, { stationToSave }) {
@@ -67,9 +65,9 @@ export const stationStore = {
             const trackIdx = stations[idx].tracks.findIndex(track => track.id === trackId)
             stations[idx].tracks.splice(trackIdx, 1)
 
-            if (stations[idx]._id === 'liked101' && currStation._id === 'liked101') {
-                this.commit({ type: 'setCurrStation', station: stations[idx] })
-            }
+            // if (stations[idx]._id === 'liked101' && currStation._id === 'liked101') {
+            //     this.commit({ type: 'setCurrStation', station: stations[idx] })
+            // }
         }
     },
     actions: {
@@ -95,6 +93,7 @@ export const stationStore = {
             try {
                 const station = await stationService.getById(stationId)
                 commit({ type: 'setCurrStation', station })
+                commit({ type: 'setCurrTrackIdx', trackIdx: 0 })
                 if (!station.owner) commit({ type: 'addStation', stationToSave: station })
             } catch (err) {
                 console.log('Could not set current station', err)
@@ -102,15 +101,15 @@ export const stationStore = {
             }
         },
         async saveStation({ commit }, { stationToSave }) {
-            stationToSave = JSON.parse(JSON.stringify(stationToSave))
-
             let type = stationToSave._id ? 'updateStation' : 'addStation'
-            if(stationToSave.owner === 'Tuneify') type = 'addStation'
+            // if(stationToSave.owner === 'Tuneify') type = 'addStation'
+
+            if(stationToSave.isEmpty) type = 'addStation'
 
             try {
                 const station = await stationService.save(stationToSave)
                 commit({ type, stationToSave: station })
-                commit({ type: 'setCurrStation', station: { ...station } })
+                // commit({ type: 'setCurrStation', station: { ...station } })
                 return station
             } catch (err) {
                 console.log(err.message)
@@ -132,7 +131,6 @@ export const stationStore = {
             if (isTrackExist) return
 
             try {
-                // trackToSave = JSON.parse(JSON.stringify(trackToSave))
                 await stationService.saveTrack(trackToSave, stationId)
                 commit({ type: 'addTrack', trackToSave, stationId })
             } catch (err) {
@@ -148,6 +146,7 @@ export const stationStore = {
             try {
                 await stationService.removeTrack(trackId, stationId)
                 commit({ type: 'removeTrack', trackId, stationId })
+                commit({ type: 'setCurrStation', station })
             } catch (err) {
                 console.log(err.message)
                 throw new Error('Could not remove track')

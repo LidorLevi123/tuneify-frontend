@@ -10,6 +10,7 @@ async function queryYT(term) {
     try {
         const response = await fetch(url)
         const data = await response.json()
+        console.log(data);
         return data.items[0].id.videoId
 
     } catch (error) {

@@ -127,6 +127,8 @@ export default {
         },
         async previousNextVideo(diff) {
 
+            console.log(this.repeatStateIdx)
+
             if (this.currTrackIdx === this.currStation.tracks.length - 1 && diff === 1) {
                 if (this.repeatStateIdx === 2) {
                     this.replayVideo()
@@ -140,6 +142,11 @@ export default {
                 }
 
             } else if (this.currTrackIdx === 0 && diff === -1) {
+                this.replayVideo()
+                return
+            }
+
+            if (this.repeatStateIdx === 2) {
                 this.replayVideo()
                 return
             }
@@ -164,9 +171,9 @@ export default {
             // get youtubeId from YT
             try {
                 console.log('Sending request to yt id...')
-                const term = this.currTrack.title + ' ' + this.currTrack.artists[0]
-                const youtubeId = await ytService.queryYT(term)
-                // const youtubeId = this.getDemoYoutubeId()
+                // const term = this.currTrack.title + ' ' + this.currTrack.artists[0]
+                // const youtubeId = await ytService.queryYT(term)
+                const youtubeId = this.getDemoYoutubeId()
                 await this.$store.dispatch({ type: 'updateTrack', youtubeId })
                 this.playVideo()
             } catch (err) {

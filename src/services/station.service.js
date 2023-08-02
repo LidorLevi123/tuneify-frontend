@@ -1,6 +1,7 @@
 import { httpService } from './http.service.js'
 import { userService } from './user.service.js'
 import { spotifyService } from './spotify.service.js'
+import { utilService } from './util.service.js'
 
 const BASE_URL = 'station/'
 
@@ -20,24 +21,20 @@ export const stationService = {
 window.cs = stationService // for console usage
 
 async function query(filterBy = {}) {
-
     const stations = await httpService.get(BASE_URL, filterBy)
-    console.log('stations after get', stations)
     return stations
 }
 
 async function getById(stationId) {
     // const station = await httpService.get(BASE_URL + stationId)
     // return station
+    let station = await httpService.get(BASE_URL + stationId)
 
-    let station
-
-    try {
-        station = await httpService.get(BASE_URL + stationId)
-    } catch (error) {
+    if (!station) {
         station = await spotifyService.getSpotifyItems('station', stationId)
-        await httpService.post(BASE_URL, station)
+        station = await httpService.post(BASE_URL, station)
     }
+
     return station
 }
 
@@ -47,6 +44,10 @@ async function remove(stationId) {
 }
 
 async function save(station) {
+    if(station.isEmpty) {
+        return await httpService.post(BASE_URL, station)
+    }
+
     if (station._id) {
         return await httpService.put(BASE_URL + station._id, station)
     }
@@ -88,7 +89,7 @@ async function getStationsForHome() {
 
     for (let i = 0; i < categories.length; i++) {
         let stations = await spotifyService.getSpotifyItems('categoryStations', categories[i].id)
-        stations = stations.map(station => ({ ...station, category: categories[i].name}))
+        stations = stations.map(station => ({ ...station, category: categories[i].name }))
         res.push(...stations)
     }
     return res
@@ -101,10 +102,12 @@ async function getStationsForHome() {
 
 function getEmptyStation() {
     return {
+        _id: utilService.makeId(),
         name: '',
         description: '',
         imgUrl: '',
         owner: userService.getLoggedinUser(),
-        tracks: []
+        tracks: [],
+        isEmpty: true
     }
 }

@@ -17,7 +17,7 @@ export const userService = {
 
 ;(async () => {
     // await signup({ fullname: 'Guest', username: 'guest', password: '123' })
-    // await login({ username: 'guest', password: '123' })
+    await login({ username: 'guest', password: '123' })
 })()
 
 window.userService = userService
