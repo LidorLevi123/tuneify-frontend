@@ -29,12 +29,11 @@ async function getById(stationId) {
     // const station = await httpService.get(BASE_URL + stationId)
     // return station
     let station = await httpService.get(BASE_URL + stationId)
-
+    
     if (!station) {
         station = await spotifyService.getSpotifyItems('station', stationId)
         station = await httpService.post(BASE_URL, station)
     }
-
     return station
 }
 

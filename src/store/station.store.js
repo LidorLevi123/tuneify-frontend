@@ -140,7 +140,7 @@ export const stationStore = {
         },
         async removeTrack({ commit, state }, { trackId, stationId }) {
             const station = state.stations.find(station => station._id === stationId)
-            const isTrackExist = station.tracks.some(currTrack => currTrack.id === trackId)
+            const isTrackExist = station.tracks.some(track => track.id === trackId)
             if (!isTrackExist) return
 
             try {
