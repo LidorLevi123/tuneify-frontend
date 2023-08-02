@@ -23,7 +23,7 @@
 
 <script>
 import { showErrorMsg } from '../services/event-bus.service'
-import { stationService } from '../services/station.service.local'
+import { stationService } from '../services/station.service'
 import { uploadService } from '../services/upload.service'
 
 export default {
@@ -40,10 +40,11 @@ export default {
     methods: {
         async loadStationToEdit() {
             try {
+                // this.stationToEdit = JSON.parse(JSON.stringify(this.currStation))
                 const station = await stationService.getById(this.stationId)
                 this.stationToEdit = station
             } catch (err) {
-                showErrorMsg('Could not save station')
+                // showErrorMsg('Could not save station')
             }
         },
 
@@ -70,6 +71,9 @@ export default {
         stationId() {
             return this.$route.params.stationId
         },
+        currStation() {
+            return this.$store.getters.currStation
+        }
     },
 
     watch: {

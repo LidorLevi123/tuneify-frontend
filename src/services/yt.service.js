@@ -4,7 +4,8 @@ export const ytService = {
 }
 
 async function queryYT(term) {
-    const API_KEY = 'AIzaSyCy-U5zlHg4WobQ9TIYb_Y3d7uMvFqFv9A'
+    // const API_KEY = 'AIzaSyCy-U5zlHg4WobQ9TIYb_Y3d7uMvFqFv9A'
+    const API_KEY = 'AIzaSyAFo_70utuVUzF4r0LOkUY-Ic3D_r42q4Y'
     const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&videoEmbeddable=true&type=video&key=${API_KEY}&q=${term}`
 
     try {

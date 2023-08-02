@@ -3,10 +3,10 @@
         <button @click="goBack" v-icon="`navBack`" class="nav-btn" title="Go back"></button>
         <button @click="goNext" v-icon="`navNext`" class="nav-btn" title="Go forward"></button>
         <button v-icon="'mPlay'" v-if="showPlay" class="play-btn-header" @click="playStation(currTrackIdx)"
-            :style="{ opacity: this.scrollPosition > 100 ? '1' : '0' }">
+            :style="{ opacity: this.scrollPosition > 400 ? '1' : '0' }">
         </button>
         <button v-icon="'pause'" v-if="showPause" class="play-btn-header" @click="pauseStation"
-            :style="{ opacity: this.scrollPosition > 100 ? '1' : '0' }">
+            :style="{ opacity: this.scrollPosition > 400 ? '1' : '0' }">
         </button>
         <span v-if="$route.path.startsWith('/station/')" class="station-header"
             :style="{ opacity: this.scrollPosition > 50 ? '1' : '0' }">{{ currStation?.name }}</span>

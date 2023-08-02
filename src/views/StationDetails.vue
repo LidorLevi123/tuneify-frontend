@@ -120,12 +120,12 @@ export default {
             // dispatch to user store and push stationId to stations array
             // then dispatch to store and getbyid to station id
             // push it to stations array
-            try {
-                await this.$store.dispatch({ type: 'saveStation', stationToSave: this.station })
-                showSuccessMsg('Saved to Your Library')
-            } catch (err) {
-                showErrorMsg('Could not add station')
-            }
+            // try {
+            //     await this.$store.dispatch({ type: 'saveStation', stationToSave: this.station })
+            //     showSuccessMsg('Saved to Your Library')
+            // } catch (err) {
+            //     showErrorMsg('Could not add station')
+            // }
         },
         async removeStation() {
             try {
