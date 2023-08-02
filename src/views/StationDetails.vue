@@ -110,7 +110,6 @@ export default {
         async loadStation() {
             try {
                 await this.$store.dispatch({ type: 'setCurrStation', stationId: this.$route.params.stationId })
-                this.$store.commit({ type: 'setCurrTrackIdx', trackIdx: 0 })
                 this.getAvgImgClr()
                 this.setTracksTotalDuration()
             } catch (err) {
@@ -185,7 +184,7 @@ export default {
             this.tracksTotalDuration = this.station.tracks?.reduce((sum, track) => sum = sum + track.formalDuration, 0)
         },
         openStationEditor() {
-            if (!this.station.owner.fullname) return
+            if (this.station.owner.fullname !== this.user.fullname) return
             document.body.classList.add('modal-open')
         },
         clickTrack(trackIdx) {

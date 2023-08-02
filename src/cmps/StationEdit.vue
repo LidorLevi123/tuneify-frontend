@@ -49,7 +49,8 @@ export default {
 
         async save() {
             try {
-                await this.$store.dispatch({ type: 'saveStation', stationToSave: this.stationToEdit })
+                const station = await this.$store.dispatch({ type: 'saveStation', stationToSave: this.stationToEdit })
+                this.$store.commit({ type: 'setCurrStation', station })
                 this.onCloseModal()
             } catch (err) {
                 console.log(err.message)

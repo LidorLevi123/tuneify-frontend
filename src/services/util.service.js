@@ -17,7 +17,7 @@ function getCategoriesJson() {
     return categoriesJson
 }
 
-function makeId(length = 6) {
+function makeId(length = 24) {
     var txt = ''
     var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 
