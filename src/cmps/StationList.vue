@@ -1,5 +1,5 @@
 <template>
-    <h1>{{ stations[0]?.category }}</h1>
+    <h1 v-if="stations[0]?.category">{{ stations[0]?.category }}</h1>
     <ul v-if="stations" class="clean-list"
         :class="{ 'station-list': !horizontalDesign, 'station-list-hor': horizontalDesign }">
         <li v-for="station in stations" :key="station._id">
