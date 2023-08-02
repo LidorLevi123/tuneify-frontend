@@ -90,16 +90,6 @@ export const stationStore = {
                 throw new Error('Could not load stations')
             }
         },
-        // async setCurrStation({ commit }, { stationId }) {
-        //     try {
-        //         const station = await stationService.getById(stationId)
-        //         commit({ type: 'setCurrStation', station })
-        //         if (!station.owner) commit({ type: 'addStation', stationToSave: station })
-        //     } catch (err) {
-        //         console.log('Could not set current station', err)
-        //         throw new Error('Could not set current station')
-        //     }
-        // },
         async saveStation({ commit }, { stationToSave }) {
             let type = stationToSave._id ? 'updateStation' : 'addStation'
             // if(stationToSave.owner === 'Tuneify') type = 'addStation'
@@ -109,7 +99,6 @@ export const stationStore = {
             try {
                 const station = await stationService.save(stationToSave)
                 commit({ type, stationToSave: station })
-                // commit({ type: 'setCurrStation', station: { ...station } })
                 return station
             } catch (err) {
                 console.log(err.message)
@@ -155,7 +144,6 @@ export const stationStore = {
             try {
                 await stationService.removeTrack(trackId, stationId)
                 commit({ type: 'removeTrack', trackId, stationId })
-                // commit({ type: 'setCurrStation', station })
             } catch (err) {
                 console.log(err.message)
                 throw new Error('Could not remove track')
