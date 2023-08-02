@@ -58,6 +58,7 @@ export default {
     name: 'TrackPreview',
 
     props: {
+        station: { type: Object },
         track: { type: Object },
         trackIdx: { type: Number }
     },
@@ -109,8 +110,7 @@ export default {
             }
         },
         isStationOwner() {
-            const currStation = this.$store.getters.currStation
-            return currStation.owner.fullname === this.user.fullname
+            return this.station.owner?.fullname === this.user.fullname
         },
         likedTracks() {
             return this.$store.getters.likedTracks

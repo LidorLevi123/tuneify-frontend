@@ -45,6 +45,7 @@ export const stationStore = {
         },
         addStation({ stations }, { stationToSave }) {
             stations.push(stationToSave)
+            console.log(stations)
         },
         updateStation({ stations }, { stationToSave }) {
             const idx = stations.findIndex(station => station._id === stationToSave._id)

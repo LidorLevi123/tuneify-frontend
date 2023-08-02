@@ -1,7 +1,9 @@
 import config from "../../config.js"
 import axios from "axios"
 
-let gAccessToken = await getAccessToken(config.clientId, config.clientSecret)
+let gAccessToken = ''
+
+getAccessToken()
 
 export const spotifyService = {
     getSpotifyItems
@@ -44,10 +46,11 @@ async function getSpotifyItems(reqType, id) {
     }
 }
 
-async function getAccessToken(clientId, clientSecret) {
+async function getAccessToken() {
+
     try {
         // Encode client credentials (Client ID and Client Secret)
-        const credentials = `${clientId}:${clientSecret}`
+        const credentials = `${config.clientId}:${config.clientSecret}`
         const encodedCredentials = btoa(credentials)
         // Make a POST request to the token endpoint
         const response = await axios.post(
@@ -66,7 +69,7 @@ async function getAccessToken(clientId, clientSecret) {
         const { data } = response
         const accessToken = data.access_token
         const expiresIn = data.expires_in
-        return accessToken
+        gAccessToken = accessToken
     } catch (error) {
         console.error(
             'Error retrieving access token:',

@@ -30,10 +30,6 @@ import { eventBus } from '../services/event-bus.service'
 export default {
     name: 'SearchPage',
 
-    props: {
-        davar: { type: Object }
-    },
-
     data() {
         return {
             filterBy: {

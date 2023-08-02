@@ -1,6 +1,6 @@
 <template>
     <section class="station-details" v-if="station">
-        <div class="top-gradient">
+        <div ref="topGradient" class="top-gradient">
             <section class="img-photo">
                 <section class="img">
                     <img crossorigin="anonymous" class="station-img" :src="station.imgUrl" alt=""
@@ -11,7 +11,7 @@
                     <h1 @click="openStationEditor">{{ station.name }}</h1>
                     <p class="description">{{ station.description }}</p>
                     <div>
-                        <img src="favicon.svg" alt="">
+                        <!-- <img src="favicon.svg" alt=""> -->
                         <span class="logo">{{ stationOwner }}</span>
                         <span class="songs-num" v-if="station.tracks">&bull; {{ station.tracks?.length }} songs</span>
                         <span class="songs-time" v-if="formttedTime">, about {{ formttedTime }} hours</span>
@@ -19,7 +19,7 @@
                 </section>
             </section>
         </div>
-        <div class="bottom-gradient">
+        <div ref="botGradient" class="bottom-gradient">
             <section class="details-player">
                 <button v-if="!isPlaying" class="details-play" v-icon="'detailsPlay'" v-show="hasTracks"
                     @click="clickTrack(currTrackIdx)">
@@ -118,16 +118,19 @@ export default {
                 showErrorMsg('Could not set current station')
             }
         },
-        async likeStation(stationId) {
+        async likeStation() {
             // dispatch to user store and push stationId to stations array
             // then dispatch to store and getbyid to station id
             // push it to stations array
-            // try {
-            //     await this.$store.dispatch({ type: 'saveStation', stationToSave: this.station })
-            //     showSuccessMsg('Saved to Your Library')
-            // } catch (err) {
-            //     showErrorMsg('Could not add station')
-            // }
+            
+            try {
+                await this.$store.dispatch({ type: 'updateUserStations', stationId: this.station._id, action: 'add' })
+                const stationToSave = await this.$store.dispatch({ type: 'getStation', stationId: this.station._id })
+                this.$store.commit({ type: 'addStation', stationToSave })
+                showSuccessMsg('Saved to Your Library')
+            } catch (err) {
+                showErrorMsg('Could not add station')
+            }
         },
         async removeStation() {
             try {
@@ -178,10 +181,11 @@ export default {
         setBackgroundClr(avgColor) {
             const [darkerColor, darkerDarkerColor] = utilService.generateColors(avgColor)
 
-            document.querySelector('.top-gradient').style.backgroundImage =
-                `linear-gradient(to bottom, ${avgColor} 0%, ${darkerColor})`
-            document.querySelector('.bottom-gradient').style.backgroundImage =
-                `linear-gradient(to bottom, ${darkerDarkerColor} 0%, #121212 14.5rem, #121212)`
+            const elTopGrad = this.$refs.topGradient
+            const elBotGrad = this.$refs.botGradient
+
+            elTopGrad.style.backgroundImage = `linear-gradient(to bottom, ${avgColor} 0%, ${darkerColor})`
+            elBotGrad.style.backgroundImage = `linear-gradient(to bottom, ${darkerDarkerColor} 0%, #121212 14.5rem, #121212)`
         },
         setTracksTotalDuration() {
             this.tracksTotalDuration = this.station.tracks?.reduce((sum, track) => sum = sum + track.formalDuration, 0)

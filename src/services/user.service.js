@@ -12,12 +12,13 @@ export const userService = {
     getById,
     remove,
     update,
+    updateUserStations,
     changeScore
 }
 
 ;(async () => {
-    // await signup({ fullname: 'Guest', username: 'guest', password: '123' })
-    await login({ username: 'guest', password: '123' })
+    // await signup({ fullname: 'Lidor', username: 'lidor', password: '123' })
+    await login({ username: 'lidor', password: '123' })
 })()
 
 window.userService = userService
@@ -39,6 +40,19 @@ async function update(user) {
     user = await httpService.put(`user/${user._id}`, user)
 
     // Handle case in which admin updates other user's details
+    if (getLoggedinUser()._id === user._id) saveLocalUser(user)
+    return user
+}
+
+async function updateUserStations(user, stationId, action) {
+    user = await httpService.get(`user/${user._id}`, user)
+    if(action === 'add') user.stationIds.push(stationId)
+    else if(action === 'remove') {
+        const idx = user.stationIds.findIndex(currStationId => currStationId = stationId)
+        user.stationIds.splice(idx, 1)
+    }
+    user = await httpService.put(`user/${user._id}`, user)
+
     if (getLoggedinUser()._id === user._id) saveLocalUser(user)
     return user
 }

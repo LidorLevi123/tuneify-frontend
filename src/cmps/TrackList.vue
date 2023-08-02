@@ -14,7 +14,7 @@
                 <Draggable v-for="(track, idx) in station.tracks" :key="track.id">
                     <li @click="onTrackClicked(idx)">
                         <TrackPreview @track-add="onAddTrack" @track-remove="onRemoveTrack" @track-like="onLikeTrack"
-                            @track-dislike="onDislikeTrack" :track="track" :trackIdx="idx" />
+                            @track-dislike="onDislikeTrack" :station="station" :track="track" :trackIdx="idx" />
                     </li>
                 </Draggable>
             </Container>
