@@ -18,35 +18,35 @@
         <span class="track-album">{{ track.album }}</span>
         <div class="df sb">
             <span class="track-date">{{ formattedDate }}</span>
-            <span v-show="isHovered" v-if="!isLiked(track.id)" @click="onAddTrack(track, user.likedId, $event)" class="btn-like"
-                v-icon="`smallLikeDis`"></span>
+            <span v-show="isHovered" v-if="!isLiked(track.id)" @click="onAddTrack(track, user.likedId, $event)"
+                class="btn-like" v-icon="`smallLikeDis`"></span>
             <span v-else @click="onDislikeTrack(track.id, $event)" class="btn-dislike" v-icon="`smallLikeEna`"></span>
         </div>
         <div class="time-actions">
             <span class="track-time">{{ formattedTime }}</span>
 
-            <section class>
 
-                <span v-show="isHovered" class="btn-options svg-fill" v-icon="'moreOptionsSmall'"
-                    @click="toggleDropdown($event)"></span>
 
-                <div v-if="showDropdown" class="dropdown">
-                    <div v-if="!isStationOwner" class="dropdown-item" @mouseenter="popSubDropdown"
-                        @mouseleave="unPopSubDropdown">
-                        <span>Add to playlist</span>
-                        <div v-show="showSubDropdown" class="sub-dropdown">
-                            <div class="sub-dropdown-item" v-for="idx in createdStations?.length"
-                                @click="onAddTrack(track, createdStations[idx - 1]._id, $event)">
-                                {{ createdStations[idx - 1].name }}
-                            </div>
+            <span v-show="isHovered" class="btn-options svg-fill" v-icon="'moreOptionsSmall'"
+                @click="toggleDropdown($event)"></span>
+
+            <div v-if="showDropdown" class="dropdown">
+                <div v-if="!isStationOwner" class="dropdown-item" @mouseenter="popSubDropdown">
+                    <span class="menu-li">Add to playlist</span>
+                    <div v-show="showSubDropdown" class="sub-dropdown">
+                        <div class="sub-dropdown-item" v-for="idx in createdStations?.length"
+                            @click="onAddTrack(track, createdStations[idx - 1]._id, $event)">
+                            {{ createdStations[idx - 1].name }}
+                            <hr>
                         </div>
                     </div>
-                    <div v-else class="dropdown-item" @click="onRemoveTrack(track.id, $event)">
-                        <span>Remove from playlist</span>
-                    </div>
                 </div>
+                <div v-else class="dropdown-item" @click="onRemoveTrack(track.id, $event)">
+                    <span class="menu-li">Remove from playlist</span>
+                </div>
+            </div>
 
-            </section>
+
         </div>
     </article>
 </template>
@@ -132,6 +132,8 @@ export default {
         onAddTrack(track, stationId, ev) {
             ev.stopPropagation()
             this.$emit('track-add', track, stationId)
+            this.showSubDropdown = false
+
         },
         onRemoveTrack(trackId, ev) {
             ev.stopPropagation()

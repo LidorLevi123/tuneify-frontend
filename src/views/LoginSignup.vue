@@ -27,6 +27,15 @@
 
         </form>
         <hr>
+        <!-- <form action="">
+          <span>Name</span>
+          <input type="text" v-model="loginCred.username" placeholder="User name">
+          <span>Username</span>
+          <input type="text" v-model="loginCred.username" placeholder="User name">
+          <span>Password</span>
+          <input type="password" v-model="loginCred.password" placeholder="Password">
+          <button class="login-btn">Sign up</button>
+        </form> -->
       </section>
     </section>
 
