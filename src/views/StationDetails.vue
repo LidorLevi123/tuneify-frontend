@@ -40,7 +40,7 @@
                 <!-- <button v-icon="'moreOptions'" class="btn details-edit"></button> -->
             </section>
             <TrackList @track-clicked="clickTrack" @track-add="addTrack" @track-remove="removeTrack"
-                @track-dislike="dislikeTrack" :station="station" />
+                @track-dislike="dislikeTrack" @station-update="loadStation" :station="station" />
         </div>
         <StationEdit />
     </section>

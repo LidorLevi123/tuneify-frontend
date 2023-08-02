@@ -40,13 +40,13 @@ export default {
     },
     methods: {
         onDrop(dropResult) {
-            console.log('dropResult', dropResult)
+            // console.log('dropResult', dropResult)
             this.items = this.applyDrag(this.station.tracks, dropResult)
         },
 
         applyDrag(arr, dragResult) {
-            console.log('arr', arr)
-            console.log('dragResult', dragResult)
+            // console.log('arr', arr)
+            // console.log('dragResult', dragResult)
             const { removedIndex, addedIndex, payload } = dragResult
             if (removedIndex === null && addedIndex === null) return arr
 
@@ -69,7 +69,7 @@ export default {
         async updateStation(updatedStation) {
             try {
                 await this.$store.dispatch({ type: 'saveStation', stationToSave: updatedStation })
-                this.onCloseModal()
+                this.$emit('station-update')
             } catch (err) {
                 console.log(err.message)
             }
