@@ -10,7 +10,7 @@
         </div>
         <hr />
         <ul v-if="station?.tracks" class="clean-list">
-            <Container orientation="vertical" dragClass="dragging" @drop="onDrop">
+            <Container dragClass="dragging" @drop="onDrop"  :animation-duration="100" drag-class="dragged-item">
                 <Draggable v-for="(track, idx) in station.tracks" :key="track.id">
                     <li @click="onTrackClicked(idx)">
                         <TrackPreview @track-add="onAddTrack" @track-remove="onRemoveTrack" @track-like="onLikeTrack"
@@ -40,29 +40,29 @@ export default {
     methods: {
         onDrop(dropResult) {
             // console.log('dropResult', dropResult)
-            this.items = this.applyDrag(this.station.tracks, dropResult)
+            this.applyDrag(dropResult)
+
         },
 
-        applyDrag(arr, dragResult) {
+        async applyDrag(dragResult) {
             // console.log('arr', arr)
             // console.log('dragResult', dragResult)
+
+
             const { removedIndex, addedIndex, payload } = dragResult
             if (removedIndex === null && addedIndex === null) return arr
 
-            const result = [...arr]
             let itemToAdd = payload
 
             if (removedIndex !== null) {
-                itemToAdd = result.splice(removedIndex, 1)[0]
+                itemToAdd = this.station.tracks.splice(removedIndex, 1)[0]
             }
 
             if (addedIndex !== null) {
-                result.splice(addedIndex, 0, itemToAdd)
+                this.station.tracks.splice(addedIndex, 0, itemToAdd)
             }
-            const updatedStation = { ...this.station, tracks: result }
-            this.updateStation(updatedStation)
-
-            return result
+            const updatedStation = { ...this.station, tracks: this.station.tracks }
+            await this.updateStation(updatedStation)
         },
 
         async updateStation(updatedStation) {
