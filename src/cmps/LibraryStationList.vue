@@ -1,11 +1,12 @@
 <template>
     <section class="library-station-list">
         <ul class="clean-list">
-            <li @click="goToDetails(station._id)" v-for="station in libraryStations" :key="station.id">
+            <li @click="goToDetails(station._id)" v-for="station in  libraryStations " :key="station.id">
                 <LibraryStationPreview :station="station" />
                 <button v-if="station._id !== user?.likedId" @click="removeStation(station._id, $event)">
                     ❌
                 </button>
+                <!-- <span v-icon="`speaker`" v-if="currStation_id === station_id"></span> -->
             </li>
         </ul>
     </section>

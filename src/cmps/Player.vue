@@ -12,8 +12,10 @@
                 <div v-if="currTrack" class="track-artist">{{ currTrack.artists?.length > 0 ? currTrack.artists[0] : '' }}
                 </div>
             </section>
-            <span v-if="!hasLiked(currTrack?.id) && currTrack" class="btn-like" v-icon="`smallLikeDis`" @click="likeTrack(currTrack)" ></span>
-            <span v-else-if="hasLiked(currTrack?.id) && currTrack" class="btn-dislike" v-icon="`smallLikeEna`" @click="dislikeTrack(currTrack.id)"></span>
+            <span v-if="!hasLiked(currTrack?.id) && currTrack" class="btn-like" v-icon="`smallLikeDis`"
+                @click="likeTrack(currTrack)"></span>
+            <span v-else-if="hasLiked(currTrack?.id) && currTrack" class="btn-dislike" v-icon="`smallLikeEna`"
+                @click="dislikeTrack(currTrack.id)"></span>
         </section>
 
         <section class="player-mid-container">
@@ -174,8 +176,8 @@ export default {
         async likeTrack(trackToSave) {
             try {
                 await this.$store.dispatch({ type: 'addTrack', trackToSave, stationId: this.user.likedId })
-                if(this.currStation._id !== this.user.likedId) {
-                    showSuccessMsg('Saved to station')
+                if (this.currStation._id !== this.user.likedId) {
+                    showSuccessMsg('Added to your Liked Songs')
                 } else {
                     showSuccessMsg('Saved to Your Library')
                 }
@@ -187,7 +189,7 @@ export default {
         async dislikeTrack(trackId) {
             try {
                 await this.$store.dispatch({ type: 'removeTrack', trackId, stationId: this.user.likedId })
-                showSuccessMsg('Removed from station')
+                showSuccessMsg('Removed from your Liked Songs')
             } catch (err) {
                 showErrorMsg('Could not dislike track')
             }

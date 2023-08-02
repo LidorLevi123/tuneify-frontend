@@ -99,8 +99,8 @@ const TuneifySvgs = {
   navBack: `<svg role="img" height="16" width="16" aria-hidden="true" class="Svg-sc-ytk21e-0 leya-dW IYDlXmBmmUKHveMzIPCF" viewBox="0 0 16 16" data-encore-id="icon"><path d="M11.03.47a.75.75 0 0 1 0 1.06L4.56 8l6.47 6.47a.75.75 0 1 1-1.06 1.06L2.44 8 9.97.47a.75.75 0 0 1 1.06 0z" fill="#FFFFFF"></path></svg>`,
   navNext:`<svg role="img" height="16" width="16" aria-hidden="true" class="Svg-sc-ytk21e-0 leya-dW IYDlXmBmmUKHveMzIPCF" viewBox="0 0 16 16" data-encore-id="icon"><path d="M4.97.47a.75.75 0 0 0 0 1.06L11.44 8l-6.47 6.47a.75.75 0 1 0 1.06 1.06L13.56 8 6.03.47a.75.75 0 0 0-1.06 0z" fill="#FFFFFF"></path></svg></svg>`,
 
-  edit:`<svg role="img" height="48" width="48" aria-hidden="true" viewBox="0 0 24 24" data-encore-id="icon" class="Svg-sc-ytk21e-0 haNxPq"></svg>
-  `
+  edit:`<svg role="img" height="48" width="48" aria-hidden="true" viewBox="0 0 24 24" data-encore-id="icon" class="Svg-sc-ytk21e-0 haNxPq"></svg>`,
+  speaker: `<svg role="img" height="16" width="16" aria-hidden="true" class="Svg-sc-ytk21e-0 ilPTuf o_wMyH9_LbAmIwlVqsF0" viewBox="0 0 16 16" data-encore-id="icon"><path d="M10.016 1.125A.75.75 0 0 0 8.99.85l-6.925 4a3.639 3.639 0 0 0 0 6.299l6.925 4a.75.75 0 0 0 1.125-.65v-13a.75.75 0 0 0-.1-.375zM11.5 5.56a2.75 2.75 0 0 1 0 4.88V5.56z" fill="#1ed760"></path><path d="M16 8a5.752 5.752 0 0 1-4.5 5.614v-1.55a4.252 4.252 0 0 0 0-8.127v-1.55A5.752 5.752 0 0 1 16 8z" fill="#1ed760"></path></svg>`
 }
 
 
