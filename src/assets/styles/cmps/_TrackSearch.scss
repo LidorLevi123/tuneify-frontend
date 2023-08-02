@@ -1,0 +1,41 @@
+.track-search-container {
+    display: flex;
+    justify-content: space-between;
+    margin-block-start: 1.5rem;
+    padding: 1.5rem 0;
+    max-width: 119rem;
+    // margin-inline: 1.5rem;
+
+    h1 {
+        color: $clr2;
+        font-size: 1.5rem;
+        font-family: CircularSpTitle;
+        margin-block-end: 1rem;
+    }
+
+    .track-search-input {
+        display: flex;
+        align-items: center;
+        height: 2.5rem;
+        background-color: #2a2a2a;
+        border-radius: 0.2rem;
+        padding-inline-end: 0.5rem;
+        padding-inline-start: 0.5rem;
+
+        input {
+            padding: 0.5rem 0.5rem;
+            border: none;
+            outline: none;
+            background-color: #2a2a2a;
+            color: $clr2;
+            width: 100%;
+        }
+
+    }
+
+    button {
+        margin-inline-end: 0.5rem;
+        background-color: transparent;
+        border: none
+    }
+}

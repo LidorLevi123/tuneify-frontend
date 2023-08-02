@@ -19,12 +19,13 @@
                 </Draggable>
             </Container>
         </ul>
+        <TrackSearch />
     </section>
 </template>
 
 <script>
 import TrackPreview from './TrackPreview.vue'
-
+import TrackSearch from './TrackSearch.vue'
 import { Container, Draggable } from 'vue3-smooth-dnd'
 
 
@@ -95,6 +96,7 @@ export default {
         TrackPreview,
         Container,
         Draggable,
+        TrackSearch
     },
 
     name: 'TrackList',
