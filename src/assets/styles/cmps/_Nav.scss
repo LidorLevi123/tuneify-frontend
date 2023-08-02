@@ -41,11 +41,14 @@
             }
 
             &:hover {
+                transition: 0.3s;
                 color: $clr2;
+
 
                 .icon {
 
                     path {
+                        transition: 0.4s;
                         fill: $clr2;
                     }
                 }

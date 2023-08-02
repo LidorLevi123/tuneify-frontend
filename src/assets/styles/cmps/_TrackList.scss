@@ -24,6 +24,10 @@
         @include for-mobile-layout {
             display: none;
         }
+
+        >:last-child {
+            padding-inline-start: 12px;
+        }
     }
 
 
