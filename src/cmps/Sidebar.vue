@@ -26,25 +26,13 @@ export default {
 
     methods: {
         async addStation() {
-<<<<<<< HEAD
-            if (!this.canAddStation) return
-
-            this.canAddStation = false
-            const stationToSave = stationService.getEmptyStation()
-
-            stationToSave.name = 'My Playlist #' + (this.libraryStations.length)
-            stationToSave.imgUrl = 'https://picsum.photos/' + (this.libraryStations.length + 232)
-            stationToSave.owner = this.loggedinUser
-
-=======
->>>>>>> 372b9fa57252eb53528c391ccf36e14e4caee04b
             try {
 
                 if (!this.canAddStation) return
-    
+
                 this.canAddStation = false
                 const stationToSave = stationService.getEmptyStation()
-    
+
                 stationToSave.name = 'My Playlist #' + this.addedStationIdx++
                 stationToSave.imgUrl = 'https://picsum.photos/' + (this.libraryStations.length + 232)
 
