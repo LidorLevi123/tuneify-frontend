@@ -133,7 +133,6 @@ export const stationStore = {
         async getTracks({ commit }, { query }) {
             if(!query) {
                 commit({ type: 'setTracks', tracks: []})
-                return
             }
             try {
                 const tracks = await stationService.getTracks(query)

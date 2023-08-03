@@ -16,11 +16,6 @@ export const userService = {
     changeScore
 }
 
-;(async () => {
-    // await signup({ fullname: 'Lidor', username: 'lidor', password: '123' })
-    await login({ username: 'lidor', password: '123' })
-})()
-
 window.userService = userService
 
 function getUsers() {
@@ -89,7 +84,6 @@ async function changeScore(by) {
     await update(user)
     return user.score
 }
-
 
 function saveLocalUser(user) {
     user = {

@@ -42,19 +42,9 @@ export default {
     },
 
     methods: {
-        async removeStation(stationId, ev) {
+        removeStation(stationId, ev) {
             ev.stopPropagation()
-            try {
-                await this.$store.dispatch({ type: 'removeStation', stationId })
-                await this.$store.dispatch({ type: 'updateUserStations', stationId, action: 'remove' })
-                if (stationId === this.$route.params.stationId) this.$router.push('/')
-                this.contextmenuOpen = false
-                showSuccessMsg('Removed from Your Library')
-            } catch (err) {
-                console.log(err.message)
-                showErrorMsg('Could not remove station')
-            }
-
+            this.$emit('station-remove', stationId)
         },
         goToDetails(stationId) {
             this.$router.push(`/station/${stationId}`)

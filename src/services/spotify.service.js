@@ -5,54 +5,6 @@ let gAccessToken = ''
 
 await getAccessToken()
 
-export const spotifyService = {
-    getSpotifyItems
-}
-
-async function getSpotifyItems(req) {
-    const { type, id, query } = req
-
-    const endpoints = {
-        categoryStations: `https://api.spotify.com/v1/browse/categories/${id}/playlists?country=il&limit=9`,
-        categories: `https://api.spotify.com/v1/browse/categories?country=US&offset=0&limit=20`,
-        station: `https://api.spotify.com/v1/playlists/${id}`,
-        tracks: `https://api.spotify.com/v1/playlists/${id}/tracks`,
-        search: `https://api.spotify.com/v1/search?q=${query}&type=track`
-    }
-
-    try {
-        // Make a GET request to the Spotify API endpoint
-        const response = await axios.get(endpoints[type], {
-            headers: {
-                Authorization: `Bearer ${gAccessToken}`,
-            },
-        })
-        // Clean and return the data from response
-        let cleanData
-        switch (type) {
-            case 'categoryStations':
-                cleanData = _cleanCategoryStationsData(response.data)
-                break
-            case 'tracks':
-                cleanData = _cleanStationsTracksData(response.data)
-                break
-            case 'station':
-                cleanData = _cleanStationData(response.data)
-                break
-            case 'search':
-                cleanData = _cleanSearchData(response.data)
-                break
-        }
-        return cleanData
-    } catch (error) {
-        console.error(
-            'Error retrieving data:',
-            error.response ? error.response.data : error.message
-        )
-        throw error
-    }
-}
-
 async function getAccessToken() {
 
     try {
@@ -87,9 +39,68 @@ async function getAccessToken() {
     }
 }
 
+export const spotifyService = {
+    getSpotifyItems
+}
+
+async function getSpotifyItems(req) {
+
+    const { type, id, query } = req
+
+    const endpoints = _getEndpoints(id, query)
+
+    try {
+        // Make a GET request to the Spotify API endpoint
+        const response = await axios.get(endpoints[type], {
+            headers: {
+                Authorization: `Bearer ${gAccessToken}`,
+            },
+        })
+
+        // Clean and return the data from response
+        let cleanData = _cleanResponseData(response.data, type)
+        return cleanData
+
+    } catch (error) {
+        console.error(
+            'Error retrieving data:',
+            error.response ? error.response.data : error.message
+        )
+        throw error
+    }
+}
+
+function _getEndpoints(id, query) {
+    return {
+        categoryStations: `https://api.spotify.com/v1/browse/categories/${id}/playlists?country=il&limit=9`,
+        station: `https://api.spotify.com/v1/playlists/${id}`,
+        tracks: `https://api.spotify.com/v1/playlists/${id}/tracks`,
+        search: `https://api.spotify.com/v1/search?q=${query}&type=track`
+    }
+}
+
+function _cleanResponseData(data, type) {
+    let cleanData
+
+    switch (type) {
+        case 'categoryStations':
+            cleanData = _cleanCategoryStationsData(data)
+            break
+        case 'tracks':
+            cleanData = _cleanStationTracksData(data)
+            break
+        case 'station':
+            cleanData = _cleanStationData(data)
+            break
+        case 'search':
+            cleanData = _cleanSearchData(data)
+            break
+    }
+    return cleanData
+}
+
 async function _cleanStationData(data) {
     const station = {
-        _id: data.id,
         spotifyId: data.id,
         name: data.name,
         imgUrl: data.images[0].url,
@@ -99,6 +110,7 @@ async function _cleanStationData(data) {
     }
     return station
 }
+
 
 function _cleanCategoryStationsData(data) {
     return data.playlists.items.map(item => ({
@@ -111,8 +123,7 @@ function _cleanCategoryStationsData(data) {
 
 // const test = getSpotifyItems('tracks', '37i9dQZF1DXcF6B6QPhFDv')
 // console.log(test)
-
-function _cleanStationsTracksData(data) {
+function _cleanStationTracksData(data) {
     return data.items.map(item => {
         return {
             addedAt: _getRandomDate(),

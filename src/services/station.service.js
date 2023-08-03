@@ -50,7 +50,6 @@ async function save(station) {
     if (station._id) {
         return await httpService.put(BASE_URL + station._id, station)
     }
-    station._id = utilService.makeId()
     return await httpService.post(BASE_URL, station)
 }
 
@@ -107,7 +106,6 @@ async function getStationsForHome() {
 
 function getEmptyStation() {
     return {
-        _id: '',
         name: '',
         description: '',
         imgUrl: '',
