@@ -1,16 +1,20 @@
 <template>
     <section class="track-search-container">
-        <div>
-            <h1>Let's find something for your playlist</h1>
-            <div class="track-search-input">
-                <span class="df ai" v-icon="`sSearch`"></span>
-                <input type="text" v-model="filterBy.txt" @input="onSetFilterBy" placeholder="Search for songs or episodes">
-                <div v-if="filterBy.txt">
-                    <span class="df ai" v-icon="'close'" @click="onClearFilter"></span>
+        <section class="track-search" v-if="modalOpen">
+            <div>
+                <h1>Let's find something for your playlist</h1>
+                <div class="track-search-input">
+                    <span class="df ai" v-icon="`sSearch`"></span>
+                    <input type="text" v-model="filterBy.txt" @input="onSetFilterBy"
+                        placeholder="Search for songs or episodes">
+                    <div v-if="filterBy.txt">
+                        <span class="df ai" v-icon="'close'" @click="onClearFilter"></span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <button v-icon="`bClose`">Close</button>
+            <button @click="toggleModal" class="close-btn" v-icon="`bClose`"></button>
+        </section>
+        <button v-if="!modalOpen" @click="toggleModal" class="find-btn">Find more</button>
     </section>
 </template>
 
@@ -23,6 +27,7 @@ export default {
             filterBy: {
                 txt: '',
             },
+            modalOpen: true
         }
     },
     methods: {
@@ -33,6 +38,9 @@ export default {
         onClearFilter() {
             this.filterBy.txt = ''
         },
+        toggleModal() {
+            this.modalOpen = !this.modalOpen
+        }
     }
 }
 </script>

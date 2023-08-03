@@ -22,6 +22,32 @@
             align-self: center;
             margin-block-start: 0.5rem;
         }
+
+        .speaker {
+            padding-inline-end: 1rem;
+        }
+
+        .dlt-btn {
+            position: absolute;
+            background-color: $clr3;
+            // width: max-content;
+            // height: max-content;
+            cursor: pointer;
+            color: $clr3;
+            background-color: $clr6;
+            padding: 1rem;
+            height: 3rem;
+            border-radius: 0.2rem;
+            inset: 0px auto auto 0px;
+
+            &:hover {
+                // .menu-item {
+                //     background-color: rgb(66, 66, 66);
+                //     padding-inline-end: 1rem;
+                //     padding-inline-start: 1rem;
+                // }
+            }
+        }
     }
 
     ul {

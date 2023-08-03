@@ -94,7 +94,7 @@ export default {
             repeatStateIdx: 0,
             isMute: false,
             lastVolume: 0,
-            currVolume: 80,
+            currVolume: 30,
             playbackPos: 0,
             currTrackDuration: 0,
             youtubePlayerStates: {
