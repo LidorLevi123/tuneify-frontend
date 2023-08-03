@@ -11,6 +11,7 @@ export const stationService = {
     save,
     remove,
     getEmptyStation,
+    getTracks,
     saveTrack,
     removeTrack,
     getCategoryStations,
@@ -29,7 +30,7 @@ async function getById(stationId) {
     let station = await httpService.get(BASE_URL + stationId)
     
     if (!station) {
-        station = await spotifyService.getSpotifyItems('station', stationId)
+        station = await spotifyService.getSpotifyItems({ type: 'station', id: stationId })
         station = await httpService.post(BASE_URL, station)
     }
 
@@ -53,6 +54,11 @@ async function save(station) {
     return await httpService.post(BASE_URL, station)
 }
 
+async function getTracks(query) {
+    const tracks = await spotifyService.getSpotifyItems({ type: 'search', query })
+    return tracks
+}
+
 async function saveTrack(track, stationId) {
     const station = await httpService.get(BASE_URL + stationId)
     station.tracks.push(track)
@@ -67,7 +73,7 @@ async function removeTrack(track, stationId) {
 }
 
 async function getCategoryStations(categoryId) {
-    const stations = await spotifyService.getSpotifyItems('categoryStations', categoryId)
+    const stations = await spotifyService.getSpotifyItems({ type: 'categoryStations', id: categoryId} )
     return stations
     // return httpService.get('spotify', categoryId)
 }
@@ -87,7 +93,7 @@ async function getStationsForHome() {
     const res = []
 
     for (let i = 0; i < categories.length; i++) {
-        let stations = await spotifyService.getSpotifyItems('categoryStations', categories[i].id)
+        let stations = await spotifyService.getSpotifyItems({type: 'categoryStations', id: categories[i].id} )
         stations = stations?.map(station => ({ ...station, category: categories[i].name }))
         res.push(...stations)
     }

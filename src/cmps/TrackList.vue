@@ -19,7 +19,7 @@
                 </Draggable>
             </Container>
         </ul>
-        <TrackSearch />
+        <TrackSearch @search="onLoadTracks"/>
     </section>
 </template>
 
@@ -42,7 +42,6 @@ export default {
         onDrop(dropResult) {
             // console.log('dropResult', dropResult)
             this.applyDrag(dropResult)
-
         },
 
         async applyDrag(dragResult) {
@@ -90,6 +89,9 @@ export default {
         onDislikeTrack(trackId) {
             this.$emit('track-dislike', trackId)
         },
+        onLoadTracks(query) {
+            this.$emit('search', query)
+        }
     },
 
     components: {

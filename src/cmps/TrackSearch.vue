@@ -5,9 +5,9 @@
                 <h1>Let's find something for your playlist</h1>
                 <div class="track-search-input">
                     <span class="df ai" v-icon="`sSearch`"></span>
-                    <input type="text" v-model="filterBy.txt" @input="onSetFilterBy"
+                    <input type="text" v-model="query"
                         placeholder="Search for songs or episodes">
-                    <div v-if="filterBy.txt">
+                    <div v-if="query">
                         <span class="df ai" v-icon="'close'" @click="onClearFilter"></span>
                     </div>
                 </div>
@@ -19,28 +19,41 @@
 </template>
 
 <script>
+import { utilService } from '../services/util.service'
+
 export default {
     name: 'TrackSearch',
 
     data() {
         return {
-            filterBy: {
-                txt: '',
-            },
+            query: '',
             modalOpen: true
         }
     },
+
+    created() {
+        this.search = utilService.debounce(() => {
+            this.$emit('search', this.query)
+        }, 700)
+    },
+
     methods: {
-        onSetFilterBy() {
-            console.log(this.filterBy)
-            this.$emit('filter', this.filterBy)
-        },
         onClearFilter() {
-            this.filterBy.txt = ''
+            this.query = ''
         },
         toggleModal() {
             this.modalOpen = !this.modalOpen
         }
-    }
+    },
+
+    watch: {
+        query: {
+            handler() {
+                if(this.query === '') return
+                this.search()
+            },
+            deep: true,
+        },
+    },
 }
 </script>

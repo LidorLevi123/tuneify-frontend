@@ -3,34 +3,33 @@ import axios from "axios"
 
 let gAccessToken = ''
 
-getAccessToken()
+await getAccessToken()
 
 export const spotifyService = {
     getSpotifyItems
 }
 
-// const data = getSpotifyItems('search')
-// console.log(data)
+async function getSpotifyItems(req) {
+    const { type, id, query } = req
 
-async function getSpotifyItems(reqType, id) {
     const endpoints = {
         categoryStations: `https://api.spotify.com/v1/browse/categories/${id}/playlists?country=il&limit=9`,
         categories: `https://api.spotify.com/v1/browse/categories?country=US&offset=0&limit=20`,
         station: `https://api.spotify.com/v1/playlists/${id}`,
         tracks: `https://api.spotify.com/v1/playlists/${id}/tracks`,
-        search: `https://api.spotify.com/v1/search`
+        search: `https://api.spotify.com/v1/search?q=${query}&type=track`
     }
+
     try {
         // Make a GET request to the Spotify API endpoint
-        const response = await axios.get(endpoints[reqType], {
+        const response = await axios.get(endpoints[type], {
             headers: {
                 Authorization: `Bearer ${gAccessToken}`,
             },
         })
-        // Return the playlist data from the response
-        // return response.data
+        // Clean and return the data from response
         let cleanData
-        switch (reqType) {
+        switch (type) {
             case 'categoryStations':
                 cleanData = _cleanCategoryStationsData(response.data)
                 break
@@ -39,6 +38,9 @@ async function getSpotifyItems(reqType, id) {
                 break
             case 'station':
                 cleanData = _cleanStationData(response.data)
+                break
+            case 'search':
+                cleanData = _cleanSearchData(response.data)
                 break
         }
         return cleanData
@@ -74,7 +76,7 @@ async function getAccessToken() {
         const { data } = response
         const accessToken = data.access_token
         const expiresIn = data.expires_in
-        
+
         gAccessToken = accessToken
     } catch (error) {
         console.error(
@@ -88,11 +90,12 @@ async function getAccessToken() {
 async function _cleanStationData(data) {
     const station = {
         _id: data.id,
+        spotifyId: data.id,
         name: data.name,
         imgUrl: data.images[0].url,
         description: data.description,
-        owner: { fullname: 'Tuneify' } ,
-        tracks: await getSpotifyItems('tracks', data.id),
+        owner: { fullname: 'Tuneify' },
+        tracks: await getSpotifyItems({ type: 'tracks', id: data.id }),
     }
     return station
 }
@@ -108,10 +111,11 @@ function _cleanCategoryStationsData(data) {
 
 // const test = getSpotifyItems('tracks', '37i9dQZF1DXcF6B6QPhFDv')
 // console.log(test)
+
 function _cleanStationsTracksData(data) {
     return data.items.map(item => {
         return {
-            addedAt: item.added_at,
+            addedAt: _getRandomDate(),
             id: item.track.id,
             title: item.track.name,
             artists: _cleanArtists(item.track.artists),
@@ -123,6 +127,36 @@ function _cleanStationsTracksData(data) {
     })
 }
 
+// const res = await getSpotifyItems({ type: 'search', query: 'לחם חביתה' })
+// console.log(res)
+
+function _cleanSearchData(data) {
+    return data.tracks.items.map(track => {
+        return {
+            id: track.id,
+            title: track.name,
+            artists: _cleanArtists(track.artists),
+            imgUrl: track.album.images[0].url,
+            formalDuration: track.duration_ms,
+            album: track.album.name,
+        }
+    })
+}
+
 function _cleanArtists(artists) {
     return artists.map((artist) => artist.name)
+}
+
+function _getRandomDate() {
+    const startYear = 2021
+    const endYear = 2023
+    const maxMonth = 7 // July
+
+    const randomYear = Math.floor(Math.random() * (endYear - startYear + 1)) + startYear
+    const randomMonth = Math.floor(Math.random() * (maxMonth + 1)) + 1 // Adding 1 because months are zero-based
+    const randomDay = Math.floor(Math.random() * 31) + 1 // Assume maximum of 31 days in a month
+
+    const randomDate = new Date(Date.UTC(randomYear, randomMonth - 1, randomDay, 0, 0, 0))
+
+    return randomDate.toISOString()
 }
