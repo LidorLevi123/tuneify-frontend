@@ -5,8 +5,7 @@
                 <h1>Let's find something for your playlist</h1>
                 <div class="track-search-input">
                     <span class="df ai" v-icon="`sSearch`"></span>
-                    <input type="text" v-model="query"
-                        placeholder="Search for songs or episodes">
+                    <input type="text" v-model="query" placeholder="Search for songs or episodes">
                     <div v-if="query">
                         <span class="df ai" v-icon="'close'" @click="onClearFilter"></span>
                     </div>
@@ -15,17 +14,19 @@
             <button @click="toggleModal" class="close-btn" v-icon="`bClose`"></button>
         </section>
         <button v-if="!modalOpen" @click="toggleModal" class="find-btn">Find more</button>
-
-        <pre v-show="tracks.length" style="color: white;"> {{ tracks }} </pre>
+        <SearchList :tracks="tracks" v-if="modalOpen" :station="station" @track-add="onAddTrack" />
     </section>
 </template>
 
 <script>
-import { utilService } from '../services/util.service'
 
+import { utilService } from '../services/util.service'
+import SearchList from './SearchList.vue'
 export default {
     name: 'TrackSearch',
-
+    props: {
+        station: { type: Object },
+    },
     data() {
         return {
             query: '',
@@ -51,6 +52,9 @@ export default {
         },
         toggleModal() {
             this.modalOpen = !this.modalOpen
+        },
+        onAddTrack(track, stationId) {
+            this.$emit('track-add', track, stationId)
         }
     },
 
@@ -61,6 +65,9 @@ export default {
             },
             deep: true,
         },
+    },
+    components: {
+        SearchList,
     },
 }
 </script>

@@ -1,0 +1,89 @@
+.search-preview-container {
+    display: grid;
+    grid-template-columns: [first] 4fr [var1] 2fr [last] minmax(120px, 1fr);
+    align-items: center;
+    padding-inline-end: 1rem;
+
+
+    .mini-prev {
+        height: 3.375rem;
+        display: flex;
+        align-items: center;
+
+        .img-container {
+            position: relative;
+
+            img {
+                height: 2.5rem;
+                width: 2.5rem;
+                margin-inline-end: 1rem;
+                margin-inline-start: 0.5rem;
+                display: flex;
+                align-self: center;
+            }
+
+            .icon {
+                position: absolute;
+                top: 0.75rem;
+                left: 1.1875rem;
+
+                path {
+                    fill: #FFFFFF;
+                }
+            }
+        }
+    }
+
+    .track-info-container {
+        overflow: hidden;
+
+        .track-name {
+            color: $clr2;
+        }
+
+        .artist-name {
+            color: $clr3;
+
+            // handling text overflow
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            white-space: pre-wrap;
+        }
+
+        &.track-playing {
+            color: $clr9
+        }
+
+
+    }
+
+    .track-playing {
+        color: $clr9;
+    }
+
+}
+
+.track-album {
+    color: $clr3;
+}
+
+.add-btn {
+    cursor: pointer;
+    justify-self: end;
+    color: $clr2;
+    background-color: transparent;
+    border: 1px solid $clr10;
+    font-weight: 700;
+    border-radius: 500px;
+    padding: 0.25rem 0.9375;
+    width: 3.6875rem;
+    height: 2rem;
+
+    &:hover {
+        scale: 103%;
+        outline: 1px solid $clr2;
+    }
+
+}
