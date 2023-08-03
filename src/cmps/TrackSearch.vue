@@ -15,6 +15,8 @@
             <button @click="toggleModal" class="close-btn" v-icon="`bClose`"></button>
         </section>
         <button v-if="!modalOpen" @click="toggleModal" class="find-btn">Find more</button>
+
+        <pre v-show="tracks.length" style="color: white;"> {{ tracks }} </pre>
     </section>
 </template>
 
@@ -28,6 +30,12 @@ export default {
         return {
             query: '',
             modalOpen: true
+        }
+    },
+
+    computed: {
+        tracks() {
+            return this.$store.getters.tracks
         }
     },
 
@@ -49,7 +57,6 @@ export default {
     watch: {
         query: {
             handler() {
-                if(this.query === '') return
                 this.search()
             },
             deep: true,
