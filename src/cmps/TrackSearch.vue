@@ -16,8 +16,6 @@
         </section>
         <button v-if="!modalOpen" @click="toggleModal" class="find-btn">Find more</button>
 
-        <pre style="color: white;"> {{ tracks }} </pre>
-
         <pre v-show="tracks.length" style="color: white;"> {{ tracks }} </pre>
     </section>
 </template>
@@ -44,7 +42,7 @@ export default {
     created() {
         this.search = utilService.debounce(() => {
             this.$emit('search', this.query)
-        }, 700)
+        }, 500)
     },
 
     methods: {

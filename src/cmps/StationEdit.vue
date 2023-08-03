@@ -7,7 +7,7 @@
         <section class="edit">
             <label>
                 <input type="file" @click="handleFile" hidden>
-                <img class="album-image" :src="stationToEdit?.imgUrl" alt="">
+                <img class="album-image" :src="stationToEdit.imgUrl" ref="stationImg" alt="">
             </label>
             <input class="title" type="text" v-model="stationToEdit.name" placeholder="Add a name">
 
@@ -51,7 +51,8 @@ export default {
         async save() {
             try {
                 const station = await this.$store.dispatch({ type: 'saveStation', stationToSave: this.stationToEdit })
-                this.stationToEdit = station
+                this.stationToEdit = JSON.parse(JSON.stringify(station))
+                this.$emit('station-edit')
                 this.onCloseModal()
             } catch (err) {
                 console.log(err.message)
@@ -62,7 +63,7 @@ export default {
         },
         async handleFile(ev) {
             const { url } = await uploadService.uploadImg(ev)
-            console.log(url);
+            console.log(url)
             this.stationToEdit.imgUrl = url
         }
     },
