@@ -15,9 +15,16 @@
         }
     }
 
+    // ghost track being dragged
+    .dragged-item {
+        border: 1px solid transparent;
+        border-radius: 4px;
+        background-color: #2c2d2a
+    }
+
     .list-header {
         // position: sticky;
-        grid-template-columns: [index] 1rem [first] 6fr [var1] 4fr [var2] 3fr [last] minmax(7.5rem, 1fr);
+        grid-template-columns: [index] 1rem [first] 6fr [var1] 4fr [var2] 3fr [last] 3.5rem;
         top: 4rem;
         margin-block-start: 0.5em;
 

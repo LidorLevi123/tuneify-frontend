@@ -1,6 +1,6 @@
 .track-preview {
     display: grid;
-    grid-template-columns: [index] 1rem [first] 6fr [var1] 4fr [var2] 3fr [last] minmax(7.5rem, 1fr);
+    grid-template-columns: [index] 1rem [first] 6fr [var1] 4fr [var2] 3fr [last] 3.5rem;
 
     @include for-mobile-layout {
         grid-template-columns: [index] 1rem [first] 16fr [var1] 4fr [var2] 3fr
@@ -91,8 +91,19 @@
         display: flex;
         align-items: center;
 
-        .track-name {
-            color: $clr2;
+        .track-info-container {
+            overflow: hidden;
+
+            .track-name, .artist-name {
+                color: $clr2;
+
+                // handling text overflow
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+                white-space: pre-wrap;
+            }
 
             &.track-playing {
                 color: $clr9
@@ -107,9 +118,8 @@
 
     .sub-dropdown {
         position: absolute;
-        right: 13rem;
+        right: 10rem;
         color: $clr3;
-        // border: 1px solid $clr3;
         border-radius: 0.2rem;
         display: grid;
         gap: 5px;
@@ -128,7 +138,7 @@
             cursor: pointer;
             position: absolute;
             background-color: $clr6;
-            right: 5rem;
+            right: 2rem;
             padding: 1rem;
             height: 3rem;
             border-radius: 0.2rem;
