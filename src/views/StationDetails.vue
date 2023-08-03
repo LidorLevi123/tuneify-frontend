@@ -3,8 +3,8 @@
         <div ref="topGradient" class="top-gradient">
             <section class="img-photo">
                 <section class="img">
-                    <img crossorigin="anonymous" class="station-img" :src="station.imgUrl" alt=""
-                     @load="getAvgImgClr" ref="stationImg">
+                    <img crossorigin="anonymous" class="station-img" :src="station.imgUrl" alt="" @load="getAvgImgClr"
+                        ref="stationImg">
                 </section>
                 <section class="station-info">
                     <span class="pl">Playlist</span>
@@ -28,11 +28,7 @@
                 <button v-else class="details-play" v-icon="'detailsPause'" v-show="hasTracks" @click="pauseTrack">
                 </button>
 
-                <button
-                    class="details-like"
-                    v-icon="'like'"
-                    v-show="!hasLiked && !isOwner"
-                    @click="likeStation">
+                <button class="details-like" v-icon="'like'" v-show="!hasLiked && !isOwner" @click="likeStation">
                 </button>
 
                 <button class="details-unlike" v-icon="'unlike'" v-show="hasLiked && !isOwner" @click="removeStation">
@@ -123,7 +119,7 @@ export default {
             // dispatch to user store and push stationId to stations array
             // then dispatch to store and getbyid to station id
             // push it to stations array
-            
+
             try {
                 await this.$store.dispatch({ type: 'updateUserStations', stationId: this.station._id, action: 'add' })
                 const stationToSave = this.station
@@ -162,7 +158,8 @@ export default {
         async addTrack(trackToSave, stationId) {
             try {
                 await this.$store.dispatch({ type: 'addTrack', trackToSave, stationId })
-                if(stationId !== this.user.likedId) {
+                this.loadStation()
+                if (stationId !== this.user.likedId) {
                     showSuccessMsg('Saved to station')
                 } else {
                     showSuccessMsg('Saved to Your Library')
@@ -204,7 +201,7 @@ export default {
             document.body.classList.add('modal-open')
         },
         clickTrack(trackIdx) {
-            if(this.currStation?._id !== this.station._id) {
+            if (this.currStation?._id !== this.station._id) {
                 this.$store.commit({ type: 'setCurrStation', station: this.station })
             }
             this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
