@@ -104,6 +104,8 @@ export const userStore = {
             }
         },
         async updateUserStations({ commit, state }, { stationId, action }) {
+            const id = state.loggedinUser.stationIds.find(id => id === stationId)
+            if(id) return
             try {
                 await userService.updateUserStations(state.loggedinUser, stationId, action)
                 commit({ type: 'setUser', user: state.loggedinUser })

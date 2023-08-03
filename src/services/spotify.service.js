@@ -9,12 +9,16 @@ export const spotifyService = {
     getSpotifyItems
 }
 
+// const data = getSpotifyItems('search')
+// console.log(data)
+
 async function getSpotifyItems(reqType, id) {
     const endpoints = {
         categoryStations: `https://api.spotify.com/v1/browse/categories/${id}/playlists?country=il&limit=9`,
         categories: `https://api.spotify.com/v1/browse/categories?country=US&offset=0&limit=20`,
         station: `https://api.spotify.com/v1/playlists/${id}`,
         tracks: `https://api.spotify.com/v1/playlists/${id}/tracks`,
+        search: `https://api.spotify.com/v1/search`
     }
     try {
         // Make a GET request to the Spotify API endpoint
@@ -24,6 +28,7 @@ async function getSpotifyItems(reqType, id) {
             },
         })
         // Return the playlist data from the response
+        // return response.data
         let cleanData
         switch (reqType) {
             case 'categoryStations':
@@ -69,6 +74,7 @@ async function getAccessToken() {
         const { data } = response
         const accessToken = data.access_token
         const expiresIn = data.expires_in
+        
         gAccessToken = accessToken
     } catch (error) {
         console.error(

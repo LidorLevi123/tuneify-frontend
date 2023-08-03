@@ -13,7 +13,6 @@ export default {
   async created() {
 
     try {
-      // await this.$store.dispatch({ type: 'getStationsForHome' })
       await this.$store.dispatch({ type: 'loadStations' })
       await this.$store.dispatch({ type: 'loadUsers' })
     } catch (err) {

@@ -88,7 +88,7 @@ async function getStationsForHome() {
 
     for (let i = 0; i < categories.length; i++) {
         let stations = await spotifyService.getSpotifyItems('categoryStations', categories[i].id)
-        stations = stations.map(station => ({ ...station, category: categories[i].name }))
+        stations = stations?.map(station => ({ ...station, category: categories[i].name }))
         res.push(...stations)
     }
     return res

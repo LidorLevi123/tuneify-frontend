@@ -46,7 +46,10 @@ async function update(user) {
 
 async function updateUserStations(user, stationId, action) {
     user = await httpService.get(`user/${user._id}`, user)
-    if(action === 'add') user.stationIds.push(stationId)
+    if(action === 'add') {
+        if(user.stationIds.some(id => id === stationId)) return
+        user.stationIds.push(stationId)
+    }
     else if(action === 'remove') {
         const idx = user.stationIds.findIndex(currStationId => currStationId = stationId)
         user.stationIds.splice(idx, 1)

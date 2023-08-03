@@ -15,8 +15,11 @@
 import StationList from '../cmps/StationList.vue'
 import historyTracker from '../services/history.service'
 export default {
-  created() {
-    historyTracker.push(this.$route.fullPath);
+  async created() {
+    if(!this.stations.length) {
+      await this.$store.dispatch({ type: 'getStationsForHome' })
+    }
+    historyTracker.push(this.$route.fullPath)
   },
   computed: {
     stations() {

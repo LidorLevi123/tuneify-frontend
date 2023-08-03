@@ -9,7 +9,7 @@
             :style="{ opacity: this.scrollPosition > 400 ? '1' : '0' }">
         </button>
         <span v-if="$route.path.startsWith('/station/')" class="station-header"
-            :style="{ opacity: this.scrollPosition > 50 ? '1' : '0' }">{{ currStation?.name }}</span>
+            :style="{ opacity: this.scrollPosition > 400 ? '1' : '0' }">{{ station?.name }}</span>
         <div v-if="$route.path === '/search'" class="search-input-container">
             <span class="df ai" v-icon="`sSearch`"></span>
             <input type="text" v-model="filterBy.txt" @input="onSetFilterBy" placeholder="What do you want to listen to?">
@@ -30,6 +30,10 @@ import { eventBus } from '../services/event-bus.service'
 export default {
     name: 'SearchPage',
 
+    props: {
+        station: { type: Object }
+    },
+
     data() {
         return {
             filterBy: {
@@ -40,7 +44,6 @@ export default {
     },
     created() {
         eventBus.on('handleScroll', this.logScroll)
-
     },
     methods: {
         onSetFilterBy() {

@@ -1,8 +1,8 @@
 <template>
     <section class="station-main-container">
         <Nav />
-        <MainHeader />
-        <RouterView class="RouterView" @scroll="handleScroll" />
+        <MainHeader :station="station" />
+        <RouterView class="RouterView" @scroll="handleScroll" @station="setStation"/>
         <Player />
     </section>
 </template>
@@ -14,9 +14,19 @@ import MainHeader from '../cmps/MainHeader.vue'
 import { eventBus } from '../services/event-bus.service'
 
 export default {
+
+    data() {
+        return {
+            station: null
+        }
+    },
+
     methods: {
         handleScroll({ target }) {
             eventBus.emit('handleScroll', target)
+        },
+        setStation(station) {
+            this.station = station
         }
     },
     components: {

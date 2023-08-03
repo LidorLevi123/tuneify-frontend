@@ -12,6 +12,7 @@ export const stationStore = {
     getters: {
         libraryStations({ stations }) { 
             const user = userService.getLoggedinUser()
+            console.log(user)
             
             return stations.filter(station => 
                 station.owner._id === user?._id
@@ -44,6 +45,8 @@ export const stationStore = {
             state.isCurrTrackPlaying = isPlaying
         },
         addStation({ stations }, { stationToSave }) {
+            const station = stations.find(currStation => currStation._id === stationToSave._id)
+            if(station) return
             stations.push(stationToSave)
             console.log(stations)
         },
@@ -94,8 +97,8 @@ export const stationStore = {
         async saveStation({ commit }, { stationToSave }) {
             let type = stationToSave._id ? 'updateStation' : 'addStation'
             // if(stationToSave.owner === 'Tuneify') type = 'addStation'
-
             if(stationToSave.isEmpty) type = 'addStation'
+
 
             try {
                 const station = await stationService.save(stationToSave)

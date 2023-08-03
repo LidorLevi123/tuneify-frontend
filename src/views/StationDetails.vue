@@ -11,7 +11,7 @@
                     <h1 @click="openStationEditor">{{ station.name }}</h1>
                     <p class="description">{{ station.description }}</p>
                     <div>
-                        <!-- <img src="favicon.svg" alt=""> -->
+                        <img src="favicon.svg" alt="">
                         <span class="logo">{{ stationOwner }}</span>
                         <span class="songs-num" v-if="station.tracks">&bull; {{ station.tracks?.length }} songs</span>
                         <span class="songs-time" v-if="formttedTime">, about {{ formttedTime }} hours</span>
@@ -113,6 +113,7 @@ export default {
             try {
                 const station = await this.$store.dispatch({ type: 'getStation', stationId: this.$route.params.stationId })
                 this.station = station
+                this.$emit('station', station)
                 this.setTracksTotalDuration()
             } catch (err) {
                 showErrorMsg('Could not set current station')
