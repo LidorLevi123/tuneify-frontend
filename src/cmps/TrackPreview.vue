@@ -120,7 +120,8 @@ export default {
         },
         user() {
             return this.$store.getters.loggedinUser
-        }
+        },
+        
     },
 
     methods: {

@@ -38,7 +38,7 @@
             <TrackList @track-clicked="clickTrack" @track-add="addTrack" @track-remove="removeTrack"
                 @track-dislike="dislikeTrack" @station-update="loadStation" @search="getTracks" :station="station" />
         </div>
-        <StationEdit />
+        <StationEdit @station-edit="loadStation"/>
     </section>
     <section v-else>
         <h1>Loading...</h1>

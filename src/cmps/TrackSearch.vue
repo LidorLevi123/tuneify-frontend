@@ -43,7 +43,7 @@ export default {
     created() {
         this.search = utilService.debounce(() => {
             this.$emit('search', this.query)
-        }, 700)
+        }, 500)
     },
 
     methods: {
