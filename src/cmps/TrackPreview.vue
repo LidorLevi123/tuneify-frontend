@@ -1,10 +1,11 @@
 <template>
     <article class="track-preview track-preview-layout" @mouseover="onMouseOver" @mouseleave="onMouseLeave">
 
-        <img v-if="isTrackPlaying" class="eq"
+        <img v-if="isTrackPlaying && !isHovered" class="eq"
             src="https://res.cloudinary.com/dmmsf57ko/image/upload/v1683729372/Song_hoitzd.gif" alt="">
-        <span v-else-if="isHovered" class="small-play" v-icon="`play`" title="Play"></span>
-        <span v-else class="track-num">{{ trackIdx + 1 }}</span>
+        <span v-else-if="isHovered && !this.isTrackPlaying" class="small-play" v-icon="`play`" title="Play"></span>
+        <span v-else-if="isHovered && this.isTrackPlaying" class="small-pause" v-icon="`pause`" title="Pause"></span>
+        <span v-else class="track-num" :class="isPaused">{{ trackIdx + 1 }}</span>
 
         <div class="mini-prev">
             <section class="img-container">
@@ -101,12 +102,24 @@ export default {
         currTrack() {
             return this.$store.getters.currTrack
         },
+        currTrackIdx() {
+            return this.$store.getters.currTrackIdx
+        },
         isTrackPlaying() {
-            return this.$store.getters.isCurrTrackPlaying && this.track.id === this.currTrack.id
+            return this.$store.getters.isCurrTrackPlaying && this.track?.id === this.currTrack?.id
         },
         isPlaying() {
+            // console.log('this.isTrackPlaying',this.isTrackPlaying)
+            // console.log('this.track.id',this.track.id)
+            // console.log('this.currTrack.id',this.currTrack?.id)
+            if(!this.currTrack) return
             return {
-                'track-playing': this.isTrackPlaying,
+                'track-playing': this.isTrackPlaying
+            }
+        },
+        isPaused() {
+            return {
+                'track-paused': !this.isTrackPlaying && this.currTrack?.id === this.track?.Id && this.currTrack !== undefined
             }
         },
         isStationOwner() {
@@ -121,7 +134,7 @@ export default {
         user() {
             return this.$store.getters.loggedinUser
         },
-        
+
     },
 
     methods: {
