@@ -1,7 +1,7 @@
 <template>
     <article class="library-station-preview">
         <img :src="station.imgUrl" alt="">
-        <h5>{{ stationName }}</h5>
+        <h5 :class="{ 'is-current': currStation?._id === station._id }">{{ stationName }}</h5>
         <small><span>{{ station.tracks.length }} songs</span> &bull;
             <span>{{ stationBelonging }}</span>
         </small>
@@ -23,6 +23,9 @@ export default {
         },
         stationBelonging() {
             return this.station.owner === 'Tuneify' ? this.station.owner : this.user?.fullname
+        },
+        currStation() {
+            return this.$store.getters.currStation
         }
     },
 

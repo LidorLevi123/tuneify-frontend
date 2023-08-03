@@ -10,7 +10,7 @@
             <section class="img-container">
                 <img :src="`${track.imgUrl}`" alt="">
             </section>
-            <section>
+            <section class="track-info-container">
                 <div class="track-name" :class="isPlaying">{{ track.title }}</div>
                 <div class="track-artist">{{ track.artists[0] }}</div>
             </section>
