@@ -77,7 +77,7 @@ export default {
         },
         hasLiked() {
             const libraryStations = this.$store.getters.libraryStations
-            return libraryStations.some(station => station._id === this.stationId)
+            return libraryStations.some(station => station._id === this.station._id)
         },
         hasTracks() {
             return this.station.tracks.length > 0
@@ -123,7 +123,7 @@ export default {
 
             try {
                 await this.$store.dispatch({ type: 'updateUserStations', stationId: this.station._id, action: 'add' })
-                const stationToSave = this.station
+                const stationToSave = JSON.parse(JSON.stringify(this.station))
                 this.$store.commit({ type: 'addStation', stationToSave })
                 showSuccessMsg('Saved to Your Library')
             } catch (err) {

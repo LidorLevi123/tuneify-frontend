@@ -1,5 +1,5 @@
 <template>
-    <section class="library-station-list">
+    <section v-if="user" class="library-station-list">
         <ul class="clean-list">
             <li @click="goToDetails(station._id)" @contextmenu.prevent="showContextMenu(station._id, $event)"
                 v-for="station in  libraryStations " :key="station.id">
@@ -16,8 +16,6 @@
 </template>
 
 <script>
-import { toHandlers } from 'vue'
-import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service'
 import LibraryStationPreview from './LibraryStationPreview.vue'
 
 export default {

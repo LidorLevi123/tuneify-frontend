@@ -126,7 +126,9 @@ export default {
             return this.station.owner?.fullname === this.user.fullname
         },
         likedTracks() {
-            return this.$store.getters.likedTracks
+            const stations = this.$store.getters.libraryStations
+            const likedSongsStation = stations?.find(station => station._id === this.user?.likedId)
+            return likedSongsStation?.tracks
         },
         createdStations() {
             return this.$store.getters.libraryStations.filter(station => station._id !== this.user.likedId)

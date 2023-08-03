@@ -23,7 +23,7 @@
           <input type="text" v-model="loginCred.username" placeholder="User name">
           <span>Password</span>
           <input type="password" v-model="loginCred.password" placeholder="Password">
-          <button class="login-btn">Log In</button>
+          <button @click="doLogin" class="login-btn">Log In</button>
 
         </form>
         <hr>
@@ -94,7 +94,7 @@ export default {
   data() {
     return {
       msg: '',
-      loginCred: { username: 'user1', password: '123' },
+      loginCred: { username: '', password: '' },
       signupCred: { username: '', password: '', fullname: '', imgUrl: '' },
     }
   },
@@ -119,10 +119,12 @@ export default {
         return
       }
       try {
-        await this.$store.dispatch({ type: "login", userCred: this.loginCred })
+        const user = await this.$store.dispatch({ type: "login", userCred: this.loginCred })
+        await this.$store.dispatch({ type: 'loadStations', userId: user._id })
         this.$router.push('/')
+        alert(`Welcome back ${user.fullname}!`)
       } catch (err) {
-        console.log(err)
+        console.log(err.message)
         this.msg = 'Failed to login'
       }
     },

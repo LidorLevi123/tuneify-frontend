@@ -48,8 +48,6 @@ async function save(station) {
         savedStation = await storageService.put(STORAGE_KEY, station)
     } else {
         console.log(station._id)
-        // Later, owner is set by the backend
-        // station.owner = userService.getLoggedinUser()
         savedStation = await storageService.post(STORAGE_KEY, station)
     }
     return savedStation

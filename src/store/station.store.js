@@ -8,25 +8,15 @@ export const stationStore = {
         currStation: null,
         currTrackIdx: -1,
         isCurrTrackPlaying: false,
-        tracks: []
+        tracks: [],
     },
     getters: {
-        libraryStations({ stations }) {
-            const user = userService.getLoggedinUser()
-
-            return stations.filter(station =>
-                station.owner._id === user?._id
-            )
-        },
+        libraryStations({ stations }) { return stations },
         stationsForHome({ stationsForHome }) { return stationsForHome },
         currStation({ currStation }) { return currStation },
         currTrackIdx({ currTrackIdx }) { return currTrackIdx },
         currTrack({ currStation, currTrackIdx  }) { return currStation?.tracks[currTrackIdx] },
         isCurrTrackPlaying({ isCurrTrackPlaying }) { return isCurrTrackPlaying },
-        likedTracks({ stations }) {
-            const likedSongsStation = stations?.find(station => station._id === userService.getLoggedinUser()?.likedId)
-            return likedSongsStation?.tracks
-        },
         tracks({ tracks }) { return tracks }
     },
     mutations: {
@@ -69,14 +59,10 @@ export const stationStore = {
             const idx = stations.findIndex(station => station._id === stationId)
             stations[idx].tracks.push(trackToSave)
         },
-        removeTrack({ stations, currStation }, { trackId, stationId }) {
+        removeTrack({ stations }, { trackId, stationId }) {
             const idx = stations.findIndex(station => station._id === stationId)
             const trackIdx = stations[idx].tracks.findIndex(track => track.id === trackId)
             stations[idx].tracks.splice(trackIdx, 1)
-
-            // if (stations[idx]._id === 'liked101' && currStation._id === 'liked101') {
-            //     this.commit({ type: 'setCurrStation', station: stations[idx] })
-            // }
         }
     },
     actions: {
@@ -89,12 +75,12 @@ export const stationStore = {
                 throw new Error('Could not load stations for home page')
             }
         },
-        async loadStations({ commit }) {
+        async loadStations({ commit }, { userId }) {
             try {
-                const stations = await stationService.query()
+                const stations = await stationService.query(userId)
                 commit({ type: 'loadStations', stations })
             } catch (err) {
-                console.log('stationStore: Error in loadStations', err)
+                console.log('stationStore: Error in loadStations', err.message)
                 throw new Error('Could not load stations')
             }
         },

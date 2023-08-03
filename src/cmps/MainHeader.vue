@@ -17,7 +17,7 @@
                 <span class="df ai" v-icon="'close'" @click="onClearFilter"></span>
             </div>
         </div>
-        <button v-icon="`profile`" class=" profile-btn" title="Logout"></button>
+        <button @click="doLogout" v-icon="`profile`" class=" profile-btn" title="Logout"></button>
         <RouterLink to="/login">
             <button class="login-btn">Log in</button>
         </RouterLink>
@@ -46,6 +46,10 @@ export default {
         eventBus.on('handleScroll', this.logScroll)
     },
     methods: {
+        async doLogout() {
+            await this.$store.dispatch({ type: 'logout' })
+            this.$store.commit({ type: 'loadStations', stations: []})
+        },
         onSetFilterBy() {
             console.log(this.filterBy)
             this.$emit('filter', this.filterBy)

@@ -21,7 +21,8 @@ export const stationService = {
 
 window.cs = stationService // for console usage
 
-async function query(filterBy = {}) {
+async function query(userId) {
+    const filterBy = { userId }
     const stations = await httpService.get(BASE_URL, filterBy)
     return stations
 }
@@ -33,7 +34,6 @@ async function getById(stationId) {
         station = await spotifyService.getSpotifyItems({ type: 'station', id: stationId })
         station = await httpService.post(BASE_URL, station)
     }
-
     return station
 }
 

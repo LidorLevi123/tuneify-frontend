@@ -7,15 +7,16 @@
 <script>
 import UserMsg from './cmps/UserMsg.vue'
 import BackDrop from './cmps/BackDrop.vue'
+import { userService } from './services/user.service'
 
 export default {
 
   async created() {
+    const user = userService.getLoggedinUser()
+    if (!user) return
 
     try {
-      // await this.$store.dispatch({ type: 'signup', userCred: { fullname: 'Lidor', username: 'lidor', password: '123' } })
-      await this.$store.dispatch({ type: 'login', userCred: { username: 'lidor', password: '123' } })
-      await this.$store.dispatch({ type: 'loadStations' })
+      await this.$store.dispatch({ type: 'loadStations', userId: user._id })
     } catch (err) {
       console.log('Something went wrong at App', err.message)
     }

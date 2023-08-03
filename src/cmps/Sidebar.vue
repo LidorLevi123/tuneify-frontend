@@ -22,7 +22,6 @@ export default {
     data() {
         return {
             canAddStation: true,
-            addedStationIdx: 1
         }
     },
 
@@ -35,7 +34,7 @@ export default {
                 this.canAddStation = false
                 const stationToSave = stationService.getEmptyStation()
     
-                stationToSave.name = 'My Playlist #' + this.addedStationIdx++
+                stationToSave.name = 'My Playlist #' + this.libraryStations.length
                 stationToSave.imgUrl = 'https://picsum.photos/' + (this.libraryStations.length + 232)
 
                 const station = await this.$store.dispatch({ type: 'saveStation', stationToSave })
