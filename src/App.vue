@@ -13,8 +13,9 @@ export default {
   async created() {
 
     try {
+      // await this.$store.dispatch({ type: 'signup', userCred: { fullname: 'Lidor', username: 'lidor', password: '123' } })
+      await this.$store.dispatch({ type: 'login', userCred: { username: 'lidor', password: '123' } })
       await this.$store.dispatch({ type: 'loadStations' })
-      await this.$store.dispatch({ type: 'loadUsers' })
     } catch (err) {
       console.log('Something went wrong at App', err.message)
     }

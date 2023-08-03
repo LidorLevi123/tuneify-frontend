@@ -14,7 +14,7 @@
                         <img src="favicon.svg" alt="">
                         <span class="logo">{{ stationOwner }}</span>
                         <span class="songs-num" v-if="station.tracks">&bull; {{ station.tracks?.length }} songs</span>
-                        <span class="songs-time" v-if="formttedTime">, about {{ formttedTime }} hours</span>
+                        <span class="songs-time" v-show="formttedTime">, about {{ formttedTime }} hours</span>
                     </div>
                 </section>
             </section>
@@ -47,13 +47,13 @@
 
 <script>
 import historyTracker from '../services/history.service'
-import { FastAverageColor } from 'fast-average-color'
-const fac = new FastAverageColor()
-import { utilService } from '../services/util.service'
-import { eventBus, showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
-
 import StationEdit from '../cmps/StationEdit.vue'
 import TrackList from '../cmps/TrackList.vue'
+
+import { FastAverageColor } from 'fast-average-color'
+import { stationService } from '../services/station.service'
+import { utilService } from '../services/util.service'
+import { eventBus, showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
 
 export default {
 
@@ -107,11 +107,12 @@ export default {
     methods: {
         async loadStation() {
             try {
-                const station = await this.$store.dispatch({ type: 'getStation', stationId: this.$route.params.stationId })
+                const station = await stationService.getById(this.stationId)
                 this.station = station
                 this.$emit('station', station)
                 this.setTracksTotalDuration()
             } catch (err) {
+                console.log(err.message)
                 showErrorMsg('Could not set current station')
             }
         },
@@ -126,6 +127,7 @@ export default {
                 this.$store.commit({ type: 'addStation', stationToSave })
                 showSuccessMsg('Saved to Your Library')
             } catch (err) {
+                console.log(err.message)
                 showErrorMsg('Could not add station')
             }
         },
@@ -134,13 +136,16 @@ export default {
                 await this.$store.dispatch({ type: 'removeStation', stationId: this.station._id })
                 showSuccessMsg('Removed from Your Library')
             } catch (err) {
+                console.log(err.message)
                 showErrorMsg('Could not remove station')
             }
         },
         async getAvgImgClr() {
             try {
+                const fac = new FastAverageColor()
                 const elImg = this.$refs.stationImg
                 const { hex } = await fac.getColorAsync(elImg)
+                
                 this.setBackgroundClr(hex)
             } catch (err) {
                 console.log(err)
@@ -152,6 +157,7 @@ export default {
                 await this.$store.dispatch({ type: 'removeTrack', trackId, stationId: this.user.likedId })
                 showSuccessMsg('Removed from Your Library')
             } catch (err) {
+                console.log(err.message)
                 showErrorMsg('Could not dislike track')
             }
         },
@@ -165,6 +171,7 @@ export default {
                     showSuccessMsg('Saved to Your Library')
                 }
             } catch (err) {
+                console.log(err.message)
                 showErrorMsg('Could not add track')
             }
         },
@@ -173,6 +180,7 @@ export default {
                 await this.$store.dispatch({ type: 'removeTrack', trackId, stationId: this.station._id })
                 showSuccessMsg('Removed from station')
             } catch (err) {
+                console.log(err.message)
                 showErrorMsg('Could not dislike track')
             }
         },

@@ -7,21 +7,21 @@ export const stationStore = {
         stationsForHome: [],
         currStation: null,
         currTrackIdx: -1,
-        isCurrTrackPlaying: null,
+        isCurrTrackPlaying: false,
         tracks: []
     },
     getters: {
-        libraryStations({ stations }) { 
+        libraryStations({ stations }) {
             const user = userService.getLoggedinUser()
-            
-            return stations.filter(station => 
+
+            return stations.filter(station =>
                 station.owner._id === user?._id
-            ) 
+            )
         },
         stationsForHome({ stationsForHome }) { return stationsForHome },
         currStation({ currStation }) { return currStation },
         currTrackIdx({ currTrackIdx }) { return currTrackIdx },
-        currTrack({ currStation, currTrackIdx  }) { return currStation.tracks[currTrackIdx] },
+        currTrack({ currStation, currTrackIdx  }) { return currStation?.tracks[currTrackIdx] },
         isCurrTrackPlaying({ isCurrTrackPlaying }) { return isCurrTrackPlaying },
         likedTracks({ stations }) {
             const likedSongsStation = stations?.find(station => station._id === userService.getLoggedinUser()?.likedId)
@@ -133,7 +133,6 @@ export const stationStore = {
         async getTracks({ commit }, { query }) {
             if(!query) {
                 commit({ type: 'setTracks', tracks: []})
-                return
             }
             try {
                 const tracks = await stationService.getTracks(query)

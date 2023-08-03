@@ -6,7 +6,7 @@
             </button>
             <button v-icon="'createList'" @click="addStation" title="Create playlist" class="add-station"></button>
         </section>
-        <LibraryStationList :libraryStations="libraryStations" />
+        <LibraryStationList @station-remove="removeStation" :libraryStations="libraryStations" />
     </section>
 </template>
 
@@ -19,12 +19,14 @@ import LibraryStationList from './LibraryStationList.vue';
 export default {
     data() {
         return {
-            canAddStation: true
+            canAddStation: true,
+            addedStationIdx: 1
         }
     },
 
     methods: {
         async addStation() {
+<<<<<<< HEAD
             if (!this.canAddStation) return
 
             this.canAddStation = false
@@ -34,7 +36,18 @@ export default {
             stationToSave.imgUrl = 'https://picsum.photos/' + (this.libraryStations.length + 232)
             stationToSave.owner = this.loggedinUser
 
+=======
+>>>>>>> 372b9fa57252eb53528c391ccf36e14e4caee04b
             try {
+
+                if (!this.canAddStation) return
+    
+                this.canAddStation = false
+                const stationToSave = stationService.getEmptyStation()
+    
+                stationToSave.name = 'My Playlist #' + this.addedStationIdx++
+                stationToSave.imgUrl = 'https://picsum.photos/' + (this.libraryStations.length + 232)
+
                 const station = await this.$store.dispatch({ type: 'saveStation', stationToSave })
                 await this.$store.dispatch({ type: 'updateUserStations', stationId: station._id, action: 'add' })
                 showSuccessMsg('Saved to Your Library')
@@ -45,6 +58,20 @@ export default {
                 this.canAddStation = true
             }
         },
+        async removeStation(stationId) {
+            try {
+                await this.$store.dispatch({ type: 'removeStation', stationId })
+                await this.$store.dispatch({ type: 'updateUserStations', stationId, action: 'remove' })
+
+                if (stationId === this.$route.params.stationId) this.$router.push('/')
+
+                this.contextmenuOpen = false
+                showSuccessMsg('Removed from Your Library')
+            } catch (err) {
+                console.log(err.message)
+                showErrorMsg('Could not remove station')
+            }
+        }
     },
     computed: {
         libraryStations() {
