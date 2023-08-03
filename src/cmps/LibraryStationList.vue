@@ -9,7 +9,7 @@
                     :style="{ top: contextmenuTop + 'px', left: contextmenuLeft + 'px' }">
                     <div class="menu-item">Remove playlist</div>
                 </div>
-                <span class="speaker" v-icon="`speaker`" v-if="currStation?.name === station.name && trackPlaying"></span>
+                <span class="speaker" v-icon="`speaker`" v-if="currStation?._id === station._id && trackPlaying"></span>
             </li>
         </ul>
     </section>
