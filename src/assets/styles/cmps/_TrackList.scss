@@ -2,6 +2,10 @@
     margin-inline: 1.5rem;
     max-width: 119rem;
 
+    .track-paused {
+        color: $clr9
+    }
+
     span {
         color: $clr3;
         font-weight: 400;

@@ -36,7 +36,7 @@
         background-color: transparent;
     }
 
-    .small-play {
+    .small-play, .small-pause {
         border: none;
         background-color: transparent;
 
@@ -105,14 +105,12 @@
                 white-space: pre-wrap;
             }
 
-            &.track-playing {
-                color: $clr9
+            .track-playing, .track-paused {
+                color: $clr9;
             }
+
         }
 
-        .track-playing {
-            color: $clr9;
-        }
     }
 
 
@@ -165,3 +163,4 @@
         padding-inline-end: 1rem;
     }
 }
+

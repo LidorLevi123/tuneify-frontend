@@ -1,0 +1,14 @@
+.search-list {
+
+    li {
+        &:hover {
+            background-color: #2c2d2a;
+            border-radius: 0.25rem;
+
+            .track-album,
+            .artist-name {
+                color: $clr2;
+            }
+        }
+    }
+}
