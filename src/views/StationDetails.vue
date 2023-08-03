@@ -40,9 +40,9 @@
                 <!-- <button v-icon="'moreOptions'" class="btn details-edit"></button> -->
             </section>
             <TrackList @track-clicked="clickTrack" @track-add="addTrack" @track-remove="removeTrack"
-                @track-dislike="dislikeTrack" @station-update="loadStation" :station="station" />
+                @track-dislike="dislikeTrack" @station-update="loadStation" @search="getTracks" :station="station" />
         </div>
-        <StationEdit />
+        <StationEdit @station-edit="loadStation"/>
     </section>
     <section v-else>
         <h1>Loading...</h1>
@@ -126,7 +126,7 @@ export default {
             
             try {
                 await this.$store.dispatch({ type: 'updateUserStations', stationId: this.station._id, action: 'add' })
-                const stationToSave = await this.$store.dispatch({ type: 'getStation', stationId: this.station._id })
+                const stationToSave = this.station
                 this.$store.commit({ type: 'addStation', stationToSave })
                 showSuccessMsg('Saved to Your Library')
             } catch (err) {
@@ -179,6 +179,14 @@ export default {
                 showErrorMsg('Could not dislike track')
             }
         },
+        async getTracks(query) {
+            try {
+                await this.$store.dispatch({ type: 'getTracks', query })
+            } catch (err) {
+                console.log(err.message)
+                showErrorMsg(`Could not load tracks`)
+            }
+        },
         setBackgroundClr(avgColor) {
             const [darkerColor, darkerDarkerColor] = utilService.generateColors(avgColor)
 
@@ -204,7 +212,7 @@ export default {
         },
         pauseTrack() {
             eventBus.emit('trackPaused')
-        }
+        },
     },
 
     watch: {

@@ -5,9 +5,9 @@
                 <h1>Let's find something for your playlist</h1>
                 <div class="track-search-input">
                     <span class="df ai" v-icon="`sSearch`"></span>
-                    <input type="text" v-model="filterBy.txt" @input="onSetFilterBy"
+                    <input type="text" v-model="query"
                         placeholder="Search for songs or episodes">
-                    <div v-if="filterBy.txt">
+                    <div v-if="query">
                         <span class="df ai" v-icon="'close'" @click="onClearFilter"></span>
                     </div>
                 </div>
@@ -15,32 +15,52 @@
             <button @click="toggleModal" class="close-btn" v-icon="`bClose`"></button>
         </section>
         <button v-if="!modalOpen" @click="toggleModal" class="find-btn">Find more</button>
+
+        <pre v-show="tracks.length" style="color: white;"> {{ tracks }} </pre>
     </section>
 </template>
 
 <script>
+import { utilService } from '../services/util.service'
+
 export default {
     name: 'TrackSearch',
 
     data() {
         return {
-            filterBy: {
-                txt: '',
-            },
+            query: '',
             modalOpen: true
         }
     },
+
+    computed: {
+        tracks() {
+            return this.$store.getters.tracks
+        }
+    },
+
+    created() {
+        this.search = utilService.debounce(() => {
+            this.$emit('search', this.query)
+        }, 500)
+    },
+
     methods: {
-        onSetFilterBy() {
-            console.log(this.filterBy)
-            this.$emit('filter', this.filterBy)
-        },
         onClearFilter() {
-            this.filterBy.txt = ''
+            this.query = ''
         },
         toggleModal() {
             this.modalOpen = !this.modalOpen
         }
-    }
+    },
+
+    watch: {
+        query: {
+            handler() {
+                this.search()
+            },
+            deep: true,
+        },
+    },
 }
 </script>
