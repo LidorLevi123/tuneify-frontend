@@ -5,7 +5,8 @@
     <section class="main-player-container">
         <section class="track-info-container">
             <section class="img-container">
-                <img v-if="currTrack" :src="`${currTrack.imgUrl}`" alt="">
+
+                <img v-if="currTrack" :src="`${currTrack.imgUrl}`" alt=""  @click="onSocketMessage('test')">
             </section>
             <section class="text-container">
                 <div v-if="currTrack" class="track-title">{{ currTrack.title }}</div>
@@ -80,6 +81,8 @@ import { ytService } from '../services/yt.service.js'
 
 import YouTube from 'vue3-youtube'
 
+import { socketService, SOCKET_EVENT_ADD_MSG } from '../services/socket.service.js'
+
 export default {
     data() {
         return {
@@ -113,6 +116,9 @@ export default {
     created() {
         eventBus.on('trackClicked', this.loadVideo)
         eventBus.on('trackPaused', this.pauseVideo)
+
+        // sockets
+        socketService.on(SOCKET_EVENT_ADD_MSG, this.onSocketMessage)
     },
     methods: {
         updateCurrTrackIdx(trackIdx) {
@@ -258,6 +264,19 @@ export default {
             this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
         },
         onStateChange(event) {
+
+            // sockets
+            if (event.data === this.youtubePlayerStates.PLAYING) {
+                socketService.emit('socket-play-track', { trackId: this.currTrack.id })
+            }
+            if (event.data === this.youtubePlayerStates.ENDED) {
+                socketService.emit('socket-play-next')
+            }
+            if (event.data === this.youtubePlayerStates.PAUSED) {
+                socketService.emit('socket-pause')
+            }
+
+            //
             if (event.data === this.youtubePlayerStates.ENDED) {
 
                 this.previousNextVideo(1)
@@ -294,6 +313,9 @@ export default {
         hasLiked(trackId) {
             return this.likedTracks?.some(track => track.id === trackId)
         },
+        onSocketMessage(msg) {
+        console.log('Received socket message:', msg)
+        }
     },
 
     beforeunmount() {

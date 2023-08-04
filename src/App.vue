@@ -12,6 +12,9 @@ import { userService } from './services/user.service'
 export default {
 
   async created() {
+
+    // await this.$store.dispatch({ type: 'signup', userCred: { fullname: 'Nitzan', username: 'Nitzan', password: '123' } })
+
     const user = userService.getLoggedinUser()
     if (!user) return
 
