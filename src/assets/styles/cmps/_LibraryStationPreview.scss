@@ -13,6 +13,10 @@
         font-weight: 400;
         font-size: 1rem;
 
+        @include for-mobile-layout {
+            color: $clr2;
+        }
+
         &.is-current {
             color: $clr9
         }

@@ -64,6 +64,7 @@ export default {
   },
   methods: {
     maxStationsCalc() {
+      if (window.innerWidth < 800) return
       if (window.innerWidth < 1050) this.maxStations = 2
       if (window.innerWidth > 1050 && window.innerWidth < 1250) this.maxStations = 3
       if (window.innerWidth > 1250 && window.innerWidth < 1440) this.maxStations = 4

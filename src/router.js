@@ -6,6 +6,7 @@ import SearchPage from './views/SearchPage.vue'
 import CategoryPage from './views/CategoryPage.vue'
 import StationDetails from './views/StationDetails.vue'
 import LoginSignup from './views/LoginSignup.vue'
+import Sidebar from './cmps/Sidebar.vue'
 
 const routes = [
   {
@@ -39,6 +40,11 @@ const routes = [
     path: '/login',
     name: 'LoginSignup',
     component: LoginSignup,
+  },
+  {
+    path: '/library',
+    name: 'PlayLists',
+    component: Sidebar,
   }
 ]
 

@@ -24,9 +24,15 @@
           <span>Password</span>
           <input type="password" v-model="loginCred.password" placeholder="Password">
           <button @click="doLogin" class="login-btn">Log In</button>
-
         </form>
-        <hr>
+        <form @submit.prevent="doSignup">
+          <hr>
+          <h2>Signup</h2>
+          <input type="text" v-model="signupCred.fullname" placeholder="Your full name" />
+          <input type="text" v-model="signupCred.username" placeholder="Username" />
+          <input type="password" v-model="signupCred.password" placeholder="Password" />
+          <button class="login-btn">Sign up</button>
+        </form>
         <!-- <form action="">
           <span>Name</span>
           <input type="text" v-model="loginCred.username" placeholder="User name">

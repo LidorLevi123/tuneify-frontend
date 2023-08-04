@@ -18,6 +18,17 @@
         </nav>
         <Sidebar />
     </section>
+    <nav class="mobile-nav">
+        <RouterLink to="/">
+            <div :class="{ 'isActive': $route.path === '/' }" v-icon="'home'"></div>
+        </RouterLink>
+        <RouterLink to="/search">
+            <div :class="{ 'isActive': $route.path === '/search' }" v-icon="'search'"></div>
+        </RouterLink>
+        <RouterLink to="/library">
+            <div :class="{ 'isActive': $route.path === '/library' }" v-icon="'collapse'"></div>
+        </RouterLink>
+    </nav>
 </template>
 
 <script>
