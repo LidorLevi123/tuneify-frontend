@@ -2,6 +2,10 @@
     margin-inline: 1.5rem;
     max-width: 119rem;
 
+    @include for-mobile-layout {
+        margin-inline: 0;
+    }
+
     .track-paused {
         color: $clr9
     }
@@ -27,10 +31,16 @@
     }
 
     .list-header {
-        // position: sticky;
+        position: sticky;
+        display: grid;
         grid-template-columns: [index] 1rem [first] 6fr [var1] 4fr [var2] 3fr [last] 3.5rem;
         top: 4rem;
         margin-block-start: 0.5em;
+        column-gap: 1rem;
+        padding: 0 16px;
+        align-items: center;
+        border: 1px solid transparent;
+        border-radius: 4px;
 
         @include for-mobile-layout {
             display: none;

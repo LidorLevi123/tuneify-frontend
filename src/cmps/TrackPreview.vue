@@ -112,7 +112,7 @@ export default {
             // console.log('this.isTrackPlaying',this.isTrackPlaying)
             // console.log('this.track.id',this.track.id)
             // console.log('this.currTrack.id',this.currTrack?.id)
-            if(!this.currTrack) return
+            if (!this.currTrack) return
             return {
                 'track-playing': this.isTrackPlaying
             }
