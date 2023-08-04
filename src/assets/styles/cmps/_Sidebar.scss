@@ -8,6 +8,10 @@
     margin-block-start: 0.5rem;
     overflow-y: hidden;
 
+    @include for-mobile-layout {
+        width: auto;
+    }
+
     .sidebar-top {
         padding: 0.85rem;
         display: flex;

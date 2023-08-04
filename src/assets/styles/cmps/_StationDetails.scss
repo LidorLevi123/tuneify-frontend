@@ -1,4 +1,5 @@
 .station-details {
+    flex: 1;
     display: grid;
     grid-template-rows: auto 1fr;
     overflow: auto;
@@ -135,6 +136,7 @@
             path {
                 fill: $clr2;
             }
+
             scale: 104%;
         }
 

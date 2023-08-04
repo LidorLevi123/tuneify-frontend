@@ -56,3 +56,16 @@
         }
     }
 }
+
+.mobile-nav {
+    display: none;
+
+    @include for-mobile-layout {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        order: 3;
+        height: 4rem;
+    }
+
+}
