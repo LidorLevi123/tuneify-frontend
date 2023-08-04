@@ -17,7 +17,7 @@ export const stationStore = {
         currTrackIdx({ currTrackIdx }) { return currTrackIdx },
         currTrack({ currStation, currTrackIdx  }) { return currStation?.tracks[currTrackIdx] },
         isCurrTrackPlaying({ isCurrTrackPlaying }) { return isCurrTrackPlaying },
-        tracks({ tracks }) { return tracks }
+        tracks({ tracks }) { return tracks },
     },
     mutations: {
         loadStations(state, { stations }) {

@@ -6,7 +6,7 @@
         <section class="track-info-container">
             <section class="img-container">
 
-                <img v-if="currTrack" :src="`${currTrack.imgUrl}`" alt=""  @click="onSocketMessage('test')">
+                <img v-if="currTrack" :src="`${currTrack.imgUrl}`" alt="" @click="onSocketMessage('test')">
             </section>
             <section class="text-container">
                 <div v-if="currTrack" class="track-title">{{ currTrack.title }}</div>
@@ -16,7 +16,7 @@
             <span v-if="!hasLiked(currTrack?.id) && currTrack" class="btn-like" v-icon="`smallLikeDis`"
                 @click="likeTrack(currTrack)"></span>
             <span v-else-if="hasLiked(currTrack?.id) && currTrack" class="btn-dislike" v-icon="`smallLikeEna`"
-                @click="dislikeTrack(currTrack.id)"></span>
+                @click="dislikeTrack(currTrack?.id)"></span>
         </section>
 
         <section class="player-mid-container">
@@ -312,7 +312,7 @@ export default {
             return this.likedTracks?.some(track => track.id === trackId)
         },
         onSocketMessage(msg) {
-        console.log('Received socket message:', msg)
+            console.log('Received socket message:', msg)
         }
     },
 
@@ -343,7 +343,9 @@ export default {
             return this.$store.getters.loggedinUser
         },
         likedTracks() {
-            return this.$store.getters.likedTracks
+            const stations = this.$store.getters.libraryStations
+            const likedSongsStation = stations?.find(station => station._id === this.user?.likedId)
+            return likedSongsStation?.tracks
         },
     },
 }
