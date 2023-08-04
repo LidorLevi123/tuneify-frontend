@@ -40,17 +40,12 @@ export default {
     },
     methods: {
         onDrop(dropResult) {
-            // console.log('dropResult', dropResult)
             this.applyDrag(dropResult)
         },
 
         async applyDrag(dragResult) {
-            // console.log('arr', arr)
-            // console.log('dragResult', dragResult)
-
 
             const { removedIndex, addedIndex, payload } = dragResult
-            if (removedIndex === null && addedIndex === null) return arr
 
             let itemToAdd = payload
 
@@ -61,7 +56,9 @@ export default {
             if (addedIndex !== null) {
                 this.station.tracks.splice(addedIndex, 0, itemToAdd)
             }
+
             const updatedStation = { ...this.station, tracks: this.station.tracks }
+
             await this.updateStation(updatedStation)
         },
 

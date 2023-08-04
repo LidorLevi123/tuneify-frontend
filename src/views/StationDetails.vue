@@ -145,7 +145,7 @@ export default {
                 const fac = new FastAverageColor()
                 const elImg = this.$refs.stationImg
                 const { hex } = await fac.getColorAsync(elImg)
-                
+
                 this.setBackgroundClr(hex)
             } catch (err) {
                 console.log(err)
@@ -210,7 +210,8 @@ export default {
         },
         clickTrack(trackIdx) {
             if (this.currStation?._id !== this.station._id) {
-                this.$store.commit({ type: 'setCurrStation', station: this.station })
+                const station = JSON.parse(JSON.stringify(this.station))
+                this.$store.commit({ type: 'setCurrStation', station})
             }
             this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
             eventBus.emit('trackClicked')
