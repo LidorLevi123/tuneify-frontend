@@ -209,6 +209,7 @@ export default {
             document.body.classList.add('modal-open')
         },
         clickTrack(trackIdx) {
+            trackIdx = trackIdx === -1 ? 0 : trackIdx
             if (this.currStation?._id !== this.station._id) {
                 this.$store.commit({ type: 'setCurrStation', station: this.station })
             }

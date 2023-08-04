@@ -12,6 +12,7 @@ import { userService } from './services/user.service'
 export default {
 
   async created() {
+
     const user = userService.getLoggedinUser()
     if (!user) return
 
@@ -30,7 +31,7 @@ export default {
     },
     currTrack() {
       return this.currStation?.tracks[this.currTrackIdx]
-    },
+    }
   },
 
   watch: {

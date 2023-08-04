@@ -62,6 +62,10 @@ export default {
             this.scrollPosition = scrollTop
         },
         playStation(trackIdx) {
+            trackIdx = trackIdx === -1 ? 0 : trackIdx
+            if (this.currStation?._id !== this.station._id) {
+                this.$store.commit({ type: 'setCurrStation', station: this.station })
+            }
             this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
             eventBus.emit('trackClicked')
         },
