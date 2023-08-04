@@ -6,6 +6,24 @@
     grid-template-columns: repeat(auto-fit, minmax(10.625rem, 1fr));
     min-width: 372px;
 
+    @include for-mobile-layout {
+
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 1.5rem;
+        -webkit-overflow-scrolling: touch;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        >* {
+            height: 14rem;
+            width: 10rem;
+        }
+    }
+
 }
 
 .station-list-hor {

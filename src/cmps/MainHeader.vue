@@ -17,8 +17,8 @@
                 <span class="df ai" v-icon="'close'" @click="onClearFilter"></span>
             </div>
         </div>
-        <button @click="doLogout" v-icon="`profile`" class=" profile-btn" title="Logout"></button>
-        <RouterLink to="/login">
+        <button v-if="user" @click="doLogout" v-icon="`profile`" class="profile-btn" title="Logout"></button>
+        <RouterLink v-if="!user" class="login-link" to="/login">
             <button class="login-btn">Log in</button>
         </RouterLink>
     </section>
@@ -49,7 +49,7 @@ export default {
         async doLogout() {
             this.$router.push('/')
             this.$store.dispatch({ type: 'logout' })
-            this.$store.commit({ type: 'loadStations', stations: []})
+            this.$store.commit({ type: 'loadStations', stations: [] })
         },
         onSetFilterBy() {
             console.log(this.filterBy)

@@ -64,14 +64,14 @@ export default {
   },
   methods: {
     maxStationsCalc() {
-      if (window.innerWidth < 800) return
-      if (window.innerWidth < 1050) this.maxStations = 2
-      if (window.innerWidth > 1050 && window.innerWidth < 1250) this.maxStations = 3
-      if (window.innerWidth > 1250 && window.innerWidth < 1440) this.maxStations = 4
-      if (window.innerWidth > 1440 && window.innerWidth < 1640) this.maxStations = 5
-      if (window.innerWidth > 1640 && window.innerWidth < 1840) this.maxStations = 6
-      if (window.innerWidth > 1840 && window.innerWidth < 2030) this.maxStations = 7
-      if (window.innerWidth > 2030 && window.innerWidth < 2230) this.maxStations = 8
+      if (window.innerWidth < 800) this.maxStations = 9
+      if (window.innerWidth > 800 && window.innerWidth <= 1050) this.maxStations = 2
+      if (window.innerWidth > 1050 && window.innerWidth <= 1250) this.maxStations = 3
+      if (window.innerWidth > 1250 && window.innerWidth <= 1440) this.maxStations = 4
+      if (window.innerWidth > 1440 && window.innerWidth <= 1640) this.maxStations = 5
+      if (window.innerWidth > 1640 && window.innerWidth <= 1840) this.maxStations = 6
+      if (window.innerWidth > 1840 && window.innerWidth <= 2030) this.maxStations = 7
+      if (window.innerWidth > 2030 && window.innerWidth <= 2230) this.maxStations = 8
       if (window.innerWidth > 2230) this.maxStations = 9
     },
   },
