@@ -5,7 +5,7 @@
             src="https://res.cloudinary.com/dmmsf57ko/image/upload/v1683729372/Song_hoitzd.gif" alt="">
         <span v-else-if="isHovered && !this.isTrackPlaying" class="small-play" v-icon="`play`" title="Play"></span>
         <span v-else-if="isHovered && this.isTrackPlaying" class="small-pause" v-icon="`pause`" title="Pause"></span>
-        <span v-else class="track-num" :class="isPaused">{{ trackIdx + 1 }}</span>
+        <span v-else class="track-num" :class="isPlaying">{{ trackIdx + 1 }}</span>
 
         <div class="mini-prev">
             <section class="img-container">
@@ -33,7 +33,7 @@
 
             <div v-if="showDropdown" class="dropdown">
                 <div v-if="!isStationOwner" class="dropdown-item" @mouseenter="popSubDropdown">
-                    <span class="menu-li">Add to playlist</span>
+                    <span @click="$event.stopPropagation()" class="menu-li">Add to playlist</span>
                     <div v-show="showSubDropdown" class="sub-dropdown">
                         <div class="sub-dropdown-item" v-for="idx in createdStations?.length"
                             @click="onAddTrack(track, createdStations[idx - 1]._id, $event)">
@@ -110,13 +110,10 @@ export default {
         },
         isPlaying() {
             if(!this.currTrack) return
+
             return {
-                'track-playing': this.isTrackPlaying
-            }
-        },
-        isPaused() {
-            return {
-                'track-paused': !this.isTrackPlaying && this.currTrack?.id === this.track?.Id && this.currTrack !== undefined
+                'track-playing': this.isTrackPlaying,
+                'track-paused': this.currTrack.id === this.track.id
             }
         },
         isStationOwner() {
@@ -128,7 +125,8 @@ export default {
             return likedSongsStation?.tracks
         },
         createdStations() {
-            return this.$store.getters.libraryStations.filter(station => station._id !== this.user.likedId)
+            const stations = this.$store.getters.libraryStations
+            return stations.filter(station => station._id !== this.user.likedId && station.owner.fullname !== 'Tuneify')
         },
         user() {
             return this.$store.getters.loggedinUser
