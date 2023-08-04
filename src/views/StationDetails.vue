@@ -119,10 +119,7 @@ export default {
             }
         },
         async likeStation() {
-            // dispatch to user store and push stationId to stations array
-            // then dispatch to store and getbyid to station id
-            // push it to stations array
-
+            console.log('hi');
             try {
                 await this.$store.dispatch({ type: 'updateUserStations', stationId: this.station._id, action: 'add' })
                 const stationToSave = JSON.parse(JSON.stringify(this.station))

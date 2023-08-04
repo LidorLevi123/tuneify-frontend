@@ -132,8 +132,6 @@ export default {
         },
         async previousNextVideo(diff) {
 
-            console.log(this.repeatStateIdx)
-
             if (this.currTrackIdx === this.currStation.tracks.length - 1 && diff === 1) {
                 if (this.repeatStateIdx === 2) {
                     this.replayVideo()

@@ -114,7 +114,7 @@ async function _cleanStationData(data) {
 
 function _cleanCategoryStationsData(data) {
     return data.playlists.items.map(item => ({
-        _id: item.id,
+        spotifyId: item.id,
         name: item.name,
         imgUrl: item.images[0].url,
         description: item.description,
