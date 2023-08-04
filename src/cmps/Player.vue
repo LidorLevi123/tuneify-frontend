@@ -264,15 +264,15 @@ export default {
         onStateChange(event) {
 
             // sockets
-            if (event.data === this.youtubePlayerStates.PLAYING) {
-                socketService.emit('socket-play-track', { trackId: this.currTrack.id })
-            }
-            if (event.data === this.youtubePlayerStates.ENDED) {
-                socketService.emit('socket-play-next')
-            }
-            if (event.data === this.youtubePlayerStates.PAUSED) {
-                socketService.emit('socket-pause')
-            }
+            // if (event.data === this.youtubePlayerStates.PLAYING) {
+            //     socketService.emit('socket-play-track', { trackId: this.currTrack.id })
+            // }
+            // if (event.data === this.youtubePlayerStates.ENDED) {
+            //     socketService.emit('socket-play-next')
+            // }
+            // if (event.data === this.youtubePlayerStates.PAUSED) {
+            //     socketService.emit('socket-pause')
+            // }
 
             //
             if (event.data === this.youtubePlayerStates.ENDED) {
