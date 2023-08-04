@@ -47,7 +47,8 @@ export default {
     },
     methods: {
         async doLogout() {
-            await this.$store.dispatch({ type: 'logout' })
+            this.$router.push('/')
+            this.$store.dispatch({ type: 'logout' })
             this.$store.commit({ type: 'loadStations', stations: []})
         },
         onSetFilterBy() {
@@ -90,6 +91,9 @@ export default {
         },
         isPlaying() {
             return this.$store.getters.isCurrTrackPlaying
+        },
+        user() {
+            return this.$store.getters.loggedinUser
         },
         showPlay() {
             return this.$route.path.startsWith('/station/') && !this.isPlaying
