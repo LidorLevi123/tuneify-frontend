@@ -16,13 +16,13 @@ export default {
 
     computed: {
         stationName() {
-            return this.station.name || `My Playlist`
+            return this.station.name
         },
         user() {
             return this.$store.getters.loggedinUser
         },
         stationBelonging() {
-            return this.station.owner === 'Tuneify' ? this.station.owner : this.user?.fullname
+            return this.station.owner.fullname === 'Tuneify' ? this.station.owner.fullname : this.user?.fullname
         },
         currStation() {
             return this.$store.getters.currStation

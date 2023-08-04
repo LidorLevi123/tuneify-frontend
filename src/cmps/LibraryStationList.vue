@@ -45,6 +45,7 @@ export default {
             this.$emit('station-remove', stationId)
         },
         goToDetails(stationId) {
+            stationId = stationId ? stationId : this.station.spotifyId
             this.$router.push(`/station/${stationId}`)
         },
         showContextMenu(stationId, ev) {

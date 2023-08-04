@@ -9,7 +9,7 @@
             <span v-icon="'clock'"></span>
         </div>
         <hr />
-        <ul v-if="station?.tracks" class="clean-list">
+        <ul v-if="station.tracks.length" class="clean-list">
             <Container dragClass="dragging" @drop="onDrop" :animation-duration="100" drag-class="dragged-item">
                 <Draggable v-for="(track, idx) in station.tracks" :key="track.id">
                     <li @click="onTrackClicked(idx)">
@@ -19,7 +19,7 @@
                 </Draggable>
             </Container>
         </ul>
-        <TrackSearch @search="onLoadTracks" @track-add="onAddTrack" :station="station" />
+        <TrackSearch v-if="canShowSearch" @search="onLoadTracks" @track-add="onAddTrack" :station="station" />
     </section>
 </template>
 
@@ -34,10 +34,21 @@ export default {
     props: {
         station: { type: Object },
     },
+
     data() {
         return {
         }
     },
+
+    computed: {
+        canShowSearch() {
+            return this.station.owner._id === this.user?._id && this.station._id !== this.user?.likedId
+        },
+        user() {
+            return this.$store.getters.loggedinUser
+        }
+    },
+
     methods: {
         onDrop(dropResult) {
             this.applyDrag(dropResult)

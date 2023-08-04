@@ -25,7 +25,6 @@ export const stationStore = {
         },
         setTracks(state, { tracks }) {
             state.tracks = tracks
-            console.log(state.tracks)
         },
         setStationsForHome(state, { stations }) {
             state.stationsForHome = stations
@@ -88,7 +87,6 @@ export const stationStore = {
             let type = stationToSave._id ? 'updateStation' : 'addStation'
             // if(stationToSave.owner === 'Tuneify') type = 'addStation'
             if(stationToSave.isEmpty) type = 'addStation'
-
             try {
                 const station = await stationService.save(stationToSave)
                 commit({ type, stationToSave: station })
@@ -119,6 +117,7 @@ export const stationStore = {
         async getTracks({ commit }, { query }) {
             if(!query) {
                 commit({ type: 'setTracks', tracks: []})
+                return
             }
             try {
                 const tracks = await stationService.getTracks(query)

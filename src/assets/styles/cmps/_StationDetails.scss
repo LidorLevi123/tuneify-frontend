@@ -108,6 +108,23 @@
         display: flex;
         padding: 1.5rem;
 
+        .material-symbols-outlined {
+            cursor: pointer;
+            margin-inline-start: 1.6rem;
+            color: $clr3;
+            font-variation-settings:
+                'FILL' 1,
+                'wght' 500,
+                'GRAD' -25,
+                'opsz' 48;
+            font-size: 2rem;
+
+            &:hover {
+                color: $clr2;
+                transform: scale(1.04);
+            }
+        }
+
         & .details-play {
             display: flex;
             justify-content: center;

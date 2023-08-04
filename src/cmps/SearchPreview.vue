@@ -6,7 +6,7 @@
                 <img :src="`${track.imgUrl}`" alt="">
             </section>
             <section class="track-info-container">
-                <div class="track-name" :class="isPlaying">{{ track.title }}</div>
+                <div class="track-name">{{ track.title }}</div>
                 <div class="artist-name">{{ track.artists[0] }}</div>
             </section>
         </div>

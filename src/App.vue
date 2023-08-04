@@ -33,7 +33,7 @@ export default {
     },
     currTrack() {
       return this.currStation?.tracks[this.currTrackIdx]
-    },
+    }
   },
 
   watch: {
