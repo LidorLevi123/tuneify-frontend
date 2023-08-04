@@ -109,9 +109,6 @@ export default {
             return this.$store.getters.isCurrTrackPlaying && this.track?.id === this.currTrack?.id
         },
         isPlaying() {
-            // console.log('this.isTrackPlaying',this.isTrackPlaying)
-            // console.log('this.track.id',this.track.id)
-            // console.log('this.currTrack.id',this.currTrack?.id)
             if(!this.currTrack) return
             return {
                 'track-playing': this.isTrackPlaying
@@ -149,7 +146,6 @@ export default {
             ev.stopPropagation()
             this.$emit('track-add', track, stationId)
             this.showSubDropdown = false
-
         },
         onRemoveTrack(trackId, ev) {
             ev.stopPropagation()

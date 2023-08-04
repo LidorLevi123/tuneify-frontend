@@ -2,7 +2,7 @@
     <section class="search-list">
         <ul v-if="tracks" class="clean-list">
             <li v-for="track in tracks" :key="track.id">
-                <SearchPreview @track-add="onAddTrack" @track-dislike="onDislikeTrack" :track="track" :station="station" />
+                <SearchPreview @track-add="onAddTrack" :track="track" :station="station" />
             </li>
         </ul>
     </section>
