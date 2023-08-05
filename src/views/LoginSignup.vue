@@ -142,7 +142,8 @@ export default {
         this.msg = 'Please fill up the form'
         return
       }
-      await this.$store.dispatch({ type: 'signup', userCred: this.signupCred })
+      const user = await this.$store.dispatch({ type: 'signup', userCred: this.signupCred })
+      await this.$store.dispatch({ type: 'loadStations', userId: user._id })
       this.$router.push('/')
 
     },

@@ -43,9 +43,6 @@ async function remove(stationId) {
 }
 
 async function save(station) {
-    // if(station.isEmpty) {
-    //     return await httpService.post(BASE_URL, station)
-    // }
     if (station._id) {
         return await httpService.put(BASE_URL + station._id, station)
     }
@@ -59,6 +56,7 @@ async function getTracks(query) {
 
 async function saveTrack(track, stationId) {
     const station = await httpService.get(BASE_URL + stationId)
+    track.addedAt = new Date().toISOString().slice(0, 10)
     station.tracks.push(track)
     await save(station)
 }

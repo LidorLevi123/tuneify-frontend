@@ -86,11 +86,12 @@ export default {
         formattedDate() {
             const now = moment()
             const targetDate = moment(this.dateStr)
-            const diffInDays = now.diff(targetDate, 'days')
+            let diffInDays = now.diff(targetDate, 'days')
 
             if (diffInDays < 7) {
                 if (diffInDays === 0) return "Today"
                 if (diffInDays === 1) return "Yesterday"
+                if(diffInDays < 0) diffInDays *= (-1)
                 return `${diffInDays} days ago`
             } else {
                 return targetDate.format("MMM D, YYYY")

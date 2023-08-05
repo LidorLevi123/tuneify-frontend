@@ -75,7 +75,7 @@ function _getEndpoints(id, query) {
         categoryStations: `https://api.spotify.com/v1/browse/categories/${id}/playlists?country=il&limit=9`,
         station: `https://api.spotify.com/v1/playlists/${id}`,
         tracks: `https://api.spotify.com/v1/playlists/${id}/tracks`,
-        search: `https://api.spotify.com/v1/search?q=${query}&type=track`
+        search: `https://api.spotify.com/v1/search?q=${query}&type=track,playlist`
     }
 }
 
@@ -111,7 +111,6 @@ async function _cleanStationData(data) {
     return station
 }
 
-
 function _cleanCategoryStationsData(data) {
     return data.playlists.items.map(item => ({
         spotifyId: item.id,
@@ -121,8 +120,6 @@ function _cleanCategoryStationsData(data) {
     }))
 }
 
-// const test = getSpotifyItems('tracks', '37i9dQZF1DXcF6B6QPhFDv')
-// console.log(test)
 function _cleanStationTracksData(data) {
     return data.items.map(item => {
         return {
@@ -133,25 +130,22 @@ function _cleanStationTracksData(data) {
             imgUrl: item.track.album.images[0].url,
             formalDuration: item.track.duration_ms,
             album: item.track.album.name,
-            youtubeId: ''
         }
     })
 }
 
-// const res = await getSpotifyItems({ type: 'search', query: 'לחם חביתה' })
-// console.log(res)
-
 function _cleanSearchData(data) {
-    return data.tracks.items.map(track => {
-        return {
-            id: track.id,
-            title: track.name,
-            artists: _cleanArtists(track.artists),
-            imgUrl: track.album.images[0].url,
-            formalDuration: track.duration_ms,
-            album: track.album.name,
-        }
-    })
+    const tracks = data.tracks.items.map(track => ({
+        id: track.id,
+        title: track.name,
+        artists: _cleanArtists(track.artists),
+        imgUrl: track.album.images[0].url,
+        formalDuration: track.duration_ms,
+        album: track.album.name,
+    }))
+
+    const stations = data.playlists.items.map(async (station) => await _cleanStationData(station))
+    return { tracks, stations }
 }
 
 function _cleanArtists(artists) {

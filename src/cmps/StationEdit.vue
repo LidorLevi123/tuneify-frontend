@@ -6,7 +6,7 @@
         </header>
         <section class="edit">
             <label>
-                <input type="file" @click="handleFile" hidden>
+                <input type="file" @change="handleFile" hidden>
                 <img class="album-image" :src="stationToEdit.imgUrl" ref="stationImg" alt="">
             </label>
             <input class="title" type="text" v-model="stationToEdit.name" placeholder="Add a name">
