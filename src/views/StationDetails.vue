@@ -34,7 +34,7 @@
 
                 <button class="details-unlike" v-icon="'unlike'" v-show="hasLiked && !isOwner"
                     @click="removeStation"></button>
-                <span class="material-symbols-outlined df ai" title="Listen With Friends">group_add</span>
+                <!-- <span class="material-symbols-outlined df ai" title="Listen With Friends">group_add</span> -->
                 <!-- <button v-icon="'moreOptions'" class="btn details-edit"></button> -->
             </section>
             <TrackList @track-clicked="clickTrack" @track-add="addTrack" @track-remove="removeTrack"
