@@ -57,7 +57,7 @@ import { stationService } from '../services/station.service'
 import { utilService } from '../services/util.service'
 import { eventBus, showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
 
-import { SOCKET_EMIT_SET_TOPIC, socketService } from '../services/socket.service.js';
+import { SOCKET_EMIT_SET_TOPIC, SOCKET_EMIT_SEND_MSG, socketService } from '../services/socket.service.js';
 
 
 export default {
@@ -119,7 +119,9 @@ export default {
                 this.setTracksTotalDuration()
 
                 console.log('Socket room name:', this.stationId)
-                this.openSocketRoom(this.stationId)
+                socketService.emit(SOCKET_EMIT_SET_TOPIC, this.stationId)
+                socketService.emit(SOCKET_EMIT_SEND_MSG, 'Hello to everyone in this room')
+
 
             } catch (err) {
                 console.log(err.message)
@@ -227,9 +229,6 @@ export default {
         pauseTrack() {
             eventBus.emit('trackPaused')
         },
-        openSocketRoom(stationId) {
-            socketService.emit(SOCKET_EMIT_SET_TOPIC, stationId)
-        }
     },
 
     watch: {
