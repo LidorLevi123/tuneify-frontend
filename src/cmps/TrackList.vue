@@ -27,6 +27,7 @@
 import TrackPreview from './TrackPreview.vue'
 import TrackSearch from './TrackSearch.vue'
 import { Container, Draggable } from 'vue3-smooth-dnd'
+import { SOCKET_EMIT_TRACK_DRAGGED } from '../services/socket.service.js'
 
 
 
@@ -39,7 +40,9 @@ export default {
         return {
         }
     },
-
+    created() {
+        socketService.on(SOCKET_EMIT_TRACK_DRAGGED, this.onTrackDragged)
+    },
     computed: {
         canShowSearch() {
             return this.station.owner._id === this.user?._id && this.station._id !== this.user?.likedId
@@ -51,10 +54,10 @@ export default {
 
     methods: {
         onDrop(dropResult) {
-            this.applyDrag(dropResult)
+            this.applyDrag(dropResult, false)
         },
 
-        async applyDrag(dragResult) {
+        async applyDrag(dragResult, isSocketBroadcast) {
 
             const { removedIndex, addedIndex, payload } = dragResult
 
@@ -71,6 +74,9 @@ export default {
             const updatedStation = { ...this.station, tracks: this.station.tracks }
 
             await this.updateStation(updatedStation)
+
+            if(isSocketBroadcast) return
+            socketService.emit(SOCKET_EMIT_TRACK_DRAGGED, dragResult)
         },
 
         async updateStation(updatedStation) {
@@ -99,6 +105,9 @@ export default {
         },
         onLoadTracks(query) {
             this.$emit('search', query)
+        },
+        async onTrackDragged(dragResult) {
+            this.applyDrag(dragResult, true)
         }
     },
 
