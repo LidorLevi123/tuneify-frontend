@@ -50,7 +50,6 @@ async function save(station) {
 
 async function getSearchRes(query) {
     const res = await spotifyService.getSpotifyItems({ type: 'search', query })
-    console.log(res);
     return res
 }
 

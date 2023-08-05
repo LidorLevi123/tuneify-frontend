@@ -19,9 +19,9 @@
 </template>
 
 <script>
-
 import { utilService } from '../services/util.service'
 import SearchList from './SearchList.vue'
+
 export default {
     name: 'TrackSearch',
     props: {

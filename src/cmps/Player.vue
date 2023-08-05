@@ -1,6 +1,6 @@
 <template>
-    <YouTube ref="youtubePlayer" v-if="currTrack?.youtubeId" :src="currTrack.youtubeId" @state-change="onStateChange"
-        @ready="playVideo" style="display: none;" />
+    <YouTube ref="youtubePlayer" :src="currTrack?.youtubeId || ''" @state-change="onStateChange" @ready="playVideo" 
+    style="display: none;"/>
 
     <section class="main-player-container">
         <section class="track-info-container">
@@ -116,6 +116,7 @@ export default {
     created() {
         eventBus.on('trackClicked', this.loadVideo)
         eventBus.on('trackPaused', this.pauseVideo)
+        eventBus.on('trackPlay', this.playTrack)
 
         // sockets
         socketService.on(SOCKET_EVENT_ADD_MSG, this.onSocketMessage)
@@ -244,7 +245,7 @@ export default {
             this.changeTime()
             this.broadcastTrackInfo()
         },
-        changeTime(){
+        changeTime() {
             this.$refs.youtubePlayer.seekTo(this.elapsedTime, true)
             this.updatePlaybackProgress()
         },
@@ -275,6 +276,21 @@ export default {
             this.$refs.youtubePlayer.stopVideo()
             this.$refs.youtubePlayer.playVideo()
             this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
+        },
+        playTrack(track) {
+            // get youtubeId from YT
+            try {
+                console.log('Sending request to yt id...')
+                // const term = track.title + ' ' + track.artists[0]
+                // const youtubeId = await ytService.queryYT(term)
+                const youtubePlayer = this.$refs.youtubePlayer.player
+                const youtubeId = this.getDemoYoutubeId()
+
+                if (youtubePlayer) youtubePlayer.loadVideoById(youtubeId)
+                // this.playVideo()
+            } catch (err) {
+                console.log('Could not set track youtube id', err.message)
+            }
         },
         onStateChange(event) {
 
@@ -315,7 +331,7 @@ export default {
             return this.likedTracks?.some(track => track.id === trackId)
         },
         onSocketMessage(msg) {
-        console.log('Received socket message:', msg)
+            console.log('Received socket message:', msg)
         },
         broadcastTrackInfo() {
             const trackInfo = {
@@ -336,7 +352,7 @@ export default {
             this.elapsedTime = trackInfo.elapsedTime
             this.changeTime()
 
-            if(trackInfo.isPlaying) {
+            if (trackInfo.isPlaying) {
                 this.playVideo()
             } else {
                 this.pauseVideo()
@@ -347,6 +363,7 @@ export default {
 
     beforeunmount() {
         eventBus.off('trackClicked', this.loadVideo)
+        eventBus.off('trackPlay', this.playTrack)
     },
 
     computed: {

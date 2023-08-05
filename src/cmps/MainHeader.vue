@@ -12,8 +12,8 @@
             :style="{ opacity: this.scrollPosition > 400 ? '1' : '0' }">{{ station?.name }}</span>
         <div v-if="$route.path === '/search'" class="search-input-container">
             <span class="df ai" v-icon="`sSearch`"></span>
-            <input type="text" v-model="filterBy.txt" @input="onSetFilterBy" placeholder="What do you want to listen to?">
-            <div v-if="filterBy.txt">
+            <input type="text" v-model="query" placeholder="What do you want to listen to?">
+            <div v-if="query">
                 <span class="df ai" v-icon="'close'" @click="onClearFilter"></span>
             </div>
         </div>
@@ -25,8 +25,10 @@
 </template>
 
 <script>
-import historyTracker from '../services/history.service'
 import { eventBus } from '../services/event-bus.service'
+import { utilService } from '../services/util.service'
+
+import historyTracker from '../services/history.service'
 export default {
     name: 'SearchPage',
 
@@ -36,14 +38,16 @@ export default {
 
     data() {
         return {
-            filterBy: {
-                txt: '',
-            },
+            query: '',
             scrollPosition: null
         }
     },
     created() {
         eventBus.on('handleScroll', this.logScroll)
+
+        this.search = utilService.debounce(() => {
+            eventBus.emit('search', this.query)
+        }, 500)
     },
     methods: {
         async doLogout() {
@@ -51,12 +55,8 @@ export default {
             this.$store.dispatch({ type: 'logout' })
             this.$store.commit({ type: 'loadStations', stations: [] })
         },
-        onSetFilterBy() {
-            console.log(this.filterBy)
-            this.$emit('filter', this.filterBy)
-        },
         onClearFilter() {
-            this.filterBy.txt = ''
+            this.query = ''
         },
         logScroll({ scrollTop }) {
             this.scrollPosition = scrollTop
@@ -105,7 +105,15 @@ export default {
         showPause() {
             return this.$route.path.startsWith('/station/') && this.isPlaying
         }
-    }
+    },
+
+    watch: {
+        query: {
+            handler() {
+                this.search()
+            },
+        },
+    },
 }
 </script>
 
