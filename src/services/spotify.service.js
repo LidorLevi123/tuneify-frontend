@@ -2,8 +2,7 @@ import config from "../../config.js"
 import axios from "axios"
 
 let gAccessToken = ''
-
-await getAccessToken()
+getAccessToken()
 
 async function getAccessToken() {
 
@@ -58,7 +57,7 @@ async function getSpotifyItems(req) {
         })
 
         // Clean and return the data from response
-        let cleanData = _cleanResponseData(response.data, type)
+        let cleanData = await _cleanResponseData(response.data, type)
         return cleanData
 
     } catch (error) {
@@ -79,7 +78,7 @@ function _getEndpoints(id, query) {
     }
 }
 
-function _cleanResponseData(data, type) {
+async function _cleanResponseData(data, type) {
     let cleanData
 
     switch (type) {
@@ -90,10 +89,10 @@ function _cleanResponseData(data, type) {
             cleanData = _cleanStationTracksData(data)
             break
         case 'station':
-            cleanData = _cleanStationData(data)
+            cleanData = await _cleanStationData(data)
             break
         case 'search':
-            cleanData = _cleanSearchData(data)
+            cleanData = await _cleanSearchData(data)
             break
     }
     return cleanData
@@ -113,7 +112,7 @@ async function _cleanStationData(data) {
 
 function _cleanCategoryStationsData(data) {
     return data.playlists.items.map(item => ({
-        spotifyId: item.id,
+        spotifyId: item.id ? item.id : '0',
         name: item.name,
         imgUrl: item.images[0].url,
         description: item.description,
@@ -130,11 +129,12 @@ function _cleanStationTracksData(data) {
             imgUrl: item.track.album.images[0].url,
             formalDuration: item.track.duration_ms,
             album: item.track.album.name,
+            youtubeId: ''
         }
     })
 }
 
-function _cleanSearchData(data) {
+async function _cleanSearchData(data) {
     const tracks = data.tracks.items.map(track => ({
         id: track.id,
         title: track.name,
@@ -142,10 +142,11 @@ function _cleanSearchData(data) {
         imgUrl: track.album.images[0].url,
         formalDuration: track.duration_ms,
         album: track.album.name,
+        youtubeId: ''
     }))
 
-    const stations = data.playlists.items.map(async (station) => await _cleanStationData(station))
-    return { tracks, stations }
+    // const stations = await data.playlists.items.map(_cleanStationData)
+    return { tracks }
 }
 
 function _cleanArtists(artists) {

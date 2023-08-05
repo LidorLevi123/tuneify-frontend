@@ -36,7 +36,7 @@ export default {
 
     computed: {
         tracks() {
-            return this.$store.getters.tracks
+            return this.$store.getters.searchRes
         }
     },
 

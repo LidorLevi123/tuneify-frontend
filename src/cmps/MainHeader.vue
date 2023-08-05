@@ -12,9 +12,9 @@
             :style="{ opacity: this.scrollPosition > 400 ? '1' : '0' }">{{ station?.name }}</span>
         <div v-if="$route.path === '/search'" class="search-input-container">
             <span class="df ai" v-icon="`sSearch`"></span>
-            <input type="text" v-model="filterBy.txt" @input="onSetFilterBy" placeholder="What do you want to listen to?">
-            <div v-if="filterBy.txt">
-                <span class="df ai" v-icon="'close'" @click="onClearFilter"></span>
+            <input type="text" v-model="query" @input="onSetSearch" placeholder="What do you want to listen to?">
+            <div v-if="query">
+                <span class="df ai" v-icon="'close'" @click="onClearSearch"></span>
             </div>
         </div>
         <button v-if="user" @click="doLogout" v-icon="`profile`" class="profile-btn" title="Logout"></button>
@@ -36,9 +36,7 @@ export default {
 
     data() {
         return {
-            filterBy: {
-                txt: '',
-            },
+            query: '',
             scrollPosition: null
         }
     },
@@ -51,22 +49,25 @@ export default {
             this.$store.dispatch({ type: 'logout' })
             this.$store.commit({ type: 'loadStations', stations: [] })
         },
-        onSetFilterBy() {
-            console.log(this.filterBy)
-            this.$emit('filter', this.filterBy)
+        onSetSearch() {
+            eventBus.emit('search', this.query)
         },
-        onClearFilter() {
-            this.filterBy.txt = ''
+        onClearSearch() {
+            this.query = ''
         },
         logScroll({ scrollTop }) {
             this.scrollPosition = scrollTop
         },
         playStation(trackIdx) {
             trackIdx = trackIdx === -1 ? 0 : trackIdx
-            if (this.currStation?._id !== this.station._id) {
-                this.$store.commit({ type: 'setCurrStation', station: this.station })
-            }
             this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
+
+            if (this.currStation?._id !== this.station._id) {
+                const station = JSON.parse(JSON.stringify(this.station))
+                this.$store.commit({ type: 'setCurrStation', station })
+                this.$store.commit({ type: 'setCurrTrackIdx', trackIdx: 0 })
+            }
+            eventBus.emit('trackClicked')
             eventBus.emit('trackClicked')
         },
         pauseStation() {
@@ -94,7 +95,7 @@ export default {
             return this.$store.getters.currTrackIdx
         },
         isPlaying() {
-            return this.$store.getters.isCurrTrackPlaying
+            return this.$store.getters.isCurrTrackPlaying && this.station._id === this.currStation?._id
         },
         user() {
             return this.$store.getters.loggedinUser
