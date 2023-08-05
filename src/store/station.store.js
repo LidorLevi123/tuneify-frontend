@@ -15,7 +15,7 @@ export const stationStore = {
         stationsForHome({ stationsForHome }) { return stationsForHome },
         currStation({ currStation }) { return currStation },
         currTrackIdx({ currTrackIdx }) { return currTrackIdx },
-        currTrack({ currStation, currTrackIdx  }) { return currStation?.tracks[currTrackIdx] },
+        currTrack({ currStation, currTrackIdx }) { return currStation?.tracks[currTrackIdx] },
         isCurrTrackPlaying({ isCurrTrackPlaying }) { return isCurrTrackPlaying },
         tracks({ tracks }) { return tracks },
     },
@@ -40,7 +40,7 @@ export const stationStore = {
         },
         addStation({ stations }, { stationToSave }) {
             const station = stations.find(currStation => currStation._id === stationToSave._id)
-            if(station) return
+            if (station) return
             stations.push(stationToSave)
         },
         updateStation({ stations }, { stationToSave }) {
@@ -85,8 +85,8 @@ export const stationStore = {
         },
         async saveStation({ commit }, { stationToSave }) {
             let type = stationToSave._id ? 'updateStation' : 'addStation'
-            // if(stationToSave.owner === 'Tuneify') type = 'addStation'
-            if(stationToSave.isEmpty) type = 'addStation'
+            if (stationToSave.isEmpty) type = 'addStation'
+
             try {
                 const station = await stationService.save(stationToSave)
                 commit({ type, stationToSave: station })
@@ -96,7 +96,7 @@ export const stationStore = {
                 throw new Error('Could not save station')
             }
         },
-        async getStation({}, { stationId }) {
+        async getStation({ }, { stationId }) {
             try {
                 const station = await stationService.getById(stationId)
                 return station
@@ -115,13 +115,13 @@ export const stationStore = {
             }
         },
         async getTracks({ commit }, { query }) {
-            if(!query) {
-                commit({ type: 'setTracks', tracks: []})
+            if (!query) {
+                commit({ type: 'setTracks', tracks: [] })
                 return
             }
             try {
                 const tracks = await stationService.getTracks(query)
-                commit({ type: 'setTracks', tracks})
+                commit({ type: 'setTracks', tracks })
             } catch (err) {
                 console.log(err.message)
                 throw new Error('Could not get tracks')
@@ -133,6 +133,7 @@ export const stationStore = {
             if (isTrackExist) return
 
             try {
+                trackToSave = JSON.parse(JSON.stringify(trackToSave))
                 await stationService.saveTrack(trackToSave, stationId)
                 commit({ type: 'addTrack', trackToSave, stationId })
             } catch (err) {
