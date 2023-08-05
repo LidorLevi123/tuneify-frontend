@@ -81,7 +81,7 @@ import { ytService } from '../services/yt.service.js'
 
 import YouTube from 'vue3-youtube'
 
-import { socketService, SOCKET_EVENT_ADD_MSG, SOCKET_EMIT_BROADCAST_TRACK, SOCKET_EMIT_PAUSE_TRACK } from '../services/socket.service.js'
+import { socketService, SOCKET_EVENT_ADD_MSG, SOCKET_EMIT_BROADCAST_TRACK } from '../services/socket.service.js'
 
 export default {
     data() {
@@ -120,7 +120,6 @@ export default {
         // sockets
         socketService.on(SOCKET_EVENT_ADD_MSG, this.onSocketMessage)
         socketService.on(SOCKET_EMIT_BROADCAST_TRACK, this.updateByBroadcast)
-        // socketService.on(SOCKET_EMIT_PAUSE_TRACK, this.pauseVideo)
     },
     methods: {
         updateCurrTrackIdx(trackIdx) {
@@ -173,10 +172,10 @@ export default {
             this.loadVideo()
         },
         async loadVideo() {
-            console.log('Someone has played a track');
             if (this.currTrack?.youtubeId) {
                 console.log('Got yt id from storage')
                 this.playVideo()
+                this.broadcastTrackInfo()
                 return
             }
             // get youtubeId from YT
@@ -187,6 +186,7 @@ export default {
                 // const youtubeId = this.getDemoYoutubeId()
                 await this.$store.dispatch({ type: 'updateTrack', youtubeId })
                 this.playVideo()
+                this.broadcastTrackInfo()
             } catch (err) {
                 console.log('Could not set track youtube id', err.message)
             }
@@ -318,17 +318,30 @@ export default {
         console.log('Received socket message:', msg)
         },
         broadcastTrackInfo() {
-            const data = {
-                station: this.currStation,
+            const trackInfo = {
+                trackId: this.currTrack.id,
                 trackIdx: this.currTrackIdx,
+                isPlaying: this.isPlaying,
+                elapsedTime: this.elapsedTime,
             }
-            socketService.emit(SOCKET_EMIT_BROADCAST_TRACK, data)
-        },
-        updateByBroadcast({ station, trackIdx }) {
-            this.$store.commit({ type: 'setCurrStation', station})
-            this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
 
-            this.loadVideo()
+            socketService.emit(SOCKET_EMIT_BROADCAST_TRACK, trackInfo)
+        },
+        updateByBroadcast(trackInfo) {
+
+            // if youtubeplayer not loaded - load it
+
+            this.updateCurrTrackIdx(trackInfo.trackIdx)
+
+            this.elapsedTime = trackInfo.elapsedTime
+            this.changeTime()
+
+            if(trackInfo.isPlaying) {
+                this.playVideo()
+            } else {
+                this.pauseVideo()
+            }
+
         }
     },
 
