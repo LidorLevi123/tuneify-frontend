@@ -11,7 +11,7 @@
                     <h1 @click="openStationEditor">{{ station.name }}</h1>
                     <p class="description">{{ station.description }}</p>
                     <div>
-                        <img src="favicon.svg" alt="">
+                        <img src="http://res.cloudinary.com/dys1sj4cd/image/upload/v1691227930/favicon_juzdft.svg" alt="">
                         <span class="logo">{{ stationOwner }}</span>
                         <span class="songs-num" v-if="station.tracks">&bull; {{ station.tracks?.length }} songs</span>
                         <span class="songs-time" v-show="formttedTime">, about {{ formttedTime }} hours</span>
@@ -91,7 +91,7 @@ export default {
             return this.station.owner._id === this.user?._id
         },
         isPlaying() {
-            return this.$store.getters.isCurrTrackPlaying
+            return this.$store.getters.isCurrTrackPlaying && this.station._id === this.currStation?._id
         },
         currStation() {
             return this.$store.getters.currStation
@@ -174,6 +174,7 @@ export default {
             try {
                 await this.$store.dispatch({ type: 'addTrack', trackToSave, stationId })
                 this.loadStation()
+                eventBus.emit('track-add')
                 if (stationId !== this.user.likedId) {
                     showSuccessMsg('Saved to station')
                 } else {
@@ -219,11 +220,13 @@ export default {
         },
         clickTrack(trackIdx) {
             trackIdx = trackIdx === -1 ? 0 : trackIdx
+            this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
+
             if (this.currStation?._id !== this.station._id) {
                 const station = JSON.parse(JSON.stringify(this.station))
                 this.$store.commit({ type: 'setCurrStation', station })
+                this.$store.commit({ type: 'setCurrTrackIdx', trackIdx: 0 })
             }
-            this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
             eventBus.emit('trackClicked')
         },
         pauseTrack() {

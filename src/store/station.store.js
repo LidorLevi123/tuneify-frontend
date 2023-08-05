@@ -8,7 +8,7 @@ export const stationStore = {
         currStation: null,
         currTrackIdx: -1,
         isCurrTrackPlaying: false,
-        tracks: [],
+        searchRes: [],
     },
     getters: {
         libraryStations({ stations }) { return stations },
@@ -17,14 +17,14 @@ export const stationStore = {
         currTrackIdx({ currTrackIdx }) { return currTrackIdx },
         currTrack({ currStation, currTrackIdx }) { return currStation?.tracks[currTrackIdx] },
         isCurrTrackPlaying({ isCurrTrackPlaying }) { return isCurrTrackPlaying },
-        tracks({ tracks }) { return tracks },
+        searchRes({ searchRes }) { return searchRes },
     },
     mutations: {
         loadStations(state, { stations }) {
             state.stations = stations
         },
-        setTracks(state, { tracks }) {
-            state.tracks = tracks
+        setSearchRes(state, { res }) {
+            state.searchRes = res
         },
         setStationsForHome(state, { stations }) {
             state.stationsForHome = stations
@@ -116,15 +116,28 @@ export const stationStore = {
         },
         async getTracks({ commit }, { query }) {
             if (!query) {
-                commit({ type: 'setTracks', tracks: [] })
+                commit({ type: 'setSearchRes', res: [] })
                 return
             }
             try {
-                const tracks = await stationService.getTracks(query)
-                commit({ type: 'setTracks', tracks })
+                const res = await stationService.getSearchRes(query)
+                commit({ type: 'setSearchRes', res: res.tracks })
             } catch (err) {
                 console.log(err.message)
                 throw new Error('Could not get tracks')
+            }
+        },
+        async getStations({ commit }, { query }) {
+            if (!query) {
+                commit({ type: 'setSearchRes', res: [] })
+                return
+            }
+            try {
+                const res = await stationService.getSearchRes(query)
+                commit({ type: 'setSearchRes', res: res.stations })
+            } catch (err) {
+                console.log(err.message)
+                throw new Error('Could not get stations')
             }
         },
         async addTrack({ commit, state }, { trackToSave, stationId }) {

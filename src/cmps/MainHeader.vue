@@ -63,10 +63,14 @@ export default {
         },
         playStation(trackIdx) {
             trackIdx = trackIdx === -1 ? 0 : trackIdx
-            if (this.currStation?._id !== this.station._id) {
-                this.$store.commit({ type: 'setCurrStation', station: this.station })
-            }
             this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
+
+            if (this.currStation?._id !== this.station._id) {
+                const station = JSON.parse(JSON.stringify(this.station))
+                this.$store.commit({ type: 'setCurrStation', station })
+                this.$store.commit({ type: 'setCurrTrackIdx', trackIdx: 0 })
+            }
+            eventBus.emit('trackClicked')
             eventBus.emit('trackClicked')
         },
         pauseStation() {
@@ -94,7 +98,7 @@ export default {
             return this.$store.getters.currTrackIdx
         },
         isPlaying() {
-            return this.$store.getters.isCurrTrackPlaying
+            return this.$store.getters.isCurrTrackPlaying && this.station._id === this.currStation?._id
         },
         user() {
             return this.$store.getters.loggedinUser

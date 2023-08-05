@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { showErrorMsg } from '../services/event-bus.service'
+import { eventBus, showErrorMsg } from '../services/event-bus.service'
 import { stationService } from '../services/station.service'
 import { uploadService } from '../services/upload.service'
 
@@ -35,6 +35,11 @@ export default {
 
     created() {
         this.loadStationToEdit()
+        eventBus.on('track-add', this.loadStationToEdit)
+    },
+
+    unmounted() {
+        eventBus.off('track-add', this.loadStationToEdit)
     },
 
     methods: {
