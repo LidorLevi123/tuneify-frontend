@@ -4,9 +4,11 @@ import { userService } from './user.service'
 export const SOCKET_EVENT_ADD_MSG = 'chat-add-msg'
 export const SOCKET_EMIT_SEND_MSG = 'chat-send-msg'
 export const SOCKET_EMIT_SET_TOPIC = 'chat-set-topic'
+export const SOCKET_EMIT_BROADCAST_TRACK = 'broadcast-track'
+export const SOCKET_EMIT_PAUSE_TRACK = 'pause-track'
+export const SOCKET_EMIT_TRACK_DRAGGED = 'track-dragged'
 export const SOCKET_EMIT_USER_WATCH = 'user-watch'
 export const SOCKET_EVENT_USER_UPDATED = 'user-updated'
-export const SOCKET_EMIT_BROADCAST_TRACK = 'broadcast-track'
 // export const SOCKET_EVENT_REVIEW_ADDED = 'review-added'
 // export const SOCKET_EVENT_REVIEW_ABOUT_YOU = 'review-about-you'
 
@@ -21,7 +23,7 @@ export const socketService = createSocketService()
 window.socketService = socketService
 
 socketService.setup()
-console.log(socketService)
+// console.log(socketService)
 
 function createSocketService() {
   var socket = null

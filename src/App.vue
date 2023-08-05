@@ -13,16 +13,25 @@ export default {
 
   async created() {
 
-    // await this.$store.dispatch({ type: 'signup', userCred: { fullname: 'Nitzan', username: 'Nitzan', password: '123' } })
+    let user = userService.getLoggedinUser()
 
-    const user = userService.getLoggedinUser()
-    if (!user) return
-
-    try {
-      await this.$store.dispatch({ type: 'loadStations', userId: user._id })
-    } catch (err) {
-      console.log('Something went wrong at App', err.message)
+    if (!user) {
+      try {
+        user = await this.$store.dispatch({ type: 'login', userCred: { username: 'guest', password: '123' } })
+        this.$store.dispatch({ type: 'loadStations', userId: user._id })
+      } catch (err) {
+        console.log('Something went wrong at App', err.message)
+      } finally {
+        return
+      }
+    } else {
+      try {
+        this.$store.dispatch({ type: 'loadStations', userId: user._id })
+      } catch (err) {
+        console.log('Something went wrong at App', err.message)
+      }
     }
+
   },
   computed: {
     currTrackIdx() {

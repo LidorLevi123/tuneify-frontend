@@ -11,12 +11,11 @@ export const stationService = {
     save,
     remove,
     getEmptyStation,
-    getTracks,
+    getSearchRes,
     saveTrack,
     removeTrack,
     getCategoryStations,
     getStationsForHome,
-    // addStationMsg
 }
 
 window.cs = stationService // for console usage
@@ -49,9 +48,10 @@ async function save(station) {
     return await httpService.post(BASE_URL, station)
 }
 
-async function getTracks(query) {
-    const tracks = await spotifyService.getSpotifyItems({ type: 'search', query })
-    return tracks
+async function getSearchRes(query) {
+    const res = await spotifyService.getSpotifyItems({ type: 'search', query })
+    console.log(res);
+    return res
 }
 
 async function saveTrack(track, stationId) {

@@ -21,17 +21,17 @@ export default {
     };
   },
   mounted() {
-    window.addEventListener("resize", this.maxStationsCalc);
+    window.addEventListener("resize", this.maxStationsCalc)
   },
   beforeDestroy() {
-    window.removeEventListener("resize", this.maxStationsCalc);
+    window.removeEventListener("resize", this.maxStationsCalc)
   },
   async created() {
     if (!this.stations.length) {
       await this.$store.dispatch({ type: 'getStationsForHome' })
+      this.maxStationsCalc()
     }
     historyTracker.push(this.$route.fullPath)
-    this.maxStationsCalc()
   },
   computed: {
     stations() {
