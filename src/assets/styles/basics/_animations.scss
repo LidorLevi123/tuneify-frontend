@@ -1,0 +1,136 @@
+$animation-duration: 0.5s;
+$animation-timing-function: cubic-bezier(0.12, 1, 0.5, 1);
+$scale-animation-duration: 0.2s;
+$heart-fill-default: #a7a7a7;
+$heart-fill-checked: #64d26d;
+$heart-fill-scale-pulse: #64d26d;
+$heart-scale: 1.1;
+
+.heart-svg {
+    height: 80px;
+    width: 80px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-block-start: -5px;
+    margin-inline-start: 110px;
+}
+
+.label {
+    width: 20px;
+    height: 20px;
+
+}
+
+label {
+    transform: translate(-90px, 18px);
+}
+
+.bubbling-heart {
+    cursor: pointer;
+}
+
+input[type="checkbox"] {
+    display: none;
+}
+
+input[type="checkbox"]+label {
+    position: relative;
+    display: grid;
+    place-content: center;
+
+    #center-heart #inner {
+        fill: transparent;
+        transition: $animation-duration $animation-timing-function;
+    }
+
+    #center-heart #outer {
+        fill: $heart-fill-default;
+        transition: $animation-duration $animation-timing-function;
+    }
+
+    #left-hearts>*,
+    #right-hearts>* {
+        opacity: 0;
+        transition: $animation-duration $animation-timing-function;
+    }
+
+    &:before,
+    &:after {
+        content: "";
+        display: grid;
+        border-radius: 100%;
+        position: absolute;
+        outline: 25px solid $clr7;
+        height: 40px;
+        width: 40px;
+        margin-inline-start: 3rem;
+        margin-block-start: -0.6rem;
+        animation: scalePulse $scale-animation-duration $animation-timing-function forwards;
+    }
+
+    &:after {
+        opacity: 1;
+        transform: scale(0);
+        animation-delay: 0.2s;
+    }
+
+    #center-heart #inner,
+    #center-heart #outer {
+        fill: $heart-fill-scale-pulse;
+    }
+
+    #left-hearts>*,
+    #right-hearts>* {
+        transform-origin: center center;
+        animation: floatingHearts $animation-duration $animation-timing-function forwards;
+    }
+
+    #right-hearts g:first-child {
+        animation-delay: 0.3s;
+    }
+
+    #right-hearts g:last-child {
+        animation-delay: 0.1s;
+    }
+
+    #left-hearts g:first-child {
+        animation-delay: 0.2s;
+    }
+
+    #left-hearts g:last-child {
+        animation-delay: 0.5s;
+    }
+
+    &.checked {
+        cursor: pointer;
+    }
+}
+
+@keyframes floatingHearts {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+}
+
+@keyframes scalePulse {
+    0% {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale($heart-scale);
+        opacity: 0;
+    }
+}

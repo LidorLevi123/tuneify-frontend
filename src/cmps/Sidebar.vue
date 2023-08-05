@@ -31,9 +31,9 @@ export default {
 
                 this.canAddStation = false
                 const stationToSave = stationService.getEmptyStation()
-    
+
                 stationToSave.name = 'My Playlist #' + this.libraryStations.length
-                stationToSave.imgUrl = 'https://picsum.photos/' + (this.libraryStations.length + 232)
+                stationToSave.imgUrl = '../../public/def-pl.png'
 
                 const station = await this.$store.dispatch({ type: 'saveStation', stationToSave })
                 await this.$store.dispatch({ type: 'updateUserStations', stationId: station._id, action: 'add' })

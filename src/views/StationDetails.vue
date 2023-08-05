@@ -21,9 +21,13 @@
         </div>
         <div ref="botGradient" class="bottom-gradient">
             <section class="details-player">
+
+
                 <button v-if="!isPlaying" class="details-play" v-icon="'detailsPlay'" v-show="hasTracks"
                     @click="clickTrack(currTrackIdx)" title="Play">
                 </button>
+
+
 
                 <button v-else class="details-play" v-icon="'detailsPause'" v-show="hasTracks" @click="pauseTrack"
                     title="Pause">
@@ -34,8 +38,13 @@
 
                 <button class="details-unlike" v-icon="'unlike'" v-show="hasLiked && !isOwner"
                     @click="removeStation"></button>
-                <span class="material-symbols-outlined df ai" title="Listen With Friends">group_add</span>
+                <!-- <span class="material-symbols-outlined df ai" title="Listen With Friends">group_add</span> -->
                 <!-- <button v-icon="'moreOptions'" class="btn details-edit"></button> -->
+
+                <div class="bubbling-heart" v-show="hasLiked">
+                    <input type="checkbox" @click="removeStation" class="heart-input" id="like-undefined">
+                    <label class="label" for="like-undefined"><span v-icon="`bHearts`"></span></label>
+                </div>
             </section>
             <TrackList @track-clicked="clickTrack" @track-add="addTrack" @track-remove="removeTrack"
                 @track-dislike="dislikeTrack" @station-update="loadStation" @search="getTracks" :station="station" />
