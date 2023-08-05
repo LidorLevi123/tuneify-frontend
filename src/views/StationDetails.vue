@@ -225,7 +225,6 @@ export default {
             if (this.currStation?._id !== this.station._id) {
                 const station = JSON.parse(JSON.stringify(this.station))
                 this.$store.commit({ type: 'setCurrStation', station })
-                this.$store.commit({ type: 'setCurrTrackIdx', trackIdx: 0 })
             }
             eventBus.emit('trackClicked')
         },
