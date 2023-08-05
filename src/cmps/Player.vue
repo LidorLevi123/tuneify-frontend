@@ -181,9 +181,9 @@ export default {
             // get youtubeId from YT
             try {
                 console.log('Sending request to yt id...')
-                // const term = this.currTrack.title + ' ' + this.currTrack.artists[0]
-                // const youtubeId = await ytService.queryYT(term)
-                const youtubeId = this.getDemoYoutubeId()
+                const term = this.currTrack.title + ' ' + this.currTrack.artists[0]
+                const youtubeId = await ytService.queryYT(term)
+                // const youtubeId = this.getDemoYoutubeId()
                 await this.$store.dispatch({ type: 'updateTrack', youtubeId })
                 this.playVideo()
                 this.broadcastTrackInfo()
@@ -278,18 +278,6 @@ export default {
         },
         onStateChange(event) {
 
-            // sockets
-            // if (event.data === this.youtubePlayerStates.PLAYING) {
-            //     socketService.emit('socket-play-track', { trackId: this.currTrack.id })
-            // }
-            // if (event.data === this.youtubePlayerStates.ENDED) {
-            //     socketService.emit('socket-play-next')
-            // }
-            // if (event.data === this.youtubePlayerStates.PAUSED) {
-            //     socketService.emit('socket-pause')
-            // }
-
-            //
             if (event.data === this.youtubePlayerStates.ENDED) {
 
                 this.previousNextVideo(1)

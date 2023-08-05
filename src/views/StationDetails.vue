@@ -107,7 +107,6 @@ export default {
     created() {
         this.loadStation()
         historyTracker.push(this.$route.fullPath)
-
     },
 
     methods: {
