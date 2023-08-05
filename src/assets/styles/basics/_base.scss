@@ -21,14 +21,6 @@ h6 {
     margin: 0;
 }
 
-/* Dont stretch my Media */
-img,
-embed,
-video,
-object {
-    max-width: 100%
-}
-
 html {
     @include for-mobile-layout {
         font-size: 1.2rem;

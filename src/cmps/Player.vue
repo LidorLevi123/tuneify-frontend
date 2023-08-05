@@ -81,7 +81,7 @@ import { ytService } from '../services/yt.service.js'
 
 import YouTube from 'vue3-youtube'
 
-import { socketService, SOCKET_EVENT_ADD_MSG } from '../services/socket.service.js'
+import { socketService, SOCKET_EVENT_ADD_MSG, SOCKET_EMIT_BROADCAST_TRACK } from '../services/socket.service.js'
 
 export default {
     data() {
@@ -119,16 +119,24 @@ export default {
 
         // sockets
         socketService.on(SOCKET_EVENT_ADD_MSG, this.onSocketMessage)
+        socketService.on(SOCKET_EMIT_BROADCAST_TRACK, this.updateByBroadcast)
     },
     methods: {
         updateCurrTrackIdx(trackIdx) {
             this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
         },
         togglePlayPause() {
+
             if (!this.currTrack) return
 
-            if (this.isPlaying) this.pauseVideo()
-            else this.playVideo()
+            if (this.isPlaying) {
+                this.pauseVideo()
+            }
+            else {
+                this.playVideo()
+            }
+
+            this.broadcastTrackInfo()
         },
         async previousNextVideo(diff) {
 
@@ -167,6 +175,7 @@ export default {
             if (this.currTrack?.youtubeId) {
                 console.log('Got yt id from storage')
                 this.playVideo()
+                this.broadcastTrackInfo()
                 return
             }
             // get youtubeId from YT
@@ -177,9 +186,11 @@ export default {
                 const youtubeId = this.getDemoYoutubeId()
                 await this.$store.dispatch({ type: 'updateTrack', youtubeId })
                 this.playVideo()
+                this.broadcastTrackInfo()
             } catch (err) {
                 console.log('Could not set track youtube id', err.message)
             }
+
         },
         async likeTrack(trackToSave) {
             try {
@@ -230,6 +241,10 @@ export default {
             }
         },
         onChangeTime() {
+            this.changeTime()
+            this.broadcastTrackInfo()
+        },
+        changeTime(){
             this.$refs.youtubePlayer.seekTo(this.elapsedTime, true)
             this.updatePlaybackProgress()
         },
@@ -264,15 +279,15 @@ export default {
         onStateChange(event) {
 
             // sockets
-            if (event.data === this.youtubePlayerStates.PLAYING) {
-                socketService.emit('socket-play-track', { trackId: this.currTrack.id })
-            }
-            if (event.data === this.youtubePlayerStates.ENDED) {
-                socketService.emit('socket-play-next')
-            }
-            if (event.data === this.youtubePlayerStates.PAUSED) {
-                socketService.emit('socket-pause')
-            }
+            // if (event.data === this.youtubePlayerStates.PLAYING) {
+            //     socketService.emit('socket-play-track', { trackId: this.currTrack.id })
+            // }
+            // if (event.data === this.youtubePlayerStates.ENDED) {
+            //     socketService.emit('socket-play-next')
+            // }
+            // if (event.data === this.youtubePlayerStates.PAUSED) {
+            //     socketService.emit('socket-pause')
+            // }
 
             //
             if (event.data === this.youtubePlayerStates.ENDED) {
@@ -312,7 +327,33 @@ export default {
             return this.likedTracks?.some(track => track.id === trackId)
         },
         onSocketMessage(msg) {
-            console.log('Received socket message:', msg)
+        console.log('Received socket message:', msg)
+        },
+        broadcastTrackInfo() {
+            const trackInfo = {
+                trackId: this.currTrack.id,
+                trackIdx: this.currTrackIdx,
+                isPlaying: this.isPlaying,
+                elapsedTime: this.elapsedTime,
+            }
+
+            socketService.emit(SOCKET_EMIT_BROADCAST_TRACK, trackInfo)
+        },
+        updateByBroadcast(trackInfo) {
+
+            // if youtubeplayer not loaded - load it
+
+            this.updateCurrTrackIdx(trackInfo.trackIdx)
+
+            this.elapsedTime = trackInfo.elapsedTime
+            this.changeTime()
+
+            if(trackInfo.isPlaying) {
+                this.playVideo()
+            } else {
+                this.pauseVideo()
+            }
+
         }
     },
 

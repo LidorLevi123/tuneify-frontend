@@ -27,20 +27,24 @@
 
     }
 
-    .login-btn {
-        border-radius: 500px;
-        border: none;
-        background-color: $clr2;
-        height: 3rem;
-        width: 6.875rem;
-        margin-inline-end: 2rem;
-        font-weight: 700;
-        font-family: CircularSpTitle;
-        font-size: 1rem;
-        cursor: pointer;
+    .login-link {
+        margin-left: auto;
 
-        &:hover {
-            scale: 104%;
+        .login-btn {
+            border-radius: 500px;
+            border: none;
+            background-color: $clr2;
+            height: 3rem;
+            width: 6.875rem;
+            margin-inline-end: 2rem;
+            font-weight: 700;
+            font-family: CircularSpTitle;
+            font-size: 1rem;
+            cursor: pointer;
+
+            &:hover {
+                scale: 104%;
+            }
         }
     }
 
@@ -98,6 +102,10 @@
         font-size: 1.5rem;
         color: $clr2;
         font-weight: 900;
+
+        @include for-mobile-layout {
+            font-size: 0.8rem;
+        }
     }
 
     .search-input-container {

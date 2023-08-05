@@ -57,6 +57,9 @@ import { stationService } from '../services/station.service'
 import { utilService } from '../services/util.service'
 import { eventBus, showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
 
+import { SOCKET_EMIT_SET_TOPIC, SOCKET_EMIT_SEND_MSG, socketService } from '../services/socket.service.js';
+
+
 export default {
 
     data() {
@@ -85,7 +88,7 @@ export default {
             return this.station.tracks.length > 0
         },
         isOwner() {
-            return this.station.owner._id === this.user._id
+            return this.station.owner._id === this.user?._id
         },
         isPlaying() {
             return this.$store.getters.isCurrTrackPlaying
@@ -104,6 +107,7 @@ export default {
     created() {
         this.loadStation()
         historyTracker.push(this.$route.fullPath)
+
     },
 
     methods: {
@@ -113,6 +117,12 @@ export default {
                 this.station = station
                 this.$emit('station', station)
                 this.setTracksTotalDuration()
+
+                console.log('Socket room name:', this.stationId)
+                socketService.emit(SOCKET_EMIT_SET_TOPIC, this.stationId)
+                socketService.emit(SOCKET_EMIT_SEND_MSG, 'Hello to everyone in this room')
+
+
             } catch (err) {
                 console.log(err.message)
                 showErrorMsg('Could not set current station')

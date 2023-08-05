@@ -110,7 +110,7 @@ export default {
             return this.$store.getters.isCurrTrackPlaying && this.track?.id === this.currTrack?.id
         },
         isPlaying() {
-            if(!this.currTrack) return
+            if (!this.currTrack) return
 
             return {
                 'track-playing': this.isTrackPlaying,

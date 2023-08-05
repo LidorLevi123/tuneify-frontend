@@ -3,7 +3,7 @@
     grid-template-columns: [index] 1rem [first] 6fr [var1] 4fr [var2] 3fr [last] 3.5rem;
 
     @include for-mobile-layout {
-        grid-template-columns: [index] 1rem [first] 16fr [var1] 4fr [var2] 3fr
+        grid-template-columns: 16fr 2fr 2fr;
     }
 
     column-gap: 1rem;
@@ -16,6 +16,10 @@
     .eq {
         height: 0.875rem;
         width: 0.875rem;
+
+        @include for-mobile-layout {
+            display: none;
+        }
     }
 
     .small-like-dis {
@@ -36,9 +40,14 @@
         background-color: transparent;
     }
 
-    .small-play, .small-pause {
+    .small-play,
+    .small-pause {
         border: none;
         background-color: transparent;
+
+        @include for-mobile-layout {
+            display: none;
+        }
 
         path {
             fill: $clr2
@@ -63,8 +72,13 @@
     .track-num {
         display: flex;
         align-items: center;
+
+        @include for-mobile-layout {
+            display: none;
+        }
     }
 
+    .track-time,
     .track-date,
     .track-album {
         @include for-mobile-layout {
@@ -94,7 +108,8 @@
         .track-info-container {
             overflow: hidden;
 
-            .track-name, .artist-name {
+            .track-name,
+            .artist-name {
                 color: $clr2;
 
                 // handling text overflow
@@ -105,7 +120,8 @@
                 white-space: pre-wrap;
             }
 
-            .track-playing, .track-paused {
+            .track-playing,
+            .track-paused {
                 color: $clr9;
             }
 
@@ -163,4 +179,3 @@
         padding-inline-end: 1rem;
     }
 }
-
