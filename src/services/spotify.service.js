@@ -5,13 +5,12 @@ export const spotifyService = {
     getSpotifyItems,
     getAccessToken
 }
+let gAccessToken = null
+getAccessToken()
 
 async function getAccessToken() {
     gAccessToken = await httpService.get('spotify/')
 }
-
-let gAccessToken = null
-getAccessToken()
 
 async function getSpotifyItems(req) {
     const { type, id, query } = req

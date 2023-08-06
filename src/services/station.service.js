@@ -70,7 +70,6 @@ async function removeTrack(track, stationId) {
 async function getCategoryStations(categoryId) {
     const stations = await spotifyService.getSpotifyItems({ type: 'categoryStations', id: categoryId} )
     return stations
-    // return httpService.get('spotify', categoryId)
 }
 
 async function getStationsForHome() {

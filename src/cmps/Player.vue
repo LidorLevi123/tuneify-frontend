@@ -1,6 +1,5 @@
 <template>
-    <YouTube ref="youtubePlayer" :src="currTrack?.youtubeId || ''" @state-change="onStateChange" @ready="playVideo" 
-    style="display: none;"/>
+    <YouTube ref="youtubePlayer" :src="currTrack?.youtubeId || ''" @state-change="onStateChange" style="display: none;"/>
 
     <section class="main-player-container">
         <section class="track-info-container">
