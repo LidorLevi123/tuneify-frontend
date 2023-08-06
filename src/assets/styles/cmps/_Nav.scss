@@ -61,11 +61,24 @@
     display: none;
 
     @include for-mobile-layout {
+
+        bottom: 2.6rem;
+        position: fixed;
+        width: 100%;
         display: flex;
-        justify-content: space-around;
-        align-items: center;
-        order: 3;
+        z-index: 3;
+        // justify-content: space-around;
+        // align-items: center;
         height: 4rem;
+
+        .nav-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 33.3%;
+            height: 3rem;
+            background-color: rgba(0, 0, 0, 0.847);
+        }
     }
 
 }

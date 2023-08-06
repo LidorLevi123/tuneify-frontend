@@ -4,6 +4,8 @@
 
     @include for-mobile-layout {
         grid-template-columns: 1fr;
+        position: absolute;
+        bottom: 0
     }
 
     align-items: center;
@@ -31,12 +33,16 @@
     .player-mid-container {
         display: grid;
         align-content: center;
-        margin-inline-start: 16px;
+        margin-inline: 1rem;
 
         .track-controls-container {
             display: flex;
             justify-content: center;
             margin-block-end: 0.5rem;
+
+            @include for-mobile-layout {
+                margin: 0;
+            }
 
             .btn {
                 height: 2rem;
@@ -72,16 +78,18 @@
                 }
             }
 
-            .repeat-playlist, .repeat-song {
+            .repeat-playlist,
+            .repeat-song {
                 position: relative;
-                    &::after {
-                        content: "•";
-                        position: absolute;
-                        bottom: -8px;
-                        left: 50%;
-                        transform: translateX(-50%);
-                        color: $clr9;
-                        font-size: 1rem;
+
+                &::after {
+                    content: "•";
+                    position: absolute;
+                    bottom: -8px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    color: $clr9;
+                    font-size: 1rem;
 
                     &:hover {
                         fill: lighten($clr9, 10%);
@@ -100,7 +108,10 @@
             .enabled path {
                 fill: $clr9;
             }
-            .enabled .svg-fill:hover, .repeat-playlist .svg-fill:hover, .repeat-song .svg-fill:hover {
+
+            .enabled .svg-fill:hover,
+            .repeat-playlist .svg-fill:hover,
+            .repeat-song .svg-fill:hover {
                 path {
                     fill: lighten($clr9, 10%);
                 }
@@ -108,14 +119,15 @@
 
             .enabled {
                 position: relative;
-                    &::after {
-                        content: "•";
-                        position: absolute;
-                        bottom: -16px;
-                        left: 50%;
-                        transform: translateX(-50%);
-                        color: $clr9;
-                        font-size: 1rem;
+
+                &::after {
+                    content: "•";
+                    position: absolute;
+                    bottom: -16px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    color: $clr9;
+                    font-size: 1rem;
                 }
             }
         }

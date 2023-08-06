@@ -18,8 +18,7 @@
             </div>
         </div>
         <button v-if="user" @click="doLogout" class="profile-btn" title="Logout">
-            <img src="http://res.cloudinary.com/dys1sj4cd/image/upload/v1691240581/54ed03de-d223-4826-bffc-cc91f16d3e3b_jxplg2.jpg"
-                alt="">
+            <img :src="user.imgUrl" alt="">
         </button>
         <RouterLink v-if="!user" class="login-link" to="/login">
             <button class="login-btn">Log in</button>

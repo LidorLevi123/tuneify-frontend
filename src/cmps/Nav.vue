@@ -19,13 +19,13 @@
         <Sidebar />
     </section>
     <nav class="mobile-nav">
-        <RouterLink to="/">
+        <RouterLink class="nav-btn" to="/">
             <div :class="{ 'isActive': $route.path === '/' }" v-icon="'home'"></div>
         </RouterLink>
-        <RouterLink to="/search">
+        <RouterLink class="nav-btn" to="/search">
             <div :class="{ 'isActive': $route.path === '/search' }" v-icon="'search'"></div>
         </RouterLink>
-        <RouterLink to="/library">
+        <RouterLink class="nav-btn" to="/library">
             <div :class="{ 'isActive': $route.path === '/library' }" v-icon="'collapse'"></div>
         </RouterLink>
     </nav>
