@@ -1,5 +1,5 @@
 <template>
-    <YouTube ref="youtubePlayer" :src="currTrack?.youtubeId || ''" @state-change="onStateChange" @ready="playVideo"
+    <YouTube ref="youtubePlayer" :src="currTrack?.youtubeId || ''" @state-change="onStateChange"
     style="display: none;"/>
 
     <section class="main-player-container">
@@ -274,8 +274,8 @@ export default {
             this.handlePlaybackInterval(true)
         },
         replayVideo() {
-            this.$refs.youtubePlayer.stopVideo()
-            this.$refs.youtubePlayer.playVideo()
+            this.$refs.youtubePlayer?.stopVideo()
+            this.$refs.youtubePlayer?.playVideo()
             this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
         },
         async playTrack(track) {
@@ -383,7 +383,6 @@ export default {
             return this.currStation?.tracks[this.currTrackIdx]
         },
         isPlaying() {
-            console.log('isPlaying', this.$store.getters.isCurrTrackPlaying)
             return this.$store.getters.isCurrTrackPlaying
         },
         user() {
