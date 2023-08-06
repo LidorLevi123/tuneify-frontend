@@ -1,8 +1,8 @@
 <template>
-    <section v-if="user" class="library-station-list">
+    <section v-if="libraryStations" class="library-station-list">
         <ul class="clean-list">
             <li @click="goToDetails(station._id)" @contextmenu.prevent="showContextMenu(station._id, $event)"
-                v-for="station in  libraryStations " :key="station.id">
+                v-for="station in libraryStations" :key="station._id">
                 <LibraryStationPreview :station="station" />
                 <div v-if="contextMenuOpenMap[station._id]" class="dlt-btn" @click="removeStation(station._id, $event)"
                     @mouseleave="closeContextMenu(station._id)"
@@ -19,9 +19,6 @@
 import LibraryStationPreview from './LibraryStationPreview.vue'
 
 export default {
-    props: {
-        libraryStations: { type: Array },
-    },
     data() {
         return {
             contextMenuOpenMap: {}
@@ -36,6 +33,9 @@ export default {
         },
         trackPlaying() {
             return this.$store.getters.isCurrTrackPlaying
+        },
+        libraryStations() {
+            return this.$store.getters.libraryStations
         }
     },
 

@@ -86,6 +86,7 @@ async function getStationsForHome() {
     ]
 
     const res = []
+    await spotifyService.getAccessToken()
     
     for (let i = 0; i < categories.length; i++) {
         let stations = await spotifyService.getSpotifyItems({type: 'categoryStations', id: categories[i].id} )

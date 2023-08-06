@@ -1,20 +1,19 @@
 <template>
-  <section class="container home-page text-center">
-    <StationList v-if="stations" :stations="summerStations" :horizontalDesign="true" />
-    <StationList v-if="stations" :stations="travelStations" />
-    <StationList v-if="stations" :stations="workoutStations" />
-    <StationList v-if="stations" :stations="decadesStations" />
-    <StationList v-if="stations" :stations="popStations" />
-    <StationList v-if="stations" :stations="tastemakersStations" />
-    <StationList v-if="stations" :stations="classicalStations" />
-    <StationList v-if="stations" :stations="gamingStations" />
+  <section v-if="stations" class="container home-page text-center">
+    <StationList :stations="summerStations" :horizontalDesign="true" />
+    <StationList :stations="travelStations" />
+    <StationList :stations="workoutStations" />
+    <StationList :stations="decadesStations" />
+    <StationList :stations="popStations" />
+    <StationList :stations="tastemakersStations" />
+    <StationList :stations="classicalStations" />
+    <StationList :stations="gamingStations" />
   </section>
 </template>
 
 <script>
 import StationList from '../cmps/StationList.vue'
 import historyTracker from '../services/history.service'
-import { spotifyService } from '../services/spotify.service'
 
 export default {
   data() {
@@ -25,14 +24,13 @@ export default {
   mounted() {
     window.addEventListener("resize", this.maxStationsCalc)
   },
-  beforeDestroy() {
+  unmounted() {
     window.removeEventListener("resize", this.maxStationsCalc)
   },
   async created() {
+    this.maxStationsCalc()
     if (!this.stations.length) {
-      await spotifyService.getAccessToken()
       await this.$store.dispatch({ type: 'getStationsForHome' })
-      this.maxStationsCalc()
     }
     historyTracker.push(this.$route.fullPath)
   },

@@ -18,7 +18,7 @@ export default {
     if (!user) {
       try {
         user = await this.$store.dispatch({ type: 'login', userCred: { username: 'guest', password: '123' } })
-        this.$store.dispatch({ type: 'loadStations', userId: user._id })
+        await this.$store.dispatch({ type: 'loadStations', userId: user._id })
       } catch (err) {
         console.log('Something went wrong at App', err.message)
       } finally {
@@ -26,7 +26,7 @@ export default {
       }
     } else {
       try {
-        this.$store.dispatch({ type: 'loadStations', userId: user._id })
+        await this.$store.dispatch({ type: 'loadStations', userId: user._id })
       } catch (err) {
         console.log('Something went wrong at App', err.message)
       }

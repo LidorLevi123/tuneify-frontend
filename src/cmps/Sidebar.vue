@@ -6,7 +6,7 @@
             </button>
             <button v-icon="'createList'" @click="addStation" title="Create playlist" class="add-station"></button>
         </section>
-        <LibraryStationList @station-remove="removeStation" :libraryStations="libraryStations" />
+        <LibraryStationList @station-remove="removeStation" />
     </section>
 </template>
 
@@ -59,14 +59,6 @@ export default {
                 showErrorMsg('Could not remove station')
             }
         }
-    },
-    computed: {
-        libraryStations() {
-            return this.$store.getters.libraryStations
-        },
-        loggedinUser() {
-            return this.$store.getters.loggedinUser
-        },
     },
 
     components: { LibraryStationList }
