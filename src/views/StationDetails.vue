@@ -237,7 +237,7 @@ export default {
             eventBus.emit('trackClicked')
         },
         pauseTrack() {
-            eventBus.emit('trackPaused')
+            eventBus.emit('trackPaused', true)
         },
     },
 
