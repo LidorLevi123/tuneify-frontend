@@ -283,10 +283,9 @@ export default {
                 console.log('Sending request to yt id...')
                 // const term = track.title + ' ' + track.artists[0]
                 // const youtubeId = await ytService.queryYT(term)
-                const youtubePlayer = this.$refs.youtubePlayer.player
                 const youtubeId = this.getDemoYoutubeId()
-
-                if (youtubePlayer) youtubePlayer.loadVideoById(youtubeId)
+                const youtubePlayer = this.$refs.youtubePlayer.player
+                youtubePlayer?.loadVideoById(youtubeId)
                 // this.playVideo()
             } catch (err) {
                 console.log('Could not set track youtube id', err.message)
