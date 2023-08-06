@@ -41,7 +41,7 @@
                 <!-- <span class="material-symbols-outlined df ai" title="Listen With Friends">group_add</span> -->
                 <!-- <button v-icon="'moreOptions'" class="btn details-edit"></button> -->
 
-                <div class="bubbling-heart" v-show="hasLiked">
+                <div class="bubbling-heart" v-show="hasLiked && !isOwner">
                     <input type="checkbox" @click="removeStation" class="heart-input" id="like-undefined">
                     <label class="label" for="like-undefined"><span v-icon="`bHearts`"></span></label>
                 </div>

@@ -2,8 +2,8 @@ $animation-duration: 0.5s;
 $animation-timing-function: cubic-bezier(0.12, 1, 0.5, 1);
 $scale-animation-duration: 0.2s;
 $heart-fill-default: #a7a7a7;
-$heart-fill-checked: #64d26d;
-$heart-fill-scale-pulse: #64d26d;
+$heart-fill-checked: $clr7;
+$heart-fill-scale-pulse: $clr7;
 $heart-scale: 1.1;
 
 .heart-svg {
