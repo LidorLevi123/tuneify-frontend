@@ -8,11 +8,11 @@ import config from '../../config.js'
 // }
 
 export const spotifyService = {
-    getSpotifyItems
+    getSpotifyItems,
+    getAccessToken
 }
 
 let gAccessToken = null
-getAccessToken()
 
 async function getAccessToken() {
     try {
