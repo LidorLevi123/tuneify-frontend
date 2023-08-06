@@ -28,10 +28,10 @@ export default {
             try {
 
                 if (!this.canAddStation) return
-
+                
                 this.canAddStation = false
                 const stationToSave = stationService.getEmptyStation()
-
+                
                 stationToSave.name = 'My Playlist #' + this.libraryStations.length
                 stationToSave.imgUrl = 'https://res.cloudinary.com/dys1sj4cd/image/upload/v1691304971/def-pl_yhfd6r.png'
 
@@ -58,6 +58,12 @@ export default {
                 console.log(err.message)
                 showErrorMsg('Could not remove station')
             }
+        }
+    },
+
+    computed: {
+        libraryStations() {
+            return this.$store.getters.libraryStations
         }
     },
 

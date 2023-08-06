@@ -22,12 +22,9 @@
         <div ref="botGradient" class="bottom-gradient">
             <section class="details-player">
 
-
                 <button v-if="!isPlaying" class="details-play" v-icon="'detailsPlay'" v-show="hasTracks"
                     @click="clickTrack(currTrackIdx)" title="Play">
                 </button>
-
-
 
                 <button v-else class="details-play" v-icon="'detailsPause'" v-show="hasTracks" @click="pauseTrack"
                     title="Pause">
@@ -91,7 +88,6 @@ export default {
         },
         hasLiked() {
             const libraryStations = this.$store.getters.libraryStations
-            console.log(libraryStations.some(station => station._id === this.station._id))
             return libraryStations.some(station => station._id === this.station._id)
         },
         hasTracks() {
@@ -124,13 +120,15 @@ export default {
             try {
                 const station = await stationService.getById(this.stationId)
                 this.station = station
+                // this.station.tracks.slice(0, 5).forEach(track => {
+                //     console.log(track.title)
+                // });
                 this.$emit('station', station)
                 this.setTracksTotalDuration()
 
                 console.log('Socket room name:', this.stationId)
                 socketService.emit(SOCKET_EMIT_SET_TOPIC, this.stationId)
-                socketService.emit(SOCKET_EMIT_SEND_MSG, 'Hello to everyone in this room')
-
+                // socketService.emit(SOCKET_EMIT_SEND_MSG, 'Hello to everyone in this room')
 
             } catch (err) {
                 console.log(err.message)
@@ -151,6 +149,7 @@ export default {
         },
         async removeStation() {
             try {
+                await this.$store.dispatch({ type: 'updateUserStations', stationId: this.station._id, action: 'remove' })
                 await this.$store.dispatch({ type: 'removeStation', stationId: this.station._id })
                 showSuccessMsg('Removed from Your Library')
             } catch (err) {
@@ -224,7 +223,7 @@ export default {
             this.tracksTotalDuration = this.station.tracks?.reduce((sum, track) => sum = sum + track.formalDuration, 0)
         },
         openStationEditor() {
-            if (this.station.owner.fullname !== this.user.fullname) return
+            if (this.station.owner.fullname !== this.user.fullname || this.station._id === this.user.likedId) return
             document.body.classList.add('modal-open')
         },
         clickTrack(trackIdx) {
