@@ -32,11 +32,10 @@
 <script>
 import TrackPreview from './TrackPreview.vue'
 import TrackSearch from './TrackSearch.vue'
+
 import { Container, Draggable } from 'vue3-smooth-dnd'
 import { SOCKET_EMIT_TRACK_DRAGGED } from '../services/socket.service.js'
 import { eventBus } from '../services/event-bus.service'
-
-
 
 export default {
     props: {
@@ -57,7 +56,13 @@ export default {
         },
         user() {
             return this.$store.getters.loggedinUser
-        }
+        },
+        currStation() {
+            return this.$store.getters.currStation
+        },
+        currTrackIdx() {
+            return this.$store.getters.currTrackIdx
+        },
     },
 
     methods: {
@@ -81,15 +86,24 @@ export default {
 
             const updatedStation = { ...this.station, tracks: this.station.tracks }
 
-            await this.updateStation(updatedStation)
+            this.updateStation(updatedStation, removedIndex, addedIndex)
 
             if (isSocketBroadcast) return
             socketService.emit(SOCKET_EMIT_TRACK_DRAGGED, dragResult)
+
         },
 
-        async updateStation(updatedStation) {
+        async updateStation(updatedStation, removedIndex, addedIndex) {
             try {
                 await this.$store.dispatch({ type: 'saveStation', stationToSave: updatedStation })
+                if (updatedStation._id === this.currStation?._id) {
+                    this.$store.commit({ type: 'setCurrStation', station: updatedStation })
+                    if(removedIndex === this.currTrackIdx) {
+                        this.$store.commit({ type: 'setCurrTrackIdx', trackIdx: addedIndex })
+                    } else if(addedIndex === this.currTrackIdx) {
+                        this.$store.commit({ type: 'setCurrTrackIdx', trackIdx: removedIndex })
+                    }
+                }
                 this.$emit('station-update')
             } catch (err) {
                 console.log(err.message)

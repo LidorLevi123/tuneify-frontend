@@ -50,6 +50,7 @@ export const stationStore = {
         },
         removeStation({ stations }, { stationId }) {
             const idx = stations.findIndex(station => station._id === stationId)
+            if(idx === -1) return
             stations.splice(idx, 1)
         },
         updateTrack({ currStation, currTrackIdx }, { youtubeId }) {
@@ -57,11 +58,14 @@ export const stationStore = {
         },
         addTrack({ stations }, { trackToSave, stationId }) {
             const idx = stations.findIndex(station => station._id === stationId)
+            if(idx === -1) return
             stations[idx].tracks.push(trackToSave)
         },
         removeTrack({ stations }, { trackId, stationId }) {
             const idx = stations.findIndex(station => station._id === stationId)
+            if(idx === -1) return
             const trackIdx = stations[idx].tracks.findIndex(track => track.id === trackId)
+            if(trackIdx === -1) return
             stations[idx].tracks.splice(trackIdx, 1)
         }
     },
@@ -87,7 +91,7 @@ export const stationStore = {
         async saveStation({ commit }, { stationToSave }) {
             let type = stationToSave._id ? 'updateStation' : 'addStation'
             if (stationToSave.isEmpty) type = 'addStation'
-
+            
             try {
                 const station = await stationService.save(stationToSave)
                 commit({ type, stationToSave: station })

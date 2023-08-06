@@ -107,8 +107,9 @@ export const userStore = {
             const id = state.loggedinUser.stationIds.find(id => id === stationId)
             if(id) return
             try {
-                await userService.updateUserStations(state.loggedinUser, stationId, action)
-                commit({ type: 'setUser', user: state.loggedinUser })
+                const user = await userService.updateUserStations(state.loggedinUser, stationId, action)
+                commit({ type: 'setUser', user })
+                commit({ type: 'setLoggedinUser', user })
             } catch (err) {
                 console.log('userStore: Error in updateUserStations', err)
                 throw err
