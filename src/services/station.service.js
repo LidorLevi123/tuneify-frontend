@@ -86,19 +86,15 @@ async function getStationsForHome() {
     ]
 
     const res = []
-
+    
     for (let i = 0; i < categories.length; i++) {
         let stations = await spotifyService.getSpotifyItems({type: 'categoryStations', id: categories[i].id} )
         stations = stations?.map(station => ({ ...station, category: categories[i].name }))
         res.push(...stations)
     }
+    
     return res
 }
-
-// async function addStationMsg(stationId, txt) {
-//     const savedMsg = await httpService.post(`station/${stationId}/msg`, {txt})
-//     return savedMsg
-// }
 
 function getEmptyStation() {
     return {

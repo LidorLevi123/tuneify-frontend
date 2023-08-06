@@ -14,7 +14,6 @@ export const spotifyService = {
 }
 
 async function getSpotifyItems(req) {
-
     const { type, id, query } = req
 
     const endpoints = _getEndpoints(id, query)

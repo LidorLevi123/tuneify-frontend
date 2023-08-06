@@ -128,7 +128,7 @@ export default {
         },
         togglePlayPause() {
 
-            if (!this.currTrack) return
+            if (!this.$refs.youtubePlayer) return
 
             if (this.isPlaying) {
                 this.pauseVideo()
@@ -277,13 +277,13 @@ export default {
             this.$refs.youtubePlayer.playVideo()
             this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
         },
-        playTrack(track) {
+        async playTrack(track) {
             // get youtubeId from YT
             try {
                 console.log('Sending request to yt id...')
-                // const term = track.title + ' ' + track.artists[0]
-                // const youtubeId = await ytService.queryYT(term)
-                const youtubeId = this.getDemoYoutubeId()
+                const term = track.title + ' ' + track.artists[0]
+                const youtubeId = await ytService.queryYT(term)
+                // const youtubeId = this.getDemoYoutubeId()
                 const youtubePlayer = this.$refs.youtubePlayer.player
                 youtubePlayer?.loadVideoById(youtubeId)
                 // this.playVideo()
