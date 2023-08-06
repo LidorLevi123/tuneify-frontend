@@ -18,17 +18,17 @@
         </div>
         <span class="track-album">{{ track.album }}</span>
         <div class="df sb">
-            <span class="track-date">{{ formattedDate }}</span>
-            <span v-show="isHovered" v-if="!isLiked(track.id)" @click="onAddTrack(track, user.likedId, $event)"
+            <span v-show="!this.$route.path.startsWith('/search')" class="track-date">{{ formattedDate }}</span>
+            <span v-show="isHovered && !this.$route.path.startsWith('/search')" 
+            v-if="!isLiked(track.id)" @click="onAddTrack(track, user.likedId, $event)"
                 class="btn-like" v-icon="`smallLikeDis`"></span>
             <span v-else @click="onDislikeTrack(track.id, $event)" class="btn-dislike" v-icon="`smallLikeEna`"></span>
         </div>
         <div class="time-actions">
             <span class="track-time">{{ formattedTime }}</span>
 
-
-
-            <span v-show="isHovered" class="btn-options svg-fill" v-icon="'moreOptionsSmall'"
+            <span v-show="isHovered && !this.$route.path.startsWith('/search')" 
+            class="btn-options svg-fill" v-icon="'moreOptionsSmall'"
                 @click="toggleDropdown($event)"></span>
 
             <div v-if="showDropdown" class="dropdown">

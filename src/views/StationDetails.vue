@@ -137,7 +137,7 @@ export default {
             }
         },
         async likeStation() {
-            console.log('hi');
+            console.log('liked station')
             try {
                 await this.$store.dispatch({ type: 'updateUserStations', stationId: this.station._id, action: 'add' })
                 const stationToSave = JSON.parse(JSON.stringify(this.station))
