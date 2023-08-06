@@ -92,7 +92,6 @@ export default {
             intervalId: null,
             elapsedTime: 0,
             isShuffle: false,
-            isRepeat: false,
             repeatStates: ['noRepeat', 'repeatPlaylist', 'repeatSong'],
             repeatStateIdx: 0,
             isMute: false,
@@ -246,7 +245,7 @@ export default {
             this.broadcastTrackInfo()
         },
         changeTime() {
-            this.$refs.youtubePlayer.seekTo(this.elapsedTime, true)
+            this.$refs.youtubePlayer?.seekTo(this.elapsedTime, true)
             this.updatePlaybackProgress()
         },
         updatePlaybackProgress() {
@@ -337,8 +336,10 @@ export default {
             const trackInfo = {
                 trackId: this.currTrack?.id,
                 trackIdx: this.currTrackIdx,
-                isPlaying: this.isPlaying,
                 elapsedTime: this.elapsedTime,
+                isPlaying: this.isPlaying,
+                repeatStateIdx: this.repeatStateIdx,
+                isShuffle: this.isShuffle,
             }
 
             socketService.emit(SOCKET_EMIT_BROADCAST_TRACK, trackInfo)
@@ -351,6 +352,8 @@ export default {
 
             this.elapsedTime = trackInfo.elapsedTime
             this.changeTime()
+            this.repeatStateIdx = trackInfo.repeatStateIdx
+            this.isShuffle = trackInfo.isShuffle
 
             if (trackInfo.isPlaying) {
                 this.playVideo()
