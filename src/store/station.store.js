@@ -1,9 +1,8 @@
-import { userService } from '../services/user.service'
 import { stationService } from '../services/station.service'
 
 export const stationStore = {
     state: {
-        stations: [], // For now we hold all stations here until wo move to backend
+        stations: [], // For now we hold all stations here until we move to backend
         stationsForHome: [],
         currStation: null,
         currTrackIdx: -1,
@@ -42,6 +41,7 @@ export const stationStore = {
             const station = stations.find(currStation => currStation._id === stationToSave._id)
             if (station) return
             stations.push(stationToSave)
+            console.log('stations', stations)
         },
         updateStation({ stations }, { stationToSave }) {
             const idx = stations.findIndex(station => station._id === stationToSave._id)

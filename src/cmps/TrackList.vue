@@ -72,6 +72,7 @@ export default {
             }
 
             const updatedStation = { ...this.station, tracks: this.station.tracks }
+            console.log("🚀 updatedStation:", updatedStation)
 
             await this.updateStation(updatedStation)
 
