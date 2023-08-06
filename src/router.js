@@ -34,6 +34,11 @@ const routes = [
         name: 'StationDetails',
         component: StationDetails,
       },
+      {
+        path: '/library',
+        name: 'PlayLists',
+        component: Sidebar,
+      }
     ]
   },
   {
@@ -41,11 +46,6 @@ const routes = [
     name: 'LoginSignup',
     component: LoginSignup,
   },
-  {
-    path: '/library',
-    name: 'PlayLists',
-    component: Sidebar,
-  }
 ]
 
 

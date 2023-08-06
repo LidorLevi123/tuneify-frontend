@@ -99,6 +99,7 @@ export default {
             return this.$store.getters.isCurrTrackPlaying
         },
         user() {
+            console.log(this.$store.getters.loggedinUser);
             return this.$store.getters.loggedinUser
         },
         showPlay() {
