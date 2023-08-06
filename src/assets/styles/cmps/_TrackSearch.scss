@@ -6,7 +6,10 @@
         margin-block-start: 1.5rem;
         padding: 1.5rem 0;
         max-width: 119rem;
-        // margin-inline: 1.5rem;
+
+        @include for-mobile-layout {
+            padding-inline-start: 1rem;
+        }
 
         h1 {
             color: $clr2;

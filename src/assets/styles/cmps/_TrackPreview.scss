@@ -1,9 +1,9 @@
 .track-preview {
     display: grid;
-    grid-template-columns: [index] 1rem [first] 6fr [var1] 4fr [var2] 3fr [last] 3.5rem;
+    grid-template-columns: [index] 1rem [first] 6fr [var1] 4fr [var2] 3fr [last] 4rem;
 
     @include for-mobile-layout {
-        grid-template-columns: 16fr 2fr 2fr;
+        grid-template-columns: 9fr 2fr 2fr;
     }
 
     column-gap: 1rem;
@@ -147,6 +147,13 @@
     .time-actions {
         display: flex;
         align-items: center;
+
+
+        .track-time {
+            display: flex;
+            justify-content: end;
+            width: 2rem;
+        }
 
         .menu-li {
             cursor: pointer;

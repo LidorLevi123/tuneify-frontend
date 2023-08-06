@@ -63,7 +63,7 @@
     @include for-mobile-layout {
 
         bottom: 2.6rem;
-        position: fixed;
+        position: absolute;
         width: 100%;
         display: flex;
         z-index: 3;

@@ -4,6 +4,9 @@
     align-items: center;
     padding-inline-end: 1rem;
 
+    @include for-mobile-layout {
+        grid-template-columns: [first] 4fr [last] minmax(120px, 1fr);
+    }
 
     .mini-prev {
         height: 3.375rem;
@@ -67,6 +70,10 @@
 
 .track-album {
     color: $clr3;
+
+    @include for-mobile-layout {
+        display: none;
+    }
 }
 
 .add-btn {

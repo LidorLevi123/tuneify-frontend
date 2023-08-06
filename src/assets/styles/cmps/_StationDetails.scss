@@ -5,6 +5,10 @@
     overflow: auto;
     border-radius: 0.5rem;
 
+    @include for-mobile-layout {
+        border-radius: 0;
+    }
+
     .station-info {
         img {
             height: 1.5rem;
@@ -15,6 +19,11 @@
             margin-block-end: 0.14rem;
             display: flex;
             align-items: center;
+
+            @include for-mobile-layout {
+                justify-content: center;
+                margin: 0.5rem;
+            }
         }
 
         div>* {
@@ -30,7 +39,9 @@
             color: $clr2;
 
             @include for-mobile-layout {
-                display: none;
+                display: flex;
+                justify-content: center;
+                font-size: 2rem;
             }
 
         }
@@ -86,9 +97,17 @@
     & .img-photo {
 
         @include for-mobile-layout {
-            margin-block-start: 1.5rem;
-            margin-inline-start: 3rem;
             display: block;
+            margin: auto;
+        }
+
+        .img {
+            img {
+                @include for-mobile-layout {
+                    width: 100%;
+                    padding: 2rem;
+                }
+            }
         }
 
         align-self: end;

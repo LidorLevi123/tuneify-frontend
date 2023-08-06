@@ -7,6 +7,10 @@
     .list {
         margin-block-start: 5.5rem;
 
+        @include for-mobile-layout {
+            margin: 0;
+        }
+
         .browse {
             color: $clr2;
             margin-block-start: 1.5rem;

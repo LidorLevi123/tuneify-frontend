@@ -19,17 +19,16 @@
         <span class="track-album">{{ track.album }}</span>
         <div class="df sb">
             <span v-show="!this.$route.path.startsWith('/search')" class="track-date">{{ formattedDate }}</span>
-            <span v-show="isHovered && !this.$route.path.startsWith('/search')" 
-            v-if="!isLiked(track.id)" @click="onAddTrack(track, user.likedId, $event)"
-                class="btn-like" v-icon="`smallLikeDis`"></span>
+            <span v-show="isHovered && !this.$route.path.startsWith('/search')" v-if="!isLiked(track.id)"
+                @click="onAddTrack(track, user.likedId, $event)" class="btn-like" v-icon="`smallLikeDis`"></span>
             <span v-else @click="onDislikeTrack(track.id, $event)" class="btn-dislike" v-icon="`smallLikeEna`"></span>
         </div>
         <div class="time-actions">
-            <span class="track-time">{{ formattedTime }}</span>
-
-            <span v-show="isHovered && !this.$route.path.startsWith('/search')" 
-            class="btn-options svg-fill" v-icon="'moreOptionsSmall'"
-                @click="toggleDropdown($event)"></span>
+            <div class="track-time">
+                <span>{{ formattedTime }}</span>
+            </div>
+            <span v-show="isHovered && !this.$route.path.startsWith('/search')" class="btn-options svg-fill"
+                v-icon="'moreOptionsSmall'" @click="toggleDropdown($event)"></span>
 
             <div v-if="showDropdown" class="dropdown">
                 <div v-if="!isStationOwner" class="dropdown-item" @mouseenter="popSubDropdown">
@@ -46,8 +45,6 @@
                     <span class="menu-li">Remove from playlist</span>
                 </div>
             </div>
-
-
         </div>
     </article>
 </template>
@@ -91,7 +88,7 @@ export default {
             if (diffInDays < 7) {
                 if (diffInDays === 0) return "Today"
                 if (diffInDays === 1) return "Yesterday"
-                if(diffInDays < 0) diffInDays *= (-1)
+                if (diffInDays < 0) diffInDays *= (-1)
                 return `${diffInDays} days ago`
             } else {
                 return targetDate.format("MMM D, YYYY")
