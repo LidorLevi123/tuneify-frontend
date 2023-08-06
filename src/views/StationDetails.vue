@@ -22,12 +22,9 @@
         <div ref="botGradient" class="bottom-gradient">
             <section class="details-player">
 
-
                 <button v-if="!isPlaying" class="details-play" v-icon="'detailsPlay'" v-show="hasTracks"
                     @click="clickTrack(currTrackIdx)" title="Play">
                 </button>
-
-
 
                 <button v-else class="details-play" v-icon="'detailsPause'" v-show="hasTracks" @click="pauseTrack"
                     title="Pause">
@@ -238,7 +235,7 @@ export default {
             eventBus.emit('trackClicked')
         },
         pauseTrack() {
-            eventBus.emit('trackPaused')
+            eventBus.emit('trackPaused', true)
         },
     },
 

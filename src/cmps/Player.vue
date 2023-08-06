@@ -1,5 +1,5 @@
 <template>
-    <YouTube ref="youtubePlayer" :src="currTrack?.youtubeId || ''" @state-change="onStateChange" @ready="playVideo" 
+    <YouTube ref="youtubePlayer" :src="currTrack?.youtubeId || ''" @state-change="onStateChange" @ready="playVideo"
     style="display: none;"/>
 
     <section class="main-player-container">
@@ -131,7 +131,7 @@ export default {
             if (!this.$refs.youtubePlayer) return
 
             if (this.isPlaying) {
-                this.pauseVideo()
+                this.pauseVideo(false)
             }
             else {
                 this.playVideo()
@@ -262,10 +262,11 @@ export default {
             this.elapsedTime = 0
             this.handlePlaybackInterval(false)
         },
-        pauseVideo() {
+        pauseVideo(isBroadcast) {
             this.$store.commit({ type: 'setIsPlaying', isPlaying: false })
             this.$refs.youtubePlayer?.pauseVideo()
             this.handlePlaybackInterval(false)
+            if(isBroadcast) this.broadcastTrackInfo()
         },
         playVideo() {
             this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
@@ -334,7 +335,7 @@ export default {
         },
         broadcastTrackInfo() {
             const trackInfo = {
-                trackId: this.currTrack.id,
+                trackId: this.currTrack?.id,
                 trackIdx: this.currTrackIdx,
                 isPlaying: this.isPlaying,
                 elapsedTime: this.elapsedTime,
@@ -354,15 +355,15 @@ export default {
             if (trackInfo.isPlaying) {
                 this.playVideo()
             } else {
-                this.pauseVideo()
+                this.pauseVideo(false)
             }
-
         }
     },
 
     beforeunmount() {
         eventBus.off('trackClicked', this.loadVideo)
         eventBus.off('trackPlay', this.playTrack)
+        eventBus.off('trackPaused', this.pauseVideo)
     },
 
     computed: {
@@ -382,6 +383,7 @@ export default {
             return this.currStation?.tracks[this.currTrackIdx]
         },
         isPlaying() {
+            console.log('isPlaying', this.$store.getters.isCurrTrackPlaying)
             return this.$store.getters.isCurrTrackPlaying
         },
         user() {
