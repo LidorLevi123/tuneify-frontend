@@ -1,5 +1,5 @@
 <template>
-    <YouTube ref="youtubePlayer" :src="currTrack?.youtubeId || ''" @state-change="onStateChange"
+    <YouTube ref="youtubePlayer" :src="currTrack?.youtubeId || ''" @state-change="onStateChange" @ready="playVideo" 
     style="display: none;"/>
 
     <section class="main-player-container">
@@ -92,6 +92,7 @@ export default {
             intervalId: null,
             elapsedTime: 0,
             isShuffle: false,
+            isRepeat: false,
             repeatStates: ['noRepeat', 'repeatPlaylist', 'repeatSong'],
             repeatStateIdx: 0,
             isMute: false,
@@ -130,7 +131,7 @@ export default {
             if (!this.$refs.youtubePlayer) return
 
             if (this.isPlaying) {
-                this.pauseVideo(false)
+                this.pauseVideo()
             }
             else {
                 this.playVideo()
@@ -245,7 +246,7 @@ export default {
             this.broadcastTrackInfo()
         },
         changeTime() {
-            this.$refs.youtubePlayer?.seekTo(this.elapsedTime, true)
+            this.$refs.youtubePlayer.seekTo(this.elapsedTime, true)
             this.updatePlaybackProgress()
         },
         updatePlaybackProgress() {
@@ -261,11 +262,10 @@ export default {
             this.elapsedTime = 0
             this.handlePlaybackInterval(false)
         },
-        pauseVideo(isBroadcast) {
+        pauseVideo() {
             this.$store.commit({ type: 'setIsPlaying', isPlaying: false })
             this.$refs.youtubePlayer?.pauseVideo()
             this.handlePlaybackInterval(false)
-            if(isBroadcast) this.broadcastTrackInfo()
         },
         playVideo() {
             this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
@@ -273,8 +273,8 @@ export default {
             this.handlePlaybackInterval(true)
         },
         replayVideo() {
-            this.$refs.youtubePlayer?.stopVideo()
-            this.$refs.youtubePlayer?.playVideo()
+            this.$refs.youtubePlayer.stopVideo()
+            this.$refs.youtubePlayer.playVideo()
             this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
         },
         async playTrack(track) {
@@ -334,12 +334,10 @@ export default {
         },
         broadcastTrackInfo() {
             const trackInfo = {
-                trackId: this.currTrack?.id,
+                trackId: this.currTrack.id,
                 trackIdx: this.currTrackIdx,
-                elapsedTime: this.elapsedTime,
                 isPlaying: this.isPlaying,
-                repeatStateIdx: this.repeatStateIdx,
-                isShuffle: this.isShuffle,
+                elapsedTime: this.elapsedTime,
             }
 
             socketService.emit(SOCKET_EMIT_BROADCAST_TRACK, trackInfo)
@@ -352,21 +350,19 @@ export default {
 
             this.elapsedTime = trackInfo.elapsedTime
             this.changeTime()
-            this.repeatStateIdx = trackInfo.repeatStateIdx
-            this.isShuffle = trackInfo.isShuffle
 
             if (trackInfo.isPlaying) {
                 this.playVideo()
             } else {
-                this.pauseVideo(false)
+                this.pauseVideo()
             }
+
         }
     },
 
     beforeunmount() {
         eventBus.off('trackClicked', this.loadVideo)
         eventBus.off('trackPlay', this.playTrack)
-        eventBus.off('trackPaused', this.pauseVideo)
     },
 
     computed: {
