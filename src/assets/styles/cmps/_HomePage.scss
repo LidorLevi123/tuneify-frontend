@@ -11,4 +11,8 @@
     background-image: linear-gradient(to bottom, #212121 0%, #121212 25%, #121212 25%, #121212 100%);
     padding: 1.5rem;
     overflow: auto;
+
+    @include for-mobile-layout {
+        border-radius: 0;
+    }
 }
