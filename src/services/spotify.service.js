@@ -1,16 +1,50 @@
 import axios from 'axios'
+import config from '../../config.js'
 
-import { httpService } from '../services/http.service'
+// import { httpService } from '../services/http.service'
 
-let gAccessToken = null
-getAccessToken()
-
-async function getAccessToken() {
-    gAccessToken = await httpService.get('spotify/')
-}
+// async function getAccessToken() {
+//     gAccessToken = await httpService.get('spotify/')
+// }
 
 export const spotifyService = {
-    getSpotifyItems
+    getSpotifyItems,
+    getAccessToken
+}
+
+let gAccessToken = null
+
+async function getAccessToken() {
+    try {
+        // Encode client credentials (Client ID and Client Secret)
+        const credentials = `${config.clientId}:${config.clientSecret}`
+        const encodedCredentials = btoa(credentials)
+        // Make a POST request to the token endpoint
+        const response = await axios.post(
+            'https://accounts.spotify.com/api/token',
+            new URLSearchParams({
+                grant_type: 'client_credentials',
+            }).toString(),
+            {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    Authorization: `Basic ${encodedCredentials}`,
+                },
+            }
+        )
+        // Extract and return the access token from the response
+        const { data } = response
+        const accessToken = data.access_token
+        const expiresIn = data.expires_in
+
+        gAccessToken = accessToken
+    } catch (error) {
+        console.error(
+            'Error retrieving access token:',
+            error.response ? error.response.data : error.message
+        )
+        throw error
+    }
 }
 
 async function getSpotifyItems(req) {

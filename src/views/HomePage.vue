@@ -14,11 +14,13 @@
 <script>
 import StationList from '../cmps/StationList.vue'
 import historyTracker from '../services/history.service'
+import { spotifyService } from '../services/spotify.service'
+
 export default {
   data() {
     return {
       maxStations: null,
-    };
+    }
   },
   mounted() {
     window.addEventListener("resize", this.maxStationsCalc)
@@ -28,6 +30,7 @@ export default {
   },
   async created() {
     if (!this.stations.length) {
+      await spotifyService.getAccessToken()
       await this.$store.dispatch({ type: 'getStationsForHome' })
       this.maxStationsCalc()
     }
