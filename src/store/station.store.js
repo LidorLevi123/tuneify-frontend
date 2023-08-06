@@ -45,6 +45,7 @@ export const stationStore = {
         },
         updateStation({ stations }, { stationToSave }) {
             const idx = stations.findIndex(station => station._id === stationToSave._id)
+            if(idx === -1) return
             stations.splice(idx, 1, stationToSave)
         },
         removeStation({ stations }, { stationId }) {

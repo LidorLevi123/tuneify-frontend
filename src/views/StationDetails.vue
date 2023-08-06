@@ -91,6 +91,7 @@ export default {
         },
         hasLiked() {
             const libraryStations = this.$store.getters.libraryStations
+            console.log(libraryStations.some(station => station._id === this.station._id))
             return libraryStations.some(station => station._id === this.station._id)
         },
         hasTracks() {
