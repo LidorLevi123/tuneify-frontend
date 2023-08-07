@@ -6,10 +6,13 @@
     height: 3rem;
     border-radius: 50%;
     background-color: $clr4;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
 
     img {
         width: 2.5rem;
         height: 2.5rem;
         border-radius: 50%;
+        object-fit: cover;
     }
 }
