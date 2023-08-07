@@ -67,6 +67,10 @@
             transition: 0.2s;
             transform: scale(1.04);
         }
+
+        @include for-mobile-layout {
+            display: none;
+        }
     }
 
     &:hover {
@@ -147,6 +151,10 @@
         &:hover {
             transition: 0.2s;
             transform: scale(1.04);
+        }
+
+        @include for-mobile-layout {
+            display: none;
         }
     }
 

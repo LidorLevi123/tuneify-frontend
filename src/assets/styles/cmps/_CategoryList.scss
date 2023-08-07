@@ -1,12 +1,14 @@
 .category-list {
 
-    // margin-block-start: 10em;
-
     ul {
         max-width: 119rem;
         padding-inline-end: 1.4rem;
         display: grid;
         gap: 24px;
         grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+
+        @include for-mobile-layout {
+            margin-block-end: 7rem;
+        }
     }
 }

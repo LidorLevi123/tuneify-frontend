@@ -4,6 +4,7 @@
 
     @include for-mobile-layout {
         margin-inline: 0;
+        margin-block-end: 7rem;
     }
 
     .track-paused {
