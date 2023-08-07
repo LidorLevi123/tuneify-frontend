@@ -124,10 +124,7 @@ export default {
                 this.station = station
                 this.$emit('station', station)
 
-                if (this.currStation?._id !== this.station._id) {
-                    const station = JSON.parse(JSON.stringify(this.station))
-                    this.$store.commit({ type: 'setCurrStation', station })
-                }
+
 
                 this.setTracksTotalDuration()
 
@@ -234,6 +231,11 @@ export default {
         clickTrack(trackIdx) {
             trackIdx = trackIdx === -1 ? 0 : trackIdx
             this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
+
+            if (this.currStation?._id !== this.station._id) {
+                    const station = JSON.parse(JSON.stringify(this.station))
+                    this.$store.commit({ type: 'setCurrStation', station })
+            }
 
             eventBus.emit('trackClicked')
         },
