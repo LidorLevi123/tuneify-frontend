@@ -1,5 +1,5 @@
 <template>
-    <article class="user-preview" title="user.fullname">
+    <article class="user-preview" :title="user.fullname">
         <img :src="user.imgUrl" alt="">
     </article>
 </template>

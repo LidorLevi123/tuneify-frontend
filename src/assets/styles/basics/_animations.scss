@@ -67,8 +67,8 @@ $heart-scale: 1.1;
             outline: 25px solid $clr7;
             height: 40px;
             width: 40px;
-            margin-inline-start: 3rem;
-            margin-block-start: -0.6rem;
+            margin-block-start: -0.7rem;
+            margin-inline-start: -1.2rem;
             animation: scalePulse $scale-animation-duration $animation-timing-function forwards;
         }
 

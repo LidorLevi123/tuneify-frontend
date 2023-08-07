@@ -1,0 +1,12 @@
+.userlist-container {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    margin-inline-start: 4rem;
+
+    li {
+        position: relative;
+        z-index: 10;
+        margin-inline-start: -1rem;
+    }
+}
