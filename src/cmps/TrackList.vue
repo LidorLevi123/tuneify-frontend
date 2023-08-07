@@ -9,7 +9,7 @@
             <span v-icon="'clock'"></span>
         </div>
         <hr v-show="station" />
-        <ul v-if="station?.tracks.length" class="clean-list">
+        <ul v-if="station?.tracks.length" class="clean-list" @touchend="fixActionRestriction">
             <Container dragClass="dragging" @drop="onDrop" :animation-duration="100" drag-class="dragged-item">
                 <Draggable v-for="(track, idx) in station.tracks" :key="track.id">
                     <li :class="`track-${track.id}`" @click="onTrackClicked(idx)">
@@ -68,6 +68,12 @@ export default {
     },
 
     methods: {
+        fixActionRestriction() {
+            document.body.classList.remove(
+                "smooth-dnd-no-user-select",
+                "smooth-dnd-disable-touch-action"
+            );
+        },
         onDrop(dropResult) {
             this.applyDrag(dropResult, false)
         },
@@ -111,6 +117,8 @@ export default {
                     }
                 }
                 this.$emit('station-update')
+
+                console.log('tracks on DnD', updatedStation.tracks)
             } catch (err) {
                 console.log(err.message)
             }
@@ -118,6 +126,8 @@ export default {
 
         onTrackClicked(trackIdx) {
             this.$emit('track-clicked', trackIdx)
+            console.log('this.station.tracks onTrackClick', this.station.tracks)
+            console.log('this.currstation.tracks onTrackClick', this.currStation.tracks)
         },
         onAddTrack(track, stationId) {
             this.$emit('track-add', track, stationId)
