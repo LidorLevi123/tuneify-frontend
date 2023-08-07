@@ -35,7 +35,8 @@
 
                 <button class="details-unlike" v-icon="'unlike'" v-show="hasLiked && !isOwner"
                     @click="removeStation"></button>
-                <span class="material-symbols-outlined df ai share" :class="{ 'enabled': this.isShare }" @click="activateShare" title="Listen With Friends">group_add</span>
+                <span class="material-symbols-outlined df ai share" :class="{ 'enabled': !this.isShare }"
+                    @click="activateShare(isShare)" title="Listen With Friends">group_add</span>
                 <!-- <button v-icon="'moreOptions'" class="btn details-edit"></button> -->
 
                 <!-- <div class="bubbling-heart" v-show="hasLiked && !isOwner">
@@ -63,7 +64,14 @@ import { stationService } from '../services/station.service'
 import { utilService } from '../services/util.service'
 import { eventBus, showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
 
-import { SOCKET_EMIT_SET_TOPIC, SOCKET_EMIT_SEND_MSG, socketService } from '../services/socket.service.js';
+import {
+    SOCKET_EMIT_SET_TOPIC,
+    SOCKET_EMIT_LEAVE_TOPIC,
+    SOCKET_EMIT_GET_TOPIC_USERS,
+    SOCKET_EMIT_SEND_MSG,
+    SOCKET_EVENT_SET_TOPIC_USERS,
+    socketService
+} from '../services/socket.service.js';
 
 
 export default {
@@ -72,7 +80,7 @@ export default {
         return {
             station: null,
             tracksTotalDuration: 0,
-            isShare: false
+            isShare: true
         }
     },
 
@@ -113,7 +121,12 @@ export default {
 
     created() {
         this.loadStation()
+        socketService.on(SOCKET_EVENT_SET_TOPIC_USERS, console.log)
         historyTracker.push(this.$route.fullPath)
+    },
+
+    unmounted() {
+        socketService.off(SOCKET_EVENT_SET_TOPIC_USERS)
     },
 
     methods: {
@@ -123,9 +136,6 @@ export default {
                 const station = await stationService.getById(this.stationId)
                 this.station = station
                 this.$emit('station', station)
-
-
-
                 this.setTracksTotalDuration()
 
                 // console.log('Socket room name:', this.stationId)
@@ -233,8 +243,8 @@ export default {
             this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
 
             if (this.currStation?._id !== this.station._id) {
-                    const station = JSON.parse(JSON.stringify(this.station))
-                    this.$store.commit({ type: 'setCurrStation', station })
+                const station = JSON.parse(JSON.stringify(this.station))
+                this.$store.commit({ type: 'setCurrStation', station })
             }
 
             eventBus.emit('trackClicked')
@@ -242,11 +252,14 @@ export default {
         pauseTrack() {
             eventBus.emit('trackPaused', true)
         },
-        activateShare() {
-            console.log('Socket room name:', this.stationId)
-            socketService.emit(SOCKET_EMIT_SET_TOPIC, this.stationId)
+        activateShare(isShare) {
+            // console.log('Socket room name:', this.stationId)
+            if(isShare) socketService.emit(SOCKET_EMIT_SET_TOPIC, this.stationId)
+            else socketService.emit(SOCKET_EMIT_LEAVE_TOPIC, this.stationId)
+
+            socketService.emit(SOCKET_EMIT_GET_TOPIC_USERS, this.stationId)
             this.isShare = !this.isShare
-        }
+        },
     },
 
     watch: {

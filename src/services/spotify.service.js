@@ -12,6 +12,8 @@ async function getAccessToken() {
     gAccessToken = await httpService.get('spotify/')
 }
 
+
+
 async function getSpotifyItems(req) {
     const { type, id, query } = req
 
@@ -37,6 +39,8 @@ async function getSpotifyItems(req) {
         throw error
     }
 }
+
+
 
 function _getEndpoints(id, query) {
     return {
