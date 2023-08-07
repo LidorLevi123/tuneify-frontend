@@ -38,10 +38,10 @@
                 <span class="material-symbols-outlined df ai share" :class="{ 'enabled': this.isShare }" @click="activateShare" title="Listen With Friends">group_add</span>
                 <!-- <button v-icon="'moreOptions'" class="btn details-edit"></button> -->
 
-                <div class="bubbling-heart" v-show="hasLiked && !isOwner">
+                <!-- <div class="bubbling-heart" v-show="hasLiked && !isOwner">
                     <input type="checkbox" @click="removeStation" class="heart-input" id="like-undefined">
                     <label class="label" for="like-undefined"><span v-icon="`bHearts`"></span></label>
-                </div>
+                </div> -->
             </section>
             <TrackList @track-clicked="clickTrack" @track-add="addTrack" @track-remove="removeTrack"
                 @track-dislike="dislikeTrack" @station-update="loadStation" @search="getTracks" :station="station" />
