@@ -118,12 +118,19 @@ export default {
     methods: {
         async loadStation() {
             try {
+
                 const station = await stationService.getById(this.stationId)
                 this.station = station
                 // this.station.tracks.slice(0, 5).forEach(track => {
                 //     console.log(track.title)
                 // });
                 this.$emit('station', station)
+
+                if (this.currStation?._id !== this.station._id) {
+                    const station = JSON.parse(JSON.stringify(this.station))
+                    this.$store.commit({ type: 'setCurrStation', station })
+                }
+
                 this.setTracksTotalDuration()
 
                 console.log('Socket room name:', this.stationId)
@@ -230,10 +237,6 @@ export default {
             trackIdx = trackIdx === -1 ? 0 : trackIdx
             this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
 
-            if (this.currStation?._id !== this.station._id) {
-                const station = JSON.parse(JSON.stringify(this.station))
-                this.$store.commit({ type: 'setCurrStation', station })
-            }
             eventBus.emit('trackClicked')
         },
         pauseTrack() {

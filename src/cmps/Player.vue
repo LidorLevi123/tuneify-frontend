@@ -1,11 +1,9 @@
 <template>
-    <YouTube ref="youtubePlayer" :src="currTrack?.youtubeId || ''" @state-change="onStateChange" @ready="playVideo" 
+    <YouTube ref="youtubePlayer" :src="currTrack?.youtubeId || ''" @state-change="onStateChange"
     style="display: none;"/>
-
     <section class="main-player-container">
         <section class="track-info-container">
             <section class="img-container">
-
                 <img v-if="currTrack" :src="`${currTrack.imgUrl}`" alt="" @click="onSocketMessage('test')">
             </section>
             <section class="text-container">
@@ -18,28 +16,21 @@
             <span v-else-if="hasLiked(currTrack?.id) && currTrack" class="btn-dislike" v-icon="`smallLikeEna`"
                 @click="dislikeTrack(currTrack?.id)"></span>
         </section>
-
         <section class="player-mid-container">
-
             <section class="track-controls-container">
-
                 <button class="shuffle btn" @click="toggleShuffle" title="Shuffle">
                     <span v-icon="'shuffle'" :class="{ 'enabled': this.isShuffle }"></span>
                 </button>
-
                 <button class="previous btn" @click="previousNextVideo(-1)" title="Previous">
                     <span v-icon="'previous'"></span>
                 </button>
-
                 <button class="play btn" @click="togglePlayPause" title="Play">
                     <span v-if="!isPlaying" v-icon="'play'"></span>
                     <span v-else v-icon="'pause'"></span>
                 </button>
-
                 <button class="next btn" @click="previousNextVideo(1)" title="Next">
                     <span v-icon="'next'"></span>
                 </button>
-
                 <button class="repeat btn" @click="cycleRepeatStates" title="Repeat" :class="{
                     'no-repeat': repeatStateIdx === 0,
                     'repeat-playlist': repeatStateIdx === 1,
@@ -48,9 +39,7 @@
                     <span v-if="this.repeatStateIdx === 2" v-icon="'repeatSong'"></span>
                     <span v-else v-icon="'repeat'"></span>
                 </button>
-
             </section>
-
             <section class="playback-container">
                 <span>{{ secsToTimeFormat(elapsedTime) }}</span>
                 <input class="playback-slider slider" @input="onChangeTime" type="range" min="0" :max="currTrackDuration"
@@ -71,18 +60,12 @@
         </section>
     </section>
 </template>
-
-
 <script>
-
 import { utilService } from '../services/util.service.js'
 import { eventBus, showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
 import { ytService } from '../services/yt.service.js'
-
 import YouTube from 'vue3-youtube'
-
 import { socketService, SOCKET_EVENT_ADD_MSG, SOCKET_EMIT_BROADCAST_TRACK } from '../services/socket.service.js'
-
 export default {
     data() {
         return {
@@ -116,7 +99,6 @@ export default {
     created() {
         eventBus.on('trackClicked', this.loadVideo)
         eventBus.on('trackPaused', this.pauseVideo)
-        eventBus.on('trackPlay', this.playTrack)
 
         // sockets
         socketService.on(SOCKET_EVENT_ADD_MSG, this.onSocketMessage)
@@ -127,20 +109,16 @@ export default {
             this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
         },
         togglePlayPause() {
-
             if (!this.$refs.youtubePlayer) return
-
             if (this.isPlaying) {
-                this.pauseVideo()
+                this.pauseVideo(false)
             }
             else {
                 this.playVideo()
             }
-
             this.broadcastTrackInfo()
         },
         async previousNextVideo(diff) {
-
             if (this.currTrackIdx === this.currStation.tracks.length - 1 && diff === 1) {
                 if (this.repeatStateIdx === 2) {
                     this.replayVideo()
@@ -152,24 +130,19 @@ export default {
                 } else if (this.repeatStateIdx === 1) {
                     this.updateCurrTrackIdx(-1)
                 }
-
             } else if (this.currTrackIdx === 0 && diff === -1) {
                 this.replayVideo()
                 return
             }
-
             if (this.repeatStateIdx === 2) {
                 this.replayVideo()
                 return
             }
-
             this.updateCurrTrackIdx(this.currTrackIdx + diff)
-
             if (this.isShuffle) {
                 const randomIdx = utilService.getRandomIntInclusive(0, this.currTrackList.length - 1)
                 this.updateCurrTrackIdx(randomIdx)
             }
-
             this.loadVideo()
         },
         async loadVideo() {
@@ -191,7 +164,6 @@ export default {
             } catch (err) {
                 console.log('Could not set track youtube id', err.message)
             }
-
         },
         async likeTrack(trackToSave) {
             try {
@@ -246,14 +218,11 @@ export default {
             this.broadcastTrackInfo()
         },
         changeTime() {
-            this.$refs.youtubePlayer.seekTo(this.elapsedTime, true)
+            this.$refs.youtubePlayer?.seekTo(this.elapsedTime, true)
             this.updatePlaybackProgress()
         },
         updatePlaybackProgress() {
             this.playbackProgressPercentage = (this.elapsedTime / this.currTrackDuration) * 100
-        },
-        updateVolProgress() {
-            // this.volProgressPercentage = (this.elapsedTime / this.currTrackDuration) * 100
         },
         stopVideo() {
             this.$store.commit({ type: 'setIsPlaying', isPlaying: false })
@@ -262,10 +231,11 @@ export default {
             this.elapsedTime = 0
             this.handlePlaybackInterval(false)
         },
-        pauseVideo() {
+        pauseVideo(isBroadcast) {
             this.$store.commit({ type: 'setIsPlaying', isPlaying: false })
             this.$refs.youtubePlayer?.pauseVideo()
             this.handlePlaybackInterval(false)
+            if(isBroadcast) this.broadcastTrackInfo()
         },
         playVideo() {
             this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
@@ -273,43 +243,23 @@ export default {
             this.handlePlaybackInterval(true)
         },
         replayVideo() {
-            this.$refs.youtubePlayer.stopVideo()
-            this.$refs.youtubePlayer.playVideo()
+            this.$refs.youtubePlayer?.stopVideo()
+            this.$refs.youtubePlayer?.playVideo()
             this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
         },
-        async playTrack(track) {
-            // get youtubeId from YT
-            try {
-                console.log('Sending request to yt id...')
-                const term = track.title + ' ' + track.artists[0]
-                const youtubeId = await ytService.queryYT(term)
-                // const youtubeId = this.getDemoYoutubeId()
-                const youtubePlayer = this.$refs.youtubePlayer.player
-                youtubePlayer?.loadVideoById(youtubeId)
-                // this.playVideo()
-            } catch (err) {
-                console.log('Could not set track youtube id', err.message)
-            }
-        },
         onStateChange(event) {
-
             if (event.data === this.youtubePlayerStates.ENDED) {
-
                 this.previousNextVideo(1)
-
-            } else if (event.data === this.youtubePlayerStates.UNSTARTED) {
+            } else {
                 let duration = this.$refs.youtubePlayer?.getDuration()
                 this.currTrackDuration = duration ? duration : 0
-            } else return
+            }
         },
         async updateElapsedTime() {
             if (this.isPlaying) {
                 this.elapsedTime = await this.$refs.youtubePlayer?.getCurrentTime()
             }
             this.updatePlaybackProgress()
-            // if (youtubePlayer && this.isPlaying) {
-            //     this.elapsedTime = await this.$refs.youtubePlayer?.getCurrentTime()
-            // }
         },
         handlePlaybackInterval(NewInterval) {
             if (this.intervalId) clearInterval(this.intervalId)
@@ -334,37 +284,38 @@ export default {
         },
         broadcastTrackInfo() {
             const trackInfo = {
-                trackId: this.currTrack.id,
+                trackId: this.currTrack?.id,
                 trackIdx: this.currTrackIdx,
                 isPlaying: this.isPlaying,
                 elapsedTime: this.elapsedTime,
+                isPlaying: this.isPlaying,
+                repeatStateIdx: this.repeatStateIdx,
+                isShuffle: this.isShuffle,
             }
 
             socketService.emit(SOCKET_EMIT_BROADCAST_TRACK, trackInfo)
         },
         updateByBroadcast(trackInfo) {
-
             // if youtubeplayer not loaded - load it
-
             this.updateCurrTrackIdx(trackInfo.trackIdx)
 
             this.elapsedTime = trackInfo.elapsedTime
             this.changeTime()
+            this.repeatStateIdx = trackInfo.repeatStateIdx
+            this.isShuffle = trackInfo.isShuffle
 
             if (trackInfo.isPlaying) {
                 this.playVideo()
             } else {
-                this.pauseVideo()
+                this.pauseVideo(false)
             }
-
         }
     },
-
     beforeunmount() {
         eventBus.off('trackClicked', this.loadVideo)
         eventBus.off('trackPlay', this.playTrack)
+        eventBus.off('trackPaused', this.pauseVideo)
     },
-
     computed: {
         repeatState() {
             return this.repeatStates[this.repeatStateIdx]
@@ -394,5 +345,4 @@ export default {
         },
     },
 }
-
 </script>
