@@ -17,8 +17,8 @@
                 <span class="df ai" v-icon="'close'" @click="onClearFilter"></span>
             </div>
         </div>
-        <button v-if="user" @click="doLogout" class="profile-btn" title="Logout">
-            <img :src="user.imgUrl" alt="">
+        <button v-if="user" @click="doLogout" class="profile-btn" :title="`${user.fullname} - press to logout`">
+            <img :src="user.imgUrl" :alt="user.imgUrl">
         </button>
         <RouterLink v-if="!user" class="login-link" to="/login">
             <button class="login-btn">Log in</button>
