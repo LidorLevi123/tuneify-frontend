@@ -79,6 +79,14 @@ export const stationStore = {
                 throw new Error('Could not load stations for home page')
             }
         },
+        async getAccessToken() {
+            try {
+                await stationService.getAccessToken()
+            } catch (err) {
+                console.log('Could not get access token', err)
+                throw new Error('Could not get access token')
+            }
+        },
         async loadStations({ commit }, { userId }) {
             try {
                 const stations = await stationService.query(userId)
