@@ -99,10 +99,12 @@ export default {
     created() {
         eventBus.on('trackClicked', this.loadVideo)
         eventBus.on('trackPaused', this.pauseVideo)
+        eventBus.on('trackPlay', this.playTrack)
 
         // sockets
         socketService.on(SOCKET_EVENT_ADD_MSG, this.onSocketMessage)
         socketService.on(SOCKET_EMIT_BROADCAST_TRACK, this.updateByBroadcast)
+
     },
     methods: {
         updateCurrTrackIdx(trackIdx) {
@@ -311,7 +313,21 @@ export default {
             } else {
                 this.pauseVideo(false)
             }
-        }
+        },
+        async playTrack(track) {
+            // get youtubeId from YT
+            try {
+                console.log('Sending request to yt id...')
+                const term = track.title + ' ' + track.artists[0]
+                const youtubeId = await ytService.queryYT(term)
+                // const youtubeId = this.getDemoYoutubeId()
+                const youtubePlayer = this.$refs.youtubePlayer.player
+                youtubePlayer?.loadVideoById(youtubeId)
+                // this.playVideo()
+            } catch (err) {
+                console.log('Could not set track youtube id', err.message)
+            }
+        },
     },
     beforeunmount() {
         eventBus.off('trackClicked', this.loadVideo)
