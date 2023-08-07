@@ -36,13 +36,13 @@
                 <button class="details-unlike" v-icon="'unlike'" v-show="hasLiked && !isOwner"
                     @click="removeStation"></button>
                 <span class="material-symbols-outlined df ai share" :class="{ 'enabled': !this.isShare }"
+                   
                     @click="activateShare(isShare)" title="Listen With Friends">group_add</span>
-                <!-- <button v-icon="'moreOptions'" class="btn details-edit"></button> -->
-
-                <!-- <div class="bubbling-heart" v-show="hasLiked && !isOwner">
+                <div class="bubbling-heart" v-show="hasLiked && !isOwner">
                     <input type="checkbox" @click="removeStation" class="heart-input" id="like-undefined">
                     <label class="label" for="like-undefined"><span v-icon="`bHearts`"></span></label>
-                </div> -->
+                </div>
+                <UserList />
             </section>
             <TrackList @track-clicked="clickTrack" @track-add="addTrack" @track-remove="removeTrack"
                 @track-dislike="dislikeTrack" @station-update="loadStation" @search="getTracks" :station="station" />
@@ -58,7 +58,7 @@
 import historyTracker from '../services/history.service'
 import StationEdit from '../cmps/StationEdit.vue'
 import TrackList from '../cmps/TrackList.vue'
-
+import UserList from '../cmps/UserList.vue'
 import { FastAverageColor } from 'fast-average-color'
 import { stationService } from '../services/station.service'
 import { utilService } from '../services/util.service'
@@ -270,7 +270,8 @@ export default {
     },
     components: {
         StationEdit,
-        TrackList
+        TrackList,
+        UserList
     }
 }
 </script>

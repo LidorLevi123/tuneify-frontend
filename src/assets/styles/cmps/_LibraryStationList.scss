@@ -2,6 +2,10 @@
     overflow-y: hidden;
     padding: 0.5rem;
 
+    @include for-mobile-layout {
+        margin-block-end: 6rem;
+    }
+
     button {
         background-color: transparent;
         border: none;
@@ -53,5 +57,6 @@
     ul {
         overflow-y: auto;
         height: 100%;
+
     }
 }
