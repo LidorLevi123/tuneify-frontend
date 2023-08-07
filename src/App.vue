@@ -13,35 +13,20 @@ export default {
 
   async created() {
 
-    let user = userService.getLoggedinUser()
+    try {
+      let user = userService.getLoggedinUser()
 
-    if (!user) {
-      try {
-        user = await this.$store.dispatch({ type: 'login', userCred: { username: 'guest', password: '123' } })
-        await this.$store.dispatch({ type: 'loadStations', userId: user._id })
-      } catch (err) {
-        console.log('Something went wrong at App', err.message)
-      } finally {
-        return
-      }
-    } else {
-      try {
-        await this.$store.dispatch({ type: 'loadStations', userId: user._id })
-      } catch (err) {
-        console.log('Something went wrong at App', err.message)
-      }
+      if (!user) user = await this.$store.dispatch({ type: 'login', userCred: { username: 'guest', password: '123' } })
+      await this.$store.dispatch({ type: 'loadStations', userId: user._id })
+      await this.$store.dispatch({ type: 'loadUsers' })
+
+    } catch (err) {
+      console.log('Something went wrong at App', err.message)
     }
-
   },
   computed: {
-    currTrackIdx() {
-      return this.$store.getters.currTrackIdx
-    },
-    currStation() {
-      return this.$store.getters.currStation
-    },
     currTrack() {
-      return this.currStation?.tracks[this.currTrackIdx]
+      return this.$store.getters.currTrack
     }
   },
 

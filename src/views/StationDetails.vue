@@ -34,15 +34,18 @@
                 </button>
 
                 <button class="details-unlike" v-icon="'unlike'" v-show="hasLiked && !isOwner"
-                    @click="removeStation"></button>
+                    @click="removeStation">
+                </button>
+
                 <span class="material-symbols-outlined df ai share" :class="{ 'enabled': !this.isShare }"
-                   
-                    @click="activateShare(isShare)" title="Listen With Friends">group_add</span>
+                    @click="activateShare(isShare)" title="Listen With Friends">group_add
+                </span>
+
                 <div class="bubbling-heart" v-show="hasLiked && !isOwner">
                     <input type="checkbox" @click="removeStation" class="heart-input" id="like-undefined">
                     <label class="label" for="like-undefined"><span v-icon="`bHearts`"></span></label>
                 </div>
-                <UserList />
+                <UserList v-show="!isShare" :users="topicUsers"/>
             </section>
             <TrackList @track-clicked="clickTrack" @track-add="addTrack" @track-remove="removeTrack"
                 @track-dislike="dislikeTrack" @station-update="loadStation" @search="getTracks" :station="station" />
@@ -80,7 +83,8 @@ export default {
         return {
             station: null,
             tracksTotalDuration: 0,
-            isShare: true
+            isShare: true,
+            topicUsers: []
         }
     },
 
@@ -116,12 +120,15 @@ export default {
         },
         user() {
             return this.$store.getters.loggedinUser
+        },
+        users() {
+            return this.$store.getters.users
         }
     },
 
     created() {
         this.loadStation()
-        socketService.on(SOCKET_EVENT_SET_TOPIC_USERS, console.log)
+        socketService.on(SOCKET_EVENT_SET_TOPIC_USERS, this.setTopicUsers)
         historyTracker.push(this.$route.fullPath)
     },
 
@@ -260,6 +267,16 @@ export default {
             socketService.emit(SOCKET_EMIT_GET_TOPIC_USERS, this.stationId)
             this.isShare = !this.isShare
         },
+        setTopicUsers(userIds) {
+            const topicUsers = []
+            this.users.forEach(user => { 
+                if(userIds.includes(user._id)) {
+                    topicUsers.push(user)
+                }
+            })
+            console.log(topicUsers)
+            this.topicUsers = topicUsers
+        }
     },
 
     watch: {

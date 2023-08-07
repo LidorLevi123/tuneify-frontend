@@ -24,6 +24,7 @@ export const userStore = {
         },
         setUsers(state, { users }) {
             state.users = users
+            console.log(users);
         },
         setUser(state, { user }) {
             const idx = state.users.findIndex(u => u._id === user._id)
