@@ -35,7 +35,7 @@
 
                 <button class="details-unlike" v-icon="'unlike'" v-show="hasLiked && !isOwner"
                     @click="removeStation"></button>
-                <!-- <span class="material-symbols-outlined df ai" title="Listen With Friends">group_add</span> -->
+                <span class="material-symbols-outlined df ai share" :class="{ 'enabled': this.isShare }" @click="activateShare" title="Listen With Friends">group_add</span>
                 <!-- <button v-icon="'moreOptions'" class="btn details-edit"></button> -->
 
                 <div class="bubbling-heart" v-show="hasLiked && !isOwner">
@@ -71,7 +71,8 @@ export default {
     data() {
         return {
             station: null,
-            tracksTotalDuration: 0
+            tracksTotalDuration: 0,
+            isShare: false
         }
     },
 
@@ -130,8 +131,8 @@ export default {
 
                 this.setTracksTotalDuration()
 
-                console.log('Socket room name:', this.stationId)
-                socketService.emit(SOCKET_EMIT_SET_TOPIC, this.stationId)
+                // console.log('Socket room name:', this.stationId)
+                // socketService.emit(SOCKET_EMIT_SET_TOPIC, this.stationId)
                 socketService.emit(SOCKET_EMIT_SEND_MSG, 'Hello to everyone in this room')
 
             } catch (err) {
@@ -239,6 +240,11 @@ export default {
         pauseTrack() {
             eventBus.emit('trackPaused', true)
         },
+        activateShare() {
+            console.log('Socket room name:', this.stationId)
+            socketService.emit(SOCKET_EMIT_SET_TOPIC, this.stationId)
+            this.isShare = !this.isShare
+        }
     },
 
     watch: {
