@@ -35,7 +35,7 @@
 
                 <button class="details-unlike" v-icon="'unlike'" v-show="hasLiked && !isOwner"
                     @click="removeStation"></button>
-                <!-- <span class="material-symbols-outlined df ai" title="Listen With Friends">group_add</span> -->
+                <span class="material-symbols-outlined df ai share" :class="{ 'enabled': this.isShare }" @click="activateShare" title="Listen With Friends">group_add</span>
                 <!-- <button v-icon="'moreOptions'" class="btn details-edit"></button> -->
 
                 <div class="bubbling-heart" v-show="hasLiked && !isOwner">
@@ -71,7 +71,8 @@ export default {
     data() {
         return {
             station: null,
-            tracksTotalDuration: 0
+            tracksTotalDuration: 0,
+            isShare: false
         }
     },
 
@@ -118,13 +119,17 @@ export default {
     methods: {
         async loadStation() {
             try {
+
                 const station = await stationService.getById(this.stationId)
                 this.station = station
                 this.$emit('station', station)
+
+
+
                 this.setTracksTotalDuration()
 
-                console.log('Socket room name:', this.stationId)
-                socketService.emit(SOCKET_EMIT_SET_TOPIC, this.stationId)
+                // console.log('Socket room name:', this.stationId)
+                // socketService.emit(SOCKET_EMIT_SET_TOPIC, this.stationId)
                 socketService.emit(SOCKET_EMIT_SEND_MSG, 'Hello to everyone in this room')
 
             } catch (err) {
@@ -228,14 +233,20 @@ export default {
             this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
 
             if (this.currStation?._id !== this.station._id) {
-                const station = JSON.parse(JSON.stringify(this.station))
-                this.$store.commit({ type: 'setCurrStation', station })
+                    const station = JSON.parse(JSON.stringify(this.station))
+                    this.$store.commit({ type: 'setCurrStation', station })
             }
+
             eventBus.emit('trackClicked')
         },
         pauseTrack() {
             eventBus.emit('trackPaused', true)
         },
+        activateShare() {
+            console.log('Socket room name:', this.stationId)
+            socketService.emit(SOCKET_EMIT_SET_TOPIC, this.stationId)
+            this.isShare = !this.isShare
+        }
     },
 
     watch: {

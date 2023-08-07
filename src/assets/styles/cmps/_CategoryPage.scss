@@ -10,5 +10,9 @@
         font-weight: 900;
         font-size: 6rem;
         color: $clr2;
+
+        @include for-mobile-layout {
+            margin: 0;
+        }
     }
 }
