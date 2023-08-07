@@ -189,10 +189,12 @@ export default {
         },
         toggleShuffle() {
             this.isShuffle = !this.isShuffle
+            this.broadcastTrackInfo()
         },
         cycleRepeatStates() {
             this.repeatStateIdx++
             if (this.repeatStateIdx >= this.repeatStates.length) this.repeatStateIdx = 0
+            this.broadcastTrackInfo()
         },
         toggleMute() {
             if (this.isMute) {
