@@ -79,24 +79,24 @@ export default {
 
         async applyDrag(dragResult, isSocketBroadcast) {
 
-            // const { removedIndex, addedIndex, payload } = dragResult
+            const { removedIndex, addedIndex, payload } = dragResult
 
-            // let itemToAdd = payload
+            let itemToAdd = payload
 
-            // if (removedIndex !== null) {
-            //     itemToAdd = this.station.tracks.splice(removedIndex, 1)[0]
-            // }
+            if (removedIndex !== null) {
+                itemToAdd = this.station.tracks.splice(removedIndex, 1)[0]
+            }
 
-            // if (addedIndex !== null) {
-            //     this.station.tracks.splice(addedIndex, 0, itemToAdd)
-            // }
+            if (addedIndex !== null) {
+                this.station.tracks.splice(addedIndex, 0, itemToAdd)
+            }
 
-            // const updatedStation = { ...this.station, tracks: this.station.tracks }
+            const updatedStation = { ...this.station, tracks: this.station.tracks }
 
-            // this.updateStation(updatedStation, removedIndex, addedIndex)
+            this.updateStation(updatedStation, removedIndex, addedIndex)
 
-            // if (isSocketBroadcast) return
-            // socketService.emit(SOCKET_EMIT_TRACK_DRAGGED, dragResult)
+            if (isSocketBroadcast) return
+            socketService.emit(SOCKET_EMIT_TRACK_DRAGGED, dragResult)
 
         },
 
