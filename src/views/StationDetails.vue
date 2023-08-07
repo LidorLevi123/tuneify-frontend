@@ -121,9 +121,6 @@ export default {
 
                 const station = await stationService.getById(this.stationId)
                 this.station = station
-                // this.station.tracks.slice(0, 5).forEach(track => {
-                //     console.log(track.title)
-                // });
                 this.$emit('station', station)
 
                 if (this.currStation?._id !== this.station._id) {
@@ -135,7 +132,7 @@ export default {
 
                 console.log('Socket room name:', this.stationId)
                 socketService.emit(SOCKET_EMIT_SET_TOPIC, this.stationId)
-                // socketService.emit(SOCKET_EMIT_SEND_MSG, 'Hello to everyone in this room')
+                socketService.emit(SOCKET_EMIT_SEND_MSG, 'Hello to everyone in this room')
 
             } catch (err) {
                 console.log(err.message)
