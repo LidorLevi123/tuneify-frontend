@@ -27,11 +27,8 @@ export default {
   unmounted() {
     window.removeEventListener("resize", this.maxStationsCalc)
   },
-  async created() {
+  created() {
     this.maxStationsCalc()
-    if (!this.stations.length) {
-      await this.$store.dispatch({ type: 'getStationsForHome' })
-    }
     historyTracker.push(this.$route.fullPath)
   },
   computed: {

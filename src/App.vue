@@ -14,6 +14,9 @@ export default {
   async created() {
 
     try {
+      await this.$store.dispatch({ type: 'getAccessToken' })
+      await this.$store.dispatch({ type: 'getStationsForHome' })
+
       let user = userService.getLoggedinUser()
 
       if (!user) user = await this.$store.dispatch({ type: 'login', userCred: { username: 'guest', password: '123' } })
