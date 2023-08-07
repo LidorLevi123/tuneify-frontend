@@ -126,8 +126,8 @@ export default {
         }
     },
 
-    created() {
-        this.loadStation()
+    async created() {
+        await this.loadStation()
         socketService.on(SOCKET_EVENT_SET_TOPIC_USERS, this.setTopicUsers)
         historyTracker.push(this.$route.fullPath)
     },
@@ -139,7 +139,6 @@ export default {
     methods: {
         async loadStation() {
             try {
-                console.log('stationId', this.stationId)
                 const station = await stationService.getById(this.stationId)
                 this.station = station
                 this.$emit('station', station)
@@ -242,6 +241,7 @@ export default {
             this.tracksTotalDuration = this.station.tracks?.reduce((sum, track) => sum = sum + track.formalDuration, 0)
         },
         openStationEditor() {
+            console.log(this.station.owner.fullname);
             if (this.station.owner.fullname !== this.user.fullname || this.station._id === this.user.likedId) return
             document.body.classList.add('modal-open')
         },

@@ -284,7 +284,7 @@ export default {
             return minutes * 60 + seconds
         },
         hasLiked(trackId) {
-            return this.likedTracks?.some(track => track.id === trackId)
+            return this.likedTracks?.some(track => track?.id === trackId)
         },
         onSocketMessage(msg) {
             console.log('Received socket message:', msg)

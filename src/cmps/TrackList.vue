@@ -21,7 +21,6 @@
         </ul>
         <TrackSearch v-if="canShowSearch && station" @search="onLoadTracks" @track-add="onAddTrack" :station="station" />
 
-
         <ul v-if="tracks?.length" class="clean-list">
             <li v-for="(track, idx) in tracks" :key="track.id" @click="onPlayTrack(track)">
                 <TrackPreview @track-add="onAddTrack" :track="track" :trackIdx="idx" />
@@ -80,24 +79,24 @@ export default {
 
         async applyDrag(dragResult, isSocketBroadcast) {
 
-            const { removedIndex, addedIndex, payload } = dragResult
+            // const { removedIndex, addedIndex, payload } = dragResult
 
-            let itemToAdd = payload
+            // let itemToAdd = payload
 
-            if (removedIndex !== null) {
-                itemToAdd = this.station.tracks.splice(removedIndex, 1)[0]
-            }
+            // if (removedIndex !== null) {
+            //     itemToAdd = this.station.tracks.splice(removedIndex, 1)[0]
+            // }
 
-            if (addedIndex !== null) {
-                this.station.tracks.splice(addedIndex, 0, itemToAdd)
-            }
+            // if (addedIndex !== null) {
+            //     this.station.tracks.splice(addedIndex, 0, itemToAdd)
+            // }
 
-            const updatedStation = { ...this.station, tracks: this.station.tracks }
+            // const updatedStation = { ...this.station, tracks: this.station.tracks }
 
-            this.updateStation(updatedStation, removedIndex, addedIndex)
+            // this.updateStation(updatedStation, removedIndex, addedIndex)
 
-            if (isSocketBroadcast) return
-            socketService.emit(SOCKET_EMIT_TRACK_DRAGGED, dragResult)
+            // if (isSocketBroadcast) return
+            // socketService.emit(SOCKET_EMIT_TRACK_DRAGGED, dragResult)
 
         },
 
@@ -108,11 +107,11 @@ export default {
                 await this.$store.dispatch({ type: 'saveStation', stationToSave: updatedStation })
                 if (updatedStation._id === this.currStation?._id) {
                     this.$store.commit({ type: 'setCurrStation', station: updatedStation })
-                    if(removedIndex === this.currTrackIdx) {
+                    if (removedIndex === this.currTrackIdx) {
                         this.$store.commit({ type: 'setCurrTrackIdx', trackIdx: addedIndex })
-                    } else if(this.currTrackIdx > removedIndex && this.currTrackIdx <= addedIndex) {
+                    } else if (this.currTrackIdx > removedIndex && this.currTrackIdx <= addedIndex) {
                         this.$store.commit({ type: 'setCurrTrackIdx', trackIdx: this.currTrackIdx - 1 })
-                    } else if(this.currTrackIdx < removedIndex && this.currTrackIdx >= addedIndex) {
+                    } else if (this.currTrackIdx < removedIndex && this.currTrackIdx >= addedIndex) {
                         this.$store.commit({ type: 'setCurrTrackIdx', trackIdx: this.currTrackIdx + 1 })
                     }
                 }

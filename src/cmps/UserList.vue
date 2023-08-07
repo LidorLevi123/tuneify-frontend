@@ -1,5 +1,5 @@
 <template>
-    <ul class="df ai" v-if="users">
+    <ul class="userlist-container clean-list" v-if="users">
         <li v-for="user in users" :key="user._id">
             <UserPreview :user="user" />
         </li>

@@ -10,12 +10,13 @@ export const stationService = {
     getById,
     save,
     remove,
-    getEmptyStation,
-    getSearchRes,
     saveTrack,
     removeTrack,
+    getEmptyStation,
+    getSearchRes,
     getCategoryStations,
     getStationsForHome,
+    getAccessToken
 }
 
 window.cs = stationService // for console usage
@@ -72,6 +73,10 @@ async function getCategoryStations(categoryId) {
     return stations
 }
 
+async function getAccessToken() {
+    await spotifyService.getAccessToken()
+}
+
 async function getStationsForHome() {
     const categories = [
         { id: '0JQ5DAqbMKFEC4WFtoNRpw', name: 'Pop' },
@@ -85,7 +90,6 @@ async function getStationsForHome() {
     ]
 
     const res = []
-    await spotifyService.getAccessToken()
     
     for (let i = 0; i < categories.length; i++) {
         let stations = await spotifyService.getSpotifyItems({type: 'categoryStations', id: categories[i].id} )
