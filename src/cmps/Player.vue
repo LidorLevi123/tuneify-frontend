@@ -155,8 +155,10 @@ export default {
             this.loadVideo()
         },
         async loadVideo() {
+
             if (this.currTrack?.youtubeId) {
                 console.log('Got yt id from storage')
+                this.elapsedTime = 0
                 this.playVideo()
                 this.broadcastTrackInfo()
                 return
@@ -168,6 +170,7 @@ export default {
                 const youtubeId = await ytService.queryYT(term)
                 // const youtubeId = this.getDemoYoutubeId()
                 await this.$store.dispatch({ type: 'updateTrack', youtubeId })
+                this.elapsedTime = 0
                 this.playVideo()
                 this.broadcastTrackInfo()
             } catch (err) {
@@ -297,18 +300,21 @@ export default {
             const trackInfo = {
                 trackId: this.currTrack?.id,
                 trackIdx: this.currTrackIdx,
+                youtubeId: this.currTrack?.youtubeId,
                 isPlaying: this.isPlaying,
                 elapsedTime: this.elapsedTime,
-                isPlaying: this.isPlaying,
                 repeatStateIdx: this.repeatStateIdx,
                 isShuffle: this.isShuffle,
             }
 
             socketService.emit(SOCKET_EMIT_BROADCAST_TRACK, trackInfo)
         },
-        updateByBroadcast(trackInfo) {
+        async updateByBroadcast(trackInfo) {
+
+            const youtubeId = trackInfo['youtubeId']
             // if youtubeplayer not loaded - load it
             this.updateCurrTrackIdx(trackInfo.trackIdx)
+            await this.$store.dispatch({ type: 'updateTrack', youtubeId })
 
             this.elapsedTime = trackInfo.elapsedTime
             this.changeTime()
