@@ -3,9 +3,16 @@
     grid-template-columns: 2fr 2.36fr 2fr;
 
     @include for-mobile-layout {
-        grid-template-columns: 1fr;
-        position: absolute;
-        bottom: 0
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        position: fixed;
+        bottom: 3rem;
+        width: 96%;
+        align-self: center;
+        border-radius: 0.5rem;
+        column-gap: 0.4rem;
+        padding-block-start: 0.5rem;
+        background-color: $clr8;
     }
 
     align-items: center;
@@ -35,6 +42,10 @@
         align-content: center;
         margin-inline: 1rem;
 
+        @include for-mobile-layout {
+            margin: 0;
+        }
+
         .track-controls-container {
             display: flex;
             justify-content: center;
@@ -42,12 +53,22 @@
 
             @include for-mobile-layout {
                 margin: 0;
+                justify-content: end;
+                grid-column: 1;
+                grid-row: 1;
+
             }
 
             .btn {
                 height: 2rem;
                 width: 2rem;
                 margin-inline: 0.5rem;
+
+                @include for-mobile-layout {
+                    margin: 0;
+                    height: 2rem;
+                    width: 2rem;
+                }
             }
 
             .repeat,
@@ -138,8 +159,11 @@
             font-weight: 400;
             gap: 6px;
 
+            @include for-mobile-layout {
+                display: none;
+            }
+
             .playback-slider {
-                // width: 39.12rem;
                 width: 100%;
             }
 
@@ -147,6 +171,21 @@
                 color: lighten($clr12, 25%);
             }
         }
+    }
+
+    .playback-container-mobile {
+        display: none;
+        grid-column: 1/-1;
+
+
+        .playback-slider {
+            width: 100%;
+        }
+
+        @include for-mobile-layout {
+            display: block;
+        }
+
     }
 
     .vol-container {
@@ -185,12 +224,17 @@
         align-items: center;
 
         @include for-mobile-layout {
-            display: none;
+            grid-column: 1;
+            grid-row: 1;
+            gap: 0.2rem;
+            padding-inline-start: 0.3rem;
+            // padding-block-end: 1.4rem;
         }
 
         .img-container {
             display: flex;
             align-items: center;
+
         }
 
         .text-container {
@@ -201,27 +245,72 @@
             border-radius: 0.2rem;
             height: 3.5rem;
             width: 3.5rem;
+
+            @include for-mobile-layout {
+                height: 2rem;
+                width: 2rem;
+            }
         }
 
         .track-title {
             color: $clr2;
             font-size: 0.875rem;
+
+            @include for-mobile-layout {
+
+                font-size: 0.6rem;
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+            }
         }
 
         .track-artist {
             color: $clr3;
             font-size: 0.69rem;
+
+            @include for-mobile-layout {
+                font-size: 0.5rem;
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+            }
         }
+
 
         .btn-like {
             display: flex;
             align-items: center;
+
+            @include for-mobile-layout {
+                display: none;
+            }
         }
 
         .btn-dislike {
             display: flex;
             align-items: center;
+
+            @include for-mobile-layout {
+                display: none;
+            }
         }
+
+        .eq {
+            display: none;
+            width: 0.7rem;
+            height: 0.7rem;
+            margin-inline-end: 0.3rem;
+
+            @include for-mobile-layout {
+                display: block;
+            }
+        }
+
+
+
     }
 }
 

@@ -18,6 +18,11 @@
         padding-block-start: 0.5rem;
         color: $clr2;
         font-weight: normal;
+
+        @include for-mobile-layout {
+            font-size: 1.2rem;
+            margin-block-end: 3rem;
+        }
     }
 
     img {

@@ -247,10 +247,7 @@ export default {
             trackIdx = trackIdx === -1 ? 0 : trackIdx
             this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
 
-            if (this.currStation?._id !== this.station._id) {
-                const station = JSON.parse(JSON.stringify(this.station))
-                this.$store.commit({ type: 'setCurrStation', station })
-            }
+            this.setViewedStationAsCurrent()
 
             eventBus.emit('trackClicked')
         },
@@ -264,10 +261,18 @@ export default {
 
             socketService.emit(SOCKET_EMIT_GET_TOPIC_USERS, this.stationId)
             this.isShare = !this.isShare
+
+            this.setViewedStationAsCurrent()
+        },
+        setViewedStationAsCurrent(){
+            if (this.currStation?._id !== this.station._id) {
+                const station = JSON.parse(JSON.stringify(this.station))
+                this.$store.commit({ type: 'setCurrStation', station })
+            }
         },
         setTopicUsers(userIds) {
             const topicUsers = []
-            this.users.forEach(user => { 
+            this.users.forEach(user => {
                 if(userIds.includes(user._id)) {
                     topicUsers.push(user)
                 }
