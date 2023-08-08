@@ -146,7 +146,7 @@ export default {
 
                 // console.log('Socket room name:', this.stationId)
                 // socketService.emit(SOCKET_EMIT_SET_TOPIC, this.stationId)
-                socketService.emit(SOCKET_EMIT_SEND_MSG, 'Hello to everyone in this room')
+                // socketService.emit(SOCKET_EMIT_SEND_MSG, 'Hello to everyone in this room')
 
             } catch (err) {
                 console.log(err.message)
@@ -154,7 +154,6 @@ export default {
             }
         },
         async likeStation() {
-            console.log('liked station')
             try {
                 await this.$store.dispatch({ type: 'updateUserStations', stationId: this.station._id, action: 'add' })
                 const stationToSave = JSON.parse(JSON.stringify(this.station))
@@ -241,7 +240,6 @@ export default {
             this.tracksTotalDuration = this.station.tracks?.reduce((sum, track) => sum = sum + track.formalDuration, 0)
         },
         openStationEditor() {
-            console.log(this.station.owner.fullname);
             if (this.station.owner.fullname !== this.user.fullname || this.station._id === this.user.likedId) return
             document.body.classList.add('modal-open')
         },
