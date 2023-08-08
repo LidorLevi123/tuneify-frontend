@@ -15,6 +15,10 @@
             color: $clr2;
             margin-block-start: 1.5rem;
             margin-block-end: 1rem;
+
+            @include for-mobile-layout {
+                margin-block-start: 3rem;
+            }
         }
     }
 }

@@ -109,7 +109,7 @@
             img {
                 @include for-mobile-layout {
                     width: 100%;
-                    padding: 2rem;
+                    padding: 3rem;
                 }
             }
         }
@@ -136,6 +136,10 @@
     & .details-player {
         display: flex;
         padding: 1.5rem;
+
+        @include for-mobile-layout {
+            padding: 0.8rem;
+        }
 
         .material-symbols-outlined {
             cursor: pointer;

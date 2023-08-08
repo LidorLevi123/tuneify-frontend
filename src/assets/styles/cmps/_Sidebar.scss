@@ -17,6 +17,10 @@
         display: flex;
         justify-content: space-between;
 
+        @include for-mobile-layout {
+            margin-block-start: 2rem;
+        }
+
         .add-station {
             height: 2rem;
             width: 2rem;

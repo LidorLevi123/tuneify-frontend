@@ -1,6 +1,5 @@
 <template>
-    <YouTube ref="youtubePlayer" :src="currTrack?.youtubeId || ''" @state-change="onStateChange"
-    style="display: none;"/>
+    <YouTube ref="youtubePlayer" :src="currTrack?.youtubeId || ''" @state-change="onStateChange" style="display: none;" />
     <section class="main-player-container">
         <section class="track-info-container">
             <section class="img-container">
@@ -11,6 +10,8 @@
                 <div v-if="currTrack" class="track-artist">{{ currTrack.artists?.length > 0 ? currTrack.artists[0] : '' }}
                 </div>
             </section>
+            <img v-if="isPlaying" class="eq"
+                src="https://res.cloudinary.com/dmmsf57ko/image/upload/v1683729372/Song_hoitzd.gif" alt="">
             <span v-if="!hasLiked(currTrack?.id) && currTrack" class="btn-like" v-icon="`smallLikeDis`"
                 @click="likeTrack(currTrack)"></span>
             <span v-else-if="hasLiked(currTrack?.id) && currTrack" class="btn-dislike" v-icon="`smallLikeEna`"
@@ -35,7 +36,8 @@
                     'no-repeat': repeatStateIdx === 0,
                     'repeat-playlist': repeatStateIdx === 1,
                     'repeat-song': repeatStateIdx === 2
-                }">
+                }
+                    ">
                     <span v-if="this.repeatStateIdx === 2" v-icon="'repeatSong'"></span>
                     <span v-else v-icon="'repeat'"></span>
                 </button>
@@ -47,6 +49,11 @@
                     :style="{ backgroundImage: `linear-gradient(to right, rgba(0,0,0,0) ${playbackProgressPercentage}%, rgb(77,77,77) ${playbackProgressPercentage}%)` }">
                 <span>{{ secsToTimeFormat(currTrackDuration) }}</span>
             </section>
+        </section>
+        <section class="playback-container-mobile">
+            <input class="playback-slider slider" @input="onChangeTime" type="range" min="0" :max="currTrackDuration"
+                v-model="elapsedTime"
+                :style="{ backgroundImage: `linear-gradient(to right, rgba(0,0,0,0) ${playbackProgressPercentage}%, rgb(77,77,77) ${playbackProgressPercentage}%)` }">
         </section>
         <section class="vol-container">
             <button class="mute btn" @click="toggleMute" title="Mute">
@@ -239,7 +246,7 @@ export default {
             this.$store.commit({ type: 'setIsPlaying', isPlaying: false })
             this.$refs.youtubePlayer?.pauseVideo()
             this.handlePlaybackInterval(false)
-            if(isBroadcast) this.broadcastTrackInfo()
+            if (isBroadcast) this.broadcastTrackInfo()
         },
         playVideo() {
             this.$store.commit({ type: 'setIsPlaying', isPlaying: true })

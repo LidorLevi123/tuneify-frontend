@@ -11,7 +11,11 @@
     height: 4rem;
 
     @include for-mobile-layout {
-        display: none;
+        position: fixed;
+        width: 100vw;
+        padding: 0.3rem 0.3rem 0.3rem 0.8rem;
+        height: 2.5rem;
+        border-radius: 0;
     }
 
     .profile-btn {
@@ -22,7 +26,11 @@
         background-color: rgba(20, 20, 20, 0.811);
         cursor: pointer;
         margin-left: auto;
-        margin-right: 1.5rem;
+        margin-inline-end: 1.5rem;
+
+        @include for-mobile-layout {
+            margin-inline-end: 0.5rem;
+        }
 
         img {
             height: 1.5rem;
@@ -104,6 +112,10 @@
         &:hover {
             transition: 0.2s;
             transform: scale(1.04);
+        }
+
+        @include for-mobile-layout {
+            display: none;
         }
     }
 
