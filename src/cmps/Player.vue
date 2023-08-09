@@ -1,6 +1,6 @@
 <template>
     <YouTube ref="youtubePlayer" :src="currTrack?.youtubeId || ''" @state-change="onStateChange" style="display: none;" />
-    <section class="main-player-container">
+    <section class="main-player-container" :class="{ 'is-shown': screenWidth < 890 && currTrack }">
         <section class="track-info-container">
             <section class="img-container">
                 <img v-if="currTrack" :src="`${currTrack.imgUrl}`" alt="" @click="onSocketMessage('test')">
@@ -76,6 +76,7 @@ import { socketService, SOCKET_EVENT_ADD_MSG, SOCKET_EMIT_BROADCAST_TRACK } from
 export default {
     data() {
         return {
+            screenWidth: window.innerWidth,
             idIdx: 0,
             playbackProgressPercentage: 0,
             volProgressPercentage: 0,

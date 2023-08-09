@@ -2,11 +2,14 @@
     display: flex;
     align-items: center;
     justify-items: center;
-    margin-inline-start: 2.5rem;
+    margin-inline-start: 3rem;
+
+    @include for-mobile-layout {
+        margin-inline-start: 0.8rem;
+    }
 
     li {
         position: relative;
-        z-index: 10;
         margin-inline-start: -1rem;
     }
 }
