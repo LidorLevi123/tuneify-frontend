@@ -10,12 +10,12 @@
                 <div v-if="currTrack" class="track-artist">{{ currTrack.artists?.length > 0 ? currTrack.artists[0] : '' }}
                 </div>
             </section>
+            <span v-if="!hasLiked(currTrack?.id) && currTrack" class="btn-like" v-icon="`smallLikeDis`"
+            @click="likeTrack(currTrack)"></span>
+            <span v-else-if="hasLiked(currTrack?.id) && currTrack" class="btn-dislike" v-icon="`smallLikeEna`"
+            @click="dislikeTrack(currTrack?.id)"></span>
             <img v-if="isPlaying" class="eq"
                 src="https://res.cloudinary.com/dmmsf57ko/image/upload/v1683729372/Song_hoitzd.gif" alt="">
-            <span v-if="!hasLiked(currTrack?.id) && currTrack" class="btn-like" v-icon="`smallLikeDis`"
-                @click="likeTrack(currTrack)"></span>
-            <span v-else-if="hasLiked(currTrack?.id) && currTrack" class="btn-dislike" v-icon="`smallLikeEna`"
-                @click="dislikeTrack(currTrack?.id)"></span>
         </section>
         <section class="player-mid-container">
             <section class="track-controls-container">

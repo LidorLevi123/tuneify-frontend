@@ -213,6 +213,7 @@ export default {
         async removeTrack(trackId) {
             try {
                 await this.$store.dispatch({ type: 'removeTrack', trackId, stationId: this.station._id })
+                this.loadStation()
                 showSuccessMsg('Removed from station')
             } catch (err) {
                 console.log(err.message)
@@ -265,10 +266,8 @@ export default {
             this.setViewedStationAsCurrent()
         },
         setViewedStationAsCurrent(){
-            if (this.currStation?._id !== this.station._id) {
                 const station = JSON.parse(JSON.stringify(this.station))
                 this.$store.commit({ type: 'setCurrStation', station })
-            }
         },
         setTopicUsers(userIds) {
             const topicUsers = []
