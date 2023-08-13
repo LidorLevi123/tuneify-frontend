@@ -1,5 +1,5 @@
 <template>
-    <section class="station-details" v-if="station">
+    <section ref="stationDetails" class="station-details" v-if="station">
         <div ref="topGradient" class="top-gradient">
             <section class="img-photo">
                 <section class="img">
@@ -33,8 +33,7 @@
                 <button class="details-like" v-icon="'like'" v-show="!hasLiked && !isOwner" @click="likeStation">
                 </button>
 
-                <button class="details-unlike" v-icon="'unlike'" v-show="hasLiked && !isOwner"
-                    @click="removeStation">
+                <button class="details-unlike" v-icon="'unlike'" v-show="hasLiked && !isOwner" @click="removeStation">
                 </button>
 
                 <span class="material-symbols-outlined df ai share" :class="{ 'enabled': !this.isShare }"
@@ -45,7 +44,7 @@
                     <input type="checkbox" @click="removeStation" class="heart-input" id="like-undefined">
                     <label class="label" for="like-undefined"><span v-icon="`bHearts`"></span></label>
                 </div>
-                <UserList v-show="!isShare" :users="topicUsers"/>
+                <UserList v-show="!isShare" :users="topicUsers" />
             </section>
             <TrackList @track-clicked="clickTrack" @track-add="addTrack" @track-remove="removeTrack"
                 @track-dislike="dislikeTrack" @station-update="loadStation" @search="getTracks" :station="station" />
@@ -130,6 +129,7 @@ export default {
         await this.loadStation()
         socketService.on(SOCKET_EVENT_SET_TOPIC_USERS, this.setTopicUsers)
         historyTracker.push(this.$route.fullPath)
+        // eventBus.on('scrollDown', this.scrollDown)
     },
 
     unmounted() {
@@ -246,18 +246,20 @@ export default {
         },
         clickTrack(trackIdx) {
             trackIdx = trackIdx === -1 ? 0 : trackIdx
-            this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
 
-            this.setViewedStationAsCurrent()
-
-            eventBus.emit('trackClicked')
+            if (trackIdx === this.currTrackIdx && this.isPlaying) this.pauseTrack()
+            else {
+                this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
+                this.setViewedStationAsCurrent()
+                eventBus.emit('trackClicked')
+            }
         },
         pauseTrack() {
             eventBus.emit('trackPaused', true)
         },
         activateShare(isShare) {
             // console.log('Socket room name:', this.stationId)
-            if(isShare) socketService.emit(SOCKET_EMIT_SET_TOPIC, this.stationId)
+            if (isShare) socketService.emit(SOCKET_EMIT_SET_TOPIC, this.stationId)
             else socketService.emit(SOCKET_EMIT_LEAVE_TOPIC, this.stationId)
 
             socketService.emit(SOCKET_EMIT_GET_TOPIC_USERS, this.stationId)
@@ -265,20 +267,23 @@ export default {
 
             this.setViewedStationAsCurrent()
         },
-        setViewedStationAsCurrent(){
-                const station = JSON.parse(JSON.stringify(this.station))
-                this.$store.commit({ type: 'setCurrStation', station })
+        setViewedStationAsCurrent() {
+            const station = JSON.parse(JSON.stringify(this.station))
+            this.$store.commit({ type: 'setCurrStation', station })
         },
         setTopicUsers(userIds) {
             const topicUsers = []
             this.users.forEach(user => {
-                if(userIds.includes(user._id)) {
+                if (userIds.includes(user._id)) {
                     topicUsers.push(user)
                 }
             })
             console.log(topicUsers)
             this.topicUsers = topicUsers
-        }
+        },
+        // scrollDown() {
+        //     this.$refs.stationDetails.scrollTop = this.$refs.stationDetails.scrollHeight
+        // }
     },
 
     watch: {

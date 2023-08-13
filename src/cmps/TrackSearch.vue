@@ -14,11 +14,12 @@
             <button @click="toggleModal" class="close-btn" v-icon="`bClose`"></button>
         </section>
         <button v-if="!modalOpen" @click="toggleModal" class="find-btn">Find more</button>
-        <SearchList :tracks="tracks" v-if="modalOpen" :station="station" @track-add="onAddTrack" />
+        <SearchList  :tracks="tracks" v-if="modalOpen" :station="station" @track-add="onAddTrack" />
     </section>
 </template>
 
 <script>
+import { eventBus } from '../services/event-bus.service'
 import { utilService } from '../services/util.service'
 import SearchList from './SearchList.vue'
 
@@ -55,13 +56,19 @@ export default {
         },
         onAddTrack(track, stationId) {
             this.$emit('track-add', track, stationId)
+        },
+        scrollToResults() {
+            eventBus.emit('scrollDown')
         }
+
+
     },
 
     watch: {
         query: {
             handler() {
                 this.search()
+                this.scrollToResults()
             },
             deep: true,
         },
