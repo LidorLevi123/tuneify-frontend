@@ -61,9 +61,9 @@ async function saveTrack(track, stationId) {
     await save(station)
 }
 
-async function removeTrack(track, stationId) {
+async function removeTrack(trackId, stationId) {
     const station = await httpService.get(BASE_URL + stationId)
-    const idx = station.tracks.findIndex(currTrack => currTrack.id === track.id)
+    const idx = station.tracks.findIndex(currTrack => currTrack.id === trackId)
     station.tracks.splice(idx, 1)
     await save(station)
 }

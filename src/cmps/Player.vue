@@ -1,6 +1,6 @@
 <template>
     <YouTube ref="youtubePlayer" :src="currTrack?.youtubeId || ''" @state-change="onStateChange" style="display: none;" />
-    <section class="main-player-container">
+    <section class="main-player-container" :class="{ 'is-shown': screenWidth < 890 && currTrack }">
         <section class="track-info-container">
             <section class="img-container">
                 <img v-if="currTrack" :src="`${currTrack.imgUrl}`" alt="" @click="onSocketMessage('test')">
@@ -10,12 +10,12 @@
                 <div v-if="currTrack" class="track-artist">{{ currTrack.artists?.length > 0 ? currTrack.artists[0] : '' }}
                 </div>
             </section>
+            <span v-if="!hasLiked(currTrack?.id) && currTrack" class="btn-like" v-icon="`smallLikeDis`"
+            @click="likeTrack(currTrack)"></span>
+            <span v-else-if="hasLiked(currTrack?.id) && currTrack" class="btn-dislike" v-icon="`smallLikeEna`"
+            @click="dislikeTrack(currTrack?.id)"></span>
             <img v-if="isPlaying" class="eq"
                 src="https://res.cloudinary.com/dmmsf57ko/image/upload/v1683729372/Song_hoitzd.gif" alt="">
-            <span v-if="!hasLiked(currTrack?.id) && currTrack" class="btn-like" v-icon="`smallLikeDis`"
-                @click="likeTrack(currTrack)"></span>
-            <span v-else-if="hasLiked(currTrack?.id) && currTrack" class="btn-dislike" v-icon="`smallLikeEna`"
-                @click="dislikeTrack(currTrack?.id)"></span>
         </section>
         <section class="player-mid-container">
             <section class="track-controls-container">
@@ -76,6 +76,7 @@ import { socketService, SOCKET_EVENT_ADD_MSG, SOCKET_EMIT_BROADCAST_TRACK } from
 export default {
     data() {
         return {
+            screenWidth: window.innerWidth,
             idIdx: 0,
             playbackProgressPercentage: 0,
             volProgressPercentage: 0,

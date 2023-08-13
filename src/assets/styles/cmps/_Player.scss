@@ -6,13 +6,18 @@
         grid-template-columns: 1fr auto;
         align-items: center;
         position: fixed;
-        bottom: 3rem;
-        width: 96%;
+        bottom: -3.5rem;
+        width: 95%;
         align-self: center;
         border-radius: 0.5rem;
         column-gap: 0.4rem;
         padding-block-start: 0.5rem;
-        background-color: $clr8;
+        background-color: #1d2d30;
+        transition: bottom 0.5s ease;
+
+        &.is-shown {
+            bottom: 3.5rem;
+        }
     }
 
     align-items: center;
@@ -179,7 +184,7 @@
 
 
         .playback-slider {
-            width: 100%;
+            width: 99%;
         }
 
         @include for-mobile-layout {
@@ -284,18 +289,18 @@
             display: flex;
             align-items: center;
 
-            @include for-mobile-layout {
-                display: none;
-            }
+            // @include for-mobile-layout {
+            //     display: none;
+            // }
         }
 
         .btn-dislike {
             display: flex;
             align-items: center;
 
-            @include for-mobile-layout {
-                display: none;
-            }
+            // @include for-mobile-layout {
+            //     display: none;
+            // }
         }
 
         .eq {

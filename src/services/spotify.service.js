@@ -95,7 +95,7 @@ function _cleanCategoryStationsData(data) {
 function _cleanStationTracksData(data) {
     return data.items.map(item => {
         return {
-            addedAt: _getRandomDate(),
+            addedAt: item.added_at,
             id: item.track.id,
             title: item.track.name,
             artists: _cleanArtists(item.track.artists),
