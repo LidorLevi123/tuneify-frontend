@@ -4,7 +4,7 @@
         <div class="prev-img-container">
             <img :src="`${station.imgUrl}`" alt="">
             <button v-if="!isStationPlaying" @click="onPlayStation" class="play-btn" v-icon="'mPlay'"></button>
-            <button v-else @click="pauseTrack" class="play-btn" v-icon="'pause'"></button>
+            <button v-else @click="pauseTrack" class="play-btn pause-btn" v-icon="'pause'"></button>
         </div>
 
         <h4>{{ station.name }}</h4>
@@ -49,7 +49,7 @@ export default {
             let station = await stationService.getById(this.station.spotifyId)
             station = JSON.parse(JSON.stringify(station))
 
-            this.$store.commit({ type: 'setCurrStation', station})
+            this.$store.commit({ type: 'setCurrStation', station })
             this.$store.commit({ type: 'setCurrTrackIdx', trackIdx: 0 })
             eventBus.emit('trackClicked')
         }

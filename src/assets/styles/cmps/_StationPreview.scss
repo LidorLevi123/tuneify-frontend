@@ -71,6 +71,11 @@
         @include for-mobile-layout {
             display: none;
         }
+
+        &.pause-btn {
+            transform: translateY(-0.6rem);
+            opacity: 1;
+        }
     }
 
     &:hover {
@@ -151,6 +156,11 @@
         &:hover {
             transition: 0.2s;
             transform: scale(1.04);
+        }
+
+        &.pause-btn {
+            transform: translateY(0rem);
+            opacity: 1;
         }
 
         @include for-mobile-layout {
