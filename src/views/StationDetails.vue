@@ -268,8 +268,12 @@ export default {
             this.setViewedStationAsCurrent()
         },
         setViewedStationAsCurrent() {
-            const station = JSON.parse(JSON.stringify(this.station))
-            this.$store.commit({ type: 'setCurrStation', station })
+            // Without this condition, tracks will be always resetting as we set the current station to be the viewed station.
+            // This condition solved the track youtube ids problem
+            if(this.station !== this.currStation) {
+                const station = JSON.parse(JSON.stringify(this.station))
+                this.$store.commit({ type: 'setCurrStation', station })
+            }
         },
         setTopicUsers(userIds) {
             const topicUsers = []
@@ -278,7 +282,6 @@ export default {
                     topicUsers.push(user)
                 }
             })
-            console.log(topicUsers)
             this.topicUsers = topicUsers
         },
         // scrollDown() {

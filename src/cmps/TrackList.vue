@@ -101,8 +101,6 @@ export default {
         },
 
         async updateStation(updatedStation, removedIndex, addedIndex) {
-            console.log(removedIndex)
-            console.log(addedIndex)
             try {
                 await this.$store.dispatch({ type: 'saveStation', stationToSave: updatedStation })
                 if (updatedStation._id === this.currStation?._id) {
@@ -125,8 +123,6 @@ export default {
 
         onTrackClicked(trackIdx) {
             this.$emit('track-clicked', trackIdx)
-            console.log('this.station.tracks onTrackClick', this.station.tracks)
-            console.log('this.currstation.tracks onTrackClick', this.currStation.tracks)
         },
         onAddTrack(track, stationId) {
             this.$emit('track-add', track, stationId)
