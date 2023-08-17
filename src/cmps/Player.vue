@@ -156,7 +156,6 @@ export default {
             this.loadVideo()
         },
         async loadVideo() {
-
             if (this.currTrack?.youtubeId) {
                 console.log('Got yt id from storage')
                 this.elapsedTime = 0

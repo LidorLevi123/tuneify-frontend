@@ -271,8 +271,9 @@ export default {
             // Without this condition, tracks will be always resetting as we set the current station to be the viewed station.
             // This condition solved the track youtube ids problem
             if(this.station !== this.currStation) {
-                const station = JSON.parse(JSON.stringify(this.station))
-                this.$store.commit({ type: 'setCurrStation', station })
+                // const station = JSON.parse(JSON.stringify(this.station))
+                // this.$store.commit({ type: 'setCurrStation', station })
+                this.$store.commit({ type: 'setCurrStation', station: this.station })
             }
         },
         setTopicUsers(userIds) {
