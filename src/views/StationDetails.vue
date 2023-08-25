@@ -3,7 +3,7 @@
         <div ref="topGradient" class="top-gradient">
             <section class="img-photo">
                 <section class="img">
-                    <img crossorigin="anonymous" class="station-img" :src="station.imgUrl" alt="" @load="getAvgImgClr"
+                    <img crossorigin="anonymous" class="station-img" :src="station.imgUrl" alt="" @load="setBackgroundClr"
                         ref="stationImg">
                 </section>
                 <section class="station-info">
@@ -61,7 +61,6 @@ import historyTracker from '../services/history.service'
 import StationEdit from '../cmps/StationEdit.vue'
 import TrackList from '../cmps/TrackList.vue'
 import UserList from '../cmps/UserList.vue'
-import { FastAverageColor } from 'fast-average-color'
 import { stationService } from '../services/station.service'
 import { utilService } from '../services/util.service'
 import { eventBus, showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
@@ -129,7 +128,6 @@ export default {
         await this.loadStation()
         socketService.on(SOCKET_EVENT_SET_TOPIC_USERS, this.setTopicUsers)
         historyTracker.push(this.$route.fullPath)
-        // eventBus.on('scrollDown', this.scrollDown)
     },
 
     unmounted() {
@@ -143,11 +141,9 @@ export default {
                 this.station = station
                 this.$emit('station', station)
                 this.setTracksTotalDuration()
-
                 // console.log('Socket room name:', this.stationId)
                 // socketService.emit(SOCKET_EMIT_SET_TOPIC, this.stationId)
                 // socketService.emit(SOCKET_EMIT_SEND_MSG, 'Hello to everyone in this room')
-
             } catch (err) {
                 console.log(err.message)
                 showErrorMsg('Could not set current station')
@@ -172,18 +168,6 @@ export default {
             } catch (err) {
                 console.log(err.message)
                 showErrorMsg('Could not remove station')
-            }
-        },
-        async getAvgImgClr() {
-            try {
-                const fac = new FastAverageColor()
-                const elImg = this.$refs.stationImg
-                const { hex } = await fac.getColorAsync(elImg)
-
-                this.setBackgroundClr(hex)
-            } catch (err) {
-                console.log(err)
-                throw new Error('cant get average color')
             }
         },
         async dislikeTrack(trackId) {
@@ -228,14 +212,22 @@ export default {
                 showErrorMsg(`Could not load tracks`)
             }
         },
-        setBackgroundClr(avgColor) {
-            const [darkerColor, darkerDarkerColor] = utilService.generateColors(avgColor)
+        async setBackgroundClr() {
+            const elImg = this.$refs.stationImg
+            try {
+                const avgColor = await utilService.getAvgImgClr(elImg)
+                const [darkerColor, darkerDarkerColor] = utilService.generateColors(avgColor)
 
-            const elTopGrad = this.$refs.topGradient
-            const elBotGrad = this.$refs.botGradient
+                const elTopGrad = this.$refs.topGradient
+                const elBotGrad = this.$refs.botGradient
 
-            elTopGrad.style.backgroundImage = `linear-gradient(to bottom, ${avgColor} 0%, ${darkerColor})`
-            elBotGrad.style.backgroundImage = `linear-gradient(to bottom, ${darkerDarkerColor} 0%, #121212 14.5rem, #121212)`
+                elTopGrad.style.backgroundImage = `linear-gradient(to bottom, ${avgColor} 0%, ${darkerColor})`
+                elBotGrad.style.backgroundImage = `linear-gradient(to bottom, ${darkerDarkerColor} 0%, #121212 14.5rem, #121212)`
+                eventBus.emit('backgroungColor', darkerDarkerColor)
+            }
+            catch (err) {
+                console.log(err.message)
+            }
         },
         setTracksTotalDuration() {
             this.tracksTotalDuration = this.station.tracks?.reduce((sum, track) => sum = sum + track.formalDuration, 0)
@@ -270,7 +262,7 @@ export default {
         setViewedStationAsCurrent() {
             // Without this condition, tracks will be always resetting as we set the current station to be the viewed station.
             // This condition solved the track youtube ids problem
-            if(this.station !== this.currStation) {
+            if (this.station !== this.currStation) {
                 // const station = JSON.parse(JSON.stringify(this.station))
                 // this.$store.commit({ type: 'setCurrStation', station })
                 this.$store.commit({ type: 'setCurrStation', station: this.station })
@@ -285,15 +277,15 @@ export default {
             })
             this.topicUsers = topicUsers
         },
-        // scrollDown() {
-        //     this.$refs.stationDetails.scrollTop = this.$refs.stationDetails.scrollHeight
-        // }
     },
 
     watch: {
         stationId() {
             if (!this.stationId) return
             this.loadStation()
+            setTimeout(() => {
+                this.$refs.stationDetails.scrollTop = 0
+            }, 500)
         },
     },
     components: {

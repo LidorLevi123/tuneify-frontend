@@ -2,6 +2,7 @@ import { stationService } from '../services/station.service'
 
 export const stationStore = {
     state: {
+        isLoading: false,
         stations: [], // For now we hold all stations here until we move to backend
         stationsForHome: [],
         currStation: null,
@@ -10,6 +11,7 @@ export const stationStore = {
         searchRes: [],
     },
     getters: {
+        isLoading({ isLoading }) { return isLoading },
         libraryStations({ stations }) { return stations },
         stationsForHome({ stationsForHome }) { return stationsForHome },
         currStation({ currStation }) { return currStation },
@@ -19,6 +21,9 @@ export const stationStore = {
         searchRes({ searchRes }) { return searchRes },
     },
     mutations: {
+        setLoading(state, value) {
+            state.isLoading = value
+        },
         loadStations(state, { stations }) {
             state.stations = stations
         },
@@ -44,12 +49,12 @@ export const stationStore = {
         },
         updateStation({ stations }, { stationToSave }) {
             const idx = stations.findIndex(station => station._id === stationToSave._id)
-            if(idx === -1) return
+            if (idx === -1) return
             stations.splice(idx, 1, stationToSave)
         },
         removeStation({ stations }, { stationId }) {
             const idx = stations.findIndex(station => station._id === stationId)
-            if(idx === -1) return
+            if (idx === -1) return
             stations.splice(idx, 1)
         },
         updateTrack({ currStation, currTrackIdx }, { youtubeId }) {
@@ -57,25 +62,29 @@ export const stationStore = {
         },
         addTrack({ stations }, { trackToSave, stationId }) {
             const idx = stations.findIndex(station => station._id === stationId)
-            if(idx === -1) return
+            if (idx === -1) return
             stations[idx].tracks.push(trackToSave)
         },
         removeTrack({ stations }, { trackId, stationId }) {
             const idx = stations.findIndex(station => station._id === stationId)
-            if(idx === -1) return
+            if (idx === -1) return
             const trackIdx = stations[idx].tracks.findIndex(track => track.id === trackId)
-            if(trackIdx === -1) return
+            if (trackIdx === -1) return
             stations[idx].tracks.splice(trackIdx, 1)
         }
     },
     actions: {
         async getStationsForHome({ commit }) {
+            commit('setLoading', true)
             try {
                 const stations = await stationService.getStationsForHome()
                 commit({ type: 'setStationsForHome', stations })
             } catch (err) {
                 console.log('stationStore: Error in getStationsForHome', err)
                 throw new Error('Could not load stations for home page')
+            }
+            finally {
+                commit('setLoading', false)
             }
         },
         async getAccessToken() {
@@ -98,7 +107,7 @@ export const stationStore = {
         async saveStation({ commit }, { stationToSave }) {
             let type = stationToSave._id ? 'updateStation' : 'addStation'
             if (stationToSave.isEmpty) type = 'addStation'
-            
+
             try {
                 const station = await stationService.save(stationToSave)
                 commit({ type, stationToSave: station })

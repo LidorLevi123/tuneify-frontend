@@ -44,6 +44,8 @@
     .small-pause {
         border: none;
         background-color: transparent;
+        display: flex;
+        align-items: center;
 
         @include for-mobile-layout {
             display: none;
@@ -72,6 +74,7 @@
     .track-num {
         display: flex;
         align-items: center;
+        justify-content: center;
 
         @include for-mobile-layout {
             display: none;

@@ -2,7 +2,7 @@
     <YouTube ref="youtubePlayer" :src="currTrack?.youtubeId || ''" @state-change="onStateChange" style="display: none;" />
     <section class="main-player-container" :class="{ 'is-shown': screenWidth < 890 && currTrack }">
         <section class="track-info-container">
-            <section class="img-container">
+            <section class="img-container" @click="goToStation" :title="`Go to playlist: ${this.currStation?.name}`">
                 <img v-if="currTrack" :src="`${currTrack.imgUrl}`" alt="" @click="onSocketMessage('test')">
             </section>
             <section class="text-container">
@@ -11,9 +11,9 @@
                 </div>
             </section>
             <span v-if="!hasLiked(currTrack?.id) && currTrack" class="btn-like" v-icon="`smallLikeDis`"
-            @click="likeTrack(currTrack)"></span>
+                @click="likeTrack(currTrack)"></span>
             <span v-else-if="hasLiked(currTrack?.id) && currTrack" class="btn-dislike" v-icon="`smallLikeEna`"
-            @click="dislikeTrack(currTrack?.id)"></span>
+                @click="dislikeTrack(currTrack?.id)"></span>
             <img v-if="isPlaying" class="eq"
                 src="https://res.cloudinary.com/dmmsf57ko/image/upload/v1683729372/Song_hoitzd.gif" alt="">
         </section>
@@ -340,6 +340,10 @@ export default {
             } catch (err) {
                 console.log('Could not set track youtube id', err.message)
             }
+        },
+        goToStation() {
+            this.$router.push(`/station/${this.currStation._id}`)
+            window.scrollTo(0, 0);
         },
     },
     beforeunmount() {

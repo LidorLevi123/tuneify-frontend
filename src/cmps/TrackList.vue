@@ -1,15 +1,15 @@
 <template>
-    <section class="track-list">
+    <section class="track-list-container">
 
-        <div v-show="station" class="list-header track-preview-layout">
+        <div v-show="station" class="list-header track-preview-layout" :class="{ 'is-sticky': scrollPosition > 450 }">
             <span>#</span>
             <span>Title</span>
             <span class="mq">Album</span>
             <span class="mq">Date added</span>
             <span v-icon="'clock'"></span>
         </div>
-        <hr v-show="station" />
-        <ul v-if="station?.tracks.length" class="clean-list" @touchend="fixActionRestriction">
+        <ul v-if="station?.tracks.length" class="clean-list track-list" @touchend="fixActionRestriction">
+            <hr v-show="station" />
             <Container dragClass="dragging" @drop="onDrop" :animation-duration="100" drag-class="dragged-item">
                 <Draggable v-for="(track, idx) in station.tracks" :key="track.id">
                     <li :class="`track-${track.id}`" @click="onTrackClicked(idx)">
@@ -46,10 +46,12 @@ export default {
 
     data() {
         return {
+            scrollPosition: null
         }
     },
     created() {
         socketService.on(SOCKET_EMIT_TRACK_DRAGGED, this.onTrackDragged)
+        eventBus.on('handleScroll', this.logScroll)
     },
     computed: {
         canShowSearch() {
@@ -144,6 +146,9 @@ export default {
         },
         onPlayTrack(track) {
             eventBus.emit('trackPlay', track)
+        },
+        logScroll({ scrollTop }) {
+            this.scrollPosition = scrollTop
         },
     },
 

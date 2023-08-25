@@ -1,4 +1,5 @@
 import categoriesJson from '../data/categories.json' assert {type: 'json'}
+import { FastAverageColor } from 'fast-average-color'
 
 export const utilService = {
     makeId,
@@ -10,7 +11,8 @@ export const utilService = {
     loadFromStorage,
     getRandomColor,
     generateColors,
-    getCategoriesJson
+    getCategoriesJson,
+    getAvgImgClr
 }
 
 function getCategoriesJson() {
@@ -57,8 +59,8 @@ function randomPastTime() {
 function debounce(func, timeout = 300) {
     let timer
     return (...args) => {
-      clearTimeout(timer)
-      timer = setTimeout(() => { func.apply(this, args) }, timeout)
+        clearTimeout(timer)
+        timer = setTimeout(() => { func.apply(this, args) }, timeout)
     }
 }
 
@@ -87,7 +89,7 @@ function generateColors(hexColor) {
     const r = parseInt(hexColor.substring(1, 3), 16)
     const g = parseInt(hexColor.substring(3, 5), 16)
     const b = parseInt(hexColor.substring(5, 7), 16)
-  
+
     // Calculate the darker colors by reducing the RGB values by 23%
     const darkerR = Math.floor(r * 0.77)
     const darkerG = Math.floor(g * 0.77)
@@ -95,20 +97,31 @@ function generateColors(hexColor) {
     const darkerDarkerR = Math.floor(darkerR * 0.77)
     const darkerDarkerG = Math.floor(darkerG * 0.77)
     const darkerDarkerB = Math.floor(darkerB * 0.77)
-  
+
     // Format the RGB values as hexadecimal color codes
     const darkerColor = "#" + _componentToHex(darkerR) + _componentToHex(darkerG) + _componentToHex(darkerB)
     const darkerDarkerColor = "#" + _componentToHex(darkerDarkerR) + _componentToHex(darkerDarkerG) + _componentToHex(darkerDarkerB)
 
     return [darkerColor, darkerDarkerColor]
-  }
-  
-  function _componentToHex(c) {
+}
+
+function _componentToHex(c) {
     const hex = c.toString(16)
     return hex.length === 1 ? "0" + hex : hex
-  }
-  
+}
 
 
-  
- 
+async function getAvgImgClr(imageRef) {
+    try {
+        const fac = new FastAverageColor()
+        const { hex } = await fac.getColorAsync(imageRef)
+        return hex
+    } catch (err) {
+        console.log(err)
+        throw new Error('cant get average color')
+    }
+
+}
+
+
+

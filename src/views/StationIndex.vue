@@ -2,7 +2,8 @@
     <section class="station-main-container">
         <Nav />
         <MainHeader :station="station" />
-        <RouterView class="RouterView" @scroll="handleScroll" @station="setStation"/>
+        <Loader v-if="isLoading" />
+        <RouterView class="RouterView" @scroll="handleScroll" @station="setStation" v-else />
         <Player />
     </section>
 </template>
@@ -11,6 +12,7 @@
 import Player from '../cmps/Player.vue'
 import Nav from '../cmps/Nav.vue'
 import MainHeader from '../cmps/MainHeader.vue'
+import Loader from '../cmps/Loader.vue'
 import { eventBus } from '../services/event-bus.service'
 
 export default {
@@ -29,10 +31,16 @@ export default {
             this.station = station
         }
     },
+    computed: {
+        isLoading() {
+            return this.$store.getters.isLoading
+        },
+    },
     components: {
         Player,
         Nav,
-        MainHeader
+        MainHeader,
+        Loader
     }
 }
 </script>

@@ -29,7 +29,7 @@ async function query(userId) {
 
 async function getById(stationId) {
     let station = await httpService.get(BASE_URL + stationId)
-    
+
     if (!station) {
         station = await spotifyService.getSpotifyItems({ type: 'station', id: stationId })
         station = await httpService.post(BASE_URL, station)
@@ -69,7 +69,7 @@ async function removeTrack(trackId, stationId) {
 }
 
 async function getCategoryStations(categoryId) {
-    const stations = await spotifyService.getSpotifyItems({ type: 'categoryStations', id: categoryId} )
+    const stations = await spotifyService.getSpotifyItems({ type: 'categoryStations', id: categoryId })
     return stations
 }
 
@@ -79,24 +79,31 @@ async function getAccessToken() {
 
 async function getStationsForHome() {
     const categories = [
+        // { id: '0JQ5DAqbMKFRKBHIxJ5hMm', name: 'Tastemakers' },
         { id: '0JQ5DAqbMKFEC4WFtoNRpw', name: 'Pop' },
         { id: '0JQ5DAqbMKFAXlCG6QvYQ4', name: 'Workout' },
         { id: '0JQ5DAqbMKFIVNxQgRNSg0', name: 'Decades' },
         { id: '0JQ5DAqbMKFPrEiAOxgac3', name: 'Classical' },
-        { id: '0JQ5DAqbMKFRKBHIxJ5hMm', name: 'Tastemakers' },
         { id: '0JQ5DAqbMKFLVaM30PMBm4', name: 'Summer' },
         { id: '0JQ5DAqbMKFCfObibaOZbv', name: 'Gaming' },
         { id: '0JQ5DAqbMKFAQy4HL4XU2D', name: 'Travel' },
+        { id: '0JQ5DAqbMKFQIL0AXnG5AK', name: 'Trending' },
+        { id: 'toplists', name: 'Top Lists' },
     ]
 
     const res = []
-    
+
     for (let i = 0; i < categories.length; i++) {
-        let stations = await spotifyService.getSpotifyItems({type: 'categoryStations', id: categories[i].id} )
-        stations = stations?.map(station => ({ ...station, category: categories[i].name }))
-        res.push(...stations)
+        try {
+            let stations = await spotifyService.getSpotifyItems({ type: 'categoryStations', id: categories[i].id })
+            stations = stations?.map(station => ({ ...station, category: categories[i].name }))
+            res.push(...stations)
+        } catch (err) {
+            console.log(err)
+        }
+
     }
-    
+
     return res
 }
 

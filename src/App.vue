@@ -27,22 +27,37 @@ export default {
       console.log('Something went wrong at App', err.message)
     }
   },
+  methods: {
+    updateDocumentTitle() {
+      if (this.isPlaying) document.title = `${this.currTrack.title} • ${this.currTrack.artists[0]}`;
+      else if (this.currStation) document.title = `${this.currStation.name} | Tuneify`
+      else document.title = 'Tuneify'
+    }
+  },
   computed: {
     currTrack() {
       return this.$store.getters.currTrack
+    },
+    currStation() {
+      return this.$store.getters.currStation
+    },
+    isPlaying() {
+      return this.$store.getters.isCurrTrackPlaying
     }
   },
 
   watch: {
+    isPlaying: {
+      immediate: true,
+      handler() {
+        this.updateDocumentTitle()
+      }
+    },
     currTrack: {
       immediate: true,
-      handler(newTrack, oldTrack) {
-        if (newTrack) {
-          document.title = `${newTrack.title} • ${newTrack.artists[0]}`
-        } else {
-          document.title = 'Tuneify'
-        }
-      },
+      handler() {
+        this.updateDocumentTitle()
+      }
     }
   },
 

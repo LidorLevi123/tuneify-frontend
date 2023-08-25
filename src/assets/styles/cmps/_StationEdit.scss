@@ -7,6 +7,10 @@
     background-color: #282828;
     border-radius: 0.5rem;
 
+    @include for-mobile-layout {
+        width: 85%;
+    }
+
     header {
         display: flex;
         justify-content: space-between;
@@ -40,6 +44,11 @@
         grid-template: 2rem 8.25rem 2rem auto/11.25rem 17.5rem;
         grid-gap: 1rem;
         padding: 0 1.5rem 1.5rem;
+
+        @include for-mobile-layout {
+            display: flex;
+            flex-direction: column;
+        }
     }
 
     .album-image,
@@ -62,6 +71,10 @@
         border: none;
         border-radius: 0.2rem;
         outline: none;
+
+        @include for-mobile-layout {
+            height: 2rem;
+        }
 
         &:focus {
             border: 1px solid lightgrey;
@@ -117,6 +130,10 @@
         grid-row: 4;
         grid-column: 1 / span 2;
         color: white;
+
+        @include for-mobile-layout {
+            display: none;
+        }
     }
 
     display: none;

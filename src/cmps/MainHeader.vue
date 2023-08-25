@@ -1,5 +1,5 @@
 <template>
-    <section class="main-header" :style="{ backgroundColor: this.scrollPosition > 50 ? '#121212' : 'transparent' }">
+    <section class="main-header" :style="{ backgroundColor: headerBgColor }">
         <button @click="goBack" v-icon="`navBack`" class="nav-btn" title="Go back"></button>
         <button @click="goNext" v-icon="`navNext`" class="nav-btn" title="Go forward"></button>
         <button v-icon="'mPlay'" v-if="showPlay" class="play-btn-header" @click="playStation(currTrackIdx)"
@@ -41,11 +41,13 @@ export default {
     data() {
         return {
             query: '',
-            scrollPosition: null
+            scrollPosition: null,
+            backgroundColor: '#121212'
         }
     },
     created() {
         eventBus.on('handleScroll', this.logScroll)
+        eventBus.on('backgroungColor', this.setBackgroundClr)
 
         this.search = utilService.debounce(() => {
             eventBus.emit('search', this.query)
@@ -62,6 +64,9 @@ export default {
         },
         logScroll({ scrollTop }) {
             this.scrollPosition = scrollTop
+        },
+        setBackgroundClr(color) {
+            this.backgroundColor = color
         },
         playStation(trackIdx) {
             trackIdx = trackIdx === -1 ? 0 : trackIdx
@@ -106,9 +111,17 @@ export default {
         },
         showPause() {
             return this.$route.path.startsWith('/station/') && this.isPlaying
+        },
+        headerBgColor() {
+            return this.$route.path.startsWith('/station/')
+                ? this.scrollPosition > 325 ? this.backgroundColor : 'transparent'
+                : this.scrollPosition > 50 ? this.backgroundColor : 'transparent'
         }
     },
-
+    beforeUnmount() {
+        eventBus.off('handleScroll', this.logScroll)
+        eventBus.off('backgroungColor', this.setBackgroundClr)
+    },
     watch: {
         query: {
             handler() {

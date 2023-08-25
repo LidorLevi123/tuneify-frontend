@@ -1,4 +1,16 @@
 .home-page {
+    border-radius: 0.5rem;
+    overflow-x: hidden;
+
+    @include for-mobile-layout {
+        border-radius: 0;
+        margin-block-end: 3.5rem;
+    }
+
+    .stations-container {
+        padding: 1.5rem;
+    }
+
     h1 {
         font-size: 1.5rem;
         font-family: CircularSpTitle;
@@ -7,13 +19,8 @@
         margin-block-end: 1rem;
     }
 
-    border-radius: 0.5rem;
-    background-image: linear-gradient(to bottom, #212121 0%, #121212 25%, #121212 25%, #121212 100%);
-    padding: 1.5rem;
-    overflow: auto;
 
-    @include for-mobile-layout {
-        border-radius: 0;
-        margin-block-end: 3.5rem;
-    }
+
+
+
 }

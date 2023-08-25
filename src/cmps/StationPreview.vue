@@ -1,8 +1,8 @@
 <template>
-    <article @click="goToDetails(station._id)"
+    <article @click="goToDetails(station._id)" @mouseover="emitAvgImgClr()"
         :class="{ 'main-preview-container': !horizontalDesign, 'main-preview-container-hor': horizontalDesign }">
         <div class="prev-img-container">
-            <img :src="`${station.imgUrl}`" alt="">
+            <img crossorigin="anonymous" :src="`${station.imgUrl}`" alt="" ref="stationImg">
             <button v-if="!isStationPlaying" @click="onPlayStation" class="play-btn" v-icon="'mPlay'"></button>
             <button v-else @click="pauseTrack" class="play-btn pause-btn" v-icon="'pause'"></button>
         </div>
@@ -14,6 +14,7 @@
 <script>
 import { eventBus } from '../services/event-bus.service'
 import { stationService } from '../services/station.service'
+import { utilService } from '../services/util.service'
 
 export default {
     name: 'StationPreview',
@@ -52,7 +53,14 @@ export default {
             this.$store.commit({ type: 'setCurrStation', station })
             this.$store.commit({ type: 'setCurrTrackIdx', trackIdx: 0 })
             eventBus.emit('trackClicked')
-        }
+        },
+        async emitAvgImgClr() {
+            if (this.horizontalDesign) {
+                const hex = await utilService.getAvgImgClr(this.$refs.stationImg)
+                eventBus.emit('changeBgColor', hex)
+                eventBus.emit('backgroungColor', hex)
+            }
+        },
     },
 }
 
