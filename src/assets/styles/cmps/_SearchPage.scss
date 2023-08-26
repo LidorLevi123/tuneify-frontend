@@ -1,15 +1,21 @@
 .categories-container {
     border-radius: 0.5rem;
     background-color: $clr4;
-    padding-inline-start: 1.4rem;
     overflow-y: auto;
 
-    .list {
-        margin-block-start: 5.5rem;
+    .track-list {
+        padding: 5rem 0 0 1.4rem;
 
         @include for-mobile-layout {
-            margin: 0;
+            padding: 5rem 0 0 0;
         }
+
+    }
+
+    .categories-list {
+        margin-block-start: 5.5rem;
+        padding-inline-start: 1.4rem;
+
 
         .browse {
             color: $clr2;

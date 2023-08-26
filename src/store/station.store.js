@@ -142,7 +142,7 @@ export const stationStore = {
             }
             try {
                 const res = await stationService.getSearchRes(query)
-                commit({ type: 'setSearchRes', res: res.tracks })
+                commit({ type: 'setSearchRes', res: res })
             } catch (err) {
                 console.log(err.message)
                 throw new Error('Could not get tracks')

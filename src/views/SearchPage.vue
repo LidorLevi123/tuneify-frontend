@@ -1,9 +1,9 @@
 <template>
   <section class="categories-container">
-    <div class="list" v-if="tracks?.length">
-      <TrackList :tracks="tracks" />
+    <div class="track-list" v-if="tracks?.length">
+      <TrackList :tracks="tracks" @track-clicked="emitClick" />
     </div>
-    <div class="list" v-else>
+    <div class="categories-list" v-else>
       <h2 class="browse">Browse all</h2>
       <CategoryList :categories="categories" />
     </div>
@@ -41,12 +41,21 @@ export default {
         showErrorMsg(`Could not load tracks`)
       }
     },
+    emitClick(trackIdx) {
+      const station = this.searchResStation
+      this.$store.commit({ type: 'setCurrStation', station })
+      this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
+      eventBus.emit('trackClicked')
+    }
   },
 
   computed: {
     tracks() {
+      return this.$store.getters.searchRes.tracks
+    },
+    searchResStation() {
       return this.$store.getters.searchRes
-    }
+    },
   },
 
   components: {

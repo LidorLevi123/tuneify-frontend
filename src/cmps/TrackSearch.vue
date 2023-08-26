@@ -14,7 +14,7 @@
             <button @click="toggleModal" class="close-btn" v-icon="`bClose`"></button>
         </section>
         <button v-if="!modalOpen" @click="toggleModal" class="find-btn">Find more</button>
-        <SearchList  :tracks="tracks" v-if="modalOpen" :station="station" @track-add="onAddTrack" />
+        <SearchList :tracks="tracks" v-if="modalOpen" :station="station" @track-add="onAddTrack" />
     </section>
 </template>
 
@@ -37,7 +37,7 @@ export default {
 
     computed: {
         tracks() {
-            return this.$store.getters.searchRes
+            return this.$store.getters.searchRes.tracks
         }
     },
 

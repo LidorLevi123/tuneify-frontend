@@ -22,7 +22,7 @@
         <TrackSearch v-if="canShowSearch && station" @search="onLoadTracks" @track-add="onAddTrack" :station="station" />
 
         <ul v-if="tracks?.length" class="clean-list">
-            <li v-for="(track, idx) in tracks" :key="track.id" @click="onPlayTrack(track)">
+            <li v-for="(track, idx) in tracks" :key="track.id" @click="onTrackClicked(idx)">
                 <TrackPreview @track-add="onAddTrack" :track="track" :trackIdx="idx" />
             </li>
         </ul>

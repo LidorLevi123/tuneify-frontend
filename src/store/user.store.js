@@ -10,10 +10,10 @@ export const userStore = {
     getters: {
         users({ users }) { return users },
         loggedinUser({ loggedinUser }) { return loggedinUser },
-        usersExcludeMe({users, loggedinUser}) {
+        usersExcludeMe({ users, loggedinUser }) {
             return users.filter(u => u._id !== loggedinUser._id)
         },
-        usersIsLoading({isLoading}) {
+        usersIsLoading({ isLoading }) {
             return isLoading
         }
     },
@@ -53,7 +53,7 @@ export const userStore = {
         async signup({ commit }, { userCred }) {
             try {
                 const user = await userService.signup(userCred)
-                if(!user) return
+                if (!user) return
                 commit({ type: 'setLoggedinUser', user })
                 return user
             } catch (err) {
@@ -72,16 +72,16 @@ export const userStore = {
             }
         },
         async loadUsers({ commit }) {
-            commit({type: 'setIsLoading', isLoading: true})
+            commit({ type: 'setIsLoading', isLoading: true })
             try {
                 const users = await userService.getUsers()
                 commit({ type: 'setUsers', users })
-                commit({type: 'setIsLoading', isLoading: false})
+                commit({ type: 'setIsLoading', isLoading: false })
             } catch (err) {
                 console.log('userStore: Error in loadUsers', err)
                 throw err
             }
-        },        
+        },
         async removeUser({ commit }, { userId }) {
             try {
                 await userService.remove(userId)
@@ -95,7 +95,7 @@ export const userStore = {
             try {
                 user = await userService.update(user)
                 commit({ type: 'setUser', user })
-                if(state.loggedinUser._id === user._id) {
+                if (state.loggedinUser._id === user._id) {
                     commit({ type: 'setLoggedinUser', user })
                 }
             } catch (err) {
@@ -104,8 +104,8 @@ export const userStore = {
             }
         },
         async updateUserStations({ commit, state }, { stationId, action }) {
-            // const id = state.loggedinUser.stationIds.find(id => id === stationId)
-            // if(id) return
+            const id = state.loggedinUser.stationIds.find(id => id === stationId)
+            if (id) return
             try {
                 const user = await userService.updateUserStations(state.loggedinUser, stationId, action)
                 commit({ type: 'setUser', user })

@@ -51,7 +51,11 @@ async function save(station) {
 
 async function getSearchRes(query) {
     const res = await spotifyService.getSpotifyItems({ type: 'search', query })
-    return res
+    const resultsStation = getEmptyStation()
+    resultsStation.name = 'searchResStation'
+    resultsStation.isEmpty = false
+    resultsStation.tracks = res.tracks
+    return resultsStation
 }
 
 async function saveTrack(track, stationId) {

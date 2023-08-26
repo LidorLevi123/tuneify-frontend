@@ -28,6 +28,10 @@ $heart-scale: 1.1;
     label {
         cursor: pointer;
         transform: translate(-90px, 18px);
+
+        @include for-mobile-layout {
+            transform: translate(-102px, 22px);
+        }
     }
 
     .bubbling-heart {
