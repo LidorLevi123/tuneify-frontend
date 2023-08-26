@@ -223,7 +223,7 @@ export default {
 
                 elTopGrad.style.backgroundImage = `linear-gradient(to bottom, ${avgColor} 0%, ${darkerColor})`
                 elBotGrad.style.backgroundImage = `linear-gradient(to bottom, ${darkerDarkerColor} 0%, #121212 14.5rem, #121212)`
-                eventBus.emit('backgroungColor', darkerDarkerColor)
+                eventBus.emit('backgroundColor', darkerDarkerColor)
             }
             catch (err) {
                 console.log(err.message)

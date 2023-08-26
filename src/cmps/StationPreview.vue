@@ -58,7 +58,7 @@ export default {
             if (this.horizontalDesign) {
                 const hex = await utilService.getAvgImgClr(this.$refs.stationImg)
                 eventBus.emit('changeBgColor', hex)
-                eventBus.emit('backgroungColor', hex)
+                eventBus.emit('backgroundColor', hex)
             }
         },
     },
