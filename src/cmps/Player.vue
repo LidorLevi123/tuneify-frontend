@@ -157,6 +157,7 @@ export default {
         },
         async loadVideo() {
             if (this.currTrack?.youtubeId) {
+                console.log('Got yt id from storage')
                 this.elapsedTime = 0
                 this.playVideo()
                 this.broadcastTrackInfo()
@@ -164,6 +165,7 @@ export default {
             }
             // get youtubeId from YT
             try {
+                console.log('Sending request to yt id...')
                 const term = this.currTrack.title + ' ' + this.currTrack.artists[0]
                 const youtubeId = await ytService.queryYT(term)
                 // const youtubeId = this.getDemoYoutubeId()
@@ -328,6 +330,7 @@ export default {
         async playTrack(track) {
             // get youtubeId from YT
             try {
+                console.log('Sending request to yt id...')
                 const term = track.title + ' ' + track.artists[0]
                 const youtubeId = await ytService.queryYT(term)
                 // const youtubeId = this.getDemoYoutubeId()
