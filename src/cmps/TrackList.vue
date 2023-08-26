@@ -73,7 +73,7 @@ export default {
             document.body.classList.remove(
                 "smooth-dnd-no-user-select",
                 "smooth-dnd-disable-touch-action"
-            );
+            )
         },
         onDrop(dropResult) {
             this.applyDrag(dropResult, false)
@@ -116,8 +116,6 @@ export default {
                     }
                 }
                 this.$emit('station-update')
-
-                console.log('tracks on DnD', updatedStation.tracks)
             } catch (err) {
                 console.log(err.message)
             }
