@@ -47,7 +47,7 @@ export default {
     },
     created() {
         eventBus.on('handleScroll', this.logScroll)
-        eventBus.on('backgroungColor', this.setBackgroundClr)
+        eventBus.on('backgroundColor', this.setBackgroundClr)
 
         this.search = utilService.debounce(() => {
             eventBus.emit('search', this.query)
@@ -120,7 +120,7 @@ export default {
     },
     beforeUnmount() {
         eventBus.off('handleScroll', this.logScroll)
-        eventBus.off('backgroungColor', this.setBackgroundClr)
+        eventBus.off('backgroundColor', this.setBackgroundClr)
     },
     watch: {
         query: {

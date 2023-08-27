@@ -68,7 +68,6 @@ export default {
         },
         async handleFile(ev) {
             const { url } = await uploadService.uploadImg(ev)
-            console.log(url)
             this.stationToEdit.imgUrl = url
         }
     },
