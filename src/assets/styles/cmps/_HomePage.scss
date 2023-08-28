@@ -9,14 +9,32 @@
 
     .stations-container {
         padding: 1.5rem;
+
+        @include for-mobile-layout {
+            padding: 2rem 0.5rem 0.5rem;
+        }
+
+        h2 {
+            color: $clr2;
+            margin-block: 3rem 1rem;
+            font-size: 2rem;
+        }
     }
 
     h1 {
+        &:first-of-type {
+            display: none;
+        }
+
         font-size: 1.5rem;
         font-family: CircularSpTitle;
         color: $clr2;
         margin-block-start: 3rem;
         margin-block-end: 1rem;
+
+        @include for-mobile-layout {
+            margin-block-start: 1.5rem;
+        }
     }
 
 

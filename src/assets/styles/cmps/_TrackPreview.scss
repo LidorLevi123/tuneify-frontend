@@ -4,6 +4,7 @@
 
     @include for-mobile-layout {
         grid-template-columns: 9fr 2fr 2fr;
+        column-gap: 0;
     }
 
     column-gap: 1rem;
@@ -69,6 +70,10 @@
         height: 2.5rem;
         width: 2.5rem;
         margin-inline-end: 1rem;
+
+        @include for-mobile-layout {
+            margin-inline-end: .5rem;
+        }
     }
 
     .track-num {
@@ -111,6 +116,7 @@
         .track-info-container {
             overflow: hidden;
 
+            .track-artist,
             .track-name,
             .artist-name {
                 color: $clr2;

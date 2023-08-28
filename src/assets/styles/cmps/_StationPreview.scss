@@ -7,9 +7,11 @@
     transition: ease-in-out 0.3s;
 
     @include for-mobile-layout {
-        height: 240px;
+        // height: 240px;
         width: 140px;
-
+        padding: 0;
+        border-radius: 0;
+        background-color: transparent;
     }
 
     &:hover {
@@ -23,6 +25,11 @@
         margin-block-end: 0.9rem;
         border-radius: 0.5rem;
         box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+
+        @include for-mobile-layout {
+            border-radius: 0;
+            margin-block-end: 0.3rem;
+        }
     }
 
     h4 {
@@ -32,6 +39,10 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+
+        @include for-mobile-layout {
+            display: none;
+        }
     }
 
     span {
@@ -43,6 +54,11 @@
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
+
+        @include for-mobile-layout {
+            font-size: 0.6rem;
+            line-height: 1.4;
+        }
     }
 
     .play-btn {
@@ -102,11 +118,15 @@
     position: relative;
     background-color: #2a2a2a5d;
     display: flex;
-    height: 80px;
+    // height: 80px;
     gap: 1rem;
     align-items: center;
     border-radius: 0.2rem;
     cursor: pointer;
+
+    @include for-mobile-layout {
+        gap: .5rem;
+    }
 
     &:hover {
         background-color: #4141418a;
@@ -116,9 +136,13 @@
         margin: 0;
         padding-bottom: 0.1rem;
         color: $clr2;
+
         // overflow: hidden;
         // text-overflow: ellipsis;
         // white-space: nowrap;
+        @include for-mobile-layout {
+            font-size: .6rem;
+        }
     }
 
     span {
@@ -126,12 +150,17 @@
     }
 
     img {
+
         border-top-left-radius: 0.2rem;
         border-bottom-left-radius: 0.2rem;
         height: 80px;
-        max-width: 100%;
+        max-width: 90px;
         display: block;
         box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+
+        @include for-mobile-layout {
+            height: 2.5rem;
+        }
     }
 
     .play-btn {

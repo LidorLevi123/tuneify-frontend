@@ -7,21 +7,20 @@
     min-width: 372px;
 
     @include for-mobile-layout {
-
         display: flex;
         flex-wrap: nowrap;
         overflow-x: auto;
-        gap: 1.5rem;
+        gap: 0.8rem;
         -webkit-overflow-scrolling: touch;
 
         &::-webkit-scrollbar {
             display: none;
         }
 
-        >* {
-            height: 14rem;
-            width: 10rem;
-        }
+        // >* {
+        //     height: 14rem;
+        //     width: 10rem;
+        // }
     }
 
 }
@@ -33,4 +32,8 @@
     grid-gap: 1rem 1.5rem;
     grid-template: auto/repeat(auto-fill, minmax(max(16.875rem, 25%), 1fr));
 
+    @include for-mobile-layout {
+        grid-gap: .5rem .5rem;
+        grid-template: auto/repeat(auto-fill, minmax(max(8.875rem, 25%), 1fr));
+    }
 }

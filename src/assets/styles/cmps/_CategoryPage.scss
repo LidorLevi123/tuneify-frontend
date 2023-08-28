@@ -4,6 +4,8 @@
     padding: 1.5rem;
     height: 100%;
     overflow: auto;
+    overflow-x: hidden;
+    width: 100%;
 
     h1 {
         margin-block-start: 11rem;
@@ -13,7 +15,8 @@
         color: $clr2;
 
         @include for-mobile-layout {
-            margin: 0;
+            margin-block-start: 5rem;
+            font-size: 2rem;
         }
     }
 }

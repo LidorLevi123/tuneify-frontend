@@ -1,6 +1,7 @@
 <template>
   <section v-if="stations" class="container home-page text-center">
     <div class="stations-container" :style="this.backgroundStyle">
+      <h2 v-if="loggedinUser">{{ greeting }}, {{ loggedinUser }}</h2>
       <StationList :stations="summerStations" :horizontalDesign="true" />
       <StationList :stations="toplistsStations" />
       <StationList :stations="trendingStations" />
@@ -24,7 +25,8 @@ export default {
   data() {
     return {
       maxStations: null,
-      backgroundColor: '#212121'
+      backgroundColor: '#212121',
+      currentTime: new Date()
     }
   },
   mounted() {
@@ -58,7 +60,7 @@ export default {
       return this.stations.filter(station => station.category === 'Tastemakers').slice(0, this.maxStations)
     },
     summerStations() {
-      return this.stations.filter(station => station.category === 'Summer')
+      return this.stations.filter(station => station.category === 'Summer').slice(0, 6)
     },
     gamingStations() {
       return this.stations.filter(station => station.category === 'Gaming').slice(0, this.maxStations)
@@ -72,11 +74,20 @@ export default {
     toplistsStations() {
       return this.stations.filter(station => station.category === 'Top Lists').slice(0, this.maxStations)
     },
-
     backgroundStyle() {
       return {
         backgroundImage: `linear-gradient(to bottom, ${this.backgroundColor} 0%, #121212 33rem, #121212)`,
       }
+    },
+    greeting() {
+      const currentHour = this.currentTime.getHours()
+
+      if (currentHour >= 5 && currentHour < 12) return 'Good morning'
+      else if (currentHour >= 12 && currentHour < 18) return 'Good afternoon'
+      else return 'Good evening'
+    },
+    loggedinUser() {
+      return this.$store.getters.loggedinUser.fullname
     }
   },
   methods: {
