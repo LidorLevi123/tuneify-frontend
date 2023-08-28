@@ -23,8 +23,13 @@
                 margin-inline-start: 0.5rem;
                 display: flex;
                 align-self: center;
+
+                &.filter {
+                    filter: brightness(0.5)
+                }
             }
 
+            .small-pause,
             .icon {
                 position: absolute;
                 top: 0.75rem;
@@ -34,6 +39,11 @@
                     fill: #FFFFFF;
                 }
             }
+
+            .small-pause {
+                top: 0.6rem;
+                left: 1.25rem;
+            }
         }
     }
 
@@ -42,6 +52,10 @@
 
         .track-name {
             color: $clr2;
+
+            &.isGreen {
+                color: $clr9;
+            }
         }
 
         .artist-name {

@@ -3,15 +3,18 @@
 
         <div class="mini-prev">
             <section class="img-container">
-                <img :src="`${track.imgUrl}`" alt="">
+                <img :src="`${track.imgUrl}`" alt="" :class="{ 'filter': isHovered }">
+                <span v-if="isHovered && !this.isTrackPlaying" v-icon="`play`" title="Play"></span>
+                <span v-else-if="isHovered && this.isTrackPlaying" class="small-pause" v-icon="`pause`"
+                    title="Pause"></span>
             </section>
             <section class="track-info-container">
-                <div class="track-name">{{ track.title }}</div>
+                <div class="track-name" :class="{ 'isGreen': this.isTrackPlaying }">{{ track.title }}</div>
                 <div class="artist-name">{{ track.artists[0] }}</div>
             </section>
         </div>
         <span class="track-album">{{ track.album }}</span>
-        <button class="add-btn" @click="onAddTrack(track, station?._id)">Add</button>
+        <button class="add-btn" @click.stop="onAddTrack(track, station?._id)">Add</button>
     </article>
 </template>
 
@@ -37,7 +40,16 @@ export default {
         onAddTrack(track, stationId) {
             this.$emit('track-add', track, stationId)
         },
+    },
+    computed: {
+        isTrackPlaying() {
+            return this.$store.getters.isCurrTrackPlaying && this.track?.id === this.currTrack?.id
+        },
+        currTrack() {
+            return this.$store.getters.currTrack
+        },
     }
+
 }
 
 </script>

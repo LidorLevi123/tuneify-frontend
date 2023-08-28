@@ -113,9 +113,13 @@ export default {
             return this.$route.path.startsWith('/station/') && this.isPlaying
         },
         headerBgColor() {
-            return this.$route.path.startsWith('/station/')
-                ? this.scrollPosition > 325 ? this.backgroundColor : 'transparent'
-                : this.scrollPosition > 50 ? this.backgroundColor : 'transparent'
+            if (this.$route.path.startsWith('/station/')) {
+                return this.scrollPosition > 325 ? this.backgroundColor : 'transparent';
+            } else if (this.$route.path.startsWith('/search/')) {
+                return this.scrollPosition > 50 ? '#121212' : 'transparent';
+            } else {
+                return this.scrollPosition > 50 ? this.backgroundColor : 'transparent';
+            }
         }
     },
     beforeUnmount() {

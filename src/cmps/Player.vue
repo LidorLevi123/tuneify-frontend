@@ -342,8 +342,11 @@ export default {
             }
         },
         goToStation() {
-            this.$router.push(`/station/${this.currStation._id}`)
-            window.scrollTo(0, 0);
+            if (this.currStation._id) {
+                this.$router.push(`/station/${this.currStation._id}`)
+                window.scrollTo(0, 0)
+            }
+            else this.$router.push(`/search`)
         },
     },
     beforeunmount() {

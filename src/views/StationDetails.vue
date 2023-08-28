@@ -108,7 +108,7 @@ export default {
             return this.station.owner._id === this.user?._id
         },
         isPlaying() {
-            return this.$store.getters.isCurrTrackPlaying && this.station._id === this.currStation?._id
+            return this.$store.getters.isCurrTrackPlaying //&& this.station._id === this.currStation?._id
         },
         currStation() {
             return this.$store.getters.currStation
@@ -121,17 +121,22 @@ export default {
         },
         users() {
             return this.$store.getters.users
-        }
+        },
+        searchResStation() {
+            return this.$store.getters.searchRes
+        },
     },
 
     async created() {
         await this.loadStation()
         socketService.on(SOCKET_EVENT_SET_TOPIC_USERS, this.setTopicUsers)
         historyTracker.push(this.$route.fullPath)
+        eventBus.on('clickFromSearchRes', this.clickTrack)
     },
 
     unmounted() {
         socketService.off(SOCKET_EVENT_SET_TOPIC_USERS)
+        eventBus.off('clickFromSearchRes', this.clickTrack)
     },
 
     methods: {
@@ -236,13 +241,14 @@ export default {
             if (this.station.owner.fullname !== this.user.fullname || this.station._id === this.user.likedId) return
             document.body.classList.add('modal-open')
         },
-        clickTrack(trackIdx) {
+        clickTrack(trackIdx, isfromSearch) {
             trackIdx = trackIdx === -1 ? 0 : trackIdx
 
             if (trackIdx === this.currTrackIdx && this.isPlaying) this.pauseTrack()
             else {
                 this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
-                this.setViewedStationAsCurrent()
+                if (isfromSearch) this.$store.commit({ type: 'setCurrStation', station: this.searchResStation })
+                else this.setViewedStationAsCurrent()
                 eventBus.emit('trackClicked')
             }
         },

@@ -42,10 +42,13 @@ export default {
       }
     },
     emitClick(trackIdx) {
-      const station = this.searchResStation
-      this.$store.commit({ type: 'setCurrStation', station })
-      this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
-      eventBus.emit('trackClicked')
+      if (trackIdx === this.currTrackIdx && this.isPlaying) eventBus.emit('trackPaused', true)
+      else {
+        const station = this.searchResStation
+        this.$store.commit({ type: 'setCurrStation', station })
+        this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
+        eventBus.emit('trackClicked')
+      }
     }
   },
 
@@ -55,6 +58,12 @@ export default {
     },
     searchResStation() {
       return this.$store.getters.searchRes
+    },
+    isPlaying() {
+      return this.$store.getters.isCurrTrackPlaying
+    },
+    currTrackIdx() {
+      return this.$store.getters.currTrackIdx
     },
   },
 
