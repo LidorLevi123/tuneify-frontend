@@ -87,7 +87,7 @@ export default {
       else return 'Good evening'
     },
     loggedinUser() {
-      return this.$store.getters.loggedinUser.fullname
+      return this.$store.getters.loggedinUser?.fullname
     }
   },
   methods: {

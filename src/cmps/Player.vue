@@ -119,6 +119,7 @@ export default {
             this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
         },
         togglePlayPause() {
+            if (!this.currTrack) return
             if (!this.$refs.youtubePlayer) return
             if (this.isPlaying) {
                 this.pauseVideo(false)
@@ -129,6 +130,7 @@ export default {
             this.broadcastTrackInfo()
         },
         async previousNextVideo(diff) {
+            if (!this.currTrack) return
             if (this.currTrackIdx === this.currStation.tracks.length - 1 && diff === 1) {
                 if (this.repeatStateIdx === 2) {
                     this.replayVideo()

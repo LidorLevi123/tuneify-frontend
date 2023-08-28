@@ -1,18 +1,17 @@
 .track-preview {
     display: grid;
     grid-template-columns: [index] 1rem [first] 6fr [var1] 4fr [var2] 3fr [last] 4rem;
-
-    @include for-mobile-layout {
-        grid-template-columns: 9fr 2fr 2fr;
-        column-gap: 0;
-    }
-
     column-gap: 1rem;
-    padding: 0 16px;
+    padding: 0 1rem;
     align-items: center;
     border: 1px solid transparent;
     border-radius: 4px;
 
+    @include for-mobile-layout {
+        grid-template-columns: 9fr 2fr auto;
+        column-gap: 0;
+        padding: 0 .5rem;
+    }
 
     .eq {
         height: 0.875rem;

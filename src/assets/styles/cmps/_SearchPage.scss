@@ -14,8 +14,11 @@
 
     .categories-list {
         margin-block-start: 5.5rem;
-        padding-inline-start: 1.4rem;
+        padding-inline: 1.5rem;
 
+        @include for-mobile-layout {
+            padding-inline: .5rem;
+        }
 
         .browse {
             color: $clr2;

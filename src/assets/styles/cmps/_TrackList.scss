@@ -69,6 +69,10 @@
 
     .track-list {
         margin-inline: 1.5rem;
+
+        @include for-mobile-layout {
+            margin: 0;
+        }
     }
 
 }
