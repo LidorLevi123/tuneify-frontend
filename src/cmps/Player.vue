@@ -11,27 +11,25 @@
                 </div>
             </section>
             <span v-if="!hasLiked(currTrack?.id) && currTrack" class="btn-like" v-icon="`smallLikeDis`"
-                @click="likeTrack(currTrack)"></span>
+                @click="likeTrack(currTrack)" title="Add to your liked tracks"></span>
             <span v-else-if="hasLiked(currTrack?.id) && currTrack" class="btn-dislike" v-icon="`smallLikeEna`"
-                @click="dislikeTrack(currTrack?.id)"></span>
+                @click="dislikeTrack(currTrack?.id)" title="Remove from your liked tracks"></span>
             <img v-if="isPlaying" class="eq"
                 src="https://res.cloudinary.com/dmmsf57ko/image/upload/v1683729372/Song_hoitzd.gif" alt="">
+            <span v-if="currTrack" @click="togglePIP" class="btn-pip" :class="{ 'is-active': pipWindow }" v-icon="`pip`"
+                title="Picture in picture"></span>
         </section>
-        <section class="player-mid-container">
+        <section class="player-mid-container" ref="playerMid">
             <section class="track-controls-container">
                 <button class="shuffle btn" @click="toggleShuffle" title="Shuffle">
                     <span v-icon="'shuffle'" :class="{ 'enabled': this.isShuffle }"></span>
                 </button>
-                <button class="previous btn" @click="previousNextVideo(-1)" title="Previous">
-                    <span v-icon="'previous'"></span>
-                </button>
+                <button v-icon="'previous'" class="previous btn" @click="previousNextVideo(-1)" title="Previous"></button>
                 <button class="play btn" @click="togglePlayPause" title="Play">
                     <span v-if="!isPlaying" v-icon="'play'"></span>
                     <span v-else v-icon="'pause'"></span>
                 </button>
-                <button class="next btn" @click="previousNextVideo(1)" title="Next">
-                    <span v-icon="'next'"></span>
-                </button>
+                <button v-icon="'next'" class="next btn" @click="previousNextVideo(1)" title="Next"></button>
                 <button class="repeat btn" @click="cycleRepeatStates" title="Repeat" :class="{
                     'no-repeat': repeatStateIdx === 0,
                     'repeat-playlist': repeatStateIdx === 1,
@@ -41,6 +39,25 @@
                     <span v-if="this.repeatStateIdx === 2" v-icon="'repeatSong'"></span>
                     <span v-else v-icon="'repeat'"></span>
                 </button>
+            </section>
+            <section v-show="pipWindow" class="pipContent" ref="pipContent"
+                style="position: relative; display: flex; justify-content: center;">
+
+                <img v-show="pipWindow" :src="`${currTrack?.imgUrl}`" alt="" style="width: 100%;">
+                <div
+                    style="justify-content: center; display: flex; height: 20%; width: 100%; position: fixed; bottom: 0px; background-color:rgba(62, 62, 62, 0.7);">
+                    <button v-icon="'previousPIP'" class="previous btn" @click="previousNextVideo(-1)" title="Previous"
+                        style="padding-inline: 1.5rem;background: transparent;border: none;">
+                    </button>
+                    <button class="play btn" @click="togglePlayPause" title="Play"
+                        style="padding-inline: 1.5rem;background: transparent;border: none;">
+                        <span v-if="!isPlaying" v-icon="'playPIP'"></span>
+                        <span v-else v-icon="'pausePIP'"></span>
+                    </button>
+                    <button v-icon="'nextPIP'" class="next btn" @click="previousNextVideo(1)" title="Next"
+                        style="padding-inline: 1.5rem;background: transparent;border: none;">
+                    </button>
+                </div>
             </section>
             <section class="playback-container">
                 <span>{{ secsToTimeFormat(elapsedTime) }}</span>
@@ -76,6 +93,7 @@ import { socketService, SOCKET_EVENT_ADD_MSG, SOCKET_EMIT_BROADCAST_TRACK } from
 export default {
     data() {
         return {
+            pipWindow: null,
             screenWidth: window.innerWidth,
             idIdx: 0,
             playbackProgressPercentage: 0,
@@ -112,14 +130,38 @@ export default {
         // sockets
         socketService.on(SOCKET_EVENT_ADD_MSG, this.onSocketMessage)
         socketService.on(SOCKET_EMIT_BROADCAST_TRACK, this.updateByBroadcast)
-
     },
     methods: {
+        async togglePIP() {
+            const eventListener = (event) => {
+                const playerContainer = this.$refs.playerMid
+                const pipPlayer = event.target.querySelector('.pipContent')
+                playerContainer.append(pipPlayer)
+                this.pipWindow = null
+            }
+
+            try {
+                if (this.pipWindow) {
+                    this.pipWindow.removeEventListener("pagehide", eventListener)
+                    this.pipWindow.close()
+                    this.pipWindow = null
+
+                } else {
+                    const player = this.$refs.pipContent
+                    this.pipWindow = await documentPictureInPicture.requestWindow({ width: 300, height: 300 })
+                    this.pipWindow.document.body.append(player)
+                    this.pipWindow.addEventListener("pagehide", eventListener)
+                }
+            } catch (err) {
+                console.log(err)
+                throw new Error
+            }
+        },
         updateCurrTrackIdx(trackIdx) {
             this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
         },
         togglePlayPause() {
-            if (!this.currTrack) return
+            if (!this.currTrack) return showSuccessMsg('Choose track or playlist to begin')
             if (!this.$refs.youtubePlayer) return
             if (this.isPlaying) {
                 this.pauseVideo(false)
@@ -386,3 +428,4 @@ export default {
     },
 }
 </script>
+

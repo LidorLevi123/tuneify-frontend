@@ -285,23 +285,24 @@
             }
         }
 
-
-        .btn-like {
-            display: flex;
-            align-items: center;
-
-            // @include for-mobile-layout {
-            //     display: none;
-            // }
-        }
-
+        .btn-pip,
+        .btn-like,
         .btn-dislike {
             display: flex;
             align-items: center;
+        }
 
-            // @include for-mobile-layout {
-            //     display: none;
-            // }
+        .btn-pip {
+            &.is-active {
+                path {
+                    fill: $clr9
+                }
+
+            }
+
+            @include for-mobile-layout {
+                display: none;
+            }
         }
 
         .eq {
