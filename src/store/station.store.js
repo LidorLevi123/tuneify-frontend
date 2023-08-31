@@ -57,8 +57,9 @@ export const stationStore = {
             if (idx === -1) return
             stations.splice(idx, 1)
         },
-        updateTrack({ currStation, currTrackIdx }, { youtubeId }) {
-            currStation.tracks[currTrackIdx].youtubeId = youtubeId
+        updateTrack({ currStation, currTrackIdx }, { youtubeId, lyrics }) {
+            if (youtubeId) currStation.tracks[currTrackIdx].youtubeId = youtubeId
+            if (lyrics) currStation.tracks[currTrackIdx].lyrics = lyrics
         },
         addTrack({ stations }, { trackToSave, stationId }) {
             const idx = stations.findIndex(station => station._id === stationId)
@@ -188,9 +189,9 @@ export const stationStore = {
                 throw new Error('Could not remove track')
             }
         },
-        async updateTrack({ commit, state }, { youtubeId }) {
+        async updateTrack({ commit, state }, { youtubeId, lyrics }) {
             try {
-                commit({ type: 'updateTrack', youtubeId })
+                commit({ type: 'updateTrack', youtubeId, lyrics })
                 await stationService.save(state.currStation)
             } catch (err) {
                 console.log(err.message)

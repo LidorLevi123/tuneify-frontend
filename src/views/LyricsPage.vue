@@ -25,11 +25,18 @@ export default {
     },
     methods: {
         async getLyrics() {
-            try {
-                const res = await lyricsService.getLyrics(this.currTrackName)
-                res === '' ? this.lyrics = 'No lyrics found' : this.lyrics = res
-            } catch (error) {
-                console.error('Error fetching lyrics:', error)
+            if (!this.currTrack.lyrics) {
+                console.log('fetching lyrics from api')
+                try {
+                    const res = await lyricsService.getLyrics(this.currTrackName)
+                    this.$store.dispatch('updateTrack', { lyrics: res })
+                    res === '' ? this.lyrics = 'No lyrics found' : this.lyrics = res
+                } catch (error) {
+                    console.error('Error fetching lyrics:', error)
+                }
+            } else {
+                console.log('fetching lyrics from storage')
+                this.lyrics = this.currTrack.lyrics
             }
         },
         async setBackgroundClr() {
