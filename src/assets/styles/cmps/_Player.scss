@@ -202,6 +202,56 @@
             display: none;
         }
 
+        .lyrics-btn {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            margin-inline-end: 1rem;
+            transition: .5s;
+
+            &.active {
+                position: relative;
+
+                &::after {
+                    content: "•";
+                    position: absolute;
+                    bottom: -1.1rem;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    color: $clr9;
+                    font-size: 1rem;
+
+                    &:hover {
+                        fill: lighten($clr9, 10%);
+                    }
+                }
+
+                svg {
+                    path {
+                        fill: $clr9;
+                    }
+                }
+
+                &:hover {
+                    svg {
+                        path {
+                            fill: $clr7;
+                            scale: 104%;
+                        }
+                    }
+                }
+            }
+
+            &:hover {
+                svg {
+                    path {
+                        fill: $clr2;
+                        scale: 104%;
+                    }
+                }
+            }
+        }
+
         .vol-slider {
             width: 5.8125rem;
         }
@@ -293,9 +343,21 @@
         }
 
         .btn-pip {
+            &:hover {
+                path {
+                    fill: $clr2
+                }
+            }
+
             &.is-active {
                 path {
                     fill: $clr9
+                }
+
+                &:hover {
+                    path {
+                        fill: $clr7;
+                    }
                 }
 
             }

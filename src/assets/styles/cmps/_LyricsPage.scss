@@ -1,0 +1,18 @@
+.lyrics-container {
+    // background-image: linear-gradient(to bottom, #212121 0%, $clr4 33rem, $clr4);
+    text-align: center;
+    overflow-x: hidden;
+    grid-column: 2;
+    color: $clr2;
+    border-radius: 0.5rem;
+
+    h1 {
+        padding-block: 4rem;
+        font-size: 2rem;
+        white-space: pre-line;
+
+        @include for-mobile-layout {
+            font-size: 1.4rem;
+        }
+    }
+}

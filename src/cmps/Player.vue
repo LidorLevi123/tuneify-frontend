@@ -73,6 +73,8 @@
                 :style="{ backgroundImage: `linear-gradient(to right, rgba(0,0,0,0) ${playbackProgressPercentage}%, rgb(77,77,77) ${playbackProgressPercentage}%)` }">
         </section>
         <section class="vol-container">
+            <span v-if="currTrack" class="lyrics-btn" v-icon="`lyrics`" title="Lyrics" @click="showLyrics"
+                :class="{ active: $route.path === '/lyrics' }"></span>
             <button class="mute btn" @click="toggleMute" title="Mute">
                 <span v-if="this.currVolume >= 66.66" v-icon="'vol1'"></span>
                 <span v-if="this.currVolume >= 33.33 && this.currVolume < 66.66" v-icon="'vol2'"></span>
@@ -132,6 +134,10 @@ export default {
         socketService.on(SOCKET_EMIT_BROADCAST_TRACK, this.updateByBroadcast)
     },
     methods: {
+        showLyrics() {
+            if (this.$route.path !== '/lyrics') this.$router.push('/lyrics')
+            else this.$router.go(-1)
+        },
         async togglePIP() {
             const eventListener = (event) => {
                 const playerContainer = this.$refs.playerMid
@@ -150,6 +156,7 @@ export default {
                     const player = this.$refs.pipContent
                     this.pipWindow = await documentPictureInPicture.requestWindow({ width: 300, height: 300 })
                     this.pipWindow.document.body.append(player)
+                    this.pipWindow.document.body.style.margin = 0
                     this.pipWindow.addEventListener("pagehide", eventListener)
                 }
             } catch (err) {

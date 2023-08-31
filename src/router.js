@@ -7,6 +7,7 @@ import CategoryPage from './views/CategoryPage.vue'
 import StationDetails from './views/StationDetails.vue'
 import LoginSignup from './views/LoginSignup.vue'
 import Sidebar from './cmps/Sidebar.vue'
+import LyricsPage from './views/LyricsPage.vue'
 
 const routes = [
   {
@@ -18,6 +19,11 @@ const routes = [
         path: '',
         name: 'HomePage',
         component: HomePage,
+      },
+      {
+        path: 'lyrics',
+        name: 'LyricsPage',
+        component: LyricsPage,
       },
       {
         path: 'search',
