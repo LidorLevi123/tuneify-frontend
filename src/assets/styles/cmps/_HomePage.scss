@@ -20,25 +20,4 @@
             font-size: 2rem;
         }
     }
-
-    h1 {
-        &:first-of-type {
-            display: none;
-        }
-
-        font-size: 1.5rem;
-        font-family: CircularSpTitle;
-        color: $clr2;
-        margin-block-start: 3rem;
-        margin-block-end: 1rem;
-
-        @include for-mobile-layout {
-            margin-block-start: 1.5rem;
-        }
-    }
-
-
-
-
-
 }

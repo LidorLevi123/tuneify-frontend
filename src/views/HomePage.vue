@@ -1,17 +1,11 @@
 <template>
   <section v-if="stations" class="container home-page text-center">
-    <div class="stations-container" :style="this.backgroundStyle">
-      <h2 v-if="loggedinUser">{{ greeting }}, {{ loggedinUser }}</h2>
-      <StationList :stations="summerStations" :horizontalDesign="true" />
-      <StationList :stations="toplistsStations" />
-      <StationList :stations="trendingStations" />
-      <StationList :stations="travelStations" />
-      <StationList :stations="workoutStations" />
-      <StationList :stations="decadesStations" />
-      <StationList :stations="popStations" />
-      <StationList :stations="tastemakersStations" />
-      <StationList :stations="classicalStations" />
-      <StationList :stations="gamingStations" />
+    <div class="stations-container" :style="backgroundStyle">
+      <h2 v-if="loggedinUser">{{ `${greeting}, ${loggedinUser}` }}</h2>
+      <div v-for="(stationGroup, idx) in stations" :key="idx">
+        <StationList :stations="idx === 0 ? stationGroup.slice(0, 6) : stationGroup.slice(0, maxStations)"
+          :horizontalDesign="idx === 0" />
+      </div>
     </div>
   </section>
 </template>
@@ -43,36 +37,6 @@ export default {
   computed: {
     stations() {
       return this.$store.getters.stationsForHome
-    },
-    popStations() {
-      return this.stations.filter(station => station.category === 'Pop').slice(0, this.maxStations)
-    },
-    workoutStations() {
-      return this.stations.filter(station => station.category === 'Workout').slice(0, this.maxStations)
-    },
-    decadesStations() {
-      return this.stations.filter(station => station.category === 'Decades').slice(0, this.maxStations)
-    },
-    classicalStations() {
-      return this.stations.filter(station => station.category === 'Classical').slice(0, this.maxStations)
-    },
-    tastemakersStations() {
-      return this.stations.filter(station => station.category === 'Tastemakers').slice(0, this.maxStations)
-    },
-    summerStations() {
-      return this.stations.filter(station => station.category === 'Summer').slice(0, 6)
-    },
-    gamingStations() {
-      return this.stations.filter(station => station.category === 'Gaming').slice(0, this.maxStations)
-    },
-    travelStations() {
-      return this.stations.filter(station => station.category === 'Travel').slice(0, this.maxStations)
-    },
-    trendingStations() {
-      return this.stations.filter(station => station.category === 'Trending').slice(0, this.maxStations)
-    },
-    toplistsStations() {
-      return this.stations.filter(station => station.category === 'Top Lists').slice(0, this.maxStations)
     },
     backgroundStyle() {
       return {

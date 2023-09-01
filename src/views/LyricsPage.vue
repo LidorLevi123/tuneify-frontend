@@ -6,8 +6,10 @@
 </template>
 
 <script>
+import historyTracker from '../services/history.service'
+import { eventBus } from '../services/event-bus.service'
 import { lyricsService } from '../services/lyrics.service'
-import { utilService } from '../services/util.service';
+import { utilService } from '../services/util.service'
 
 export default {
     name: 'LyricsPage',
@@ -20,8 +22,8 @@ export default {
     },
     created() {
         if (!this.currTrack) this.$router.push(`/`)
-    },
-    mounted() {
+        historyTracker.push(this.$route.fullPath)
+        eventBus.emit('backgroundColor', this.bgColor)
     },
     methods: {
         async getLyrics() {
@@ -35,12 +37,12 @@ export default {
                     console.error('Error fetching lyrics:', error)
                 }
             } else {
-                console.log('fetching lyrics from storage')
+                console.log('got lyrics from storage')
                 this.lyrics = this.currTrack.lyrics
             }
         },
         async setBackgroundClr() {
-            const elImg = this.currTrack.imgUrl
+            const elImg = this.currTrack?.imgUrl
             const color = await utilService.getAvgImgClr(elImg)
             this.bgColor = color
         },

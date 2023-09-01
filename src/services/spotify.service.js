@@ -44,7 +44,7 @@ async function getSpotifyItems(req) {
 
 function _getEndpoints(id, query) {
     return {
-        categoryStations: `https://api.spotify.com/v1/browse/categories/${id}/playlists?country=il&limit=9`,
+        categoryStations: `https://api.spotify.com/v1/browse/categories/${id}/playlists?country=il&limit=50`,
         station: `https://api.spotify.com/v1/playlists/${id}`,
         tracks: `https://api.spotify.com/v1/playlists/${id}/tracks`,
         search: `https://api.spotify.com/v1/search?q=${query}&type=track,playlist`

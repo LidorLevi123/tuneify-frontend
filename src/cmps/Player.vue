@@ -3,7 +3,7 @@
     <section class="main-player-container" :class="{ 'is-shown': screenWidth < 890 && currTrack }">
         <section class="track-info-container">
             <section class="img-container" @click="goToStation" :title="`Go to playlist: ${this.currStation?.name}`">
-                <img v-if="currTrack" :src="`${currTrack.imgUrl}`" alt="" @click="onSocketMessage('test')">
+                <img v-if="currTrack" :src="`${currTrack.imgUrl}`" alt="">
             </section>
             <section class="text-container">
                 <div v-if="currTrack" class="track-title">{{ currTrack.title }}</div>
@@ -343,9 +343,6 @@ export default {
         },
         hasLiked(trackId) {
             return this.likedTracks?.some(track => track?.id === trackId)
-        },
-        onSocketMessage(msg) {
-            console.log('Received socket message:', msg)
         },
         broadcastTrackInfo() {
             const trackInfo = {

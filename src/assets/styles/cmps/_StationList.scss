@@ -1,39 +1,70 @@
-.station-list {
-
-    max-width: 119rem;
-    display: grid;
-    gap: 1.5rem;
-    grid-template-columns: repeat(auto-fit, minmax(10.625rem, 1fr));
-    min-width: 372px;
-
-    @include for-mobile-layout {
+.station-list-container {
+    .sub-header {
+        max-width: 119rem;
         display: flex;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        gap: 0.8rem;
-        -webkit-overflow-scrolling: touch;
+        justify-content: space-between;
+        align-items: end;
 
-        &::-webkit-scrollbar {
-            display: none;
+        h1 {
+            font-size: 1.5rem;
+            font-family: CircularSpTitle;
+            color: $clr2;
+            margin-block-start: 3rem;
+            margin-block-end: 1rem;
+
+            @include for-mobile-layout {
+                margin-block-start: 1.5rem;
+            }
         }
 
-        // >* {
-        //     height: 14rem;
-        //     width: 10rem;
-        // }
+        .category-link {
+            font-size: 0.875rem;
+            color: #b3b3af;
+            margin-block-end: 1rem;
+            font-weight: 700;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+
     }
 
-}
 
-.station-list-hor {
 
-    max-width: 119rem;
-    display: grid;
-    grid-gap: 1rem 1.5rem;
-    grid-template: auto/repeat(auto-fill, minmax(max(16.875rem, 25%), 1fr));
+    .station-list {
 
-    @include for-mobile-layout {
-        grid-gap: .5rem .5rem;
-        grid-template: auto/repeat(auto-fill, minmax(max(8.875rem, 25%), 1fr));
+        max-width: 119rem;
+        display: grid;
+        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fit, minmax(10.625rem, 1fr));
+        min-width: 372px;
+
+        @include for-mobile-layout {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 0.8rem;
+            -webkit-overflow-scrolling: touch;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+        }
+
+    }
+
+    .station-list-hor {
+
+        max-width: 119rem;
+        display: grid;
+        grid-gap: 1rem 1.5rem;
+        grid-template: auto/repeat(auto-fill, minmax(max(16.875rem, 25%), 1fr));
+
+        @include for-mobile-layout {
+            grid-gap: .5rem .5rem;
+            grid-template: auto/repeat(auto-fill, minmax(max(8.875rem, 25%), 1fr));
+        }
     }
 }
