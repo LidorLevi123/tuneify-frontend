@@ -3,6 +3,7 @@ import { stationService } from '../services/station.service'
 export const stationStore = {
     state: {
         isLoading: false,
+        sidebarCollapsed: false,
         stations: [], // For now we hold all stations here until we move to backend
         stationsForHome: [],
         currStation: null,
@@ -11,6 +12,7 @@ export const stationStore = {
         searchRes: [],
     },
     getters: {
+        sidebarCollapsed({ sidebarCollapsed }) { return sidebarCollapsed },
         isLoading({ isLoading }) { return isLoading },
         libraryStations({ stations }) { return stations },
         stationsForHome({ stationsForHome }) { return stationsForHome },
@@ -21,6 +23,9 @@ export const stationStore = {
         searchRes({ searchRes }) { return searchRes },
     },
     mutations: {
+        setSidebarCollapsed(state) {
+            state.sidebarCollapsed = !state.sidebarCollapsed
+        },
         setLoading(state, value) {
             state.isLoading = value
         },

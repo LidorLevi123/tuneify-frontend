@@ -9,7 +9,8 @@
                     :style="{ top: contextmenuTop + 'px', left: contextmenuLeft + 'px' }">
                     <div class="menu-item">Remove playlist</div>
                 </div>
-                <span class="speaker" v-icon="`speaker`" v-if="currStation?._id === station._id && trackPlaying"></span>
+                <span class="speaker" v-icon="`speaker`" v-if="currStation?._id === station._id && trackPlaying"
+                    :style="{ display: sidebarCollapsed ? 'none' : 'block' }"></span>
             </li>
         </ul>
     </section>
@@ -36,6 +37,9 @@ export default {
         },
         libraryStations() {
             return this.$store.getters.libraryStations
+        },
+        sidebarCollapsed() {
+            return this.$store.getters.sidebarCollapsed
         }
     },
 

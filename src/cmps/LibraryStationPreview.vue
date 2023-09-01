@@ -1,15 +1,18 @@
 <template>
-    <article class="library-station-preview">
+    <article class="library-station-preview" :style="{ columnGap: sidebarCollapsed ? '0' : '0.8rem' }">
         <img :src="station.imgUrl" alt="">
-        <h5 :class="{ 'is-current': currStation?._id === station._id }">{{ stationName }}</h5>
-        <small><span>{{ station.tracks.length }} songs</span> &bull;
+        <h5 :class="{ 'is-current': currStation?._id === station._id }"
+            :style="{ display: sidebarCollapsed ? 'none' : 'block' }">{{ stationName }}</h5>
+        <small :style="{ display: sidebarCollapsed ? 'none' : 'block' }"><span>{{ station.tracks.length }} songs</span>
+            &bull;
             <span>{{ stationBelonging }}</span>
         </small>
     </article>
 </template>
-<script>
 
+<script>
 export default {
+    name: 'LibraryStationPreview',
     props: {
         station: { type: Object, required: true },
     },
@@ -26,10 +29,10 @@ export default {
         },
         currStation() {
             return this.$store.getters.currStation
+        },
+        sidebarCollapsed() {
+            return this.$store.getters.sidebarCollapsed
         }
     },
-
-    name: 'LibraryStationPreview',
 }
-
 </script>

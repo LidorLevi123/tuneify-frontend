@@ -1,10 +1,13 @@
 <template>
-    <section class="sidebar-list-container">
+    <section class="sidebar-list-container" :style="{ width: sidebarCollapsed ? 'auto' : '412px' }">
         <section class="sidebar-top">
-            <button class="collapse"><span v-icon="'collapse'"></span>
-                <div class="one">Your Library</div>
+            <button class="collapse" @click="collapseSidebar">
+                <span v-if="!sidebarCollapsed" v-icon="'collapse'"></span>
+                <span v-else v-icon="'collapsed'"></span>
+                <div :style="{ display: sidebarCollapsed ? 'none' : 'block' }">Your Library</div>
             </button>
-            <button v-icon="'createList'" @click="addStation" title="Create playlist" class="add-station"></button>
+            <button v-icon="'createList'" @click="addStation" title="Create playlist" class="add-station"
+                :style="{ display: sidebarCollapsed ? 'none' : 'block' }"></button>
         </section>
         <LibraryStationList @station-remove="removeStation" />
     </section>
@@ -28,10 +31,10 @@ export default {
             try {
 
                 if (!this.canAddStation) return
-                
+
                 this.canAddStation = false
                 const stationToSave = stationService.getEmptyStation()
-                
+
                 stationToSave.name = 'My Playlist #' + this.libraryStations.length
                 stationToSave.imgUrl = 'http://res.cloudinary.com/dys1sj4cd/image/upload/v1691338579/def-pl-fotor-202308061976_hbckqs.png'
 
@@ -58,12 +61,18 @@ export default {
                 console.log(err.message)
                 showErrorMsg('Could not remove station')
             }
+        },
+        collapseSidebar() {
+            this.$store.commit('setSidebarCollapsed', true)
         }
     },
 
     computed: {
         libraryStations() {
             return this.$store.getters.libraryStations
+        },
+        sidebarCollapsed() {
+            return this.$store.getters.sidebarCollapsed
         }
     },
 

@@ -10,7 +10,6 @@
     background-color: $clr1;
     grid-column: 1;
     grid-row: 1;
-    width: 412px;
     color: $clr2;
 
 
@@ -30,7 +29,7 @@
             display: flex;
             gap: 20px;
             align-items: center;
-            padding: 0.25rem 0.75rem 0.25rem 0.75rem;
+            padding: 0.25rem 0.75rem 0.25rem 0.8rem;
 
             &.isActive {
                 color: $clr2;
@@ -67,12 +66,11 @@
         width: 100%;
         display: flex;
         z-index: 3;
-        // justify-content: space-around;
-        // align-items: center;
         height: 3rem;
 
         .nav-btn {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             width: 33.3%;
@@ -84,6 +82,11 @@
                 align-items: center;
             }
         }
+    }
+
+    small {
+        color: $clr3;
+        font-size: 0.5rem;
     }
 
 }

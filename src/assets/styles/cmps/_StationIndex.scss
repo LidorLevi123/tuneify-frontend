@@ -1,7 +1,7 @@
 .station-main-container {
     padding: 0.5rem;
     display: grid;
-    grid-template-columns: 412px 1fr;
+    grid-template-columns: auto 1fr;
 
     @include for-mobile-layout {
         display: flex;

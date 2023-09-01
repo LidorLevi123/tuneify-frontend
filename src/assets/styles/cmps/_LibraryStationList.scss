@@ -2,10 +2,6 @@
     overflow-y: hidden;
     padding: 0.5rem;
 
-    @include for-mobile-layout {
-        margin-block-end: 6rem;
-    }
-
     button {
         background-color: transparent;
         border: none;
@@ -43,20 +39,11 @@
             height: 3rem;
             border-radius: 0.2rem;
             inset: 0px auto auto 0px;
-
-            &:hover {
-                // .menu-item {
-                //     background-color: rgb(66, 66, 66);
-                //     padding-inline-end: 1rem;
-                //     padding-inline-start: 1rem;
-                // }
-            }
         }
     }
 
     ul {
         overflow-y: auto;
         height: 100%;
-
     }
 }

@@ -2,7 +2,7 @@
     grid-column: 1;
     display: grid;
     grid-template-rows: auto 1fr;
-    width: 412px;
+    // width: 412px;
     background-color: $clr4;
     border-radius: 0.5rem;
     margin-block-start: 0.5rem;
@@ -49,7 +49,7 @@
     }
 
     .collapse {
-        padding-inline-start: 0.68rem;
+        padding-inline-start: 0.7rem;
         gap: 0.8rem;
         display: flex;
         align-items: center;
@@ -58,12 +58,23 @@
         cursor: pointer;
 
         &:hover {
+
+            path {
+                fill: $clr2;
+            }
+
             div {
                 color: $clr2;
             }
 
             .icon {
                 fill: $clr2;
+            }
+        }
+
+        span {
+            @include for-mobile-layout {
+                display: none;
             }
         }
     }
