@@ -4,11 +4,13 @@
         <MainHeader :station="station" />
         <Loader v-if="isLoading" />
         <RouterView class="RouterView" @scroll="handleScroll" @station="setStation" v-else />
+        <RightSidebar />
         <Player />
     </section>
 </template>
 
 <script>
+import RightSidebar from '../cmps/RightSidebar.vue'
 import Player from '../cmps/Player.vue'
 import Nav from '../cmps/Nav.vue'
 import MainHeader from '../cmps/MainHeader.vue'
@@ -40,7 +42,8 @@ export default {
         Player,
         Nav,
         MainHeader,
-        Loader
+        Loader,
+        RightSidebar
     }
 }
 </script>

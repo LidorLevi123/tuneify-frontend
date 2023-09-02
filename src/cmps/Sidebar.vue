@@ -7,7 +7,7 @@
                 <div :style="{ display: sidebarCollapsed ? 'none' : 'block' }">Your Library</div>
             </button>
             <button v-icon="'createList'" @click="addStation" title="Create playlist" class="add-station"
-                :style="{ display: sidebarCollapsed ? 'none' : 'block' }"></button>
+                :style="{ display: sidebarCollapsed ? 'none' : 'flex' }"></button>
         </section>
         <LibraryStationList @station-remove="removeStation" />
     </section>

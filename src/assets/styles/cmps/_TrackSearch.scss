@@ -1,6 +1,10 @@
 .track-search-container {
     margin-inline: 1.5rem;
 
+    @include for-mobile-layout {
+        margin: 0;
+    }
+
     .track-search {
 
         display: flex;

@@ -33,8 +33,12 @@ async function getSpotifyItems(req) {
 
     } catch (error) {
         console.error(
-            'Error retrieving data:',
-            error.response ? error.response.data : error.message
+            'Error retrieving artist data:',
+            error.response ? error.response.data : error.message,
+            'Status Code:',
+            error.response ? error.response.status : 'N/A',
+            'Headers:',
+            error.response ? error.response.headers : 'N/A'
         )
         throw error
     }
@@ -47,7 +51,8 @@ function _getEndpoints(id, query) {
         categoryStations: `https://api.spotify.com/v1/browse/categories/${id}/playlists?country=il&limit=50`,
         station: `https://api.spotify.com/v1/playlists/${id}`,
         tracks: `https://api.spotify.com/v1/playlists/${id}/tracks`,
-        search: `https://api.spotify.com/v1/search?q=${query}&type=track,playlist`
+        search: `https://api.spotify.com/v1/search?q=${query}&type=track,playlist`,
+        artist: `https://api.spotify.com/v1/artists/${id}`
     }
 }
 
@@ -99,6 +104,7 @@ function _cleanStationTracksData(data) {
             id: item.track.id,
             title: item.track.name,
             artists: _cleanArtists(item.track.artists),
+            artistId: item.track.artists[0].id,
             imgUrl: item.track.album.images[0].url,
             formalDuration: item.track.duration_ms,
             album: item.track.album.name,
@@ -125,16 +131,3 @@ function _cleanArtists(artists) {
     return artists.map((artist) => artist.name)
 }
 
-function _getRandomDate() {
-    const startYear = 2021
-    const endYear = 2023
-    const maxMonth = 7 // July
-
-    const randomYear = Math.floor(Math.random() * (endYear - startYear + 1)) + startYear
-    const randomMonth = Math.floor(Math.random() * (maxMonth + 1)) + 1 // Adding 1 because months are zero-based
-    const randomDay = Math.floor(Math.random() * 31) + 1 // Assume maximum of 31 days in a month
-
-    const randomDate = new Date(Date.UTC(randomYear, randomMonth - 1, randomDay, 0, 0, 0))
-
-    return randomDate.toISOString()
-}

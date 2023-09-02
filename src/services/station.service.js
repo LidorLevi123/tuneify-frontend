@@ -1,7 +1,6 @@
 import { httpService } from './http.service.js'
-import { userService } from './user.service.js'
 import { spotifyService } from './spotify.service.js'
-import { utilService } from './util.service.js'
+
 
 const BASE_URL = 'station/'
 
@@ -108,6 +107,14 @@ async function getStationsForHome() {
         throw new Error('Failed to fetch station data')
     }
 }
+// getArtistData('1HY2Jd0NmPuamShAr6KMms')
+
+async function getArtistData(artistId) {
+    const artist = await spotifyService.getSpotifyItems({ type: 'artist', id: artistId })
+    return artist
+}
+
+
 
 function getEmptyStation() {
     return {

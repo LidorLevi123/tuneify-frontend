@@ -73,6 +73,8 @@
                 :style="{ backgroundImage: `linear-gradient(to right, rgba(0,0,0,0) ${playbackProgressPercentage}%, rgb(77,77,77) ${playbackProgressPercentage}%)` }">
         </section>
         <section class="vol-container">
+            <span v-if="currTrack" v-icon="`toggleRSB`" class="toggleRSB-btn" :class="{ active: this.rsbOpen }"
+                @click="toggleRSB" title="Now Playing View"></span>
             <span v-if="currTrack" class="lyrics-btn" v-icon="`lyrics`" title="Lyrics" @click="showLyrics"
                 :class="{ active: $route.path === '/lyrics' }"></span>
             <button class="mute btn" @click="toggleMute" title="Mute">
@@ -128,12 +130,16 @@ export default {
         eventBus.on('trackClicked', this.loadVideo)
         eventBus.on('trackPaused', this.pauseVideo)
         eventBus.on('trackPlay', this.playTrack)
+        eventBus.on('playNextTrack', () => this.previousNextVideo(1))
 
         // sockets
         socketService.on(SOCKET_EVENT_ADD_MSG, this.onSocketMessage)
         socketService.on(SOCKET_EMIT_BROADCAST_TRACK, this.updateByBroadcast)
     },
     methods: {
+        toggleRSB() {
+            this.$store.commit('toggleRsb')
+        },
         showLyrics() {
             if (this.$route.path !== '/lyrics') this.$router.push('/lyrics')
             else this.$router.go(-1)
@@ -401,8 +407,13 @@ export default {
         eventBus.off('trackClicked', this.loadVideo)
         eventBus.off('trackPlay', this.playTrack)
         eventBus.off('trackPaused', this.pauseVideo)
+        eventBus.off('playNextTrack', () => this.previousNextVideo(1))
+
     },
     computed: {
+        rsbOpen() {
+            return this.$store.getters.isRsbOpen
+        },
         repeatState() {
             return this.repeatStates[this.repeatStateIdx]
         },

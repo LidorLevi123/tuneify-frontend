@@ -2,6 +2,7 @@ import { stationService } from '../services/station.service'
 
 export const stationStore = {
     state: {
+        isRsbOpen: false,
         isLoading: false,
         sidebarCollapsed: false,
         stations: [], // For now we hold all stations here until we move to backend
@@ -12,6 +13,7 @@ export const stationStore = {
         searchRes: [],
     },
     getters: {
+        isRsbOpen({ isRsbOpen }) { return isRsbOpen },
         sidebarCollapsed({ sidebarCollapsed }) { return sidebarCollapsed },
         isLoading({ isLoading }) { return isLoading },
         libraryStations({ stations }) { return stations },
@@ -23,6 +25,9 @@ export const stationStore = {
         searchRes({ searchRes }) { return searchRes },
     },
     mutations: {
+        toggleRsb(state) {
+            state.isRsbOpen = !state.isRsbOpen
+        },
         setSidebarCollapsed(state) {
             state.sidebarCollapsed = !state.sidebarCollapsed
         },
