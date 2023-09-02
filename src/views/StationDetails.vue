@@ -11,7 +11,8 @@
                     <h1 @click="openStationEditor">{{ station.name }}</h1>
                     <p class="description">{{ station.description }}</p>
                     <div>
-                        <img src="http://res.cloudinary.com/dys1sj4cd/image/upload/v1691227930/favicon_juzdft.svg" alt="">
+                        <img v-if="this.station.owner.fullname === 'Tuneify'"
+                            src="http://res.cloudinary.com/dys1sj4cd/image/upload/v1691227930/favicon_juzdft.svg" alt="">
                         <span class="logo">{{ stationOwner }}</span>
                         <span class="songs-num" v-if="station.tracks">&bull; {{ station.tracks?.length }} songs</span>
                         <span class="songs-time" v-show="formttedTime">, about {{ formttedTime }} hours</span>

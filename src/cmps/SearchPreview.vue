@@ -4,7 +4,7 @@
         <div class="mini-prev">
             <section class="img-container">
                 <img :src="`${track.imgUrl}`" alt="" :class="{ 'filter': isHovered }">
-                <span v-if="isHovered && !this.isTrackPlaying" v-icon="`play`" title="Play"></span>
+                <span v-if="isHovered && !this.isTrackPlaying" class="small-play" v-icon="`sPlay`" title="Play"></span>
                 <span v-else-if="isHovered && this.isTrackPlaying" class="small-pause" v-icon="`pause`"
                     title="Pause"></span>
             </section>

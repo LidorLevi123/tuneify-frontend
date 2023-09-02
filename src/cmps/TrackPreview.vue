@@ -3,7 +3,7 @@
 
         <img v-if="isTrackPlaying && !isHovered" class="eq"
             src="https://res.cloudinary.com/dmmsf57ko/image/upload/v1683729372/Song_hoitzd.gif" alt="">
-        <span v-else-if="isHovered && !this.isTrackPlaying" class="small-play" v-icon="`play`" title="Play"></span>
+        <span v-else-if="isHovered && !this.isTrackPlaying" class="small-play" v-icon="`sPlay`" title="Play"></span>
         <span v-else-if="isHovered && this.isTrackPlaying" class="small-pause" v-icon="`pause`" title="Pause"></span>
         <span v-else class="track-num" :class="isPlaying">{{ trackIdx + 1 }}</span>
 
