@@ -8,6 +8,7 @@
     grid-column: 3;
     border-radius: 0.5rem;
     max-width: 26.25rem;
+    overflow-y: auto;
 
     button {
         border: none;
@@ -65,6 +66,7 @@
         h4 {
             font-weight: 400;
             color: $clr3;
+            display: inline;
         }
     }
 
@@ -116,6 +118,13 @@
                 font-size: 0.875rem;
                 color: $clr3;
             }
+        }
+    }
+
+    .artist-meta {
+        img {
+            width: 100%;
+            border-radius: .5rem;
         }
     }
 }

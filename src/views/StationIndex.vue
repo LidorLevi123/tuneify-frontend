@@ -4,7 +4,7 @@
         <MainHeader :station="station" />
         <Loader v-if="isLoading" />
         <RouterView class="RouterView" @scroll="handleScroll" @station="setStation" v-else />
-        <RightSidebar />
+        <RightSidebar v-if="isRsbOpen" />
         <Player />
     </section>
 </template>
@@ -37,6 +37,9 @@ export default {
         isLoading() {
             return this.$store.getters.isLoading
         },
+        isRsbOpen() {
+            return this.$store.getters.isRsbOpen
+        }
     },
     components: {
         Player,
