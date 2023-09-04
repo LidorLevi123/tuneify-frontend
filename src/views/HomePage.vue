@@ -1,6 +1,6 @@
 <template>
-  <section v-if="stations" class="container home-page text-center">
-    <div class="stations-container" :style="backgroundStyle">
+  <section v-if="stations" class="container home-page text-center" :style="{ backgroundColor: this.backgroundColor }">
+    <div class="stations-container">
       <h2 v-if="loggedinUser">{{ `${greeting}, ${loggedinUser}` }}</h2>
       <div v-for="(stationGroup, idx) in stations" :key="idx">
         <StationList :stations="idx === 0 ? stationGroup.slice(0, 6) : stationGroup.slice(0, maxStations)"
@@ -16,6 +16,7 @@ import { eventBus } from '../services/event-bus.service'
 import historyTracker from '../services/history.service'
 
 export default {
+  name: 'HomePage',
   data() {
     return {
       maxStations: null,
@@ -37,11 +38,6 @@ export default {
   computed: {
     stations() {
       return this.$store.getters.stationsForHome
-    },
-    backgroundStyle() {
-      return {
-        backgroundImage: `linear-gradient(to bottom, ${this.backgroundColor} 0%, #121212 33rem, #121212)`,
-      }
     },
     greeting() {
       const currentHour = this.currentTime.getHours()
@@ -67,9 +63,7 @@ export default {
       if (window.innerWidth > 2230) this.maxStations = 9
     },
     setBgcolor(color) {
-      setTimeout(() => {
-        this.backgroundColor = color
-      }, 100)
+      this.backgroundColor = color
     }
   },
 
@@ -77,7 +71,6 @@ export default {
     StationList
   },
 
-  name: 'HomePage',
 }
 
 </script>

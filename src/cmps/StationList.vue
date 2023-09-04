@@ -7,7 +7,7 @@
             </RouterLink>
         </div>
         <ul v-if="stations" class="clean-list"
-            :class="{ 'station-list': !horizontalDesign, 'station-list-hor': horizontalDesign }">
+            :class="{ 'station-list': !horizontalDesign, 'station-list-hor': horizontalDesign, 'category-list': this.$route.path.startsWith('/category/') }">
             <li v-for="station in stations" :key="station._id">
                 <StationPreview :station="station" :horizontalDesign="horizontalDesign" />
             </li>

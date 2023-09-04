@@ -2,6 +2,10 @@
     overflow-y: hidden;
     padding: 0.5rem;
 
+    @include for-mobile-layout {
+        padding: 0;
+    }
+
     button {
         background-color: transparent;
         border: none;
@@ -30,8 +34,6 @@
         .dlt-btn {
             position: absolute;
             background-color: $clr3;
-            // width: max-content;
-            // height: max-content;
             cursor: pointer;
             color: $clr3;
             background-color: $clr6;
@@ -45,5 +47,9 @@
     ul {
         overflow-y: auto;
         height: 100%;
+
+        @include for-mobile-layout {
+            padding-block-end: 3rem;
+        }
     }
 }

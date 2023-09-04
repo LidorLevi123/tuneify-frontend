@@ -1,6 +1,6 @@
 <template>
     <article @click="goToDetails(station._id)" @mouseover="emitAvgImgClr()"
-        :class="{ 'main-preview-container': !horizontalDesign, 'main-preview-container-hor': horizontalDesign }">
+        :class="{ 'main-preview-container': !horizontalDesign, 'main-preview-container-hor': horizontalDesign, 'category-station': this.$route.path.startsWith('/category/') }">
         <div class="prev-img-container">
             <img crossorigin="anonymous" :src="`${station.imgUrl}`" alt="" ref="stationImg">
             <button v-if="!isStationPlaying" @click="onPlayStation" class="play-btn" v-icon="'mPlay'"></button>

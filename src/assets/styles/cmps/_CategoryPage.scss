@@ -7,6 +7,11 @@
     overflow-x: hidden;
     width: 100%;
 
+    @include for-mobile-layout {
+        padding-block: 2rem;
+        padding-inline: 0rem;
+    }
+
     h1 {
         margin-block-start: 11rem;
         margin-block-end: 2rem;

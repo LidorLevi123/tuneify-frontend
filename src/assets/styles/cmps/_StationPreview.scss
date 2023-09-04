@@ -7,11 +7,14 @@
     transition: ease-in-out 0.3s;
 
     @include for-mobile-layout {
-        // height: 240px;
         width: 140px;
         padding: 0;
         border-radius: 0;
         background-color: transparent;
+
+        &.category-station {
+            width: auto;
+        }
     }
 
     &:hover {
