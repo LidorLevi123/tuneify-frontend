@@ -6,20 +6,24 @@
 
     @include for-mobile-layout {
         border-radius: 0;
-        margin-block-end: 3.5rem;
     }
 
     .stations-container {
         padding: 1.5rem;
 
         @include for-mobile-layout {
-            padding: 2rem 0.5rem 0.5rem;
+            padding: 2rem 0.5rem 6rem;
         }
 
         h2 {
             color: $clr2;
             margin-block: 3rem 1rem;
             font-size: 2rem;
+
+            @include for-mobile-layout {
+                font-size: 1.5rem;
+                margin-block: 1rem;
+            }
         }
     }
 }

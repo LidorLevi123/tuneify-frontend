@@ -18,6 +18,7 @@
 
         @include for-mobile-layout {
             padding-inline: .5rem;
+            padding-block-end: 1rem;
         }
 
         .browse {
