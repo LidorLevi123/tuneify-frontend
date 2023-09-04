@@ -1,6 +1,6 @@
 <template>
     <div class="loader-container">
-        <img src="loader.gif" alt="">
+        <img src="/loader.gif" alt="">
     </div>
 </template>
 
