@@ -1,6 +1,8 @@
 .home-page {
     border-radius: 0.5rem;
     overflow-x: hidden;
+    transition: 1.5s ease;
+    background-image: linear-gradient(to bottom, transparent 0%, #121212 33rem, #121212);
 
     @include for-mobile-layout {
         border-radius: 0;

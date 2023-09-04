@@ -42,6 +42,7 @@
         min-width: 372px;
 
         @include for-mobile-layout {
+            padding-inline-end: 1rem;
             display: flex;
             flex-wrap: nowrap;
             overflow-x: auto;
@@ -50,6 +51,13 @@
 
             &::-webkit-scrollbar {
                 display: none;
+            }
+
+            &.category-list {
+                padding-inline: .5rem;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(5.625rem, 1fr));
+                gap: .5rem;
             }
         }
 

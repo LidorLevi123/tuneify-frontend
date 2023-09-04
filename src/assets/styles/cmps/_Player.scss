@@ -1,6 +1,11 @@
 .main-player-container {
     display: grid;
     grid-template-columns: 2fr 2.36fr 2fr;
+    align-items: center;
+    grid-column: 1 / -1;
+    width: 100%;
+    background-color: $clr1;
+    height: 72px;
 
     @include for-mobile-layout {
         grid-template-columns: 1fr auto;
@@ -20,18 +25,8 @@
         }
     }
 
-    align-items: center;
-    grid-column: 1 / -1;
-    width: 100%;
-    background-color: $clr1;
-    height: 72px;
-
     >*:last-child {
         justify-self: end;
-    }
-
-    h1 {
-        padding-inline-start: 0.5rem;
     }
 
     .svg-fill {
@@ -276,7 +271,7 @@
     .track-info-container {
         display: flex;
         gap: 1rem;
-        padding-inline-start: 0.6rem;
+        padding-inline-start: 0.5rem;
         align-items: center;
 
         @include for-mobile-layout {
@@ -284,7 +279,6 @@
             grid-row: 1;
             gap: 0.2rem;
             padding-inline-start: 0.3rem;
-            // padding-block-end: 1.4rem;
         }
 
         .img-container {
@@ -377,6 +371,10 @@
             @include for-mobile-layout {
                 display: block;
             }
+        }
+
+        .lyrics-btn {
+            display: flex;
         }
 
 

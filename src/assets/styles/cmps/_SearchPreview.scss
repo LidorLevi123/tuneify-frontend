@@ -50,14 +50,11 @@
     .track-info-container {
         overflow: hidden;
 
-        .track-name {
-            color: $clr2;
-
-            &.isGreen {
-                color: $clr9;
-            }
+        &.isGreen {
+            color: $clr9;
         }
 
+        .track-name,
         .artist-name {
             color: $clr3;
 
@@ -67,6 +64,11 @@
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 1;
             white-space: pre-wrap;
+        }
+
+        .track-name {
+            color: $clr2;
+
         }
 
         &.track-playing {

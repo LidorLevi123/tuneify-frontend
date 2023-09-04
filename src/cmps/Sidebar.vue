@@ -1,5 +1,5 @@
 <template>
-    <section class="sidebar-list-container" :style="{ width: sidebarCollapsed ? 'auto' : '412px' }">
+    <section class="sidebar-list-container" :style="{ width: sidebarWidth }">
         <section class="sidebar-top">
             <button class="collapse" @click="collapseSidebar">
                 <span v-if="!sidebarCollapsed" v-icon="'collapse'"></span>
@@ -20,6 +20,7 @@ import { stationService } from '../services/station.service'
 import LibraryStationList from './LibraryStationList.vue';
 
 export default {
+    name: 'Sidebar',
     data() {
         return {
             canAddStation: true,
@@ -73,6 +74,10 @@ export default {
         },
         sidebarCollapsed() {
             return this.$store.getters.sidebarCollapsed
+        },
+        sidebarWidth() {
+            if (window.innerWidth < 890) return 'auto'
+            else return this.sidebarCollapsed ? 'auto' : '412px'
         }
     },
 

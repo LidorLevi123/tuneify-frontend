@@ -6,8 +6,9 @@ export const wikiService = {
 
 async function getArtistData(term) {
     try {
-        return await httpService.get('wiki/', term)
-        // return artistData
+        const artistData = await httpService.get('wiki/', term)
+        if (artistData.artistSnippet.includes('may refer to:')) artistData.artistSnippet = ''
+        return artistData
     }
     catch (error) {
         console.log(error)
