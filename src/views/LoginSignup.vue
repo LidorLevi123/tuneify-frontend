@@ -18,12 +18,12 @@
           </button>
           <hr>
         </section>
-        <form action="">
+        <form @submit.prevent="doLogin">
           <span>Username</span>
           <input type="text" v-model="loginCred.username" placeholder="User name">
           <span>Password</span>
           <input type="password" v-model="loginCred.password" placeholder="Password">
-          <button @click="doLogin" class="login-btn">Log In</button>
+          <button class="login-btn">Log In</button>
         </form>
         <form @submit.prevent="doSignup">
           <hr>
@@ -33,67 +33,15 @@
           <input type="password" v-model="signupCred.password" placeholder="Password" />
           <button class="login-btn">Sign up</button>
         </form>
-        <!-- <form action="">
-          <span>Name</span>
-          <input type="text" v-model="loginCred.username" placeholder="User name">
-          <span>Username</span>
-          <input type="text" v-model="loginCred.username" placeholder="User name">
-          <span>Password</span>
-          <input type="password" v-model="loginCred.password" placeholder="Password">
-          <button class="login-btn">Sign up</button>
-        </form> -->
       </section>
     </section>
-
-    <!-- <p>{{ msg }}</p>
-
-    <div v-if="loggedinUser">
-      <h3>
-        Loggedin User:
-        {{ loggedinUser.fullname }}
-        <button @click="doLogout">Logout</button>
-      </h3>
-    </div>
-    <div v-else>
-      <h2>Login</h2>
-      <form @submit.prevent="doLogin">
-        <select v-model="loginCred.username">
-          <option value="">Select User</option>
-          <option v-for="user in users" :key="user._id" :value="user.username">{{ user.fullname }}</option>
-        </select>
-        <input type="text" v-model="loginCred.username" placeholder="User name" />
-        <input type="text" v-model="loginCred.password" placeholder="Password" />
-        <button>Login</button>
-      </form>
-      <p class="mute">user1 or admin, pass:123 </p>
-      <form @submit.prevent="doSignup">
-        <h2>Signup</h2>
-        <input type="text" v-model="signupCred.fullname" placeholder="Your full name" />
-        <input type="text" v-model="signupCred.username" placeholder="Username" />
-        <input type="password" v-model="signupCred.password" placeholder="Password" />
-        <ImgUploader @uploaded="onUploaded" />
-        <button>Signup</button>
-      </form>
-    </div>
-    <hr />
-    <details>
-      <summary>
-        Admin Section
-      </summary>
-      <h3 v-if="isLoading">Loading...</h3>
-      <ul v-else>
-        <li v-for="user in users" :key="user._id">
-          <pre>{{ user }}</pre>
-          <button @click="removeUser(user._id)">x</button>
-        </li>
-      </ul>
-    </details> -->
   </div>
 </template>
 
 <script>
 
 import ImgUploader from '../cmps/ImgUploader.vue'
+import { showErrorMsg } from '../services/event-bus.service'
 
 export default {
   name: 'login-signup',
@@ -128,7 +76,6 @@ export default {
         const user = await this.$store.dispatch({ type: "login", userCred: this.loginCred })
         await this.$store.dispatch({ type: 'loadStations', userId: user._id })
         this.$router.push('/')
-        alert(`Welcome back ${user.fullname}!`)
       } catch (err) {
         console.log(err.message)
         this.msg = 'Failed to login'
@@ -160,9 +107,15 @@ export default {
     },
     onUploaded(imgUrl) {
       this.signupCred.imgUrl = imgUrl
-    }
-
+    },
   },
+
+  watch: {
+    msg() {
+      showErrorMsg(this.msg)
+    }
+  }, 
+
   components: {
     ImgUploader
   }

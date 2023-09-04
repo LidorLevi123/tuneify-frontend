@@ -54,7 +54,7 @@ export default {
         }, 500)
     },
     methods: {
-        async doLogout() {
+        doLogout() {
             this.$router.push('/')
             this.$store.dispatch({ type: 'logout' })
             this.$store.commit({ type: 'loadStations', stations: [] })
