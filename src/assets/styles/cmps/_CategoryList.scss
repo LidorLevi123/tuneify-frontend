@@ -9,7 +9,10 @@
         @include for-mobile-layout {
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 0.5rem;
-            margin-block-end: 7rem;
         }
+    }
+
+    @include for-mobile-layout {
+        margin-block-end: 12rem;
     }
 }
