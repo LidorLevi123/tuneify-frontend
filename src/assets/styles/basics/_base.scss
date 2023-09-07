@@ -45,9 +45,11 @@ body {
 
 ::-webkit-scrollbar-track {
     background-color: #121212;
+    border-radius: 0 .5rem .5rem 0;
 }
 
 ::-webkit-scrollbar-thumb {
+    border-radius: 0 .5rem .5rem 0;
     background-color: #6464644a;
 }
 

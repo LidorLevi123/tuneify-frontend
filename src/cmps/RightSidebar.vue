@@ -1,5 +1,5 @@
 <template>
-    <section v-if="this.currTrack" class="rsb-main-container">
+    <section v-if="currTrack" class="rsb-main-container">
         <header class="rsb-header">
             <RouterLink :to="`/station/${currStation._id}`">{{ currStation.name }}</RouterLink>
             <button v-icon="`close`" @click="closeRSB" class="closeRSB-btn"></button>
@@ -24,19 +24,22 @@
                 </section>
             </section>
         </section>
-        <section class="artist-meta">
+        <section v-if="artistImage" class="artist-meta" @click="openBio">
+            <h4>About the artist</h4>
             <img :src="this.artistImage" alt="">
-            <section>
-                <section v-html="artistSnippet"></section>
+            <section v-if="artistSnippet" class="mini-bio-container">
+                <section v-html="artistSnippet" class="mini-bio"></section>
             </section>
         </section>
     </section>
+    <ArtistData v-if="artistBioOpen" :artistSnippet="artistSnippet" :artistImage="artistImage" @closeBio="closeBio" />
 </template>
 
 <script>
 import { eventBus } from '../services/event-bus.service'
 import { wikiService } from '../services/wiki.service'
 import { mapGetters } from 'vuex';
+import ArtistData from './ArtistData.vue';
 
 export default {
     name: 'RightSidebar',
@@ -44,7 +47,8 @@ export default {
         return {
             nextTrackHovered: false,
             artistImage: null,
-            artistSnippet: null
+            artistSnippet: null,
+            artistBioOpen: false
         }
     },
     created() {
@@ -55,6 +59,14 @@ export default {
         onMouseLeave() { this.nextTrackHovered = false },
         emitToNextTrack() { eventBus.emit('playNextTrack') },
         closeRSB() { this.$store.commit('toggleRsb') },
+        openBio() {
+            this.artistBioOpen = true
+            document.body.classList.add('modal-open')
+        },
+        closeBio() {
+            this.artistBioOpen = false
+            document.body.classList.remove('modal-open')
+        },
         async getArtistData(artist) {
             const metaData = await wikiService.getArtistData(artist)
             this.artistImage = metaData.artistImage
@@ -85,7 +97,10 @@ export default {
             }
         }
     },
-
+    components: {
+        ArtistData
+    }
 }
+
 </script>
 

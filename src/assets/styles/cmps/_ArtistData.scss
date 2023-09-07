@@ -1,0 +1,73 @@
+.artist-data-containter {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    z-index: 3;
+    background-color: $clr4;
+    border-radius: 0.5rem;
+    width: 48rem;
+    max-height: 60rem;
+    overflow-y: auto;
+    display: none;
+
+    div {
+        height: 0;
+        display: flex;
+        justify-content: end;
+        position: sticky;
+        top: 0;
+    }
+
+    .closeBio-btn {
+        margin: .5rem .5rem 0 0;
+        height: 2rem;
+        width: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        background-color: transparent;
+        border-radius: 50%;
+        transition: .3s;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #ffffff12;
+
+            path {
+                fill: $clr2;
+            }
+        }
+    }
+
+    .img-container {
+        background-color: $clr1;
+        display: flex;
+        justify-content: center;
+    }
+
+    .artist-bio {
+        padding: 1rem 2.5rem;
+
+        h1 {
+            color: #a6a6a6;
+            text-align: center;
+        }
+
+        .artist-wiki {
+            color: #a6a6a6;
+
+        }
+    }
+
+
+}
+
+body.modal-open .artist-data-containter {
+    display: block;
+}
+
+.mw-empty-elt {
+    display: none;
+}
