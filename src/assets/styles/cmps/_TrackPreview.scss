@@ -118,8 +118,6 @@
             .track-artist,
             .track-name,
             .artist-name {
-                color: $clr2;
-
                 // handling text overflow
                 overflow: hidden;
                 display: -webkit-box;
@@ -128,13 +126,15 @@
                 white-space: pre-wrap;
             }
 
+            .track-name {
+                color: $clr2;
+            }
+
             .track-playing,
             .track-paused {
                 color: $clr9;
             }
-
         }
-
     }
 
 

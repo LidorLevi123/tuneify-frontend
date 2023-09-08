@@ -14,6 +14,7 @@
     "axios": "^0.27.2",
     "dotenv": "^16.3.1",
     "fast-average-color": "^9.3.0",
+    "js-cookie": "^3.0.5",
     "moment": "^2.29.4",
     "sass": "^1.53.0",
     "socket.io-client": "^4.7.2",

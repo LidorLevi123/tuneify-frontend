@@ -1,4 +1,5 @@
 import { stationService } from '../services/station.service'
+import Cookies from 'js-cookie'
 
 export const stationStore = {
     state: {
@@ -45,9 +46,11 @@ export const stationStore = {
         },
         setCurrStation(state, { station }) {
             state.currStation = station
+            Cookies.set('currStation', station._id.toString())
         },
         setCurrTrackIdx(state, { trackIdx }) {
             state.currTrackIdx = trackIdx
+            Cookies.set('currTrackIdx', trackIdx.toString())
         },
         setIsPlaying(state, { isPlaying }) {
             state.isCurrTrackPlaying = isPlaying
@@ -135,6 +138,20 @@ export const stationStore = {
             } catch (err) {
                 console.log(err.message)
                 throw new Error('Could not save station')
+            }
+        },
+        async setLastTrackFromCookie({ commit, dispatch }) {
+            const lastTrackIdx = Cookies.get('currTrackIdx')
+            if (lastTrackIdx) commit('setCurrTrackIdx', { trackIdx: parseInt(lastTrackIdx) })
+            const lastStationId = Cookies.get('currStation')
+            if (lastStationId) {
+                try {
+                    const lastStation = await dispatch('getStation', { stationId: lastStationId })
+                    if (lastStation) commit({ type: 'setCurrStation', station: lastStation })
+                } catch (error) {
+                    console.error(error)
+                    throw new Error('Could not get last track')
+                }
             }
         },
         async removeStation({ commit }, payload) {
