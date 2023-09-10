@@ -1,5 +1,6 @@
 <template>
-    <YouTube ref="youtubePlayer" :src="currTrack?.youtubeId || ''" @state-change="onStateChange" style="display: none;" />
+    <YouTube v-if="cookieLoaded" ref="youtubePlayer" :src="currTrack?.youtubeId || ''" @state-change="onStateChange"
+        style="display: none;" />
     <section class="main-player-container" :class="{ 'is-shown': screenWidth < 890 && currTrack }">
         <section class="track-info-container">
             <section class="img-container" @click="goToStation" :title="`Go to playlist: ${this.currStation?.name}`">
@@ -99,6 +100,7 @@ import { socketService, SOCKET_EVENT_ADD_MSG, SOCKET_EMIT_BROADCAST_TRACK } from
 export default {
     data() {
         return {
+            cookieLoaded: false,
             pipWindow: null,
             screenWidth: window.innerWidth,
             idIdx: 0,
@@ -137,8 +139,14 @@ export default {
         // sockets
         socketService.on(SOCKET_EVENT_ADD_MSG, this.onSocketMessage)
         socketService.on(SOCKET_EMIT_BROADCAST_TRACK, this.updateByBroadcast)
+
+        this.loadCookie()
     },
     methods: {
+        async loadCookie() {
+            await this.$store.dispatch({ type: 'setLastTrackFromCookie' })
+            this.cookieLoaded = true
+        },
         toggleRSB() {
             this.$store.commit('toggleRsb')
         },

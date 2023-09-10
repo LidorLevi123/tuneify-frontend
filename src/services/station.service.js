@@ -82,12 +82,12 @@ async function getAccessToken() {
 
 async function getStationsForHome() {
     const categories = [
-        { id: '0JQ5DAqbMKFRKBHIxJ5hMm', name: 'Tastemakers' },
         { id: '0JQ5DAqbMKFLVaM30PMBm4', name: 'Summer' },
+        { id: '0JQ5DAqbMKFAXlCG6QvYQ4', name: 'Workout' },
         { id: 'toplists', name: 'Top Lists' },
         { id: '0JQ5DAqbMKFQIL0AXnG5AK', name: 'Trending' },
         { id: '0JQ5DAqbMKFAQy4HL4XU2D', name: 'Travel' },
-        { id: '0JQ5DAqbMKFAXlCG6QvYQ4', name: 'Workout' },
+        { id: '0JQ5DAqbMKFRKBHIxJ5hMm', name: 'Tastemakers' },
         { id: '0JQ5DAqbMKFIVNxQgRNSg0', name: 'Decades' },
         { id: '0JQ5DAqbMKFEC4WFtoNRpw', name: 'Pop' },
         { id: '0JQ5DAqbMKFPrEiAOxgac3', name: 'Classical' },
@@ -101,12 +101,22 @@ async function getStationsForHome() {
         })
 
         const results = await Promise.all(stationPromises)
+        _cleanDescriptions(results)
         return results
     } catch (error) {
         console.error(error)
         throw new Error('Failed to fetch station data')
     }
 }
+
+// cleans descriptions from <a> tags
+function _cleanDescriptions(arr) {
+    arr.forEach(item => {
+        if (Array.isArray(item)) _cleanDescriptions(item)
+        else if (typeof item === 'object') item.description = item.description.replace(/<a\b[^>]*>.*?<\/a>/gi, '')
+    })
+}
+
 // getArtistData('1HY2Jd0NmPuamShAr6KMms')
 
 async function getArtistData(artistId) {

@@ -16,8 +16,6 @@ export default {
     try {
       await this.$store.dispatch({ type: 'getAccessToken' })
       await this.$store.dispatch({ type: 'getStationsForHome' })
-      await this.$store.dispatch({ type: 'setLastTrackFromCookie' })
-
       let user = userService.getLoggedinUser()
 
       if (!user) user = await this.$store.dispatch({ type: 'login', userCred: { username: 'guest', password: '123' } })

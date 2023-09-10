@@ -46,7 +46,7 @@ export const stationStore = {
         },
         setCurrStation(state, { station }) {
             state.currStation = station
-            Cookies.set('currStation', station._id.toString())
+            if (station._id) Cookies.set('currStation', station._id.toString())
         },
         setCurrTrackIdx(state, { trackIdx }) {
             state.currTrackIdx = trackIdx

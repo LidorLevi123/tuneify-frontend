@@ -109,7 +109,7 @@ export default {
             return this.station.owner._id === this.user?._id
         },
         isPlaying() {
-            return this.$store.getters.isCurrTrackPlaying //&& this.station._id === this.currStation?._id
+            return this.$store.getters.isCurrTrackPlaying && (this.station._id === this.currStation?._id || this.currStation?.name.includes('Search'))
         },
         currStation() {
             return this.$store.getters.currStation
@@ -147,9 +147,6 @@ export default {
                 this.station = station
                 this.$emit('station', station)
                 this.setTracksTotalDuration()
-                // console.log('Socket room name:', this.stationId)
-                // socketService.emit(SOCKET_EMIT_SET_TOPIC, this.stationId)
-                // socketService.emit(SOCKET_EMIT_SEND_MSG, 'Hello to everyone in this room')
             } catch (err) {
                 console.log(err.message)
                 showErrorMsg('Could not set current station')
@@ -257,7 +254,7 @@ export default {
             eventBus.emit('trackPaused', true)
         },
         activateShare(isShare) {
-            // console.log('Socket room name:', this.stationId)
+
             if (isShare) socketService.emit(SOCKET_EMIT_SET_TOPIC, this.stationId)
             else socketService.emit(SOCKET_EMIT_LEAVE_TOPIC, this.stationId)
 
@@ -270,8 +267,6 @@ export default {
             // Without this condition, tracks will be always resetting as we set the current station to be the viewed station.
             // This condition solved the track youtube ids problem
             if (this.station !== this.currStation) {
-                // const station = JSON.parse(JSON.stringify(this.station))
-                // this.$store.commit({ type: 'setCurrStation', station })
                 this.$store.commit({ type: 'setCurrStation', station: this.station })
             }
         },

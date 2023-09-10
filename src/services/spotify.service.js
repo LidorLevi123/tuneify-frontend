@@ -77,6 +77,11 @@ async function _cleanResponseData(data, type) {
 }
 
 async function _cleanStationData(data) {
+    if (/<a\b[^>]*>.*?<\/a>/i.test(data.description)) {
+        // If there's an <a> tag in the description, remove it
+        data.description = data.description.replace(/<a\b[^>]*>(.*?)<\/a>/gi, '')
+    }
+
     const station = {
         spotifyId: data.id,
         name: data.name,

@@ -13,8 +13,7 @@
     }
 
     .categories-list {
-        margin-block-start: 5.5rem;
-        padding-inline: 1.5rem;
+        padding: 5.5rem 1.5rem 1.5rem;
 
         @include for-mobile-layout {
             padding-inline: .5rem;

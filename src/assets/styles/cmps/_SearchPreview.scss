@@ -50,9 +50,7 @@
     .track-info-container {
         overflow: hidden;
 
-        &.isGreen {
-            color: $clr9;
-        }
+
 
         .track-name,
         .artist-name {
@@ -69,6 +67,9 @@
         .track-name {
             color: $clr2;
 
+            &.isGreen {
+                color: $clr9;
+            }
         }
 
         &.track-playing {

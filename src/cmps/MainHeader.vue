@@ -101,7 +101,7 @@ export default {
             return this.$store.getters.currTrackIdx
         },
         isPlaying() {
-            return this.$store.getters.isCurrTrackPlaying
+            return this.$store.getters.isCurrTrackPlaying && this.station._id === this.currStation?._id
         },
         user() {
             return this.$store.getters.loggedinUser
