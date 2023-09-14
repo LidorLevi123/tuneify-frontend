@@ -85,6 +85,7 @@ async function getStationsForHome() {
         { id: '0JQ5DAqbMKFLVaM30PMBm4', name: 'Summer' },
         { id: '0JQ5DAqbMKFAXlCG6QvYQ4', name: 'Workout' },
         { id: 'toplists', name: 'Top Lists' },
+        { id: '0JQ5DAqbMKFzHmL4tf05da', name: 'Mood' },
         { id: '0JQ5DAqbMKFQIL0AXnG5AK', name: 'Trending' },
         { id: '0JQ5DAqbMKFAQy4HL4XU2D', name: 'Travel' },
         { id: '0JQ5DAqbMKFRKBHIxJ5hMm', name: 'Tastemakers' },
@@ -94,12 +95,17 @@ async function getStationsForHome() {
         { id: '0JQ5DAqbMKFCfObibaOZbv', name: 'Gaming' },
     ]
 
-    try {
-        const stationPromises = categories.map(async (category) => {
+    const stationPromises = categories.map(async (category) => {
+        try {
             const stations = await spotifyService.getSpotifyItems({ type: 'categoryStations', id: category.id })
             return stations.map((station) => ({ ...station, category: category.name, categoryId: category.id }))
-        })
+        } catch (error) {
+            console.error(`Error fetching stations for category ${category.name}: ${error.message}`)
+            return []
+        }
+    })
 
+    try {
         const results = await Promise.all(stationPromises)
         _cleanDescriptions(results)
         return results
@@ -116,15 +122,6 @@ function _cleanDescriptions(arr) {
         else if (typeof item === 'object') item.description = item.description.replace(/<a\b[^>]*>.*?<\/a>/gi, '')
     })
 }
-
-// getArtistData('1HY2Jd0NmPuamShAr6KMms')
-
-async function getArtistData(artistId) {
-    const artist = await spotifyService.getSpotifyItems({ type: 'artist', id: artistId })
-    return artist
-}
-
-
 
 function getEmptyStation() {
     return {

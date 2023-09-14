@@ -33,7 +33,7 @@ async function getSpotifyItems(req) {
 
     } catch (error) {
         console.error(
-            'Error retrieving artist data:',
+            'Error retrieving data:',
             error.response ? error.response.data : error.message,
             'Status Code:',
             error.response ? error.response.status : 'N/A',
