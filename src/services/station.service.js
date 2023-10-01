@@ -82,9 +82,9 @@ async function getAccessToken() {
 
 async function getStationsForHome() {
     const categories = [
+        { id: 'toplists', name: 'Top Lists' },
         { id: '0JQ5DAqbMKFLVaM30PMBm4', name: 'Summer' },
         { id: '0JQ5DAqbMKFAXlCG6QvYQ4', name: 'Workout' },
-        { id: 'toplists', name: 'Top Lists' },
         { id: '0JQ5DAqbMKFzHmL4tf05da', name: 'Mood' },
         { id: '0JQ5DAqbMKFQIL0AXnG5AK', name: 'Trending' },
         { id: '0JQ5DAqbMKFAQy4HL4XU2D', name: 'Travel' },
@@ -107,8 +107,9 @@ async function getStationsForHome() {
 
     try {
         const results = await Promise.all(stationPromises)
-        _cleanDescriptions(results)
-        return results
+        const filteredResults = results.filter(stationsArray => stationsArray.length > 8)
+        _cleanDescriptions(filteredResults)
+        return filteredResults
     } catch (error) {
         console.error(error)
         throw new Error('Failed to fetch station data')
