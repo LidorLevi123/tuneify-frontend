@@ -133,6 +133,7 @@ export default {
         socketService.on(SOCKET_EVENT_SET_TOPIC_USERS, this.setTopicUsers)
         historyTracker.push(this.$route.fullPath)
         eventBus.on('clickFromSearchRes', this.clickTrack)
+        eventBus.on('scrollDown', this.scrollDown)
     },
 
     unmounted() {
@@ -141,6 +142,10 @@ export default {
     },
 
     methods: {
+        scrollDown() {
+            const container = this.$refs.stationDetails
+            if (container) container.scrollBy({ top: 600, behavior: 'smooth' })
+        },
         async loadStation() {
             try {
                 const station = await stationService.getById(this.stationId)

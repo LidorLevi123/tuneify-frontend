@@ -31,22 +31,24 @@ export default {
     data() {
         return {
             query: '',
-            modalOpen: true
+            modalOpen: true,
+            scrollDown: false
         }
     },
-
     computed: {
         tracks() {
             return this.$store.getters.searchRes.tracks
         }
     },
-
     created() {
         this.search = utilService.debounce(() => {
             this.$emit('search', this.query)
+            if (!this.scrollDown && this.query && window.innerWidth > 890) {
+                setTimeout(this.scrollToResults, 500)
+                this.scrollDown = true
+            }
         }, 500)
     },
-
     methods: {
         onClearFilter() {
             this.query = ''
@@ -60,15 +62,12 @@ export default {
         scrollToResults() {
             eventBus.emit('scrollDown')
         }
-
-
     },
-
     watch: {
         query: {
             handler() {
                 this.search()
-                this.scrollToResults()
+                if (!this.query) this.scrollDown = false
             },
             deep: true,
         },
