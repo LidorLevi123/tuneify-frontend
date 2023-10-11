@@ -4,20 +4,15 @@
       <section class="login-logo">
         <RouterLink class="df" to="/">
           <img src="../../public/favicon.svg" alt="">
-          <h2>Tuniefy</h2>
+          <h2>Tuneify</h2>
         </RouterLink>
       </section>
     </header>
     <section class="form-container">
       <section class="login-form">
-        <section class="google-login">
-          <h1>Log in to Tuneify</h1>
-          <button class="google-btn">
-            <img src="https://accounts.scdn.co/sso/images/new-google-icon.72fd940a229bc94cf9484a3320b3dccb.svg" alt="">
-            <span>Continue with Google</span>
-          </button>
-          <hr>
-        </section>
+
+        <h1>Log in to Tuneify</h1>
+
         <form @submit.prevent="doLogin">
           <span>Username</span>
           <input type="text" v-model="loginCred.username" placeholder="User name">
@@ -27,7 +22,6 @@
         </form>
         <form @submit.prevent="doSignup">
           <hr>
-          <h2>Signup</h2>
           <input type="text" v-model="signupCred.fullname" placeholder="Your full name" />
           <input type="text" v-model="signupCred.username" placeholder="Username" />
           <input type="password" v-model="signupCred.password" placeholder="Password" />
@@ -114,7 +108,7 @@ export default {
     msg() {
       showErrorMsg(this.msg)
     }
-  }, 
+  },
 
   components: {
     ImgUploader

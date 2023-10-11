@@ -14,7 +14,7 @@
     @include for-mobile-layout {
         position: fixed;
         width: 100vw;
-        padding: 0.3rem 0.3rem 0.3rem 0.8rem;
+        padding: .5rem;
         height: 2.5rem;
         border-radius: 0;
     }
@@ -30,7 +30,7 @@
         margin-inline-end: 1.5rem;
 
         @include for-mobile-layout {
-            margin-inline-end: 0.5rem;
+            margin-inline-end: unset;
         }
 
         img {
@@ -60,6 +60,11 @@
             font-family: CircularSpTitle;
             font-size: 1rem;
             cursor: pointer;
+
+            @include for-mobile-layout {
+                margin: unset;
+                scale: 70%;
+            }
 
             &:hover {
                 scale: 104%;

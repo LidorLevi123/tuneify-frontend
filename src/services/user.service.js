@@ -13,7 +13,6 @@ export const userService = {
     remove,
     update,
     updateUserStations,
-    changeScore
 }
 
 window.userService = userService
@@ -42,11 +41,11 @@ async function update(user) {
 async function updateUserStations(user, stationId, action) {
     user = JSON.parse(JSON.stringify(user))
 
-    if(action === 'add') {
-        if(user.stationIds.some(id => id === stationId)) return
+    if (action === 'add') {
+        if (user.stationIds.some(id => id === stationId)) return
         user.stationIds.push(stationId)
     }
-    else if(action === 'remove') {
+    else if (action === 'remove') {
         const idx = user.stationIds.findIndex(currStationId => currStationId = stationId)
         user.stationIds.splice(idx, 1)
     }
@@ -75,14 +74,6 @@ async function logout() {
     sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER)
     // socketService.logout()
     return await httpService.post('auth/logout')
-}
-
-async function changeScore(by) {
-    const user = getLoggedinUser()
-    if (!user) throw new Error('Not loggedin')
-    user.score = user.score + by || by
-    await update(user)
-    return user.score
 }
 
 function saveLocalUser(user) {

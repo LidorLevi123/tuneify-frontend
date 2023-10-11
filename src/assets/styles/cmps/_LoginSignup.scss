@@ -4,11 +4,16 @@
     grid-template-rows: auto 1fr;
 
     header {
-        background-color: $clr1;
 
         .login-logo {
             display: flex;
             padding: 2rem 0 2rem 3.1875rem;
+
+            @include for-mobile-layout {
+                width: 100%;
+                padding: .5rem;
+                justify-content: center;
+            }
 
             img {
                 width: 2.25rem;
@@ -24,17 +29,15 @@
 
     .form-container {
         height: 100%;
-
-        // flex: 3 1 0%;
-        // flex-grow: 3;
-        // flex-shrink: 1;
-        // flex-basis: 0%;
-        // -webkit-box-pack: center;
-
         display: flex;
         justify-content: center;
         padding: 2rem;
         background: linear-gradient(rgba(255, 255, 255, 0.1) 0%, rgb(0, 0, 0) 100%);
+
+        @include for-mobile-layout {
+            padding: .5rem;
+            background: unset;
+        }
 
 
         .login-form {
@@ -42,52 +45,25 @@
             border-radius: 0.5rem;
             height: 56.875rem;
 
+            @include for-mobile-layout {
+                width: 100%;
+            }
 
-            .google-login {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
+            h1 {
+                color: $clr2;
+                font-size: 3rem;
+                font-family: CircularSpTitle;
+                margin: 5rem 0rem 3rem;
                 width: 45.875rem;
+                text-align: center;
 
-                h1 {
-                    color: $clr2;
-                    font-size: 3rem;
-                    font-family: CircularSpTitle;
-                    margin: 5rem 0rem 3rem;
+                @include for-mobile-layout {
+                    display: none;
+                    width: unset;
                 }
-
-
-                .google-btn {
-                    padding: 0.4375rem 1.9375rem;
-                    border-radius: 2rem;
-                    background-color: transparent;
-                    border: 1px solid $clr3;
-
-                    &:hover {
-                        outline: 1px solid $clr2;
-                        cursor: pointer;
-                    }
-
-
-                    span {
-                        margin: 0.3152rem 2.26rem;
-                        color: white;
-                        font-size: 1rem;
-                        font-weight: 700;
-                    }
-
-                }
-
-                hr {
-                    margin: 2rem 6.25rem;
-                    width: 70%;
-                }
-
             }
 
             form {
-
-
                 width: 324px;
                 margin: 0px auto;
                 padding-bottom: 0px;
@@ -95,9 +71,11 @@
                 flex-direction: column;
                 align-items: center;
 
+                @include for-mobile-layout {
+                    width: unset
+                }
 
                 input {
-
                     margin-block-end: 1rem;
                     width: 20.25rem;
                     height: 3rem;
@@ -107,7 +85,9 @@
                     border: 1px solid $clr3;
                     color: $clr2;
 
-
+                    @include for-mobile-layout {
+                        width: 100%;
+                    }
 
                     &:focus:hover {
                         outline: 2px solid white
@@ -128,26 +108,26 @@
                     font-weight: 700;
                     font-size: 1rem;
 
+                    @include for-mobile-layout {
+                        width: 100%;
+                    }
+
                     &:hover {
                         scale: 104%;
                     }
                 }
-
             }
 
             hr {
                 margin: 2rem 6.25rem;
-                width: 70%;
+                width: 100%;
             }
 
         }
     }
 
-
     span {
         color: $clr2;
         align-self: flex-start;
-
     }
-
 }
