@@ -21,12 +21,19 @@
             <div @click="editProfile" class="menu-li">Edit profile</div>
             <div @click="doLogout" class="menu-li">Log out</div>
         </div>
-        <button v-if="user" @click="openUserMenu" class="profile-btn" :title="`${user.fullname}`">
-            <img :src="user.imgUrl" :alt="user.imgUrl">
-        </button>
-        <RouterLink v-if="!user" class="login-link" to="/login">
-            <button class="login-btn">Log in</button>
-        </RouterLink>
+        <div class="profile-btns">
+            <RouterLink v-if="user?.isAdmin" class="admin-link" to="/admin">
+                <button class="admin-btn">Admin page</button>
+            </RouterLink>
+
+            <button v-if="user" @click="openUserMenu" class="profile-btn" :title="`${user.fullname}`">
+                <img :src="user.imgUrl" :alt="user.imgUrl">
+            </button>
+
+            <RouterLink v-if="!user" class="login-link" to="/login">
+                <button class="login-btn">Log in</button>
+            </RouterLink>
+        </div>
     </section>
 </template>
 
@@ -107,7 +114,6 @@ export default {
             document.body.classList.add('ue-modal-open')
             this.showUserMenu = false
         }
-
     },
     computed: {
         currStation() {
@@ -129,13 +135,9 @@ export default {
             return this.$route.path.startsWith('/station/') && this.isPlaying
         },
         headerBgColor() {
-            if (this.$route.path.startsWith('/station/')) {
-                return this.scrollPosition > 325 ? this.backgroundColor : 'transparent';
-            } else if (this.$route.path.startsWith('/search/')) {
-                return this.scrollPosition > 50 ? '#121212' : 'transparent';
-            } else {
-                return this.scrollPosition > 50 ? this.backgroundColor : 'transparent';
-            }
+            if (this.$route.path.startsWith('/station/')) return this.scrollPosition > 325 ? this.backgroundColor : 'transparent'
+            else if (this.$route.path.startsWith('/search/')) return this.scrollPosition > 50 ? '#121212' : 'transparent'
+            else return this.scrollPosition > 50 ? this.backgroundColor : 'transparent'
         }
     },
     beforeUnmount() {
@@ -151,5 +153,3 @@ export default {
     },
 }
 </script>
-
-

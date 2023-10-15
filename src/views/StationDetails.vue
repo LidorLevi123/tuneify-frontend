@@ -12,7 +12,7 @@
                     <p class="description">{{ station.description }}</p>
                     <div>
                         <img v-if="this.station.owner.fullname === 'Tuneify'"
-                            src="http://res.cloudinary.com/dys1sj4cd/image/upload/v1691227930/favicon_juzdft.svg" alt="">
+                            src="https://res.cloudinary.com/dys1sj4cd/image/upload/v1691227930/favicon_juzdft.svg" alt="">
                         <span class="logo">{{ stationOwner }}</span>
                         <span class="songs-num" v-if="station.tracks">&bull; {{ station.tracks?.length }} songs</span>
                         <span class="songs-time" v-show="formttedTime">, about {{ formttedTime }} hours</span>
@@ -78,7 +78,7 @@ import {
 
 
 export default {
-
+    name: 'StationDetails',
     data() {
         return {
             station: null,
@@ -87,7 +87,6 @@ export default {
             topicUsers: []
         }
     },
-
     computed: {
         stationId() {
             return this.$route.params.stationId
@@ -128,7 +127,6 @@ export default {
             return this.$store.getters.searchRes
         },
     },
-
     async created() {
         await this.loadStation()
         socketService.on(SOCKET_EVENT_SET_TOPIC_USERS, this.setTopicUsers)
@@ -136,12 +134,10 @@ export default {
         eventBus.on('clickFromSearchRes', this.clickTrack)
         eventBus.on('scrollDown', this.scrollDown)
     },
-
     unmounted() {
         socketService.off(SOCKET_EVENT_SET_TOPIC_USERS)
         eventBus.off('clickFromSearchRes', this.clickTrack)
     },
-
     methods: {
         scrollDown() {
             const container = this.$refs.stationDetails
@@ -280,7 +276,6 @@ export default {
             this.topicUsers = topicUsers
         }
     },
-
     watch: {
         stationId() {
             if (!this.stationId) return
@@ -297,4 +292,3 @@ export default {
     }
 }
 </script>
-

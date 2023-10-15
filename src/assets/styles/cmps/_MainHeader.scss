@@ -51,55 +51,77 @@
         }
     }
 
-    .profile-btn {
-        border: none;
-        border-radius: 50%;
-        height: 2rem;
-        width: 2rem;
-        background-color: rgba(20, 20, 20, 0.811);
-        cursor: pointer;
-        margin-left: auto;
-        margin-inline-end: 1.5rem;
+    .profile-btns {
+        display: flex;
+        gap: .5rem;
+        margin-inline-start: auto;
 
-        @include for-mobile-layout {
-            margin-inline-end: unset;
-        }
-
-        img {
-            height: 1.5rem;
-            width: 1.5rem;
-            border-radius: 50%;
-        }
-
-        &:hover {
-            background-color: $clr1;
-            scale: 104%;
-        }
-
-    }
-
-    .login-link {
-        margin-left: auto;
-
-        .login-btn {
-            border-radius: 500px;
+        .admin-btn {
             border: none;
-            background-color: $clr2;
-            height: 3rem;
-            width: 6.875rem;
-            margin-inline-end: 2rem;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.54);
+            padding: .5rem 1rem;
+            border-radius: 500px;
+            font-size: 0.875rem;
             font-weight: 700;
-            font-family: CircularSpTitle;
-            font-size: 1rem;
             cursor: pointer;
 
+            &:hover {
+                background-color: $clr1;
+                scale: 104%;
+            }
+        }
+
+        .profile-btn {
+            border: none;
+            border-radius: 50%;
+            height: 2rem;
+            width: 2rem;
+            background-color: rgba(0, 0, 0, 0.54);
+            cursor: pointer;
+            margin-left: auto;
+            margin-inline-end: 1.5rem;
+
             @include for-mobile-layout {
-                margin: unset;
-                scale: 70%;
+                margin-inline-end: unset;
+            }
+
+            img {
+                height: 1.5rem;
+                width: 1.5rem;
+                border-radius: 50%;
             }
 
             &:hover {
+                background-color: $clr1;
                 scale: 104%;
+            }
+
+        }
+
+        .login-link {
+            margin-left: auto;
+
+            .login-btn {
+                border-radius: 500px;
+                border: none;
+                background-color: $clr2;
+                height: 3rem;
+                width: 6.875rem;
+                margin-inline-end: 2rem;
+                font-weight: 700;
+                font-family: CircularSpTitle;
+                font-size: 1rem;
+                cursor: pointer;
+
+                @include for-mobile-layout {
+                    margin: unset;
+                    scale: 70%;
+                }
+
+                &:hover {
+                    scale: 104%;
+                }
             }
         }
     }

@@ -1,0 +1,64 @@
+.admin-page {
+    height: 100vh;
+    background-image: linear-gradient(to bottom, #282828 0%, #121212 33rem, #121212);
+    overflow: auto;
+    color: $clr2;
+
+    .admin-page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.5rem 3rem;
+    }
+
+    .user-list {
+        display: grid;
+        gap: 1rem;
+
+        .user-info {
+            display: grid;
+            grid-template-columns: 4rem minmax(1rem, 5rem) auto;
+            gap: 1rem;
+            margin-inline-start: 3rem;
+            align-items: center;
+
+            img {
+                width: 4rem;
+                aspect-ratio: 1;
+                border-radius: 50%;
+                cursor: pointer;
+
+                &:hover {
+                    transition: .1s;
+                    outline: 3px solid $clr9;
+                }
+            }
+
+            button {
+                width: fit-content;
+            }
+        }
+    }
+
+    .remove-btn,
+    .back-btn {
+        border: none;
+        color: $clr2;
+        background-color: rgba(0, 0, 0, 0.54);
+        padding: .5rem 1rem;
+        border-radius: 500px;
+        font-size: 0.875rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: .2s;
+
+        &:hover {
+            background-color: $clr9;
+        }
+    }
+
+
+
+
+
+}

@@ -8,6 +8,7 @@ import StationDetails from './views/StationDetails.vue'
 import LoginSignup from './views/LoginSignup.vue'
 import Sidebar from './cmps/Sidebar.vue'
 import LyricsPage from './views/LyricsPage.vue'
+import AdminPage from './views/AdminPage.vue'
 
 const routes = [
   {
@@ -51,6 +52,11 @@ const routes = [
     path: '/login',
     name: 'LoginSignup',
     component: LoginSignup,
+  },
+  {
+    path: '/admin',
+    name: 'AdminPage',
+    component: AdminPage,
   },
 ]
 
