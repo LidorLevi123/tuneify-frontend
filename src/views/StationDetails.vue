@@ -63,6 +63,7 @@ import StationEdit from '../cmps/StationEdit.vue'
 import TrackList from '../cmps/TrackList.vue'
 import UserList from '../cmps/UserList.vue'
 import { stationService } from '../services/station.service'
+import { userService } from '../services/user.service'
 import { utilService } from '../services/util.service'
 import { eventBus, showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
 
@@ -96,7 +97,7 @@ export default {
             return Math.floor(hours)
         },
         stationOwner() {
-            return this.station.owner?.fullname
+            return this.station.owner?.fullname === 'Tuneify' ? 'Tuneify' : this.user?.fullname
         },
         hasLiked() {
             const libraryStations = this.$store.getters.libraryStations
@@ -192,11 +193,10 @@ export default {
                 await this.$store.dispatch({ type: 'addTrack', trackToSave, stationId })
                 this.loadStation()
                 eventBus.emit('track-add')
-                if (stationId !== this.user.likedId) {
-                    showSuccessMsg('Saved to station')
-                } else {
-                    showSuccessMsg('Saved to Your Library')
-                }
+
+                if (stationId !== this.user.likedId) showSuccessMsg('Added to playlist')
+                else showSuccessMsg('Added to Liked Songs')
+
             } catch (err) {
                 console.log(err.message)
                 showErrorMsg('Could not add track')
@@ -206,7 +206,7 @@ export default {
             try {
                 await this.$store.dispatch({ type: 'removeTrack', trackId, stationId: this.station._id })
                 this.loadStation()
-                showSuccessMsg('Removed from station')
+                showSuccessMsg('Removed from playlist')
             } catch (err) {
                 console.log(err.message)
                 showErrorMsg('Could not dislike track')
@@ -241,8 +241,8 @@ export default {
             this.tracksTotalDuration = this.station.tracks?.reduce((sum, track) => sum = sum + track.formalDuration, 0)
         },
         openStationEditor() {
-            if (this.station.owner.fullname !== this.user.fullname || this.station._id === this.user.likedId) return
-            document.body.classList.add('modal-open')
+            if (this.station.owner.fullname === 'Tuneify' || this.station._id === this.user.likedId) return
+            document.body.classList.add('se-modal-open')
         },
         clickTrack(trackIdx, isfromSearch) {
             trackIdx = trackIdx === -1 ? 0 : trackIdx
@@ -275,15 +275,10 @@ export default {
                 this.$store.commit({ type: 'setCurrStation', station: this.station })
             }
         },
-        setTopicUsers(userIds) {
-            const topicUsers = []
-            this.users.forEach(user => {
-                if (userIds.includes(user._id)) {
-                    topicUsers.push(user)
-                }
-            })
+        async setTopicUsers(userIds) {
+            const topicUsers = await Promise.all(userIds.map(userId => userService.getById(userId)))
             this.topicUsers = topicUsers
-        },
+        }
     },
 
     watch: {

@@ -6,7 +6,9 @@
 export default {
     methods: {
         onCloseModal() {
-            document.body.classList.remove('modal-open')
+            document.body.classList.remove('se-modal-open')
+            document.body.classList.remove('ad-modal-open')
+            document.body.classList.remove('ue-modal-open')
         }
     }
 }

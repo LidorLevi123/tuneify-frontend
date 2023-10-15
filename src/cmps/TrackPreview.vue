@@ -29,20 +29,21 @@
             </div>
             <span v-show="isHovered && !this.$route.path.startsWith('/search')" class="btn-options svg-fill"
                 v-icon="'moreOptionsSmall'" @click="toggleDropdown($event)"></span>
-
             <div v-if="showDropdown" class="dropdown">
                 <div v-if="!isStationOwner" class="dropdown-item" @mouseenter="popSubDropdown">
-                    <span @click="$event.stopPropagation()" class="menu-li">Add to playlist</span>
-                    <div v-show="showSubDropdown" class="sub-dropdown">
+                    <span @click="$event.stopPropagation()" class="menu-li df sb" v-clickOutside="hideMenu">Add to
+                        playlist <span v-icon="`rightArrow`" class="df ai"></span></span>
+
+                    <div v-show="showSubDropdown && createdStations?.length" class="sub-dropdown">
                         <div class="sub-dropdown-item" v-for="idx in createdStations?.length"
                             @click="onAddTrack(track, createdStations[idx - 1]._id, $event)">
                             {{ createdStations[idx - 1].name }}
-                            <hr>
+
                         </div>
                     </div>
                 </div>
                 <div v-else class="dropdown-item" @click="onRemoveTrack(track.id, $event)">
-                    <span class="menu-li">Remove from playlist</span>
+                    <span class="menu-li" v-clickOutside="hideMenu">Remove from playlist</span>
                 </div>
             </div>
         </div>
@@ -136,12 +137,11 @@ export default {
         onMouseOver() { this.isHovered = true },
         onMouseLeave() {
             this.isHovered = false
-            this.showDropdown = false
         },
         onAddTrack(track, stationId, ev) {
             ev.stopPropagation()
             this.$emit('track-add', track, stationId)
-            this.showSubDropdown = false
+            this.hideMenu()
         },
         onRemoveTrack(trackId, ev) {
             ev.stopPropagation()
@@ -162,8 +162,9 @@ export default {
         popSubDropdown() {
             this.showSubDropdown = true
         },
-        unPopSubDropdown() {
+        hideMenu() {
             this.showSubDropdown = false
+            this.showDropdown = false
         },
     }
 }

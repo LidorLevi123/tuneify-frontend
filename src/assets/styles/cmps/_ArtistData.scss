@@ -3,7 +3,7 @@
     top: 50%;
     left: 50%;
     translate: -50% -50%;
-    z-index: 3;
+    z-index: 4;
     background-color: $clr4;
     border-radius: 0.5rem;
     width: 48rem;
@@ -64,7 +64,7 @@
 
 }
 
-body.modal-open .artist-data-containter {
+body.ad-modal-open .artist-data-containter {
     display: block;
 }
 

@@ -7,12 +7,14 @@
     background-color: rgba(0, 0, 0, 0.707);
     pointer-events: none;
     cursor: pointer;
-    z-index: 2;
+    z-index: 3;
 
     opacity: 0;
 }
 
-body.modal-open .backdrop {
+body.se-modal-open .backdrop,
+body.ad-modal-open .backdrop,
+body.ue-modal-open .backdrop {
     opacity: 1;
     pointer-events: auto;
 }

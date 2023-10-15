@@ -19,7 +19,6 @@ export const userStore = {
     },
     mutations: {
         setLoggedinUser(state, { user }) {
-            // Yaron: needed this workaround as score not reactive from birth
             state.loggedinUser = (user) ? { ...user } : null
         },
         setUsers(state, { users }) {
@@ -34,9 +33,6 @@ export const userStore = {
         },
         removeUser(state, { userId }) {
             state.users = state.users.filter(user => user._id !== userId)
-        },
-        setUserScore(state, { score }) {
-            state.loggedinUser.score = score
         },
     },
     actions: {
@@ -60,7 +56,6 @@ export const userStore = {
                 console.log('userStore: Error in signup', err)
                 throw err
             }
-
         },
         async logout({ commit }) {
             try {
@@ -115,14 +110,5 @@ export const userStore = {
                 throw err
             }
         },
-        async increaseScore({ commit }) {
-            try {
-                const score = await userService.changeScore(100)
-                commit({ type: 'setUserScore', score })
-            } catch (err) {
-                console.log('userStore: Error in increaseScore', err)
-                throw err
-            }
-        }
     }
 }

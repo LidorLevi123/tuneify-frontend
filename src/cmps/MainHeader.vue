@@ -17,7 +17,11 @@
                 <span class="df ai" v-icon="'close'" @click="onClearFilter"></span>
             </div>
         </div>
-        <button v-if="user" @click="doLogout" class="profile-btn" :title="`${user.fullname} - press to logout`">
+        <div v-if="showUserMenu" class="dropdown" v-clickOutside="handleClickOutside">
+            <div @click="editProfile" class="menu-li">Edit profile</div>
+            <div @click="doLogout" class="menu-li">Log out</div>
+        </div>
+        <button v-if="user" @click="openUserMenu" class="profile-btn" :title="`${user.fullname}`">
             <img :src="user.imgUrl" :alt="user.imgUrl">
         </button>
         <RouterLink v-if="!user" class="login-link" to="/login">
@@ -42,7 +46,8 @@ export default {
         return {
             query: '',
             scrollPosition: null,
-            backgroundColor: '#121212'
+            backgroundColor: '#121212',
+            showUserMenu: false
         }
     },
     created() {
@@ -54,10 +59,17 @@ export default {
         }, 500)
     },
     methods: {
+        handleClickOutside() {
+            this.showUserMenu = false
+        },
+        openUserMenu() {
+            this.showUserMenu = true
+        },
         doLogout() {
             this.$router.push('/')
             this.$store.dispatch({ type: 'logout' })
             this.$store.commit({ type: 'loadStations', stations: [] })
+            this.showUserMenu = false
         },
         onClearFilter() {
             this.query = ''
@@ -91,6 +103,10 @@ export default {
                 this.$router.push(nextPath)
             }
         },
+        editProfile() {
+            document.body.classList.add('ue-modal-open')
+            this.showUserMenu = false
+        }
 
     },
     computed: {

@@ -64,7 +64,7 @@ export default {
             }
         },
         onCloseModal() {
-            document.body.classList.remove('modal-open')
+            document.body.classList.remove('se-modal-open')
         },
         async handleFile(ev) {
             const { url } = await uploadService.uploadImg(ev)

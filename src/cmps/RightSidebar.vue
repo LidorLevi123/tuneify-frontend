@@ -61,11 +61,11 @@ export default {
         closeRSB() { this.$store.commit('toggleRsb') },
         openBio() {
             this.artistBioOpen = true
-            document.body.classList.add('modal-open')
+            document.body.classList.add('ad-modal-open')
         },
         closeBio() {
             this.artistBioOpen = false
-            document.body.classList.remove('modal-open')
+            document.body.classList.remove('ad-modal-open')
         },
         async getArtistData(artist) {
             const metaData = await wikiService.getArtistData(artist)

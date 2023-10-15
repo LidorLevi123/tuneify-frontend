@@ -137,21 +137,6 @@
         }
     }
 
-
-    .sub-dropdown {
-        position: absolute;
-        right: 10rem;
-        color: $clr3;
-        border-radius: 0.2rem;
-        display: grid;
-        gap: 5px;
-        padding: 1rem;
-        box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
-        background-color: $clr6;
-        width: max-content;
-        cursor: pointer;
-    }
-
     .time-actions {
         display: flex;
         align-items: center;
@@ -163,17 +148,54 @@
             width: 2rem;
         }
 
+        .sub-dropdown {
+            position: absolute;
+            right: 13.5rem;
+            color: #ffffffe6;
+            border-radius: 0.2rem;
+            display: grid;
+            padding: .25rem;
+            box-shadow: 0 16px 24px rgba(0, 0, 0, .3), 0 6px 8px rgba(0, 0, 0, .2);
+            background-color: $clr6;
+            min-width: 11.5rem;
+            cursor: pointer;
+
+            @include for-mobile-layout {
+                right: 3.2rem;
+                top: 10.9%;
+            }
+
+            .sub-dropdown-item {
+                padding: .35rem;
+                border-radius: 0.2rem;
+                color: #ffffffe6;
+                font-size: 0.875rem;
+
+                &:hover {
+                    background-color: #3e3e3e
+                }
+            }
+        }
+
         .menu-li {
             cursor: pointer;
             position: absolute;
             background-color: $clr6;
             right: 2rem;
-            padding: 1rem;
-            height: 3rem;
+            padding: .5rem;
+            min-width: 11.5rem;
             border-radius: 0.2rem;
-            color: $clr3;
-            box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+            color: #ffffffe6;
+            font-size: 0.875rem;
+            box-shadow: 0 16px 24px rgba(0, 0, 0, .3), 0 6px 8px rgba(0, 0, 0, .2);
+
+            &:hover {
+                background-color: #3e3e3e
+            }
+
+
         }
+
     }
 
     .btn-options,

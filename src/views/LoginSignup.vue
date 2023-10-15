@@ -3,7 +3,7 @@
     <header>
       <section class="login-logo">
         <RouterLink class="df" to="/">
-          <img src="../../public/favicon.svg" alt="">
+          <img src="/favicon.svg" alt="">
           <h2>Tuneify</h2>
         </RouterLink>
       </section>
@@ -46,20 +46,6 @@ export default {
       signupCred: { username: '', password: '', fullname: '', imgUrl: '' },
     }
   },
-  computed: {
-    users() {
-      return this.$store.getters.users
-    },
-    isLoading() {
-      return this.$store.getters.usersIsLoading
-    },
-    loggedinUser() {
-      return this.$store.getters.loggedinUser
-    },
-  },
-  created() {
-    this.loadUsers()
-  },
   methods: {
     async doLogin() {
       if (!this.loginCred.username) {
@@ -87,9 +73,6 @@ export default {
       await this.$store.dispatch({ type: 'loadStations', userId: user._id })
       this.$router.push('/')
 
-    },
-    loadUsers() {
-      this.$store.dispatch({ type: "loadUsers" })
     },
     async removeUser(userId) {
       try {
