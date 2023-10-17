@@ -42,11 +42,10 @@
         min-width: 372px;
 
         @include for-mobile-layout {
-            padding-inline-end: 1rem;
             display: flex;
             flex-wrap: nowrap;
             overflow-x: auto;
-            gap: 0.8rem;
+            gap: .5rem;
             -webkit-overflow-scrolling: touch;
 
             &::-webkit-scrollbar {

@@ -32,7 +32,8 @@
             </section>
         </section>
     </section>
-    <ArtistData v-if="artistBioOpen" :artistSnippet="artistSnippet" :artistImage="artistImage" @closeBio="closeBio" />
+    <ArtistData v-if="artistBioOpen" :artistSnippet="artistSnippet" :artistImage="artistImage"
+        :artistFollowers="artistFollowers" @closeBio="closeBio" />
 </template>
 
 <script>
@@ -40,6 +41,7 @@ import { eventBus } from '../services/event-bus.service'
 import { wikiService } from '../services/wiki.service'
 import { mapGetters } from 'vuex';
 import ArtistData from './ArtistData.vue';
+import { stationService } from '../services/station.service';
 
 export default {
     name: 'RightSidebar',
@@ -48,6 +50,7 @@ export default {
             nextTrackHovered: false,
             artistImage: null,
             artistSnippet: null,
+            artistFollowers: null,
             artistBioOpen: false
         }
     },
@@ -67,10 +70,11 @@ export default {
             this.artistBioOpen = false
             document.body.classList.remove('ad-modal-open')
         },
-        async getArtistData(artist) {
-            const metaData = await wikiService.getArtistData(artist)
-            this.artistImage = metaData.artistImage
-            this.artistSnippet = metaData.artistSnippet
+        async getArtistData(artist, artistId) {
+            const [metaData, { imgUrl, followers }] = await Promise.all([wikiService.getArtistData(artist), stationService.getArtistData(artistId)])
+            this.artistImage = imgUrl
+            this.artistSnippet = metaData
+            this.artistFollowers = followers
         }
     },
     computed: {
@@ -92,7 +96,7 @@ export default {
             immediate: true,
             handler(newTrackName, oldTrackName) {
                 if (newTrackName !== oldTrackName) {
-                    this.getArtistData(this.currTrack.artists[0])
+                    this.getArtistData(this.currTrack.artists[0], this.currTrack.artistId)
                 }
             }
         }

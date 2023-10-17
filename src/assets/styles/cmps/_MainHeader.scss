@@ -201,7 +201,7 @@
         background-color: #242424;
 
         @include for-mobile-layout {
-            width: 15.75rem;
+            width: 10.75rem;
             height: 2rem;
         }
 
@@ -230,7 +230,7 @@
             width: 20rem;
 
             @include for-mobile-layout {
-                width: 13rem;
+                width: 7.5rem;
             }
         }
 

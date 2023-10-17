@@ -12,7 +12,7 @@
             :style="{ opacity: this.scrollPosition > 400 ? '1' : '0' }">{{ station?.name }}</span>
         <div v-if="$route.path === '/search'" class="search-input-container">
             <span class="df ai" v-icon="`sSearch`"></span>
-            <input type="text" v-model="query" placeholder="What do you want to listen to?">
+            <input type="text" v-model="query" :placeholder="placeholderText">
             <div v-if="query">
                 <span class="df ai" v-icon="'close'" @click="onClearFilter"></span>
             </div>
@@ -138,6 +138,9 @@ export default {
             if (this.$route.path.startsWith('/station/')) return this.scrollPosition > 325 ? this.backgroundColor : 'transparent'
             else if (this.$route.path.startsWith('/search/')) return this.scrollPosition > 50 ? '#121212' : 'transparent'
             else return this.scrollPosition > 50 ? this.backgroundColor : 'transparent'
+        },
+        placeholderText() {
+            return window.innerWidth > 890 ? 'What do you want to listen to?' : 'Search'
         }
     },
     beforeUnmount() {

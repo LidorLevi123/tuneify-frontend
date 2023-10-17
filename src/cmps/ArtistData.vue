@@ -7,8 +7,13 @@
             <img :src="artistImage" alt="">
         </section>
         <section class="artist-bio">
+            <section class="followers" v-if="artistFollowers">
+                <span class="followers-number">{{ artistFollowers.toLocaleString("en-US") }}</span>
+                <span class="followers-text">Followers</span>
+            </section>
+
             <h1 v-if="!artistSnippet">No bio available</h1>
-            <section class="artist-wiki" v-html="artistSnippet"></section>
+            <section v-else class="artist-wiki" v-html="artistSnippet"></section>
         </section>
     </section>
 </template>
@@ -18,7 +23,8 @@ export default {
     name: 'ArtistData',
     props: {
         artistImage: { type: String },
-        artistSnippet: { type: String }
+        artistSnippet: { type: String },
+        artistFollowers: { type: Number }
     },
     methods: {
         closeBio() {

@@ -49,19 +49,36 @@
 
     .artist-bio {
         padding: 1rem 2.5rem;
+        display: flex;
+        justify-content: space-around;
 
         h1 {
-            color: #a6a6a6;
-            text-align: center;
+            color: $clr3;
+            align-self: center;
+        }
+
+        .followers {
+            display: flex;
+            flex-direction: column;
+            padding: 1rem 2.5rem 0 0;
+
+            .followers-number {
+                font-size: 2rem;
+                color: $clr2;
+                font-family: CircularSpTitle;
+            }
+
+            .followers-text {
+                font-size: 0.875rem;
+                color: $clr3;
+                margin-top: -.5rem;
+            }
         }
 
         .artist-wiki {
-            color: #a6a6a6;
-
+            color: $clr3;
         }
     }
-
-
 }
 
 body.ad-modal-open .artist-data-containter {

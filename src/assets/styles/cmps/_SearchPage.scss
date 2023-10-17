@@ -3,11 +3,19 @@
     background-color: $clr4;
     overflow-y: auto;
 
-    .track-list {
-        padding: 5rem 0 0 1.4rem;
+    .search-res {
+        padding: 3.5rem 0 0 1.4rem;
+
+        .songs,
+        .playlists {
+            color: $clr2;
+            font-family: CircularSpTitle;
+            font-size: 1.5rem;
+            margin: 1rem .5rem;
+        }
 
         @include for-mobile-layout {
-            padding: 5rem 0 0 0;
+            padding: 2rem 0 0 0;
         }
 
     }
@@ -16,14 +24,13 @@
         padding: 5.5rem 1.5rem 1.5rem;
 
         @include for-mobile-layout {
-            padding-inline: .5rem;
-            padding-block-end: 1rem;
+            padding: 0 .5rem 0;
         }
 
         .browse {
             color: $clr2;
-            margin-block-start: 1.5rem;
-            margin-block-end: 1rem;
+            margin-block: 1.5rem 1rem;
+            ;
 
             @include for-mobile-layout {
                 margin-block-start: 3rem;

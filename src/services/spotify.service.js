@@ -6,16 +6,15 @@ export const spotifyService = {
     getAccessToken
 }
 let gAccessToken = null
-getAccessToken()
 
 async function getAccessToken() {
     gAccessToken = await httpService.get('spotify/')
+    return gAccessToken
 }
-
-
 
 async function getSpotifyItems(req) {
     const { type, id, query } = req
+    if (!gAccessToken) gAccessToken = await getAccessToken()
 
     const endpoints = _getEndpoints(id, query)
 
@@ -26,7 +25,6 @@ async function getSpotifyItems(req) {
                 Authorization: `Bearer ${gAccessToken}`,
             },
         })
-
         // Clean and return the data from response
         let cleanData = await _cleanResponseData(response.data, type)
         return cleanData
@@ -44,14 +42,12 @@ async function getSpotifyItems(req) {
     }
 }
 
-
-
 function _getEndpoints(id, query) {
     return {
         categoryStations: `https://api.spotify.com/v1/browse/categories/${id}/playlists?country=il&limit=50`,
         station: `https://api.spotify.com/v1/playlists/${id}`,
         tracks: `https://api.spotify.com/v1/playlists/${id}/tracks`,
-        search: `https://api.spotify.com/v1/search?q=${query}&type=track,playlist`,
+        search: `https://api.spotify.com/v1/search?q=${query}&type=track,playlist&limit=12`,
         artist: `https://api.spotify.com/v1/artists/${id}`
     }
 }
@@ -72,21 +68,19 @@ async function _cleanResponseData(data, type) {
         case 'search':
             cleanData = await _cleanSearchData(data)
             break
+        case 'artist':
+            cleanData = await _cleanArtistData(data)
+            break
     }
     return cleanData
 }
 
 async function _cleanStationData(data) {
-    if (/<a\b[^>]*>.*?<\/a>/i.test(data.description)) {
-        // If there's an <a> tag in the description, remove it
-        data.description = data.description.replace(/<a\b[^>]*>(.*?)<\/a>/gi, '')
-    }
-
     const station = {
         spotifyId: data.id,
         name: data.name,
         imgUrl: data.images[0].url,
-        description: data.description,
+        description: data.description.replace(/<a\b[^>]*>(.*?)<\/a>/gi, ''),
         owner: { fullname: 'Tuneify' },
         tracks: await getSpotifyItems({ type: 'tracks', id: data.id }),
     }
@@ -123,13 +117,30 @@ async function _cleanSearchData(data) {
         id: track.id,
         title: track.name,
         artists: _cleanArtists(track.artists),
+        artistId: track.artists[0].id,
         imgUrl: track.album.images[0].url,
         formalDuration: track.duration_ms,
         album: track.album.name,
         youtubeId: ''
     }))
 
-    return { tracks }
+    const stations = data.playlists.items.map(station => ({
+        spotifyId: station.id,
+        name: station.name,
+        imgUrl: station.images[0].url,
+        description: station.description.replace(/<a\b[^>]*>(.*?)<\/a>/gi, '')
+    }))
+
+    return { tracks, stations }
+}
+
+async function _cleanArtistData(data) {
+    return {
+        spotifyId: data.id,
+        name: data.name,
+        imgUrl: data.images[0].url,
+        followers: data.followers.total
+    }
 }
 
 function _cleanArtists(artists) {

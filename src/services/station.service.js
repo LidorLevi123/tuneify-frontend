@@ -15,7 +15,9 @@ export const stationService = {
     getSearchRes,
     getCategoryStations,
     getStationsForHome,
-    getAccessToken
+    getAccessToken,
+    getAllStations,
+    getArtistData
 }
 
 window.cs = stationService // for console usage
@@ -24,6 +26,10 @@ async function query(userId) {
     const filterBy = { userId }
     const stations = await httpService.get(BASE_URL, filterBy)
     return stations
+}
+
+async function getAllStations() {
+    return await httpService.get('station/getAll')
 }
 
 async function getById(stationId) {
@@ -42,19 +48,20 @@ async function remove(stationId) {
 }
 
 async function save(station) {
-    if (station._id) {
-        return await httpService.put(BASE_URL + station._id, station)
-    }
-    return await httpService.post(BASE_URL, station)
+    if (station.name.includes('Search results')) return
+    if (station._id) return await httpService.put(BASE_URL + station._id, station)
+    else return await httpService.post(BASE_URL, station)
 }
 
 async function getSearchRes(query) {
-    const res = await spotifyService.getSpotifyItems({ type: 'search', query })
-    const resultsStation = getEmptyStation()
-    resultsStation.name = `Search results for: ${query}`
-    resultsStation.isEmpty = false
-    resultsStation.tracks = res.tracks
-    return resultsStation
+    const { tracks, stations } = await spotifyService.getSpotifyItems({ type: 'search', query })
+    return {
+        name: `Search results for: ${query}`,
+        isEmpty: false,
+        tracks: tracks,
+        stations: stations
+    }
+
 }
 
 async function saveTrack(track, stationId) {
@@ -132,4 +139,8 @@ function getEmptyStation() {
         tracks: [],
         isEmpty: true
     }
+}
+
+async function getArtistData(id) {
+    return await spotifyService.getSpotifyItems({ type: 'artist', id })
 }

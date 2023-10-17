@@ -1,7 +1,12 @@
 <template>
   <section class="categories-container">
-    <div class="track-list" v-if="tracks?.length">
-      <TrackList :tracks="tracks" @track-clicked="emitClick" />
+    <div class="search-res" v-if="tracks?.length">
+      <h1 class="songs">Songs</h1>
+      <TrackList :tracks="tracks" @track-clicked="emitClick" class="track-list" />
+      <div>
+        <h1 class="playlists">Playlists</h1>
+        <StationList :stations="stations" class="station-list" />
+      </div>
     </div>
     <div class="categories-list" v-else>
       <h2 class="browse">Browse all</h2>
@@ -17,6 +22,7 @@ import { eventBus } from '../services/event-bus.service'
 import TrackList from '../cmps/TrackList.vue'
 import CategoryList from '../cmps/CategoryList.vue'
 import historyTracker from '../services/history.service'
+import StationList from '../cmps/StationList.vue'
 
 export default {
   name: 'SearchPage',
@@ -26,7 +32,6 @@ export default {
       categories: utilService.getCategoriesJson(),
     }
   },
-
   created() {
     historyTracker.push(this.$route.fullPath)
     eventBus.on('search', this.getTracks)
@@ -53,6 +58,9 @@ export default {
   },
 
   computed: {
+    stations() {
+      return this.$store.getters.searchRes.stations
+    },
     tracks() {
       return this.$store.getters.searchRes.tracks
     },
@@ -70,6 +78,18 @@ export default {
   components: {
     CategoryList,
     TrackList,
+    StationList
   }
 }
 </script>
+
+<style scoped>
+.track-list {
+  margin-block-end: unset;
+}
+
+.station-list {
+  margin-block-end: 12rem;
+  padding-inline-start: .5rem;
+}
+</style>

@@ -2,6 +2,7 @@
     <section class="admin-page">
         <div class="admin-page-header">
             <h1>Admin Page</h1>
+            <button class="print-btn" @click="printAllStations">Print all stations to console</button>
             <RouterLink to="/">
                 <button class="back-btn">back to app</button>
             </RouterLink>
@@ -20,6 +21,7 @@
 </template>
 
 <script>
+import { stationService } from '../services/station.service'
 export default {
     name: 'AdminPage',
     data() {
@@ -36,6 +38,10 @@ export default {
         },
         showUserDetails(user) {
             this.user = user
+        },
+        async printAllStations() {
+            const stations = await stationService.getAllStations()
+            console.log(stations)
         }
     },
     computed: {

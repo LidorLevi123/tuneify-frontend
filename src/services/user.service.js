@@ -46,7 +46,7 @@ async function updateUserStations(user, stationId, action) {
         user.stationIds.push(stationId)
     }
     else if (action === 'remove') {
-        const idx = user.stationIds.findIndex(currStationId => currStationId = stationId)
+        const idx = user.stationIds.findIndex(currStationId => currStationId === stationId)
         user.stationIds.splice(idx, 1)
     }
     user = await httpService.put(`user/${user._id}`, user)
@@ -83,7 +83,7 @@ function saveLocalUser(user) {
         imgUrl: user.imgUrl,
         stationIds: user.stationIds,
         likedId: user.likedId,
-        isAdmin: user.isJohnWick
+        isAdmin: user.isAdmin
     }
     sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(user))
     return user
