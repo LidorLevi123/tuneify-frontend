@@ -37,6 +37,7 @@
             font-weight: 900;
             font-size: 6rem;
             color: $clr2;
+            cursor: pointer;
 
             @include for-mobile-layout {
                 display: flex;

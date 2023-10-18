@@ -17,6 +17,7 @@ export const stationService = {
     getStationsForHome,
     getAccessToken,
     getAllStations,
+    removeStationsByName,
     getArtistData
 }
 
@@ -29,7 +30,7 @@ async function query(userId) {
 }
 
 async function getAllStations() {
-    return await httpService.get('station/getAll')
+    return await httpService.get('station/getall')
 }
 
 async function getById(stationId) {
@@ -43,8 +44,11 @@ async function getById(stationId) {
 }
 
 async function remove(stationId) {
-    const station = await httpService.delete(BASE_URL + stationId)
+    const station = await httpService.delete('station/byid/' + stationId)
     return station
+}
+async function removeStationsByName(term) {
+    return await httpService.delete('station/byname/' + term)
 }
 
 async function save(station) {

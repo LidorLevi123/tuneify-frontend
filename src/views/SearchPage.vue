@@ -2,7 +2,8 @@
   <section class="categories-container">
     <div class="search-res" v-if="tracks?.length">
       <h1 class="songs">Songs</h1>
-      <TrackList :tracks="tracks" @track-clicked="emitClick" class="track-list" />
+      <TrackList :tracks="tracks" @track-clicked="emitClick" @track-add="addTrack" @track-dislike="dislikeTrack"
+        class="track-list" />
       <div>
         <h1 class="playlists">Playlists</h1>
         <StationList :stations="stations" class="station-list" />
@@ -18,7 +19,7 @@
 <script>
 import { utilService } from '../services/util.service'
 import { eventBus } from '../services/event-bus.service'
-
+import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
 import TrackList from '../cmps/TrackList.vue'
 import CategoryList from '../cmps/CategoryList.vue'
 import historyTracker from '../services/history.service'
@@ -35,8 +36,12 @@ export default {
   created() {
     historyTracker.push(this.$route.fullPath)
     eventBus.on('search', this.getTracks)
+    eventBus.on('dislikeTrack', this.dislikeTrack)
   },
-
+  unmounted() {
+    eventBus.off('search', this.getTracks)
+    eventBus.off('dislikeTrack', this.dislikeTrack)
+  },
   methods: {
     async getTracks(query) {
       try {
@@ -54,7 +59,25 @@ export default {
         this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
         eventBus.emit('trackClicked')
       }
-    }
+    },
+    async addTrack(trackToSave, stationId) {
+      try {
+        await this.$store.dispatch({ type: 'addTrack', trackToSave, stationId })
+        showSuccessMsg('Added to Liked Songs')
+      } catch (err) {
+        console.log(err.message)
+        showErrorMsg('Could not like track')
+      }
+    },
+    async dislikeTrack(trackId) {
+      try {
+        await this.$store.dispatch({ type: 'removeTrack', trackId, stationId: this.user.likedId })
+        showSuccessMsg('Removed from Your Library')
+      } catch (err) {
+        console.log(err.message)
+        showErrorMsg('Could not dislike track')
+      }
+    },
   },
 
   computed: {
@@ -73,6 +96,9 @@ export default {
     currTrackIdx() {
       return this.$store.getters.currTrackIdx
     },
+    user() {
+      return this.$store.getters.loggedinUser
+    }
   },
 
   components: {

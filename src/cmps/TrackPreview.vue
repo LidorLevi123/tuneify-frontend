@@ -17,10 +17,10 @@
             </section>
         </div>
         <span class="track-album">{{ track.album }}</span>
-        <div class="df sb">
+        <div class="df sb" :class="{ 'in-search': $route.path.startsWith('/search') }">
             <span v-show="!this.$route.path.startsWith('/search')" class="track-date">{{ formattedDate }}</span>
-            <span v-show="isHovered && !this.$route.path.startsWith('/search')" v-if="!isLiked(track.id)"
-                @click="onAddTrack(track, user.likedId, $event)" class="btn-like" v-icon="`smallLikeDis`"></span>
+            <span v-show="isHovered" v-if="!isLiked(track.id)" @click="onAddTrack(track, user.likedId, $event)"
+                class="btn-like" v-icon="`smallLikeDis`"></span>
             <span v-else @click="onDislikeTrack(track.id, $event)" class="btn-dislike" v-icon="`smallLikeEna`"></span>
         </div>
         <div class="time-actions">
@@ -52,6 +52,7 @@
 
 <script>
 import moment from 'moment'
+import { eventBus } from '../services/event-bus.service'
 
 export default {
     name: 'TrackPreview',
@@ -150,6 +151,7 @@ export default {
         onDislikeTrack(trackId, ev) {
             ev.stopPropagation()
             this.$emit('track-dislike', trackId)
+            eventBus.emit('dislikeTrack', trackId)
         },
         isLiked(trackId) {
             return this.likedTracks?.some(track => track.id === trackId)
@@ -168,6 +170,10 @@ export default {
         },
     }
 }
-
 </script>
+<style scoped>
+.in-search {
+    justify-content: end;
+}
+</style>
 

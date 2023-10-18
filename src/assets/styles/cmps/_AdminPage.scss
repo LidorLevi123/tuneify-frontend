@@ -3,12 +3,22 @@
     background-image: linear-gradient(to bottom, #282828 0%, #121212 33rem, #121212);
     overflow: auto;
     color: $clr2;
+    padding: 3rem;
+
+    @include for-mobile-layout {
+        padding: .5rem;
+    }
 
     .admin-page-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 1.5rem 3rem;
+    }
+
+    .delete-stations {
+        display: flex;
+        gap: .5rem;
+        margin-block: 3rem;
     }
 
     .user-list {
@@ -18,8 +28,7 @@
         .user-info {
             display: grid;
             grid-template-columns: 4rem minmax(1rem, 5rem) auto;
-            gap: 1rem;
-            margin-inline-start: 3rem;
+            gap: .5rem;
             align-items: center;
 
             img {
@@ -40,6 +49,7 @@
         }
     }
 
+    .delete-btn,
     .print-btn,
     .remove-btn,
     .back-btn {
@@ -57,9 +67,4 @@
             background-color: $clr9;
         }
     }
-
-
-
-
-
 }

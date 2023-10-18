@@ -13,8 +13,8 @@
             <Container dragClass="dragging" @drop="onDrop" :animation-duration="100" drag-class="dragged-item">
                 <Draggable v-for="(track, idx) in station.tracks" :key="track.id">
                     <li :class="`track-${track.id}`" @click="onTrackClicked(idx)">
-                        <TrackPreview @track-add="onAddTrack" @track-remove="onRemoveTrack" @track-like="onLikeTrack"
-                            @track-dislike="onDislikeTrack" :station="station" :track="track" :trackIdx="idx" />
+                        <TrackPreview @track-add="onAddTrack" @track-remove="onRemoveTrack" @track-dislike="onDislikeTrack"
+                            :station="station" :track="track" :trackIdx="idx" />
                     </li>
                 </Draggable>
             </Container>
@@ -129,9 +129,6 @@ export default {
         },
         onRemoveTrack(trackId) {
             this.$emit('track-remove', trackId)
-        },
-        onLikeTrack(track) {
-            this.$emit('track-like', track)
         },
         onDislikeTrack(trackId) {
             this.$emit('track-dislike', trackId)
