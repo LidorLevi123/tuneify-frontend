@@ -72,7 +72,7 @@ export default {
     async dislikeTrack(trackId) {
       try {
         await this.$store.dispatch({ type: 'removeTrack', trackId, stationId: this.user.likedId })
-        showSuccessMsg('Removed from Your Library')
+        showSuccessMsg('Removed from Liked Tracks')
       } catch (err) {
         console.log(err.message)
         showErrorMsg('Could not dislike track')

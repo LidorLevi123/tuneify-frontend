@@ -34,14 +34,41 @@ async function getAllStations() {
 }
 
 async function getById(stationId) {
-    let station = await httpService.get(BASE_URL + stationId)
+    try {
+        let DbStation = await httpService.get(BASE_URL + stationId)
+        let spotifyStation
 
-    if (!station) {
-        station = await spotifyService.getSpotifyItems({ type: 'station', id: stationId })
-        station = await httpService.post(BASE_URL, station)
+        if (!DbStation) {
+            console.log('fetching from Spotify')
+            spotifyStation = await spotifyService.getSpotifyItems({ type: 'station', id: stationId })
+            await httpService.post(BASE_URL, spotifyStation)
+            return spotifyStation
+        } else {
+            if (DbStation.owner.fullname !== 'Tuneify') return DbStation
+
+            spotifyStation = await spotifyService.getSpotifyItems({ type: 'station', id: DbStation.spotifyId })
+            console.log('checking for changes')
+
+            if (_stationsDifferent(spotifyStation, DbStation)) {
+                console.log('changed - updating from Spotify')
+                spotifyStation._id = DbStation._id
+                save(spotifyStation)
+
+                return spotifyStation
+            } else {
+                console.log('not changed - fetching from DB')
+                return DbStation
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error)
     }
-    return station
 }
+
+function _stationsDifferent(spotify, db) {
+    return spotify.tracks.some((track, i) => db.tracks[i].id !== track.id)
+}
+
 
 async function remove(stationId) {
     const station = await httpService.delete('station/byid/' + stationId)
@@ -94,7 +121,7 @@ async function getAccessToken() {
 async function getStationsForHome() {
     const categories = [
         { id: 'toplists', name: 'Top Lists' },
-        { id: '0JQ5DAqbMKFLVaM30PMBm4', name: 'Summer' },
+        // { id: '0JQ5DAqbMKFLVaM30PMBm4', name: 'Summer' },
         { id: '0JQ5DAqbMKFAXlCG6QvYQ4', name: 'Workout' },
         { id: '0JQ5DAqbMKFzHmL4tf05da', name: 'Mood' },
         { id: '0JQ5DAqbMKFQIL0AXnG5AK', name: 'Trending' },

@@ -65,8 +65,9 @@
     }
 
     input {
-        grid-row: 1;
+        grid-row: 2;
         grid-column: 2;
+        height: 2.5rem;
         color: $clr2;
         padding: 0rem 0.75rem;
         background-color: #FFFFFF1A;
@@ -88,16 +89,20 @@
         grid-row: 2;
         grid-column: 2;
         justify-self: end;
-        align-self: center;
+        align-self: end;
         border-radius: 2em;
         background: #fff;
         padding: 0.5rem 2rem;
-
+        margin-block-end: 2rem;
         font-weight: bold;
         font-family: Circular;
         font-size: 1rem;
         height: 3rem;
         border: none;
+
+        @include for-mobile-layout {
+            align-self: center;
+        }
 
         &:hover {
             scale: 105%;

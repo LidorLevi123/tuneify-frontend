@@ -8,7 +8,7 @@
                 </section>
                 <section class="station-info">
                     <span class="pl">Playlist</span>
-                    <h1 @click="openStationEditor">{{ station.name }}</h1>
+                    <h1 @click="openStationEditor" :class="{ 'user-editable': userPlaylists }">{{ station.name }}</h1>
                     <p class="description">{{ station.description }}</p>
                     <div>
                         <img v-if="this.station.owner.fullname === 'Tuneify'"
@@ -53,11 +53,12 @@
         <StationEdit @station-edit="loadStation" />
     </section>
     <section v-else>
-        <h1>Loading...</h1>
+        <Loader />
     </section>
 </template>
 
 <script>
+import Loader from '../cmps/Loader.vue'
 import historyTracker from '../services/history.service'
 import StationEdit from '../cmps/StationEdit.vue'
 import TrackList from '../cmps/TrackList.vue'
@@ -126,6 +127,9 @@ export default {
         searchResStation() {
             return this.$store.getters.searchRes
         },
+        userPlaylists() {
+            return this.station.owner.fullname !== 'Tuneify' && this.station.name !== 'Liked Songs'
+        }
     },
     async created() {
         await this.loadStation()
@@ -288,7 +292,8 @@ export default {
     components: {
         StationEdit,
         TrackList,
-        UserList
+        UserList,
+        Loader
     }
 }
 </script>
