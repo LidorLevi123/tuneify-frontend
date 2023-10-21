@@ -8,7 +8,7 @@
                 </section>
                 <section class="station-info">
                     <span class="pl">Playlist</span>
-                    <h1 @click="openStationEditor" :class="{ 'user-editable': userPlaylists }">{{ station.name }}</h1>
+                    <h1 @click="openStationEditor" :class="{ 'user-editable': userStations }">{{ station.name }}</h1>
                     <p class="description">{{ station.description }}</p>
                     <div>
                         <img v-if="this.station.owner.fullname === 'Tuneify'"
@@ -31,10 +31,12 @@
                     title="Pause">
                 </button>
 
-                <button class="details-like" v-icon="'like'" v-show="!hasLiked && !isOwner" @click="likeStation">
+                <button class="details-like" v-icon="'like'" v-show="!hasLiked && !isOwner"
+                    @click="likeDislikeStation('add')">
                 </button>
 
-                <button class="details-unlike" v-icon="'unlike'" v-show="hasLiked && !isOwner" @click="removeStation">
+                <button class="details-unlike" v-icon="'unlike'" v-show="hasLiked && !isOwner"
+                    @click="likeDislikeStation('remove')">
                 </button>
 
                 <span class="material-symbols-outlined df ai share" :class="{ 'enabled': !this.isShare }"
@@ -42,7 +44,7 @@
                 </span>
 
                 <div class="bubbling-heart" v-show="hasLiked && !isOwner">
-                    <input type="checkbox" @click="removeStation" class="heart-input" id="like-undefined">
+                    <input type="checkbox" @click="likeDislikeStation('remove')" class="heart-input" id="like-undefined">
                     <label class="label" for="like-undefined"><span v-icon="`bHearts`"></span></label>
                 </div>
                 <UserList v-show="!isShare" :users="topicUsers" />
@@ -50,7 +52,7 @@
             <TrackList @track-clicked="clickTrack" @track-add="addTrack" @track-remove="removeTrack"
                 @track-dislike="dislikeTrack" @station-update="loadStation" @search="getTracks" :station="station" />
         </div>
-        <StationEdit @station-edit="loadStation" />
+        <StationEdit @station-edit="loadStation" v-if="isOwner" />
     </section>
     <section v-else>
         <Loader />
@@ -121,13 +123,10 @@ export default {
         user() {
             return this.$store.getters.loggedinUser
         },
-        users() {
-            return this.$store.getters.users
-        },
         searchResStation() {
             return this.$store.getters.searchRes
         },
-        userPlaylists() {
+        userStations() {
             return this.station.owner.fullname !== 'Tuneify' && this.station.name !== 'Liked Songs'
         }
     },
@@ -158,15 +157,19 @@ export default {
                 showErrorMsg('Could not set current station')
             }
         },
-        async likeStation() {
+        async likeDislikeStation(action) {
+            let errMsg
+            let successMsg
+            action === 'add' ? (successMsg = 'Saved to Your Library', errMsg = 'Could not add station')
+                : (successMsg = 'Removed from Your Library', errMsg = 'Could not remove station')
+
             try {
-                await this.$store.dispatch({ type: 'updateUserStations', stationId: this.station._id, action: 'add' })
-                const stationToSave = JSON.parse(JSON.stringify(this.station))
-                this.$store.commit({ type: 'addStation', stationToSave })
-                showSuccessMsg('Saved to Your Library')
+                await this.$store.dispatch({ type: 'updateUserStations', stationId: this.station._id, action })
+                await this.$store.dispatch({ type: 'loadUserStations', userId: this.user._id })
+                showSuccessMsg(successMsg)
             } catch (err) {
                 console.log(err.message)
-                showErrorMsg('Could not add station')
+                showErrorMsg(errMsg)
             }
         },
         async removeStation() {

@@ -1,10 +1,10 @@
 <template>
     <section v-if="libraryStations" class="library-station-list">
         <ul class="clean-list">
-            <li @click="goToDetails(station._id)" @contextmenu.prevent="showContextMenu(station._id, $event)"
+            <li @click="goToDetails(station)" @contextmenu.prevent="showContextMenu(station._id, $event)"
                 v-for="station in libraryStations" :key="station._id">
                 <LibraryStationPreview :station="station" />
-                <div v-if="contextMenuOpenMap[station._id]" class="dlt-btn" @click="removeStation(station._id, $event)"
+                <div v-if="contextMenuOpenMap[station._id]" class="dlt-btn" @click="removeStation(station, $event)"
                     @mouseleave="closeContextMenu(station._id)"
                     :style="{ top: contextmenuTop + 'px', left: contextmenuLeft + 'px' }">
                     <div class="menu-item">Remove playlist</div>
@@ -48,8 +48,8 @@ export default {
             ev.stopPropagation()
             this.$emit('station-remove', stationId)
         },
-        goToDetails(stationId) {
-            stationId = stationId ? stationId : this.station.spotifyId
+        goToDetails(station) {
+            const stationId = station.spotifyId ? station.spotifyId : station._id
             this.$router.push(`/station/${stationId}`)
         },
         showContextMenu(stationId, ev) {

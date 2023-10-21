@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { showSuccessMsg } from '../services/event-bus.service';
+import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service';
 
 import { stationService } from '../services/station.service'
 import LibraryStationList from './LibraryStationList.vue';
@@ -49,12 +49,13 @@ export default {
                 this.canAddStation = true
             }
         },
-        async removeStation(stationId) {
+        async removeStation(station) {
             try {
-                await this.$store.dispatch({ type: 'removeStation', stationId })
-                await this.$store.dispatch({ type: 'updateUserStations', stationId, action: 'remove' })
-
-                if (stationId === this.$route.params.stationId) this.$router.push('/')
+                if (station.owner.fullname !== 'Tuneify') {
+                    await this.$store.dispatch({ type: 'removeStation', stationId: station._id })
+                }
+                await this.$store.dispatch({ type: 'updateUserStations', stationId: station._id, action: 'remove' })
+                await this.$store.dispatch({ type: 'loadUserStations', userId: this.user._id })
 
                 this.contextmenuOpen = false
                 showSuccessMsg('Removed from Your Library')
@@ -78,6 +79,9 @@ export default {
         sidebarWidth() {
             if (window.innerWidth < 890) return 'auto'
             else return this.sidebarCollapsed ? 'auto' : '412px'
+        },
+        user() {
+            return this.$store.getters.loggedinUser
         }
     },
 

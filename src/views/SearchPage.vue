@@ -1,9 +1,11 @@
 <template>
   <section class="categories-container">
     <div class="search-res" v-if="tracks?.length">
-      <h1 class="songs">Songs</h1>
-      <TrackList :tracks="tracks" @track-clicked="emitClick" @track-add="addTrack" @track-dislike="dislikeTrack"
-        class="track-list" />
+      <div>
+        <h1 class="songs">Songs</h1>
+        <TrackList :tracks="tracks" @track-clicked="emitClick" @track-add="addTrack" @track-dislike="dislikeTrack"
+          class="track-list" />
+      </div>
       <div>
         <h1 class="playlists">Playlists</h1>
         <StationList :stations="stations" class="station-list" />
@@ -116,6 +118,6 @@ export default {
 
 .station-list {
   margin-block-end: 12rem;
-  padding-inline-start: .5rem;
+  padding-inline: .5rem;
 }
 </style>

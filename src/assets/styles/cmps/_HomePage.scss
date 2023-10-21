@@ -25,5 +25,35 @@
                 margin-block: 1rem;
             }
         }
+
+        .sub-header {
+            max-width: 119rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+
+            h1 {
+                font-size: 1.5rem;
+                font-family: CircularSpTitle;
+                color: $clr2;
+                margin-block-start: 3rem;
+                margin-block-end: 1rem;
+
+                @include for-mobile-layout {
+                    margin-block-start: 1.5rem;
+                }
+            }
+
+            .category-link {
+                font-size: 0.875rem;
+                color: #b3b3af;
+                margin-block-end: 1.4rem;
+                font-weight: 700;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
     }
 }

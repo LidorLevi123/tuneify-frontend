@@ -54,7 +54,7 @@ export default {
       }
       try {
         const user = await this.$store.dispatch({ type: "login", userCred: this.loginCred })
-        await this.$store.dispatch({ type: 'loadStations', userId: user._id })
+        await this.$store.dispatch({ type: 'loadUserStations', userId: user._id })
         this.$router.push('/')
       } catch (err) {
         console.log(err.message)
@@ -70,7 +70,7 @@ export default {
         return
       }
       const user = await this.$store.dispatch({ type: 'signup', userCred: this.signupCred })
-      await this.$store.dispatch({ type: 'loadStations', userId: user._id })
+      await this.$store.dispatch({ type: 'loadUserStations', userId: user._id })
       this.$router.push('/')
 
     },

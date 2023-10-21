@@ -24,10 +24,6 @@ export const userStore = {
         setUsers(state, { users }) {
             state.users = users
         },
-        setUser(state, { user }) {
-            const idx = state.users.findIndex(u => u._id === user._id)
-            state.users.splice(idx, 1, user)
-        },
         setIsLoading(state, { isLoading }) {
             state.isLoading = isLoading
         },
@@ -99,11 +95,8 @@ export const userStore = {
             }
         },
         async updateUserStations({ commit, state }, { stationId, action }) {
-            const id = state.loggedinUser.stationIds.find(id => id === stationId)
-            if (id) return
             try {
                 const user = await userService.updateUserStations(state.loggedinUser, stationId, action)
-                commit({ type: 'setUser', user })
                 commit({ type: 'setLoggedinUser', user })
             } catch (err) {
                 console.log('userStore: Error in updateUserStations', err)

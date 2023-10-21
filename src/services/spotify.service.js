@@ -45,9 +45,10 @@ async function getSpotifyItems(req) {
 function _getEndpoints(id, query) {
     return {
         categoryStations: `https://api.spotify.com/v1/browse/categories/${id}/playlists?country=il&limit=50`,
+        featured: `https://api.spotify.com/v1/browse/featured-playlists?country=IL&locale=he_IL&limit=50`,
         station: `https://api.spotify.com/v1/playlists/${id}`,
         tracks: `https://api.spotify.com/v1/playlists/${id}/tracks`,
-        search: `https://api.spotify.com/v1/search?q=${query}&type=track,playlist&limit=12`,
+        search: `https://api.spotify.com/v1/search?q=${query}&type=track,playlist&limit=20`,
         artist: `https://api.spotify.com/v1/artists/${id}`
     }
 }
@@ -57,6 +58,7 @@ async function _cleanResponseData(data, type) {
 
     switch (type) {
         case 'categoryStations':
+        case 'featured':
             cleanData = _cleanCategoryStationsData(data)
             break
         case 'tracks':
@@ -92,7 +94,7 @@ function _cleanCategoryStationsData(data) {
         spotifyId: item.id ? item.id : '0',
         name: item.name,
         imgUrl: item.images[0].url,
-        description: item.description,
+        description: item.description.replace(/<a\b[^>]*>(.*?)<\/a>/gi, '')
     }))
 }
 
@@ -146,4 +148,3 @@ async function _cleanArtistData(data) {
 function _cleanArtists(artists) {
     return artists.map((artist) => artist.name)
 }
-

@@ -75,7 +75,7 @@ export default {
         doLogout() {
             this.$router.push('/')
             this.$store.dispatch({ type: 'logout' })
-            this.$store.commit({ type: 'loadStations', stations: [] })
+            this.$store.commit({ type: 'loadUserStations', stations: [] })
             this.showUserMenu = false
         },
         onClearFilter() {
@@ -123,7 +123,7 @@ export default {
             return this.$store.getters.currTrackIdx
         },
         isPlaying() {
-            return this.$store.getters.isCurrTrackPlaying && this.station._id === this.currStation?._id
+            return this.$store.getters.isCurrTrackPlaying && this.station?._id === this.currStation?._id
         },
         user() {
             return this.$store.getters.loggedinUser

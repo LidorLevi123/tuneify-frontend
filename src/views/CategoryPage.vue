@@ -8,13 +8,12 @@
 </template>
 
 <script>
-// import { stationService } from '../services/station.service.local';
 import { stationService } from '../services/station.service';
 import StationList from '../cmps/StationList.vue'
 import historyTracker from '../services/history.service';
 
 export default {
-
+    name: 'CategoryPage',
     data() {
         return {
             categoryStations: null
@@ -27,6 +26,9 @@ export default {
         },
         categoryName() {
             return this.$route.params.categoryName
+        },
+        stationsForHome() {
+            return this.$store.getters.stationsForHome
         }
     },
 
@@ -37,11 +39,15 @@ export default {
 
     methods: {
         async loadCategoryStations() {
-            try {
-                const stations = await stationService.getCategoryStations(this.categoryId)
-                this.categoryStations = stations
-            } catch (err) {
-                console.log('Could not load category stations')
+            if (this.categoryId === 'featured') {
+                this.categoryStations = this.stationsForHome[1]
+            } else {
+                try {
+                    const stations = await stationService.getCategoryStations(this.categoryId)
+                    this.categoryStations = stations
+                } catch (err) {
+                    console.log('Could not load category stations')
+                }
             }
         }
     },
@@ -50,6 +56,5 @@ export default {
         StationList
     },
 
-    name: 'CategoryPage',
 }
 </script>

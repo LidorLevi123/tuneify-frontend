@@ -33,31 +33,30 @@ async function getAllStations() {
     return await httpService.get('station/getall')
 }
 
-async function getById(stationId) {
+async function getById(spotifyId) {
     try {
-        let DbStation = await httpService.get(BASE_URL + stationId)
+        let dbStation = await httpService.get(BASE_URL + spotifyId)
         let spotifyStation
 
-        if (!DbStation) {
+        if (!dbStation) {
             console.log('fetching from Spotify')
-            spotifyStation = await spotifyService.getSpotifyItems({ type: 'station', id: stationId })
-            await httpService.post(BASE_URL, spotifyStation)
-            return spotifyStation
+            spotifyStation = await spotifyService.getSpotifyItems({ type: 'station', id: spotifyId })
+            dbStation = await httpService.post(BASE_URL, spotifyStation)
+            return dbStation
         } else {
-            if (DbStation.owner.fullname !== 'Tuneify') return DbStation
+            if (dbStation.owner.fullname !== 'Tuneify') return dbStation
 
-            spotifyStation = await spotifyService.getSpotifyItems({ type: 'station', id: DbStation.spotifyId })
-            console.log('checking for changes')
+            spotifyStation = await spotifyService.getSpotifyItems({ type: 'station', id: dbStation.spotifyId })
 
-            if (_stationsDifferent(spotifyStation, DbStation)) {
+            if (_stationsDifferent(spotifyStation, dbStation)) {
                 console.log('changed - updating from Spotify')
-                spotifyStation._id = DbStation._id
+                spotifyStation._id = dbStation._id
                 save(spotifyStation)
 
                 return spotifyStation
             } else {
-                console.log('not changed - fetching from DB')
-                return DbStation
+                console.log('station unchanged - fetching from DB')
+                return dbStation
             }
         }
     } catch (error) {
@@ -121,7 +120,7 @@ async function getAccessToken() {
 async function getStationsForHome() {
     const categories = [
         { id: 'toplists', name: 'Top Lists' },
-        // { id: '0JQ5DAqbMKFLVaM30PMBm4', name: 'Summer' },
+        { id: 'featured', name: 'Featured Playlists' },
         { id: '0JQ5DAqbMKFAXlCG6QvYQ4', name: 'Workout' },
         { id: '0JQ5DAqbMKFzHmL4tf05da', name: 'Mood' },
         { id: '0JQ5DAqbMKFQIL0AXnG5AK', name: 'Trending' },
@@ -135,10 +134,15 @@ async function getStationsForHome() {
 
     const stationPromises = categories.map(async (category) => {
         try {
-            const stations = await spotifyService.getSpotifyItems({ type: 'categoryStations', id: category.id })
-            return stations.map((station) => ({ ...station, category: category.name, categoryId: category.id }))
+            if (category.id === 'featured') {
+                const featured = await spotifyService.getSpotifyItems({ type: 'featured' });
+                return featured.map((item) => ({ ...item, category: category.name, categoryId: category.id }))
+            } else {
+                const stations = await spotifyService.getSpotifyItems({ type: 'categoryStations', id: category.id })
+                return stations.map((station) => ({ ...station, category: category.name, categoryId: category.id }))
+            }
         } catch (error) {
-            console.error(`Error fetching stations for category ${category.name}: ${error.message}`)
+            console.error(`Error fetching data for category ${category.name}: ${error.message}`)
             return []
         }
     })
@@ -149,7 +153,7 @@ async function getStationsForHome() {
         _cleanDescriptions(filteredResults)
         return filteredResults
     } catch (error) {
-        console.error(error)
+        console.error(`Error fetching data: ${error.message}`)
         throw new Error('Failed to fetch station data')
     }
 }
