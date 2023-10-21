@@ -6,7 +6,7 @@ export const stationStore = {
         isRsbOpen: false,
         isLoading: false,
         sidebarCollapsed: false,
-        UserStations: [],
+        stations: [],
         stationsForHome: [],
         currStation: null,
         currTrackIdx: -1,
@@ -17,7 +17,7 @@ export const stationStore = {
         isRsbOpen({ isRsbOpen }) { return isRsbOpen },
         sidebarCollapsed({ sidebarCollapsed }) { return sidebarCollapsed },
         isLoading({ isLoading }) { return isLoading },
-        libraryStations({ userStations }) { return userStations },
+        libraryStations({ stations }) { return stations },
         stationsForHome({ stationsForHome }) { return stationsForHome },
         currStation({ currStation }) { return currStation },
         currTrackIdx({ currTrackIdx }) { return currTrackIdx },
@@ -35,8 +35,8 @@ export const stationStore = {
         setLoading(state, value) {
             state.isLoading = value
         },
-        loadUserStations(state, { userStations }) {
-            state.userStations = userStations
+        loadUserStations(state, { stations }) {
+            state.stations = stations
         },
         setSearchRes(state, { res }) {
             state.searchRes = res
@@ -55,10 +55,10 @@ export const stationStore = {
         setIsPlaying(state, { isPlaying }) {
             state.isCurrTrackPlaying = isPlaying
         },
-        addStation({ userStations }, { stationToSave }) {
-            const station = userStations.find(currStation => currStation._id === stationToSave._id)
+        addStation({ stations }, { stationToSave }) {
+            const station = stations.find(currStation => currStation._id === stationToSave._id)
             if (station) return
-            userStations.push(stationToSave)
+            stations.push(stationToSave)
         },
         updateStation({ stations }, { stationToSave }) {
             const idx = stations.findIndex(station => station._id === stationToSave._id)
@@ -111,11 +111,11 @@ export const stationStore = {
         },
         async loadUserStations({ commit }, { userId }) {
             try {
-                const userStations = await stationService.query(userId)
-                commit({ type: 'loadUserStations', userStations })
+                const stations = await stationService.query(userId)
+                commit({ type: 'loadUserStations', stations })
             } catch (err) {
                 console.log('stationStore: Error in loadUserStations', err.message)
-                throw new Error('Could not load userStations')
+                throw new Error('Could not load stations')
             }
         },
         async saveStation({ commit }, { stationToSave }) {

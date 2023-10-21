@@ -3,8 +3,29 @@
         <div ref="topGradient" class="top-gradient">
             <section class="img-photo">
                 <section class="img">
-                    <img crossorigin="anonymous" class="station-img" :src="station.imgUrl" alt="" @load="setBackgroundClr"
-                        ref="stationImg">
+
+                    <img v-if="!this.station.owner._id" crossorigin="anonymous" class="station-img" :src="station.imgUrl"
+                        alt="" @load="setBackgroundClr" ref="stationImg" />
+
+                    <img v-else-if="this.station.owner._id && this.station.imgUrl" crossorigin="anonymous"
+                        class="station-img" :src="station.imgUrl" alt="" @load="setBackgroundClr" ref="stationImg" />
+
+                    <img v-else-if="this.station.owner._id && this.station.tracks.length && this.station.tracks.length < 4"
+                        crossorigin="anonymous" class="station-img" :src="station.tracks[0]?.imgUrl" alt=""
+                        @load="setBackgroundClr" ref="stationImg" />
+
+                    <div v-else-if="this.station.owner._id && this.station.tracks.length >= 4" class="collage-container">
+                        <img class="s-img" :src="this.station.tracks[0]?.imgUrl" alt="" crossorigin="anonymous"
+                            @load="setBackgroundClr" ref="stationImg">
+                        <img class="s-img" :src="this.station.tracks[1]?.imgUrl" alt="">
+                        <img class="s-img" :src="this.station.tracks[2]?.imgUrl" alt="">
+                        <img class="s-img" :src="this.station.tracks[3]?.imgUrl" alt="">
+                    </div>
+
+                    <div v-else class="img-placeholder">
+                        <span class="note-svg" v-icon="`note2`"></span>
+                    </div>
+
                 </section>
                 <section class="station-info">
                     <span class="pl">Playlist</span>
@@ -128,7 +149,7 @@ export default {
         },
         userStations() {
             return this.station.owner.fullname !== 'Tuneify' && this.station.name !== 'Liked Songs'
-        }
+        },
     },
     async created() {
         await this.loadStation()

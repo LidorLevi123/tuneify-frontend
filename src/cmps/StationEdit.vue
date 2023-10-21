@@ -7,7 +7,7 @@
         <section class="edit">
             <label>
                 <input type="file" @change="handleFile" hidden>
-                <img class="album-image" :src="stationToEdit.imgUrl" ref="stationImg" alt="">
+                <img class="album-image" :src="imgUrl" ref="stationImg" alt="">
             </label>
             <input class="title" type="text" v-model="stationToEdit.name" placeholder="Add a name">
 
@@ -68,6 +68,7 @@ export default {
         },
         async handleFile(ev) {
             const { url } = await uploadService.uploadImg(ev)
+            console.log('image url', url)
             this.stationToEdit.imgUrl = url
         }
     },
@@ -75,6 +76,9 @@ export default {
     computed: {
         stationId() {
             return this.$route.params.stationId
+        },
+        imgUrl() {
+            return this.stationToEdit?.imgUrl || this.stationToEdit?.tracks[0]?.imgUrl || 'https://res.cloudinary.com/dys1sj4cd/image/upload/v1691338579/def-pl-fotor-202308061976_hbckqs.png'
         },
     },
 

@@ -10,7 +10,9 @@
         </div>
         <ul v-if="station?.tracks.length" class="clean-list track-list" @touchend="fixActionRestriction">
             <hr v-show="station" />
-            <Container dragClass="dragging" @drop="onDrop" :animation-duration="100" drag-class="dragged-item">
+
+            <Container v-if="station.owner._id" dragClass="dragging" @drop="onDrop" :animation-duration="100"
+                drag-class="dragged-item">
                 <Draggable v-for="(track, idx) in station.tracks" :key="track.id">
                     <li :class="`track-${track.id}`" @click="onTrackClicked(idx)">
                         <TrackPreview @track-add="onAddTrack" @track-remove="onRemoveTrack" @track-dislike="onDislikeTrack"
@@ -18,6 +20,15 @@
                     </li>
                 </Draggable>
             </Container>
+
+            <template v-else>
+                <li v-for="(track, idx) in station.tracks" :key="track.id" @click="onTrackClicked(idx)"
+                    class="`track-${track.id}`">
+                    <TrackPreview @track-add="onAddTrack" @track-remove="onRemoveTrack" @track-dislike="onDislikeTrack"
+                        :station="station" :track="track" :trackIdx="idx" />
+                </li>
+            </template>
+
         </ul>
         <TrackSearch v-if="canShowSearch && station" @search="onLoadTracks" @track-add="onAddTrack" :station="station" />
 

@@ -1,6 +1,6 @@
 <template>
     <article class="library-station-preview" :style="{ columnGap: sidebarCollapsed ? '0' : '0.8rem' }">
-        <img :src="station.imgUrl" alt="">
+        <img :src="imgUrl" alt="">
         <h5 :class="{ 'is-current': currStation?._id === station._id }"
             :style="{ display: sidebarCollapsed ? 'none' : 'block' }">{{ stationName }}</h5>
         <small :style="{ display: sidebarCollapsed ? 'none' : 'block' }"><span>{{ station.tracks.length }} songs</span>
@@ -32,6 +32,9 @@ export default {
         },
         sidebarCollapsed() {
             return this.$store.getters.sidebarCollapsed
+        },
+        imgUrl() {
+            return this.station.imgUrl || this.station.tracks[0]?.imgUrl || 'https://res.cloudinary.com/dys1sj4cd/image/upload/v1697929192/note_cu2ps5.png'
         }
     },
 }

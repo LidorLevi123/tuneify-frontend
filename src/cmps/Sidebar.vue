@@ -37,7 +37,7 @@ export default {
                 const stationToSave = stationService.getEmptyStation()
 
                 stationToSave.name = 'My Playlist #' + this.libraryStations.length
-                stationToSave.imgUrl = 'https://res.cloudinary.com/dys1sj4cd/image/upload/v1691338579/def-pl-fotor-202308061976_hbckqs.png'
+                stationToSave.imgUrl = ''
 
                 const station = await this.$store.dispatch({ type: 'saveStation', stationToSave })
                 await this.$store.dispatch({ type: 'updateUserStations', stationId: station._id, action: 'add' })
