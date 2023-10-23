@@ -7,6 +7,10 @@
     border: 1px solid transparent;
     border-radius: 4px;
 
+    &.inSearch {
+        grid-template-columns: [index] 1rem [first] 7fr [var1] 4fr [var2] 1fr [last] 2rem;
+    }
+
     @include for-mobile-layout {
         grid-template-columns: 9fr 2fr auto;
         column-gap: 0;
@@ -151,6 +155,7 @@
         .sub-dropdown {
             position: absolute;
             right: 13.5rem;
+            top: -1rem;
             color: #ffffffe6;
             border-radius: 0.2rem;
             display: grid;
@@ -161,8 +166,8 @@
             cursor: pointer;
 
             @include for-mobile-layout {
-                right: 3.2rem;
-                top: 10.9%;
+                right: 2rem;
+                top: 1.48rem;
             }
 
             .sub-dropdown-item {
@@ -177,23 +182,26 @@
             }
         }
 
-        .menu-li {
-            cursor: pointer;
-            position: absolute;
-            background-color: $clr6;
-            right: 2rem;
-            padding: .5rem;
-            min-width: 11.5rem;
-            border-radius: 0.2rem;
-            color: #ffffffe6;
-            font-size: 0.875rem;
-            box-shadow: 0 16px 24px rgba(0, 0, 0, .3), 0 6px 8px rgba(0, 0, 0, .2);
+        .dropdown {
+            position: relative;
 
-            &:hover {
-                background-color: #3e3e3e
+            .menu-li {
+                cursor: pointer;
+                position: absolute;
+                background-color: $clr6;
+                right: 2rem;
+                top: -1rem;
+                padding: .5rem;
+                min-width: 11.5rem;
+                border-radius: 0.2rem;
+                color: #ffffffe6;
+                font-size: 0.875rem;
+                box-shadow: 0 16px 24px rgba(0, 0, 0, .3), 0 6px 8px rgba(0, 0, 0, .2);
+
+                &:hover {
+                    background-color: #3e3e3e
+                }
             }
-
-
         }
 
     }

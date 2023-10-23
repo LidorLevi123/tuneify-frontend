@@ -85,6 +85,16 @@ export const stationStore = {
             const trackIdx = stations[idx].tracks.findIndex(track => track.id === trackId)
             if (trackIdx === -1) return
             stations[idx].tracks.splice(trackIdx, 1)
+        },
+        setUserStations(state, { station, action }) {
+            if (action === 'add') {
+                state.stations.push(station)
+            }
+            if (action === 'remove') {
+                const idx = state.stations.findIndex(currStation => currStation._id === station._id)
+                if (idx === -1) return
+                state.stations.splice(idx, 1)
+            }
         }
     },
     actions: {

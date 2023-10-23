@@ -186,7 +186,8 @@ export default {
 
             try {
                 await this.$store.dispatch({ type: 'updateUserStations', stationId: this.station._id, action })
-                await this.$store.dispatch({ type: 'loadUserStations', userId: this.user._id })
+                this.$store.commit({ type: 'setUserStations', station: this.station, action })
+
                 showSuccessMsg(successMsg)
             } catch (err) {
                 console.log(err.message)
@@ -206,7 +207,7 @@ export default {
         async dislikeTrack(trackId) {
             try {
                 await this.$store.dispatch({ type: 'removeTrack', trackId, stationId: this.user.likedId })
-                showSuccessMsg('Removed from Your Library')
+                showSuccessMsg('Removed from Liked Songs')
             } catch (err) {
                 console.log(err.message)
                 showErrorMsg('Could not dislike track')

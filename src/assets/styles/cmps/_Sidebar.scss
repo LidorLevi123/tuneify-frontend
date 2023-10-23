@@ -1,7 +1,7 @@
 .sidebar-list-container {
     grid-column: 1;
     display: grid;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto auto 1fr;
     background-color: $clr4;
     border-radius: 0.5rem;
     margin-block-start: 0.5rem;
@@ -82,5 +82,138 @@
                 display: none;
             }
         }
+    }
+
+    .filter-sort {
+        display: flex;
+        justify-content: space-between;
+        padding-inline: 0.8rem 1.1rem;
+
+        @include for-mobile-layout {
+            padding-inline: .3rem;
+        }
+
+        div {
+            padding-inline-start: .2rem;
+
+            .station-search-btn {
+                height: 2rem;
+                width: 2rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: transparent;
+                border: none;
+                border-radius: 50%;
+                cursor: pointer;
+                transition: .3s;
+
+                path {
+                    fill: $clr3;
+                }
+
+                &:hover {
+                    background-color: #ffffff12;
+
+                    path {
+                        fill: $clr2;
+                    }
+                }
+            }
+        }
+
+
+
+        .search-container {
+            display: flex;
+            gap: .2rem;
+            padding: .4rem .7rem;
+            background-color: $clr6;
+            border-radius: .2rem;
+            height: 2rem;
+
+            span path {
+                fill: $clr3;
+            }
+
+            .station-search-input {
+                background-color: $clr6;
+                border: none;
+                outline: none;
+                color: $clr3;
+
+                @include for-mobile-layout {
+                    max-width: 7rem;
+                }
+            }
+        }
+
+        .sort-container {
+            display: flex;
+            align-items: center;
+            gap: .2rem;
+            position: relative;
+            cursor: pointer;
+            transition: .05s;
+
+            &:hover .material-symbols-outlined,
+            &:hover .sort-btn {
+                color: $clr2;
+            }
+
+            .sort-btn {
+                color: $clr2;
+                color: #A7A7A7;
+                font-size: 0.875rem;
+
+                .sort-menu {
+                    padding: .25rem;
+                    position: absolute;
+                    right: 0;
+                    width: 10rem;
+                    background-color: $clr6;
+                    border-radius: .2rem;
+                    box-shadow: 0 16px 24px rgba(0, 0, 0, 0.3), 0 6px 8px rgba(0, 0, 0, 0.2);
+                    cursor: default;
+
+                    .sort-menu-header {
+                        color: $clr3;
+                        font-size: 0.75rem;
+                        font-weight: 700;
+                        padding: .8rem .7rem;
+                    }
+
+                    .sort-option {
+                        color: #FFFFFFE6;
+                        border-radius: .2rem;
+                        padding: .4rem .7rem;
+                        font-size: 0.875rem;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+
+                        &.active {
+                            color: $clr9;
+                        }
+
+                        &:hover {
+                            background-color: $clr12;
+                        }
+
+                        .vee-icon svg {
+                            height: 1rem;
+                            display: flex;
+                            align-items: center;
+                        }
+                    }
+
+                }
+            }
+
+            .material-symbols-outlined {
+                color: #A7A7A7;
+            }
+        }
+
     }
 }

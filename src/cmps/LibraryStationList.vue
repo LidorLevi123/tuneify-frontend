@@ -1,8 +1,9 @@
 <template>
     <section v-if="libraryStations" class="library-station-list">
         <ul class="clean-list">
-            <li @click="goToDetails(station)" @contextmenu.prevent="showContextMenu(station._id, $event)"
-                v-for="station in libraryStations" :key="station._id">
+            <li @click="goToDetails(station)" :class="{ active: stationActive(station) }"
+                @contextmenu.prevent="showContextMenu(station._id, $event)" v-for="station in libraryStations"
+                :key="station._id">
                 <LibraryStationPreview :station="station" />
                 <div v-if="contextMenuOpenMap[station._id]" class="dlt-btn" @click="removeStation(station, $event)"
                     @mouseleave="closeContextMenu(station._id)"
@@ -20,6 +21,13 @@
 import LibraryStationPreview from './LibraryStationPreview.vue'
 
 export default {
+    name: 'LibraryStationList',
+    props: {
+        libraryStations: {
+            type: Array,
+            required: true
+        }
+    },
     data() {
         return {
             contextMenuOpenMap: {}
@@ -34,9 +42,6 @@ export default {
         },
         trackPlaying() {
             return this.$store.getters.isCurrTrackPlaying
-        },
-        libraryStations() {
-            return this.$store.getters.libraryStations
         },
         sidebarCollapsed() {
             return this.$store.getters.sidebarCollapsed
@@ -59,13 +64,15 @@ export default {
         },
         closeContextMenu(stationId) {
             this.contextMenuOpenMap[stationId] = false
+        },
+        stationActive(station) {
+            if (!this.$route.params.stationId) return false
+            else return this.$route.params.stationId === station._id || this.$route.params.stationId === station.spotifyId
         }
     },
 
     components: {
         LibraryStationPreview,
     },
-
-    name: 'LibraryStationList',
 }
 </script>

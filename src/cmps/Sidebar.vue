@@ -9,25 +9,69 @@
             <button v-icon="'createList'" @click="addStation" title="Create playlist" class="add-station"
                 :style="{ display: sidebarCollapsed ? 'none' : 'flex' }"></button>
         </section>
-        <LibraryStationList @station-remove="removeStation" />
+        <section class="filter-sort" v-if="!sidebarCollapsed">
+            <div v-if="!searchOpen" @click.stop="toggleSearch">
+                <button v-icon="'sSearch'" title="Create playlist" class="station-search-btn"></button>
+            </div>
+            <section v-else class="search-container" v-clickOutside="toggleSearch">
+                <span class="df ai" v-icon="`sSearch`"></span>
+                <input class="station-search-input" type="text" v-model="query" placeholder="Search in Playlists">
+                <span class="df ai" v-icon="'close'" @click.stop="this.query = ''"></span>
+            </section>
+            <section @click="toggleSortMenu" class="sort-container">
+                <span class="sort-btn">{{ sortedBy }}
+                    <ul v-if="sortMenuOpen" v-clickOutside="toggleSortMenu" class="clean-list sort-menu">
+                        <li class="sort-menu-header">sort by</li>
+                        <li class="sort-option" :class="{ active: sortedBy === 'Alphabetical' }"
+                            @click.stop="filterSortLibrary('Alphabetical')">Alphabetical <span
+                                v-show="sortedBy === 'Alphabetical'" class="vee-icon" v-icon="`vee`"></span></li>
+                        <li class="sort-option" :class="{ active: sortedBy === 'Creator' }"
+                            @click.stop="filterSortLibrary('Creator')">
+                            Creator <span v-show="sortedBy === 'Creator'" class="vee-icon" v-icon="`vee`"></span>
+                        </li>
+                        <li class="sort-option" :class="{ active: sortedBy === 'Custom Order' }"
+                            @click.stop="filterSortLibrary('Custom Order')">Custom Order <span
+                                v-show="sortedBy === 'Custom Order'" class="vee-icon" v-icon="`vee`"></span></li>
+                    </ul>
+                </span>
+                <span class="material-symbols-outlined">list</span>
+            </section>
+        </section>
+        <LibraryStationList v-if="libraryStations" @station-remove="removeStation" :libraryStations="libraryStations" />
     </section>
 </template>
 
 <script>
 import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service';
-
 import { stationService } from '../services/station.service'
 import LibraryStationList from './LibraryStationList.vue';
-
 export default {
     name: 'Sidebar',
     data() {
         return {
+            libraryStations: null,
             canAddStation: true,
+            query: '',
+            sortedBy: 'Custom Order',
+            sortMenuOpen: false,
+            searchOpen: false,
+            searchBtn: true,
         }
     },
 
+    created() {
+        this.loadLibrary()
+    },
+
     methods: {
+        async loadLibrary() {
+            try {
+                this.libraryStations = await stationService.query(this.user._id)
+            }
+            catch (err) {
+                console.log('Could not load library')
+            }
+        },
         async addStation() {
             try {
 
@@ -55,7 +99,7 @@ export default {
                     await this.$store.dispatch({ type: 'removeStation', stationId: station._id })
                 }
                 await this.$store.dispatch({ type: 'updateUserStations', stationId: station._id, action: 'remove' })
-                await this.$store.dispatch({ type: 'loadUserStations', userId: this.user._id })
+                this.$store.commit({ type: 'setUserStations', station, action: 'remove' })
 
                 this.contextmenuOpen = false
                 showSuccessMsg('Removed from Your Library')
@@ -64,25 +108,72 @@ export default {
                 showErrorMsg('Could not remove station')
             }
         },
+        async filterSortLibrary(sortBy = this.sortedBy) {
+            this.libraryStations = await stationService.query(this.user._id)
+
+            if (sortBy === 'Alphabetical') {
+                if (this.sortOrder === 'asc' || !this.sortOrder) {
+                    this.libraryStations.sort((a, b) => a.name.localeCompare(b.name))
+                    this.sortOrder = 'desc'
+                } else {
+                    this.libraryStations.sort((a, b) => b.name.localeCompare(a.name))
+                    this.sortOrder = 'asc'
+                }
+            }
+            if (sortBy === 'Creator') {
+                if (this.sortOrder === 'asc' || !this.sortOrder) {
+                    this.libraryStations.sort((a, b) => a.owner.fullname.localeCompare(b.owner.fullname))
+                    this.sortOrder = 'desc'
+                } else {
+                    this.libraryStations.sort((a, b) => b.owner.fullname.localeCompare(a.owner.fullname))
+                    this.sortOrder = 'asc'
+                }
+            }
+
+            this.libraryStations = this.libraryStations.filter(station => station.name.toLowerCase().includes(this.query.toLowerCase()))
+
+            this.sortedBy = sortBy
+        },
         collapseSidebar() {
             this.$store.commit('setSidebarCollapsed', true)
-        }
+        },
+        searchLibrary() {
+            this.$store.dispatch({ type: 'searchLibrary', query: this.query })
+        },
+        toggleSortMenu() {
+            this.sortMenuOpen = !this.sortMenuOpen
+        },
+        toggleSearch() {
+            if (this.query) return
+            this.searchOpen = !this.searchOpen
+        },
     },
 
     computed: {
-        libraryStations() {
+        stationsState() {
             return this.$store.getters.libraryStations
         },
         sidebarCollapsed() {
             return this.$store.getters.sidebarCollapsed
         },
         sidebarWidth() {
-            if (window.innerWidth < 890) return 'auto'
+            if (window.innerWidth < 1200) return 'auto'
             else return this.sidebarCollapsed ? 'auto' : '412px'
         },
         user() {
             return this.$store.getters.loggedinUser
         }
+    },
+    watch: {
+        query() {
+            this.filterSortLibrary()
+        },
+        stationsState: {
+            handler(newVal, oldVal) {
+                this.filterSortLibrary()
+            },
+            deep: true,
+        },
     },
 
     components: { LibraryStationList }

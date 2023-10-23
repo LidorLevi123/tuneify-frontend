@@ -1,5 +1,6 @@
 <template>
-    <article class="track-preview track-preview-layout" @mouseover="onMouseOver" @mouseleave="onMouseLeave">
+    <article class="track-preview track-preview-layout" :class="{ inSearch: $route.path.startsWith('/search') }"
+        @mouseover="onMouseOver" @mouseleave="onMouseLeave">
 
         <img v-if="isTrackPlaying && !isHovered" class="eq"
             src="https://res.cloudinary.com/dmmsf57ko/image/upload/v1683729372/Song_hoitzd.gif" alt="">
