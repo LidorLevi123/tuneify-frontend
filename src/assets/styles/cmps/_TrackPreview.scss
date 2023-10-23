@@ -9,6 +9,10 @@
 
     &.inSearch {
         grid-template-columns: [index] 1rem [first] 7fr [var1] 4fr [var2] 1fr [last] 2rem;
+
+        @include for-mobile-layout {
+            grid-template-columns: 9fr 2fr auto
+        }
     }
 
     @include for-mobile-layout {

@@ -1,4 +1,5 @@
 import { stationService } from '../services/station.service'
+import { eventBus } from '../services/event-bus.service'
 import Cookies from 'js-cookie'
 
 export const stationStore = {
@@ -135,6 +136,7 @@ export const stationStore = {
             try {
                 const station = await stationService.save(stationToSave)
                 commit({ type, stationToSave: station })
+                eventBus.emit('loadLibrary')
                 return station
             } catch (err) {
                 console.log(err.message)

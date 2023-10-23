@@ -67,6 +67,10 @@
             font-weight: 700;
             cursor: pointer;
 
+            @include for-mobile-layout {
+                font-size: 0.55rem;
+            }
+
             &:hover {
                 background-color: $clr1;
                 scale: 104%;

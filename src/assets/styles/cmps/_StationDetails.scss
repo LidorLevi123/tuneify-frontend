@@ -199,6 +199,10 @@
             font-size: 2.7rem;
             padding-top: 0.1rem;
 
+            &.user-station {
+                margin: unset;
+            }
+
             &:hover {
                 color: $clr2;
                 transform: scale(1.04);

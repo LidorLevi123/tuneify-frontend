@@ -60,8 +60,9 @@
                     @click="likeDislikeStation('remove')">
                 </button>
 
-                <span class="material-symbols-outlined df ai share" :class="{ 'enabled': !this.isShare }"
-                    @click="activateShare(isShare)" title="Listen With Friends">group_add
+                <span v-if="this.station.tracks.length" class="material-symbols-outlined df ai share"
+                    :class="{ 'enabled': !isShare, 'user-station': isOwner }" @click="activateShare(isShare)"
+                    title="Listen With Friends">group_add
                 </span>
 
                 <div class="bubbling-heart" v-show="hasLiked && !isOwner">
@@ -170,6 +171,7 @@ export default {
         async loadStation() {
             try {
                 const station = await stationService.getById(this.stationId)
+                if (!station) return this.$router.push('/')
                 this.station = station
                 this.$emit('station', station)
                 this.setTracksTotalDuration()
@@ -187,26 +189,17 @@ export default {
             try {
                 await this.$store.dispatch({ type: 'updateUserStations', stationId: this.station._id, action })
                 this.$store.commit({ type: 'setUserStations', station: this.station, action })
-
+                eventBus.emit('loadLibrary')
                 showSuccessMsg(successMsg)
             } catch (err) {
                 console.log(err.message)
                 showErrorMsg(errMsg)
             }
         },
-        async removeStation() {
-            try {
-                await this.$store.dispatch({ type: 'updateUserStations', stationId: this.station._id, action: 'remove' })
-                await this.$store.dispatch({ type: 'removeStation', stationId: this.station._id })
-                showSuccessMsg('Removed from Your Library')
-            } catch (err) {
-                console.log(err.message)
-                showErrorMsg('Could not remove station')
-            }
-        },
         async dislikeTrack(trackId) {
             try {
                 await this.$store.dispatch({ type: 'removeTrack', trackId, stationId: this.user.likedId })
+                eventBus.emit('loadLibrary')
                 showSuccessMsg('Removed from Liked Songs')
             } catch (err) {
                 console.log(err.message)
@@ -218,6 +211,7 @@ export default {
                 await this.$store.dispatch({ type: 'addTrack', trackToSave, stationId })
                 this.loadStation()
                 eventBus.emit('track-add')
+                eventBus.emit('loadLibrary')
 
                 if (stationId !== this.user.likedId) showSuccessMsg('Added to playlist')
                 else showSuccessMsg('Added to Liked Songs')
@@ -231,6 +225,7 @@ export default {
             try {
                 await this.$store.dispatch({ type: 'removeTrack', trackId, stationId: this.station._id })
                 this.loadStation()
+                eventBus.emit('loadLibrary')
                 showSuccessMsg('Removed from playlist')
             } catch (err) {
                 console.log(err.message)

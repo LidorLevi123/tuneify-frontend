@@ -45,6 +45,7 @@
 import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service';
 import { stationService } from '../services/station.service'
 import LibraryStationList from './LibraryStationList.vue';
+import { eventBus } from '../services/event-bus.service';
 export default {
     name: 'Sidebar',
     data() {
@@ -60,16 +61,23 @@ export default {
     },
 
     created() {
-        this.loadLibrary()
+        if (this.user) this.loadLibrary()
+        eventBus.on('loadLibrary', this.filterSortLibrary)
+    },
+    unmounted() {
+        eventBus.off('loadLibrary', this.loadLibrary)
     },
 
     methods: {
         async loadLibrary() {
             try {
                 this.libraryStations = await stationService.query(this.user._id)
+                this.filterSortLibrary()
             }
             catch (err) {
-                console.log('Could not load library')
+                showErrorMsg('Could not load library')
+                console.log('Could not load library', err)
+                throw err
             }
         },
         async addStation() {
@@ -85,7 +93,8 @@ export default {
 
                 const station = await this.$store.dispatch({ type: 'saveStation', stationToSave })
                 await this.$store.dispatch({ type: 'updateUserStations', stationId: station._id, action: 'add' })
-                showSuccessMsg('Saved to Your Library')
+                this.libraryStations.push(station)
+                showSuccessMsg('Added to Your Library')
                 this.$router.push(`/station/${station._id}`)
             } catch (err) {
                 console.log('Could not add station')
@@ -94,6 +103,11 @@ export default {
             }
         },
         async removeStation(station) {
+            if (station.name === 'Liked Songs') return showErrorMsg('Cannot remove Liked Songs')
+
+            const idx = this.libraryStations.findIndex(item => item._id === station._id)
+            if (idx !== -1) this.libraryStations.splice(idx, 1)
+
             try {
                 if (station.owner.fullname !== 'Tuneify') {
                     await this.$store.dispatch({ type: 'removeStation', stationId: station._id })
@@ -109,7 +123,13 @@ export default {
             }
         },
         async filterSortLibrary(sortBy = this.sortedBy) {
-            this.libraryStations = await stationService.query(this.user._id)
+            try {
+                this.libraryStations = await stationService.query(this.user._id)
+            } catch (err) {
+                showErrorMsg('Could not load library')
+                console.log('Could not load library', err)
+                throw err
+            }
 
             if (sortBy === 'Alphabetical') {
                 if (this.sortOrder === 'asc' || !this.sortOrder) {
@@ -150,9 +170,6 @@ export default {
     },
 
     computed: {
-        stationsState() {
-            return this.$store.getters.libraryStations
-        },
         sidebarCollapsed() {
             return this.$store.getters.sidebarCollapsed
         },
@@ -162,22 +179,17 @@ export default {
         },
         user() {
             return this.$store.getters.loggedinUser
+        },
+        stationsState() {
+            return this.$store.getters.libraryStations
         }
     },
     watch: {
         query() {
             this.filterSortLibrary()
         },
-        stationsState: {
-            handler(newVal, oldVal) {
-                this.filterSortLibrary()
-            },
-            deep: true,
-        },
     },
 
     components: { LibraryStationList }
 }
-
 </script>
-

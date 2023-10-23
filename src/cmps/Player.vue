@@ -247,6 +247,7 @@ export default {
         async likeTrack(trackToSave) {
             try {
                 await this.$store.dispatch({ type: 'addTrack', trackToSave, stationId: this.user.likedId })
+                eventBus.emit('loadLibrary')
                 showSuccessMsg('Added to your Liked Songs')
             } catch (err) {
                 console.log(err.message)
@@ -256,6 +257,7 @@ export default {
         async dislikeTrack(trackId) {
             try {
                 await this.$store.dispatch({ type: 'removeTrack', trackId, stationId: this.user.likedId })
+                eventBus.emit('loadLibrary')
                 showSuccessMsg('Removed from your Liked Songs')
             } catch (err) {
                 showErrorMsg('Could not dislike track')

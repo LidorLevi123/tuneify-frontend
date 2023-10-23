@@ -41,15 +41,24 @@
         }
 
         .dlt-btn {
+            padding: .25rem;
             position: absolute;
-            background-color: $clr3;
             cursor: pointer;
             color: $clr3;
             background-color: $clr6;
-            padding: 1rem;
-            height: 3rem;
-            border-radius: 0.2rem;
-            inset: 0px auto auto 0px;
+            width: 10rem;
+            border-radius: .2rem;
+
+            .menu-item {
+                color: #FFFFFFE6;
+                border-radius: .2rem;
+                padding: .4rem .7rem;
+                font-size: 0.875rem;
+
+                &:hover {
+                    background-color: $clr12;
+                }
+            }
         }
     }
 

@@ -41,14 +41,20 @@ async function update(user) {
 async function updateUserStations(user, stationId, action) {
     user = JSON.parse(JSON.stringify(user))
 
-    if (action === 'add') {
+    if (action === 'update') {
+        user.stationIds = stationId
+    }
+
+    else if (action === 'add') {
         if (user.stationIds.some(id => id === stationId)) return
         user.stationIds.push(stationId)
     }
+
     else if (action === 'remove') {
         const idx = user.stationIds.findIndex(currStationId => currStationId === stationId)
         user.stationIds.splice(idx, 1)
     }
+
     user = await httpService.put(`user/${user._id}`, user)
     if (getLoggedinUser()._id === user._id) saveLocalUser(user)
     return user

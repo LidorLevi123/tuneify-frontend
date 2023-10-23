@@ -10,6 +10,7 @@ import UserMsg from './cmps/UserMsg.vue'
 import BackDrop from './cmps/BackDrop.vue'
 import UserEdit from './cmps/UserEdit.vue'
 import { userService } from './services/user.service'
+import { eventBus } from './services/event-bus.service'
 
 export default {
 
@@ -22,6 +23,7 @@ export default {
 
       if (!user) user = await this.$store.dispatch({ type: 'login', userCred: { username: 'guest', password: '123' } })
       await this.$store.dispatch({ type: 'loadUserStations', userId: user._id })
+      if (user) eventBus.emit('loadLibrary')
 
     } catch (err) {
       console.log('Something went wrong at App', err.message)
