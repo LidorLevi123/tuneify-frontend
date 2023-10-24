@@ -198,7 +198,7 @@
                         }
 
                         &:hover {
-                            background-color: $clr12;
+                            background-color: $clr13;
                         }
 
                         .vee-icon svg {
@@ -208,13 +208,35 @@
                         }
                     }
 
+                    hr {
+                        margin: 0;
+                        border-color: $clr12;
+                    }
+
+                    div {
+                        display: flex;
+                        align-items: center;
+                        gap: .2rem;
+                        padding: 0;
+                    }
                 }
             }
 
             .material-symbols-outlined {
                 color: #A7A7A7;
+                font-variation-settings:
+                    'wght' 400,
+                    'GRAD' -25,
+                    'opsz' 24;
+
+                &.active {
+                    color: $clr9;
+                }
+
+                &:last-of-type {
+                    padding-block-start: 2px;
+                }
             }
         }
-
     }
 }

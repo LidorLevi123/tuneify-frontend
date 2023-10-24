@@ -1,9 +1,10 @@
 <template>
     <article class="library-station-preview" :style="{ columnGap: sidebarCollapsed ? '0' : '0.8rem' }">
-        <img :src="imgUrl" alt="">
+        <img v-if="libraryView === 'list'" :src="imgUrl" alt="">
         <h5 :class="{ 'is-current': currStation?._id === station._id }"
             :style="{ display: sidebarCollapsed ? 'none' : 'block' }">{{ stationName }}</h5>
-        <small :style="{ display: sidebarCollapsed ? 'none' : 'block' }"><span>{{ station.tracks.length }} songs</span>
+        <small v-if="libraryView === 'list'" :style="{ display: sidebarCollapsed ? 'none' : 'block' }"><span>{{
+            station.tracks.length }} songs</span>
             &bull;
             <span>{{ stationBelonging }}</span>
         </small>
@@ -18,6 +19,9 @@ export default {
     },
 
     computed: {
+        libraryView() {
+            return this.$store.getters.libraryView
+        },
         stationName() {
             return this.station.name
         },

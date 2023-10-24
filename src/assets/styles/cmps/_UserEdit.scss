@@ -44,11 +44,35 @@
         display: grid;
         grid-template: 2rem 8.25rem auto/11.25rem 17.5rem;
         grid-gap: .8rem;
+        position: relative;
         padding: 0 1.5rem 1.5rem;
 
         @include for-mobile-layout {
             display: flex;
             flex-direction: column;
+        }
+
+        .remove-img-btn {
+            position: absolute;
+            bottom: 7rem;
+            left: 3.5rem;
+            border: none;
+            background-color: transparent;
+            font-weight: 700;
+            font-size: 1rem;
+            color: $clr2;
+            transition: .2s;
+
+            &:hover {
+                text-decoration: underline;
+            }
+
+            @include for-mobile-layout {
+                opacity: 1 !important;
+                bottom: 12rem;
+                left: 4.5rem;
+            }
+
         }
     }
 

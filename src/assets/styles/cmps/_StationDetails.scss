@@ -110,6 +110,7 @@
         @include for-mobile-layout {
             display: block;
             margin: auto;
+            padding-block-start: 2.5rem;
         }
 
         .img {
@@ -123,7 +124,6 @@
 
                 @include for-mobile-layout {
                     width: 100%;
-                    padding-block-start: 2.5rem;
                 }
             }
 

@@ -7,7 +7,11 @@
         <section class="edit">
             <label>
                 <input type="file" @change="handleFile" hidden>
-                <img class="album-image" :src="userToEdit.imgUrl" ref="userImg" alt="">
+                <img class="album-image" :src="userToEdit.imgUrl" ref="userImg" alt="" @mouseover="imageIsHovered = true"
+                    @mouseleave="imageIsHovered = false">
+                <button v-if="this.userToEdit.imgUrl" @click.stop="removeImg" class="remove-img-btn"
+                    :style="{ opacity: imageIsHovered ? '1' : '0' }" @mouseover="imageIsHovered = true">Remove
+                    photo</button>
             </label>
             <input class="fullname" type="text" v-model="userToEdit.fullname" placeholder="Add a display name" required>
             <button class="save-btn" @click="save" type="submit">Save</button>
@@ -27,6 +31,7 @@ export default {
     data() {
         return {
             userToEdit: null,
+            imageIsHovered: false
         }
     },
     created() {
@@ -53,7 +58,11 @@ export default {
         },
         async handleFile(ev) {
             const { url } = await uploadService.uploadImg(ev)
+            console.log('image url', url)
             this.userToEdit.imgUrl = url
+        },
+        removeImg() {
+            this.userToEdit.imgUrl = 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png'
         }
     },
     computed: {

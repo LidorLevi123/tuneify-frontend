@@ -36,6 +36,11 @@
                         playlist <span v-icon="`rightArrow`" class="df ai"></span></span>
 
                     <div v-show="showSubDropdown && createdStations?.length" class="sub-dropdown">
+                        <div class="sub-dropdown-item" @click.stop="addStation(track)">
+                            <span v-icon="'createList'" class="df ai"></span>
+                            <div>Create playlist</div>
+                        </div>
+                        <hr>
                         <div class="sub-dropdown-item" v-for="idx in createdStations?.length"
                             @click="onAddTrack(track, createdStations[idx - 1]._id, $event)">
                             {{ createdStations[idx - 1].name }}
@@ -136,6 +141,10 @@ export default {
     },
 
     methods: {
+        addStation(track) {
+            eventBus.emit('add-station', track)
+            this.hideMenu()
+        },
         onMouseOver() { this.isHovered = true },
         onMouseLeave() {
             this.isHovered = false

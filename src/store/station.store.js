@@ -1,5 +1,4 @@
 import { stationService } from '../services/station.service'
-import { eventBus } from '../services/event-bus.service'
 import Cookies from 'js-cookie'
 
 export const stationStore = {
@@ -7,6 +6,7 @@ export const stationStore = {
         isRsbOpen: false,
         isLoading: false,
         sidebarCollapsed: false,
+        libraryView: 'list',
         stations: [],
         stationsForHome: [],
         currStation: null,
@@ -17,6 +17,7 @@ export const stationStore = {
     getters: {
         isRsbOpen({ isRsbOpen }) { return isRsbOpen },
         sidebarCollapsed({ sidebarCollapsed }) { return sidebarCollapsed },
+        libraryView({ libraryView }) { return libraryView },
         isLoading({ isLoading }) { return isLoading },
         libraryStations({ stations }) { return stations },
         stationsForHome({ stationsForHome }) { return stationsForHome },
@@ -32,6 +33,10 @@ export const stationStore = {
         },
         setSidebarCollapsed(state) {
             state.sidebarCollapsed = !state.sidebarCollapsed
+        },
+        setLibraryView(state, view) {
+            console.log(view);
+            state.libraryView = view
         },
         setLoading(state, value) {
             state.isLoading = value
@@ -136,7 +141,6 @@ export const stationStore = {
             try {
                 const station = await stationService.save(stationToSave)
                 commit({ type, stationToSave: station })
-                eventBus.emit('loadLibrary')
                 return station
             } catch (err) {
                 console.log(err.message)

@@ -6,7 +6,7 @@
                 <span v-else v-icon="'collapsed'"></span>
                 <div :style="{ display: sidebarCollapsed ? 'none' : 'block' }">Your Library</div>
             </button>
-            <button v-icon="'createList'" @click="addStation" title="Create playlist" class="add-station"
+            <button v-icon="'createList'" @click="addStation()" title="Create playlist" class="add-station"
                 :style="{ display: sidebarCollapsed ? 'none' : 'flex' }"></button>
         </section>
         <section class="filter-sort" v-if="!sidebarCollapsed">
@@ -23,18 +23,41 @@
                     <ul v-if="sortMenuOpen" v-clickOutside="toggleSortMenu" class="clean-list sort-menu">
                         <li class="sort-menu-header">sort by</li>
                         <li class="sort-option" :class="{ active: sortedBy === 'Alphabetical' }"
-                            @click.stop="filterSortLibrary('Alphabetical')">Alphabetical <span
-                                v-show="sortedBy === 'Alphabetical'" class="vee-icon" v-icon="`vee`"></span></li>
+                            @click.stop="filterSortLibrary('Alphabetical')">
+                            <span>Alphabetical</span>
+                            <span v-show="sortedBy === 'Alphabetical'" class="vee-icon" v-icon="`vee`"></span>
+                        </li>
                         <li class="sort-option" :class="{ active: sortedBy === 'Creator' }"
                             @click.stop="filterSortLibrary('Creator')">
-                            Creator <span v-show="sortedBy === 'Creator'" class="vee-icon" v-icon="`vee`"></span>
+                            <span>Creator</span>
+                            <span v-show="sortedBy === 'Creator'" class="vee-icon" v-icon="`vee`"></span>
                         </li>
                         <li class="sort-option" :class="{ active: sortedBy === 'Custom Order' }"
                             @click.stop="filterSortLibrary('Custom Order')">Custom Order <span
                                 v-show="sortedBy === 'Custom Order'" class="vee-icon" v-icon="`vee`"></span></li>
+                        <hr>
+                        <li class="sort-menu-header">View as</li>
+                        <li class="sort-option" :class="{ active: libraryView === 'compact' }"
+                            @click.stop="setLibraryView('compact')">
+                            <div>
+                                <span :class="{ active: libraryView === 'compact' }"
+                                    class="material-symbols-outlined">menu</span>
+                                <span>Compact</span>
+                            </div>
+                            <span v-show="libraryView === 'compact'" class="vee-icon" v-icon="`vee`"></span>
+                        </li>
+                        <li class="sort-option" :class="{ active: libraryView === 'list' }"
+                            @click.stop="setLibraryView('list')">
+                            <div>
+                                <span :class="{ active: libraryView === 'list' }"
+                                    class="material-symbols-outlined">list</span>
+                                <span>List</span>
+                            </div>
+                            <span v-show="libraryView === 'list'" class="vee-icon" v-icon="`vee`"></span>
+                        </li>
                     </ul>
                 </span>
-                <span class="material-symbols-outlined">list</span>
+                <span class="material-symbols-outlined">{{ libraryIcon }}</span>
             </section>
         </section>
         <LibraryStationList v-if="libraryStations" @station-remove="removeStation" :libraryStations="libraryStations" />
@@ -51,7 +74,6 @@ export default {
     data() {
         return {
             libraryStations: null,
-            canAddStation: true,
             query: '',
             sortedBy: 'Custom Order',
             sortMenuOpen: false,
@@ -63,9 +85,11 @@ export default {
     created() {
         if (this.user) this.loadLibrary()
         eventBus.on('loadLibrary', this.filterSortLibrary)
+        eventBus.on('add-station', this.addStation)
     },
     unmounted() {
         eventBus.off('loadLibrary', this.loadLibrary)
+        eventBus.off('add-station', this.addStation)
     },
 
     methods: {
@@ -80,26 +104,20 @@ export default {
                 throw err
             }
         },
-        async addStation() {
+        async addStation(track) {
             try {
-
-                if (!this.canAddStation) return
-
-                this.canAddStation = false
                 const stationToSave = stationService.getEmptyStation()
 
-                stationToSave.name = 'My Playlist #' + this.libraryStations.length
-                stationToSave.imgUrl = ''
+                stationToSave.name = track?.title || 'My Playlist #' + this.libraryStations.length
 
                 const station = await this.$store.dispatch({ type: 'saveStation', stationToSave })
+                if (track && station) await this.$store.dispatch({ type: 'addTrack', trackToSave: track, stationId: station._id })
                 await this.$store.dispatch({ type: 'updateUserStations', stationId: station._id, action: 'add' })
                 this.libraryStations.push(station)
                 showSuccessMsg('Added to Your Library')
-                this.$router.push(`/station/${station._id}`)
+                if (!track) this.$router.push(`/station/${station._id}`)
             } catch (err) {
-                console.log('Could not add station')
-            } finally {
-                this.canAddStation = true
+                console.log('Could not add station', err)
             }
         },
         async removeStation(station) {
@@ -167,11 +185,21 @@ export default {
             if (this.query) return
             this.searchOpen = !this.searchOpen
         },
+        setLibraryView(view) {
+            this.$store.commit('setLibraryView', view)
+        }
     },
 
     computed: {
+        libraryIcon() {
+            if (this.libraryView === 'compact') return 'menu'
+            else return 'list'
+        },
         sidebarCollapsed() {
             return this.$store.getters.sidebarCollapsed
+        },
+        libraryView() {
+            return this.$store.getters.libraryView
         },
         sidebarWidth() {
             if (window.innerWidth < 1200) return 'auto'

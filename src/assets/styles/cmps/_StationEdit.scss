@@ -41,6 +41,7 @@
     }
 
     .edit {
+        position: relative;
         display: grid;
         grid-template: 2rem 8.25rem 2rem auto/11.25rem 17.5rem;
         grid-gap: 1rem;
@@ -49,6 +50,61 @@
         @include for-mobile-layout {
             display: flex;
             flex-direction: column;
+        }
+
+        .station-img-btn {
+            position: absolute;
+            transition: .2s;
+            padding: .25rem;
+            top: .5rem;
+            left: 10.3rem;
+            border: none;
+            background-color: rgba(36, 36, 36, 0.842);
+            height: 2rem;
+            width: 2rem;
+            border-radius: 50%;
+
+            path {
+                fill: $clr3;
+            }
+
+            &:hover {
+                path {
+                    fill: $clr2;
+                }
+            }
+
+            @include for-mobile-layout {
+                opacity: 1 !important;
+                top: .5rem;
+                left: 12.5rem;
+            }
+        }
+
+        .menu {
+            position: absolute;
+            left: 10.4rem;
+            top: 2.7rem;
+            width: 10rem;
+            padding: .25rem;
+            background-color: $clr6;
+            border-radius: .2rem;
+            box-shadow: 0 16px 24px rgba(0, 0, 0, 0.3), 0 6px 8px rgba(0, 0, 0, 0.2);
+
+            @include for-mobile-layout {
+                left: 4.5rem;
+            }
+
+            .menu-item {
+                color: #FFFFFFE6;
+                border-radius: .2rem;
+                padding: .4rem .7rem;
+                font-size: 0.875rem;
+
+                &:hover {
+                    background-color: $clr13;
+                }
+            }
         }
     }
 
@@ -60,6 +116,8 @@
         grid-column: 1;
         box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
         background-color: #282828;
+        aspect-ratio: 1;
+        object-fit: cover;
     }
 
     input {

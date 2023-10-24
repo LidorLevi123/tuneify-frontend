@@ -7,7 +7,14 @@
         <section class="edit">
             <label>
                 <input type="file" @change="handleFile" hidden>
-                <img class="album-image" :src="imgUrl" ref="stationImg" alt="">
+                <img class="album-image" :src="imgUrl" ref="stationImg" alt="" @mouseover="imageIsHovered = true"
+                    @mouseleave="imageIsHovered = false">
+                <button v-if="this.stationToEdit.imgUrl" v-icon="`moreOptionsSmall`" class="station-img-btn"
+                    :style="{ opacity: imageIsHovered ? 1 : 0 }" @click.prevent="openMenu"
+                    @mouseover="imageIsHovered = true"></button>
+                <div class="menu" v-if="menuOpen">
+                    <div class="menu-item" @click.prevent="removeImg" v-clickOutside="openMenu">Remove photo</div>
+                </div>
             </label>
             <input class="title" type="text" v-model="stationToEdit.name" placeholder="Add a name">
 
@@ -30,6 +37,8 @@ export default {
     data() {
         return {
             stationToEdit: null,
+            menuOpen: false,
+            imageIsHovered: false
         }
     },
 
@@ -58,6 +67,7 @@ export default {
                 const station = await this.$store.dispatch({ type: 'saveStation', stationToSave: this.stationToEdit })
                 this.stationToEdit = JSON.parse(JSON.stringify(station))
                 this.$emit('station-edit')
+                eventBus.emit('loadLibrary')
                 this.onCloseModal()
             } catch (err) {
                 console.log(err.message)
@@ -70,6 +80,13 @@ export default {
             const { url } = await uploadService.uploadImg(ev)
             console.log('image url', url)
             this.stationToEdit.imgUrl = url
+        },
+        openMenu() {
+            this.menuOpen = !this.menuOpen
+        },
+        removeImg() {
+            this.stationToEdit.imgUrl = ''
+            this.menuOpen = false
         }
     },
 
@@ -88,7 +105,6 @@ export default {
             this.loadStationToEdit()
         },
     }
-
 }
 
 </script>

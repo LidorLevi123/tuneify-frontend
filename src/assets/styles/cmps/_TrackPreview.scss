@@ -175,14 +175,21 @@
             }
 
             .sub-dropdown-item {
+                display: flex;
+                gap: .75rem;
                 padding: .35rem;
                 border-radius: 0.2rem;
                 color: #ffffffe6;
                 font-size: 0.875rem;
 
                 &:hover {
-                    background-color: #3e3e3e
+                    background-color: $clr13;
                 }
+            }
+
+            hr {
+                margin: 0;
+                border-color: $clr13;
             }
         }
 
@@ -203,7 +210,7 @@
                 box-shadow: 0 16px 24px rgba(0, 0, 0, .3), 0 6px 8px rgba(0, 0, 0, .2);
 
                 &:hover {
-                    background-color: #3e3e3e
+                    background-color: $clr13
                 }
             }
         }
