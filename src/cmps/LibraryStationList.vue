@@ -88,7 +88,7 @@ export default {
         },
         showContextMenu(stationId, ev) {
             this.contextmenuLeft = ev.clientX - 100
-            this.contextmenuTop = ev.clientY - 225
+            this.contextmenuTop = ev.clientY - 300
             this.contextMenuOpenMap[stationId] = true
         },
         closeContextMenu(stationId) {

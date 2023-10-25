@@ -1,7 +1,7 @@
 .sidebar-list-container {
     grid-column: 1;
     display: grid;
-    grid-template-rows: auto auto 1fr;
+    grid-template-rows: auto auto auto 1fr;
     background-color: $clr4;
     border-radius: 0.5rem;
     margin-block-start: 0.5rem;
@@ -80,6 +80,45 @@
         span {
             @include for-mobile-layout {
                 display: none;
+            }
+        }
+    }
+
+    .filter-btns {
+        display: flex;
+        gap: .4rem;
+        align-items: center;
+        padding: .3rem 1rem .6rem 1rem;
+
+        .btn {
+            border: none;
+            background-color: #ffffff12;
+            color: $clr2;
+            cursor: pointer;
+            transition: .2s;
+
+            &:hover {
+                background-color: #ffffff1b;
+            }
+
+            path {
+                fill: $clr2;
+            }
+        }
+
+        .unfilter {
+            height: 2rem;
+            width: 2rem;
+            border-radius: 50%;
+        }
+
+        .filter {
+            padding: .5rem .7rem;
+            border-radius: 500px;
+
+            &.active {
+                background-color: $clr2;
+                color: $clr1;
             }
         }
     }

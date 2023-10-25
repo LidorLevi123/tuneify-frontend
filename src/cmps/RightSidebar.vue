@@ -4,7 +4,7 @@
             <RouterLink :to="`/station/${currStation._id}`">{{ currStation.name }}</RouterLink>
             <button v-icon="`close`" @click="closeRSB" class="closeRSB-btn"></button>
         </header>
-        <img class="track-img" :src="currTrack.imgUrl" alt="">
+        <img class="track-img" :src="currTrack.imgUrl[0].url" alt="">
         <section class="track-info">
             <h1>{{ currTrack.title }}</h1>
             <h4 v-for="(artist, idx) in currTrack.artists" :key="idx">{{ artist }} <span
@@ -17,7 +17,7 @@
                     <span v-if="this.nextTrackHovered" v-icon="`sPlay`" class="rsb-play"></span>
                     <span v-else v-icon="`note`"></span>
                 </button>
-                <img :src="nextTrack.imgUrl" alt="">
+                <img :src="nextTrack.imgUrl[2].url" alt="">
                 <section>
                     <span class="next-track-name">{{ nextTrack.title }}</span>
                     <span class="next-track-artist">{{ nextTrack.artists[0] }}</span>

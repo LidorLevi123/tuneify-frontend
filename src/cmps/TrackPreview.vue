@@ -10,7 +10,7 @@
 
         <div class="mini-prev">
             <section class="img-container">
-                <img :src="`${track.imgUrl}`" alt="">
+                <img v-if="track.imgUrl" :src="`${track.imgUrl[2].url}`" alt="">
             </section>
             <section class="track-info-container">
                 <div class="track-name" :class="isPlaying">{{ track.title }}</div>
@@ -35,12 +35,12 @@
                     <span @click="$event.stopPropagation()" class="menu-li df sb" v-clickOutside="hideMenu">Add to
                         playlist <span v-icon="`rightArrow`" class="df ai"></span></span>
 
-                    <div v-show="showSubDropdown && createdStations?.length" class="sub-dropdown">
+                    <div v-show="showSubDropdown" class="sub-dropdown">
                         <div class="sub-dropdown-item" @click.stop="addStation(track)">
                             <span v-icon="'createList'" class="df ai"></span>
                             <div>Create playlist</div>
                         </div>
-                        <hr>
+                        <hr v-if="createdStations?.length">
                         <div class="sub-dropdown-item" v-for="idx in createdStations?.length"
                             @click="onAddTrack(track, createdStations[idx - 1]._id, $event)">
                             {{ createdStations[idx - 1].name }}

@@ -106,7 +106,7 @@ function _cleanStationTracksData(data) {
             title: item.track.name,
             artists: _cleanArtists(item.track.artists),
             artistId: item.track.artists[0].id,
-            imgUrl: item.track.album.images[0].url,
+            imgUrl: item.track.album.images,
             formalDuration: item.track.duration_ms,
             album: item.track.album.name,
             youtubeId: ''
@@ -120,7 +120,7 @@ async function _cleanSearchData(data) {
         title: track.name,
         artists: _cleanArtists(track.artists),
         artistId: track.artists[0].id,
-        imgUrl: track.album.images[0].url,
+        imgUrl: track.album.images,
         formalDuration: track.duration_ms,
         album: track.album.name,
         youtubeId: ''

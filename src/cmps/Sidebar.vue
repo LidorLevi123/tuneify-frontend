@@ -9,6 +9,13 @@
             <button v-icon="'createList'" @click="addStation()" title="Create playlist" class="add-station"
                 :style="{ display: sidebarCollapsed ? 'none' : 'flex' }"></button>
         </section>
+        <section class="filter-btns">
+            <button @click="this.filterBy = null" v-icon="'close'" class="unfilter btn"></button>
+            <button @click="this.filterBy = 'Tuneify'" class="filter btn"
+                :class="{ active: this.filterBy === 'Tuneify' }">By Tuneify</button>
+            <button @click="this.filterBy = this.user?.fullname" class="filter btn"
+                :class="{ active: this.filterBy === this.user?.fullname }">By You</button>
+        </section>
         <section class="filter-sort" v-if="!sidebarCollapsed">
             <div v-if="!searchOpen" @click.stop="toggleSearch">
                 <button v-icon="'sSearch'" title="Create playlist" class="station-search-btn"></button>
@@ -76,6 +83,7 @@ export default {
             libraryStations: null,
             query: '',
             sortedBy: 'Custom Order',
+            filterBy: null,
             sortMenuOpen: false,
             searchOpen: false,
             searchBtn: true,
@@ -169,7 +177,7 @@ export default {
             }
 
             this.libraryStations = this.libraryStations.filter(station => station.name.toLowerCase().includes(this.query.toLowerCase()))
-
+            if (this.filterBy) this.libraryStations = this.stationsState.filter((station) => station.owner.fullname === this.filterBy)
             this.sortedBy = sortBy
         },
         collapseSidebar() {
@@ -213,7 +221,8 @@ export default {
         }
     },
     watch: {
-        query() {
+        query: 'filterSortLibrary',
+        filterBy: function () {
             this.filterSortLibrary()
         },
     },

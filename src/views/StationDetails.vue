@@ -11,15 +11,15 @@
                         class="station-img" :src="station.imgUrl" alt="" @load="setBackgroundClr" ref="stationImg" />
 
                     <img v-else-if="this.station.owner._id && this.station.tracks.length && this.station.tracks.length < 4"
-                        crossorigin="anonymous" class="station-img" :src="station.tracks[0]?.imgUrl" alt=""
+                        crossorigin="anonymous" class="station-img" :src="station.tracks[0]?.imgUrl[1].url" alt=""
                         @load="setBackgroundClr" ref="stationImg" />
 
                     <div v-else-if="this.station.owner._id && this.station.tracks.length >= 4" class="collage-container">
-                        <img class="s-img" :src="this.station.tracks[0]?.imgUrl" alt="" crossorigin="anonymous"
+                        <img class="s-img" :src="this.station.tracks[0]?.imgUrl[1].url" alt="" crossorigin="anonymous"
                             @load="setBackgroundClr" ref="stationImg">
-                        <img class="s-img" :src="this.station.tracks[1]?.imgUrl" alt="">
-                        <img class="s-img" :src="this.station.tracks[2]?.imgUrl" alt="">
-                        <img class="s-img" :src="this.station.tracks[3]?.imgUrl" alt="">
+                        <img class="s-img" :src="this.station.tracks[1]?.imgUrl[1].url" alt="">
+                        <img class="s-img" :src="this.station.tracks[2]?.imgUrl[1].url" alt="">
+                        <img class="s-img" :src="this.station.tracks[3]?.imgUrl[1].url" alt="">
                     </div>
 
                     <div v-else class="img-placeholder">

@@ -1,6 +1,6 @@
 <template>
     <article class="library-station-preview" :style="{ columnGap: sidebarCollapsed ? '0' : '0.8rem' }">
-        <img v-if="libraryView === 'list'" :src="imgUrl" alt="">
+        <img v-if="libraryView === 'list'" :src="imgUrl[2].url || imgUrl" alt="">
         <h5 :class="{ 'is-current': currStation?._id === station._id }"
             :style="{ display: sidebarCollapsed ? 'none' : 'block' }">{{ stationName }}</h5>
         <small v-if="libraryView === 'list'" :style="{ display: sidebarCollapsed ? 'none' : 'block' }"><span>{{
