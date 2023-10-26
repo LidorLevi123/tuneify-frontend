@@ -190,12 +190,22 @@
         .sort-container {
             display: flex;
             align-items: center;
-            gap: .2rem;
+            gap: .4rem;
             position: relative;
             cursor: pointer;
             transition: .05s;
 
-            &:hover .material-symbols-outlined,
+            &:hover .view-option-icon:last-of-type {
+                svg {
+
+                    path {
+                        fill: $clr2;
+                    }
+                }
+            }
+
+
+
             &:hover .sort-btn {
                 color: $clr2;
             }
@@ -255,25 +265,26 @@
                     div {
                         display: flex;
                         align-items: center;
-                        gap: .2rem;
+                        gap: .5rem;
                         padding: 0;
                     }
                 }
             }
 
-            .material-symbols-outlined {
-                color: #A7A7A7;
-                font-variation-settings:
-                    'wght' 400,
-                    'GRAD' -25,
-                    'opsz' 24;
+            .view-option-icon {
+                display: flex;
 
                 &.active {
-                    color: $clr9;
+                    path {
+                        fill: $clr9;
+                    }
+
                 }
 
                 &:last-of-type {
-                    padding-block-start: 2px;
+                    path {
+                        fill: #A7A7A7;
+                    }
                 }
             }
         }

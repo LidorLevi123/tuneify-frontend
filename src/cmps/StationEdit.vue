@@ -95,7 +95,7 @@ export default {
             return this.$route.params.stationId
         },
         imgUrl() {
-            return this.stationToEdit?.imgUrl || this.stationToEdit?.tracks[0]?.imgUrl || 'https://res.cloudinary.com/dys1sj4cd/image/upload/v1691338579/def-pl-fotor-202308061976_hbckqs.png'
+            return this.stationToEdit?.imgUrl || this.stationToEdit?.tracks[0]?.imgUrl[1].url || 'https://res.cloudinary.com/dys1sj4cd/image/upload/v1691338579/def-pl-fotor-202308061976_hbckqs.png'
         },
     },
 

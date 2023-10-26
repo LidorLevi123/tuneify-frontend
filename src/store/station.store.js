@@ -35,7 +35,6 @@ export const stationStore = {
             state.sidebarCollapsed = !state.sidebarCollapsed
         },
         setLibraryView(state, view) {
-            console.log(view);
             state.libraryView = view
         },
         setLoading(state, value) {

@@ -5,14 +5,14 @@
                 <div :class="{ 'isActive': $route.path === '/' }">
                     <span v-if="$route.path === '/'" v-icon="'homeActive'"></span>
                     <span v-else v-icon="'home'"></span>
-                    <section :style="{ display: sidebarCollapsed ? 'none' : 'block' }">Home</section>
+                    <section v-if="!sidebarCollapsed">Home</section>
                 </div>
             </RouterLink>
             <RouterLink to="/search">
                 <div :class="{ 'isActive': $route.path === '/search' }">
                     <span v-if="$route.path === '/search'" v-icon="'searchActive'"></span>
                     <span v-else v-icon="'search'"></span>
-                    <section :style="{ display: sidebarCollapsed ? 'none' : 'block' }">Search</section>
+                    <section v-if="!sidebarCollapsed">Search</section>
                 </div>
             </RouterLink>
         </nav>

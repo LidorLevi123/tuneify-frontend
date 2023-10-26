@@ -1,17 +1,13 @@
 .station-main-container {
     padding: 0.5rem;
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template: 1fr auto/auto 1fr;
+    height: 100vh;
+    gap: .5rem;
 
     @include for-mobile-layout {
         display: flex;
         flex-direction: column;
         padding: 0;
-        grid-row-gap: 0;
     }
-
-    grid-template-rows: 1fr auto;
-    grid-column-gap: 0.5rem;
-    grid-row-gap: 0.5rem;
-    height: 100vh;
 }

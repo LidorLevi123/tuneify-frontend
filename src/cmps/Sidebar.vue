@@ -4,12 +4,12 @@
             <button class="collapse" @click="collapseSidebar">
                 <span v-if="!sidebarCollapsed" v-icon="'collapse'"></span>
                 <span v-else v-icon="'collapsed'"></span>
-                <div :style="{ display: sidebarCollapsed ? 'none' : 'block' }">Your Library</div>
+                <div v-if="!sidebarCollapsed">Your Library</div>
             </button>
             <button v-icon="'createList'" @click="addStation()" title="Create playlist" class="add-station"
-                :style="{ display: sidebarCollapsed ? 'none' : 'flex' }"></button>
+                v-if="!sidebarCollapsed"></button>
         </section>
-        <section class="filter-btns">
+        <section class="filter-btns" v-if="!sidebarCollapsed">
             <button @click="this.filterBy = null" v-icon="'close'" class="unfilter btn"></button>
             <button @click="this.filterBy = 'Tuneify'" class="filter btn"
                 :class="{ active: this.filterBy === 'Tuneify' }">By Tuneify</button>
@@ -47,8 +47,8 @@
                         <li class="sort-option" :class="{ active: libraryView === 'compact' }"
                             @click.stop="setLibraryView('compact')">
                             <div>
-                                <span :class="{ active: libraryView === 'compact' }"
-                                    class="material-symbols-outlined">menu</span>
+                                <span class="view-option-icon" :class="{ active: libraryView === 'compact' }"
+                                    v-icon="`compact`"></span>
                                 <span>Compact</span>
                             </div>
                             <span v-show="libraryView === 'compact'" class="vee-icon" v-icon="`vee`"></span>
@@ -56,15 +56,15 @@
                         <li class="sort-option" :class="{ active: libraryView === 'list' }"
                             @click.stop="setLibraryView('list')">
                             <div>
-                                <span :class="{ active: libraryView === 'list' }"
-                                    class="material-symbols-outlined">list</span>
+                                <span class="view-option-icon" :class="{ active: libraryView === 'list' }"
+                                    v-icon="`list`"></span>
                                 <span>List</span>
                             </div>
                             <span v-show="libraryView === 'list'" class="vee-icon" v-icon="`vee`"></span>
                         </li>
                     </ul>
                 </span>
-                <span class="material-symbols-outlined">{{ libraryIcon }}</span>
+                <span class="view-option-icon" v-icon="this.libraryView"></span>
             </section>
         </section>
         <LibraryStationList v-if="libraryStations" @station-remove="removeStation" :libraryStations="libraryStations" />
@@ -199,10 +199,6 @@ export default {
     },
 
     computed: {
-        libraryIcon() {
-            if (this.libraryView === 'compact') return 'menu'
-            else return 'list'
-        },
         sidebarCollapsed() {
             return this.$store.getters.sidebarCollapsed
         },
@@ -210,7 +206,7 @@ export default {
             return this.$store.getters.libraryView
         },
         sidebarWidth() {
-            if (window.innerWidth < 1200) return 'auto'
+            if (window.innerWidth < 890) return 'auto'
             else return this.sidebarCollapsed ? 'auto' : '412px'
         },
         user() {

@@ -121,6 +121,7 @@ async function getStationsForHome() {
     const categories = [
         { id: 'toplists', name: 'Top Lists' },
         { id: 'featured', name: 'Featured Playlists' },
+        { id: '0JQ5DAqbMKFLVaM30PMBm4', name: 'Summer' },
         { id: '0JQ5DAqbMKFAXlCG6QvYQ4', name: 'Workout' },
         { id: '0JQ5DAqbMKFzHmL4tf05da', name: 'Mood' },
         { id: '0JQ5DAqbMKFQIL0AXnG5AK', name: 'Trending' },
