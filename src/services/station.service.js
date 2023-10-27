@@ -15,7 +15,6 @@ export const stationService = {
     getSearchRes,
     getCategoryStations,
     getStationsForHome,
-    getAccessToken,
     getAllStations,
     removeStationsByName,
     getArtistData
@@ -111,10 +110,6 @@ async function removeTrack(trackId, stationId) {
 async function getCategoryStations(categoryId) {
     const stations = await spotifyService.getSpotifyItems({ type: 'categoryStations', id: categoryId })
     return stations
-}
-
-async function getAccessToken() {
-    await spotifyService.getAccessToken()
 }
 
 async function getStationsForHome() {

@@ -33,8 +33,6 @@
 </template>
 
 <script>
-
-import ImgUploader from '../cmps/ImgUploader.vue'
 import { showErrorMsg } from '../services/event-bus.service'
 
 export default {
@@ -43,7 +41,7 @@ export default {
     return {
       msg: '',
       loginCred: { username: '', password: '' },
-      signupCred: { username: '', password: '', fullname: '', imgUrl: '' },
+      signupCred: { username: '', password: '', fullname: '' },
     }
   },
   methods: {
@@ -72,29 +70,12 @@ export default {
       const user = await this.$store.dispatch({ type: 'signup', userCred: this.signupCred })
       await this.$store.dispatch({ type: 'loadUserStations', userId: user._id })
       this.$router.push('/')
-
-    },
-    async removeUser(userId) {
-      try {
-        await this.$store.dispatch({ type: "removeUser", userId })
-        this.msg = 'User removed'
-      } catch (err) {
-        this.msg = 'Failed to remove user'
-      }
-    },
-    onUploaded(imgUrl) {
-      this.signupCred.imgUrl = imgUrl
-    },
+    }
   },
-
   watch: {
     msg() {
       showErrorMsg(this.msg)
     }
-  },
-
-  components: {
-    ImgUploader
   }
 }
 </script>

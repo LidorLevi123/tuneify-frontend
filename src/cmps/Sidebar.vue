@@ -91,26 +91,20 @@ export default {
     },
 
     created() {
-        if (this.user) this.loadLibrary()
+        this.duplicateStationsToLibrary()
+        eventBus.on('duplicateStationsToLibrary', this.duplicateStationsToLibrary)
         eventBus.on('loadLibrary', this.filterSortLibrary)
         eventBus.on('add-station', this.addStation)
     },
     unmounted() {
-        eventBus.off('loadLibrary', this.loadLibrary)
+        eventBus.off('duplicateStationsToLibrary', this.duplicateStationsToLibrary)
+        eventBus.off('loadLibrary', this.filterSortLibrary)
         eventBus.off('add-station', this.addStation)
     },
 
     methods: {
-        async loadLibrary() {
-            try {
-                this.libraryStations = await stationService.query(this.user._id)
-                this.filterSortLibrary()
-            }
-            catch (err) {
-                showErrorMsg('Could not load library')
-                console.log('Could not load library', err)
-                throw err
-            }
+        async duplicateStationsToLibrary() {
+            this.libraryStations = [...this.stationsState]
         },
         async addStation(track) {
             try {
@@ -177,7 +171,7 @@ export default {
             }
 
             this.libraryStations = this.libraryStations.filter(station => station.name.toLowerCase().includes(this.query.toLowerCase()))
-            if (this.filterBy) this.libraryStations = this.stationsState.filter((station) => station.owner.fullname === this.filterBy)
+            if (this.filterBy) this.libraryStations = this.libraryStations.filter((station) => station.owner.fullname === this.filterBy)
             this.sortedBy = sortBy
         },
         collapseSidebar() {

@@ -116,14 +116,6 @@ export const stationStore = {
                 commit('setLoading', false)
             }
         },
-        async getAccessToken() {
-            try {
-                await stationService.getAccessToken()
-            } catch (err) {
-                console.log('Could not get access token', err)
-                throw new Error('Could not get access token')
-            }
-        },
         async loadUserStations({ commit }, { userId }) {
             try {
                 const stations = await stationService.query(userId)
