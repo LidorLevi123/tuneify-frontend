@@ -6,10 +6,15 @@
     border-radius: 0.5rem;
     margin-block-start: 0.5rem;
     overflow-y: hidden;
+    width: 412px;
 
     @include for-mobile-layout {
         width: auto;
         height: 100%;
+    }
+
+    @include for-narrow-layout {
+        width: auto;
     }
 
     .sidebar-top {

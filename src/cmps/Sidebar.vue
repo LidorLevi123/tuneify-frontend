@@ -200,8 +200,7 @@ export default {
             return this.$store.getters.libraryView
         },
         sidebarWidth() {
-            if (window.innerWidth < 890) return 'auto'
-            else return this.sidebarCollapsed ? 'auto' : '412px'
+            if (this.sidebarCollapsed) return 'auto'
         },
         user() {
             return this.$store.getters.loggedinUser

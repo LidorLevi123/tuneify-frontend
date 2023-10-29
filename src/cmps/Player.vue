@@ -1,7 +1,8 @@
 <template>
     <YouTube v-if="cookieLoaded" ref="youtubePlayer" :src="currTrack?.youtubeId || ''" @state-change="onStateChange"
         style="display: none;" />
-    <section class="main-player-container" :class="{ 'is-shown': screenWidth < 890 && currTrack }">
+    <section class="main-player-container" :class="{ 'is-shown': screenWidth < 890 && currTrack }"
+        :style="rsbOpen ? { gridColumn: '1 / span 3' } : { gridColumn: '1 / -1' }">
         <section class="track-info-container">
             <section class="img-container" @click="goToStation" :title="`Go to playlist: ${this.currStation?.name}`">
                 <img v-if="currTrack" :src="`${currTrack.imgUrl[2].url}`" alt="">

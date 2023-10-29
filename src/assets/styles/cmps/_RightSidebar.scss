@@ -10,6 +10,10 @@
     max-width: 26.25rem;
     overflow-y: auto;
 
+    @include for-mobile-layout {
+        display: none;
+    }
+
     button {
         border: none;
         background-color: transparent;

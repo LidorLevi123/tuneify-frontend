@@ -54,19 +54,24 @@ export default {
     },
     loggedinUser() {
       return this.$store.getters.loggedinUser?.fullname
+    },
+    rsbOpen() {
+      return this.$store.getters.isRsbOpen
     }
   },
   methods: {
     maxStationsCalc() {
-      if (window.innerWidth <= 890) this.maxStations = 9
-      if (window.innerWidth > 890 && window.innerWidth <= 1050) this.maxStations = 2
-      if (window.innerWidth > 1050 && window.innerWidth <= 1250) this.maxStations = 3
-      if (window.innerWidth > 1250 && window.innerWidth <= 1440) this.maxStations = 4
-      if (window.innerWidth > 1440 && window.innerWidth <= 1640) this.maxStations = 5
-      if (window.innerWidth > 1640 && window.innerWidth <= 1840) this.maxStations = 6
-      if (window.innerWidth > 1840 && window.innerWidth <= 2030) this.maxStations = 7
-      if (window.innerWidth > 2030 && window.innerWidth <= 2230) this.maxStations = 8
-      if (window.innerWidth > 2230) this.maxStations = 9
+      const delta = this.rsbOpen ? 420 : 0
+      const winwidth = window.innerWidth
+
+      if (winwidth > 890 + delta && winwidth <= 1050 + delta) this.maxStations = 2
+      else if (winwidth > 1050 + delta && winwidth <= 1250 + delta) this.maxStations = 3
+      else if (winwidth > 1250 + delta && winwidth <= 1440 + delta) this.maxStations = 4
+      else if (winwidth > 1440 + delta && winwidth <= 1640 + delta) this.maxStations = 5
+      else if (winwidth > 1640 + delta && winwidth <= 1840 + delta) this.maxStations = 6
+      else if (winwidth > 1840 + delta && winwidth <= 2030 + delta) this.maxStations = 7
+      else if (winwidth > 2030 + delta && winwidth <= 2230 + delta) this.maxStations = 8
+      else this.maxStations = 9
     },
     setBgcolor(color) {
       this.backgroundColor = color
