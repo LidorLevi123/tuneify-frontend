@@ -171,7 +171,7 @@ export default {
 
                 } else {
                     const player = this.$refs.pipContent
-                    this.pipWindow = await documentPictureInPicture.requestWindow({ width: 300, height: 300 })
+                    this.pipWindow = await documentPictureInPicture.requestWindow({ width: 300, height: 332 })
                     this.pipWindow.document.body.append(player)
                     this.pipWindow.document.body.style.margin = 0
                     this.pipWindow.addEventListener("pagehide", eventListener)

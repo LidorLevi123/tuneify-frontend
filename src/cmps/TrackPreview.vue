@@ -14,7 +14,10 @@
             </section>
             <section class="track-info-container">
                 <div class="track-name" :class="isPlaying">{{ track.title }}</div>
-                <div class="track-artist">{{ track.artists[0] }}</div>
+                <div class="df">
+                    <div class="track-artist" v-for="(artist, idx) in track.artists" :key="idx">{{ artist }}<span
+                            v-if="idx < track.artists.length - 1">, </span></div>
+                </div>
             </section>
         </div>
         <span class="track-album">{{ track.album }}</span>
