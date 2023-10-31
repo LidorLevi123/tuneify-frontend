@@ -29,7 +29,7 @@ export default {
             return this.$store.getters.loggedinUser
         },
         stationBelonging() {
-            return this.station.owner.fullname === 'Tuneify' ? this.station.owner.fullname : this.user?.fullname
+            return this.station.owner.fullname
         },
         currStation() {
             return this.$store.getters.currStation

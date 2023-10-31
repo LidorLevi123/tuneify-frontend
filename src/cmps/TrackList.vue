@@ -4,8 +4,8 @@
         <div v-show="station" class="list-header track-preview-layout" :class="{ 'is-sticky': scrollPosition > 450 }">
             <span>#</span>
             <span>Title</span>
-            <span class="mq">Album</span>
-            <span class="mq">Date added</span>
+            <span class="mq" :style="{ opacity: station?.isAlbum ? '0' : '1' }">Album</span>
+            <span class="mq" :style="{ opacity: station?.isAlbum ? '0' : '1' }">Date added</span>
             <span v-icon="'clock'"></span>
         </div>
         <ul v-if="station?.tracks.length" class="clean-list track-list" @touchend="fixActionRestriction">

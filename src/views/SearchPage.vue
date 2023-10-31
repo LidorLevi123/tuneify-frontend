@@ -1,14 +1,27 @@
 <template>
   <section class="categories-container">
     <div class="search-res" v-if="tracks?.length">
-      <div>
+      <section class="df search-filter-btns">
+        <button class="search-filter-btn" :class="{ active: !searchFilter }" @click="searchFilter = ''">All</button>
+        <button class="search-filter-btn" :class="{ active: searchFilter === 'Songs' }"
+          @click="searchFilter = 'Songs'">Songs</button>
+        <button class="search-filter-btn" :class="{ active: searchFilter === 'Playlists' }"
+          @click="searchFilter = 'Playlists'">Playlists</button>
+        <button class="search-filter-btn" :class="{ active: searchFilter === 'Albums' }"
+          @click="searchFilter = 'Albums'">Albums</button>
+      </section>
+      <div v-show="!searchFilter || searchFilter === 'Songs'">
         <h1 class="songs">Songs</h1>
         <TrackList :tracks="tracks" @track-clicked="emitClick" @track-add="addTrack" @track-dislike="dislikeTrack"
           class="track-list" />
       </div>
-      <div>
+      <div v-show="!searchFilter || searchFilter === 'Playlists'">
         <h1 class="playlists">Playlists</h1>
-        <StationList :stations="stations" class="station-list" />
+        <StationList :stations="stations" />
+      </div>
+      <div v-show="!searchFilter || searchFilter === 'Albums'">
+        <h1 class="playlists">Albums</h1>
+        <StationList :stations="albums" />
       </div>
     </div>
     <div class="categories-list" v-else>
@@ -33,6 +46,7 @@ export default {
   data() {
     return {
       categories: utilService.getCategoriesJson(),
+      searchFilter: '',
     }
   },
   created() {
@@ -86,8 +100,11 @@ export default {
     stations() {
       return this.$store.getters.searchRes.stations
     },
+    albums() {
+      return this.$store.getters.searchRes.albums
+    },
     tracks() {
-      return this.$store.getters.searchRes.tracks
+      return this.$store.getters.searchRes.tracks?.slice(0, 10)
     },
     searchResStation() {
       return this.$store.getters.searchRes
@@ -114,10 +131,5 @@ export default {
 <style scoped>
 .track-list {
   margin-block-end: unset;
-}
-
-.station-list {
-  margin-block-end: 12rem;
-  padding-inline: .5rem;
 }
 </style>

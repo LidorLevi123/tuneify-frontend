@@ -8,7 +8,9 @@
         </div>
 
         <h4>{{ station.name }}</h4>
-        <span>{{ station.description }}</span>
+        <!-- <pre style="color: aqua;">{{ station }}</pre> -->
+        <span v-if="station.isAlbum">{{ station.releaseDate.substr(0, 4) }} &bull; {{ station.artists[0] }}</span>
+        <span v-else>{{ station.description }}</span>
     </article>
 </template>
 <script>
@@ -37,7 +39,8 @@ export default {
     methods: {
         goToDetails(stationId) {
             stationId = stationId ? stationId : this.station.spotifyId
-            this.$router.push(`/station/${stationId}`)
+            if (this.station.isAlbum) this.$router.push(`/album/${stationId}`)
+            else this.$router.push(`/station/${stationId}`)
         },
 
         pauseTrack(ev) {

@@ -10,14 +10,11 @@
 
         <div class="mini-prev">
             <section class="img-container">
-                <img v-if="track.imgUrl" :src="`${track.imgUrl[2].url}`" alt="">
+                <img v-if="track.imgUrl && !this.station?.isAlbum" :src="`${track.imgUrl[2].url}`" alt="">
             </section>
             <section class="track-info-container">
                 <div class="track-name" :class="isPlaying">{{ track.title }}</div>
-                <div class="df">
-                    <div class="track-artist" v-for="(artist, idx) in track.artists" :key="idx">{{ artist }}<span
-                            v-if="idx < track.artists.length - 1">, </span></div>
-                </div>
+                <span class="track-artist">{{ track.artists.join(', ') }}</span>
             </section>
         </div>
         <span class="track-album">{{ track.album }}</span>
@@ -92,6 +89,7 @@ export default {
             return `${minutes}:${padZero(seconds)}`
         },
         formattedDate() {
+            if (!this.dateStr) return
             const now = moment()
             const targetDate = moment(this.dateStr)
             let diffInDays = now.diff(targetDate, 'days')

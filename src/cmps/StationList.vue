@@ -1,11 +1,16 @@
 <template>
     <section class="station-list-container">
-        <ul v-if="stations" class="clean-list"
-            :class="{ 'station-list': !horizontalDesign, 'station-list-hor': horizontalDesign, 'category-list': this.$route.path.startsWith('/category/') }">
+        <ul v-if="stations" class="clean-list" :class="{
+            'station-list': !horizontalDesign,
+            'station-list-hor': horizontalDesign,
+            'category-list': this.$route.path.startsWith('/category/'),
+            'search-list': this.$route.path.startsWith('/search')
+        }">
             <li v-for="station in stations" :key="station._id">
                 <StationPreview :station="station" :horizontalDesign="horizontalDesign" />
             </li>
         </ul>
+
     </section>
 </template>
 

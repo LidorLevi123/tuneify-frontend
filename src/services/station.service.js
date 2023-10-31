@@ -32,20 +32,20 @@ async function getAllStations() {
     return await httpService.get('station/getall')
 }
 
-async function getById(spotifyId) {
+async function getById(spotifyId, type = 'station') {
     try {
         let dbStation = await httpService.get(BASE_URL + spotifyId)
         let spotifyStation
 
         if (!dbStation) {
             console.log('fetching from Spotify')
-            spotifyStation = await spotifyService.getSpotifyItems({ type: 'station', id: spotifyId })
+            spotifyStation = await spotifyService.getSpotifyItems({ type: type, id: spotifyId })
             dbStation = await httpService.post(BASE_URL, spotifyStation)
             return dbStation
         } else {
             if (dbStation.owner.fullname !== 'Tuneify') return dbStation
 
-            spotifyStation = await spotifyService.getSpotifyItems({ type: 'station', id: dbStation.spotifyId })
+            spotifyStation = await spotifyService.getSpotifyItems({ type: type, id: dbStation.spotifyId })
 
             if (_stationsDifferent(spotifyStation, dbStation)) {
                 console.log('changed - updating from Spotify')
@@ -83,12 +83,13 @@ async function save(station) {
 }
 
 async function getSearchRes(query) {
-    const { tracks, stations } = await spotifyService.getSpotifyItems({ type: 'search', query })
+    const { tracks, stations, albums } = await spotifyService.getSpotifyItems({ type: 'search', query })
     return {
         name: `Search results for: ${query}`,
         isEmpty: false,
         tracks: tracks,
-        stations: stations
+        stations: stations,
+        albums: albums
     }
 
 }

@@ -42,6 +42,11 @@ const routes = [
         component: StationDetails,
       },
       {
+        path: 'album/:stationId',
+        name: 'AlbumDetails',
+        component: StationDetails,
+      },
+      {
         path: '/library',
         name: 'PlayLists',
         component: Sidebar,

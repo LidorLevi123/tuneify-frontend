@@ -8,7 +8,7 @@
         <button v-icon="'pause'" v-if="showPause" class="play-btn-header" @click="pauseStation"
             :style="{ opacity: this.scrollPosition > 400 ? '1' : '0' }">
         </button>
-        <span v-if="$route.path.startsWith('/station/')" class="station-header"
+        <span v-if="$route.path.startsWith('/station/') || this.station?.isAlbum" class="station-header"
             :style="{ opacity: this.scrollPosition > 400 ? '1' : '0' }">{{ station?.name }}</span>
         <div v-if="$route.path === '/search'" class="search-input-container">
             <span class="df ai" v-icon="`sSearch`"></span>

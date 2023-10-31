@@ -25,6 +25,10 @@
                 grid-template-columns: repeat(auto-fit, minmax(5.625rem, 1fr));
                 gap: .5rem;
             }
+
+            &.search-list {
+                padding-inline: .5rem;
+            }
         }
 
     }

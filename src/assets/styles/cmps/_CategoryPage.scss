@@ -20,7 +20,7 @@
         color: $clr2;
 
         @include for-mobile-layout {
-            margin-block-start: 5rem;
+            margin: 5rem .5rem 2rem .5rem;
             font-size: 2rem;
         }
     }

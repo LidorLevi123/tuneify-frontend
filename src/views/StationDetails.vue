@@ -28,15 +28,17 @@
 
                 </section>
                 <section class="station-info">
-                    <span class="pl">Playlist</span>
+                    <span class="pl">{{ stationType }}</span>
                     <h1 @click="openStationEditor" :class="{ 'user-editable': userStations }">{{ station.name }}</h1>
                     <p class="description">{{ station.description }}</p>
                     <div>
                         <img v-if="this.station.owner.fullname === 'Tuneify'"
                             src="https://res.cloudinary.com/dys1sj4cd/image/upload/v1691227930/favicon_juzdft.svg" alt="">
                         <span class="logo">{{ stationOwner }}</span>
+                        <span v-if="station.isAlbum" class="logo">&bull; {{ this.station.releaseDate?.substr(0, 4)
+                        }}</span>
                         <span class="songs-num" v-if="station.tracks">&bull; {{ station.tracks?.length }} songs</span>
-                        <span class="songs-time" v-show="formttedTime">, about {{ formttedTime }} hours</span>
+                        <span class="songs-time" v-show="formttedTime">{{ formttedTime }}</span>
                     </div>
                 </section>
             </section>
@@ -113,15 +115,36 @@ export default {
         }
     },
     computed: {
+        stationType() {
+            return this.station.isAlbum ? 'Album' : 'Station'
+        },
         stationId() {
             return this.$route.params.stationId
         },
         formttedTime() {
-            const hours = this.tracksTotalDuration / (1000 * 60 * 60)
-            return Math.floor(hours)
+            if (!this.station.isAlbum) {
+                const hours = this.tracksTotalDuration / (1000 * 60 * 60)
+                return `, About ${Math.floor(hours)} hours`
+            }
+            else {
+                const seconds = Math.floor(this.tracksTotalDuration / 1000)
+                const minutes = Math.floor(seconds / 60)
+                const hours = Math.floor(minutes / 60)
+
+                const formattedTime = []
+
+                if (hours > 0) formattedTime.push(hours + ' hr')
+
+                if (minutes > 0) {
+                    const remainingMinutes = minutes % 60
+                    formattedTime.push(remainingMinutes + ' min')
+                }
+
+                return `, ${formattedTime.join(' ')}`
+            }
         },
         stationOwner() {
-            return this.station.owner?.fullname === 'Tuneify' ? 'Tuneify' : this.user?.fullname
+            return this.station.owner?.fullname
         },
         hasLiked() {
             const libraryStations = this.$store.getters.libraryStations
@@ -149,7 +172,7 @@ export default {
             return this.$store.getters.searchRes
         },
         userStations() {
-            return this.station.owner.fullname !== 'Tuneify' && this.station.name !== 'Liked Songs'
+            return this.station.owner.fullname !== 'Tuneify' && this.station.name !== 'Liked Songs' && !this.station.isAlbum
         },
     },
     async created() {
@@ -170,7 +193,9 @@ export default {
         },
         async loadStation() {
             try {
-                const station = await stationService.getById(this.stationId)
+                let station
+                if (this.$route.path.startsWith('/station')) station = await stationService.getById(this.stationId, 'station')
+                else station = await stationService.getById(this.stationId, 'album')
                 if (!station) return this.$router.push('/')
                 this.station = station
                 this.$emit('station', station)
@@ -261,7 +286,7 @@ export default {
             this.tracksTotalDuration = this.station.tracks?.reduce((sum, track) => sum = sum + track.formalDuration, 0)
         },
         openStationEditor() {
-            if (this.station.owner.fullname === 'Tuneify' || this.station._id === this.user.likedId) return
+            if (this.station.owner.fullname === 'Tuneify' || this.station._id === this.user.likedId || this.station.isAlbum) return
             document.body.classList.add('se-modal-open')
         },
         clickTrack(trackIdx, isfromSearch) {
