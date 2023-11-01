@@ -8,7 +8,6 @@
         </div>
 
         <h4>{{ station.name }}</h4>
-        <!-- <pre style="color: aqua;">{{ station }}</pre> -->
         <span v-if="station.isAlbum">{{ station.releaseDate.substr(0, 4) }} &bull; {{ station.artists[0] }}</span>
         <span v-else>{{ station.description }}</span>
     </article>

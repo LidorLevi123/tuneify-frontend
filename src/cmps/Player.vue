@@ -9,7 +9,7 @@
             </section>
             <section class="text-container">
                 <div v-if="currTrack" class="track-title">{{ currTrack.title }}</div>
-                <div v-if="currTrack" class="track-artist">{{ currTrack.artists?.length > 0 ? currTrack.artists[0] : '' }}
+                <div v-if="currTrack" class="track-artist">{{ currTrack.artists.join(', ') }}
                 </div>
             </section>
             <span v-if="!hasLiked(currTrack?.id) && currTrack" class="btn-like" v-icon="`smallLikeDis`"
@@ -171,7 +171,7 @@ export default {
 
                 } else {
                     const player = this.$refs.pipContent
-                    this.pipWindow = await documentPictureInPicture.requestWindow({ width: 300, height: 332 })
+                    this.pipWindow = await documentPictureInPicture.requestWindow({ width: 300, height: 348 })
                     this.pipWindow.document.body.append(player)
                     this.pipWindow.document.body.style.margin = 0
                     this.pipWindow.addEventListener("pagehide", eventListener)

@@ -176,6 +176,7 @@ export default {
         },
         collapseSidebar() {
             this.$store.commit('setSidebarCollapsed', true)
+            this.setLibraryView('list')
         },
         searchLibrary() {
             this.$store.dispatch({ type: 'searchLibrary', query: this.query })

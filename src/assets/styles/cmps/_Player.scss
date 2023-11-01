@@ -320,6 +320,11 @@
         .track-artist {
             color: $clr3;
             font-size: 0.69rem;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            white-space: pre-wrap;
 
             @include for-mobile-layout {
                 font-size: 0.5rem;

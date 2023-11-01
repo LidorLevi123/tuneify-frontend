@@ -3,10 +3,9 @@
         <img v-if="libraryView === 'list'" :src="imgUrl[2].url || imgUrl" alt="">
         <h5 :class="{ 'is-current': currStation?._id === station._id }"
             :style="{ display: sidebarCollapsed ? 'none' : 'block' }">{{ stationName }}</h5>
-        <small v-if="libraryView === 'list'" :style="{ display: sidebarCollapsed ? 'none' : 'block' }"><span>{{
-            station.tracks.length }} songs</span>
-            &bull;
-            <span>{{ stationBelonging }}</span>
+        <small v-if="libraryView === 'list'" :style="{ display: sidebarCollapsed ? 'none' : 'block' }">
+            <span>{{ stationType }}</span>
+            <span v-html="stationBelonging"></span>
         </small>
     </article>
 </template>
@@ -19,6 +18,10 @@ export default {
     },
 
     computed: {
+        stationType() {
+            if (this.station.name === 'Liked Songs') return `${this.station.tracks.length} songs`
+            return this.station.isAlbum ? 'Album' : 'Playlist'
+        },
         libraryView() {
             return this.$store.getters.libraryView
         },
@@ -29,7 +32,7 @@ export default {
             return this.$store.getters.loggedinUser
         },
         stationBelonging() {
-            return this.station.owner.fullname
+            if (this.station.name !== 'Liked Songs') return ` &bull; ${this.station.owner.fullname}`
         },
         currStation() {
             return this.$store.getters.currStation

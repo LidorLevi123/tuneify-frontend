@@ -32,6 +32,12 @@
                 justify-content: center;
                 margin: 0.5rem;
             }
+
+            img {
+                border-radius: 50%;
+                aspect-ratio: 1;
+                object-fit: cover;
+            }
         }
 
         div>* {
@@ -60,7 +66,6 @@
                 padding-inline-end: 0.5rem;
                 text-align: center;
             }
-
         }
 
         .logo {
@@ -90,7 +95,6 @@
         .songs-time {
             color: $clr3;
         }
-
     }
 
     & .description {
@@ -102,8 +106,6 @@
             display: none;
         }
     }
-
-
 
     & .img-photo {
 
@@ -136,7 +138,6 @@
                 background-color: $clr6;
                 box-shadow: 0 4px 60px rgba(0, 0, 0, 0.5);
 
-
                 .note-svg svg {
                     height: 4rem;
                     width: 4rem;
@@ -168,7 +169,6 @@
         line-height: 1;
         margin-block-end: 1.34rem;
     }
-
 
     .top-gradient {
         height: 24.92rem;
@@ -244,6 +244,5 @@
         .share.enabled {
             color: $clr7;
         }
-
     }
 }

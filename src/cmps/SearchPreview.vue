@@ -10,7 +10,7 @@
             </section>
             <section class="track-info-container">
                 <div class="track-name" :class="{ 'isGreen': this.isTrackPlaying }">{{ track.title }}</div>
-                <div class="artist-name">{{ track.artists[0] }}</div>
+                <div class="artist-name">{{ track.artists.join(', ') }}</div>
             </section>
         </div>
         <span class="track-album">{{ track.album }}</span>

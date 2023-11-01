@@ -32,13 +32,12 @@
                     <h1 @click="openStationEditor" :class="{ 'user-editable': userStations }">{{ station.name }}</h1>
                     <p class="description">{{ station.description }}</p>
                     <div>
-                        <img v-if="this.station.owner.fullname === 'Tuneify'"
-                            src="https://res.cloudinary.com/dys1sj4cd/image/upload/v1691227930/favicon_juzdft.svg" alt="">
+                        <img :src="ownerImg" alt="">
                         <span class="logo">{{ stationOwner }}</span>
                         <span v-if="station.isAlbum" class="logo">&bull; {{ this.station.releaseDate?.substr(0, 4)
                         }}</span>
                         <span class="songs-num" v-if="station.tracks">&bull; {{ station.tracks?.length }} songs</span>
-                        <span class="songs-time" v-show="formttedTime">{{ formttedTime }}</span>
+                        <span class="songs-time" v-show="formattedTime">{{ formattedTime }}</span>
                     </div>
                 </section>
             </section>
@@ -111,22 +110,24 @@ export default {
             station: null,
             tracksTotalDuration: 0,
             isShare: true,
-            topicUsers: []
+            topicUsers: [],
+            artist: null
         }
     },
     computed: {
+        ownerImg() {
+            if (this.station.owner.fullname === 'Tuneify') return `https://res.cloudinary.com/dys1sj4cd/image/upload/v1691227930/favicon_juzdft.svg`
+            else if (this.station.isAlbum) return this.artist?.imgUrl
+            else return this.user.imgUrl
+        },
         stationType() {
             return this.station.isAlbum ? 'Album' : 'Station'
         },
         stationId() {
             return this.$route.params.stationId
         },
-        formttedTime() {
-            if (!this.station.isAlbum) {
-                const hours = this.tracksTotalDuration / (1000 * 60 * 60)
-                return `, About ${Math.floor(hours)} hours`
-            }
-            else {
+        formattedTime() {
+            const albumTimeCalc = () => {
                 const seconds = Math.floor(this.tracksTotalDuration / 1000)
                 const minutes = Math.floor(seconds / 60)
                 const hours = Math.floor(minutes / 60)
@@ -142,7 +143,15 @@ export default {
 
                 return `, ${formattedTime.join(' ')}`
             }
+
+            if (!this.station.isAlbum) {
+                const hours = this.tracksTotalDuration / (1000 * 60 * 60)
+                if (hours < 1) return albumTimeCalc()
+                return `, About ${Math.floor(hours)} hours`
+            }
+            else return albumTimeCalc()
         },
+
         stationOwner() {
             return this.station.owner?.fullname
         },
@@ -157,7 +166,7 @@ export default {
             return this.station.owner._id === this.user?._id
         },
         isPlaying() {
-            return this.$store.getters.isCurrTrackPlaying && (this.station._id === this.currStation?._id || this.currStation?.name.includes('Search'))
+            return this.$store.getters.isCurrTrackPlaying && (this.station._id === this.currStation?._id)
         },
         currStation() {
             return this.$store.getters.currStation
@@ -200,9 +209,20 @@ export default {
                 this.station = station
                 this.$emit('station', station)
                 this.setTracksTotalDuration()
+                if (this.station.isAlbum) this.loadArtist()
             } catch (err) {
                 console.log(err.message)
                 showErrorMsg('Could not set current station')
+            }
+        },
+        async loadArtist() {
+            const artistId = this.station.tracks[0].artistId
+            try {
+                this.artist = await stationService.getArtistData(artistId)
+            }
+            catch (err) {
+                console.log(err.message)
+                showErrorMsg('Could not load artist')
             }
         },
         async likeDislikeStation(action) {

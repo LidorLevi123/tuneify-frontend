@@ -3,6 +3,10 @@
     background-color: $clr4;
     overflow-y: auto;
 
+    @include for-mobile-layout {
+        height: 100%;
+    }
+
     .search-res {
         padding-block: 5.5rem;
         padding-inline: 1.5rem;
@@ -10,7 +14,7 @@
 
         @include for-mobile-layout {
             padding-inline: 0;
-            padding-block: 4rem 8rem;
+            padding-block: 4rem 10rem;
         }
 
         .search-filter-btns {

@@ -133,7 +133,7 @@ export default {
         },
         createdStations() {
             const stations = this.$store.getters.libraryStations
-            return stations.filter(station => station._id !== this.user.likedId && station.owner.fullname !== 'Tuneify')
+            return stations.filter(station => station._id !== this.user.likedId && station.owner.fullname !== 'Tuneify' && !station.isAlbum)
         },
         user() {
             return this.$store.getters.loggedinUser
