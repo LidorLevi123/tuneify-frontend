@@ -43,7 +43,7 @@ async function getById(spotifyId, type = 'station') {
             dbStation = await httpService.post(BASE_URL, spotifyStation)
             return dbStation
         } else {
-            if (dbStation.owner.fullname !== 'Tuneify') return dbStation
+            if (dbStation.owner?.fullname !== 'Tuneify') return dbStation
 
             spotifyStation = await spotifyService.getSpotifyItems({ type: type, id: dbStation.spotifyId })
 

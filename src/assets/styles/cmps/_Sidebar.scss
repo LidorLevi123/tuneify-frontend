@@ -120,10 +120,22 @@
         .filter {
             padding: .5rem .7rem;
             border-radius: 500px;
+            z-index: 1;
 
             &.active {
                 background-color: $clr2;
                 color: $clr1;
+            }
+
+            &.transform {
+                transform: translateX(-2rem);
+                z-index: 0;
+                padding: .5rem .7rem .5rem 2rem;
+                background-color: #DEDEDE;
+
+                &:hover {
+                    background-color: $clr2;
+                }
             }
         }
     }
@@ -131,6 +143,7 @@
     .filter-sort {
         display: flex;
         justify-content: space-between;
+        gap: .5rem;
         padding-inline: 0.8rem 1.1rem;
 
         @include for-mobile-layout {
@@ -170,11 +183,27 @@
 
         .search-container {
             display: flex;
+            align-items: center;
             gap: .2rem;
             padding: .4rem .7rem;
             background-color: $clr6;
             border-radius: .2rem;
             height: 2rem;
+            width: 11.8rem;
+            animation: createBox .2s ease-in-out;
+            transform-origin: left;
+
+            @keyframes createBox {
+                from {
+                    transform: scaleX(.5);
+                    opacity: .5;
+                }
+
+                to {
+                    transform: scaleX(1);
+                    opacity: 1;
+                }
+            }
 
             span path {
                 fill: $clr3;
@@ -184,7 +213,16 @@
                 background-color: $clr6;
                 border: none;
                 outline: none;
-                color: $clr3;
+                width: 8rem;
+                color: #ffffff99;
+                font-size: .72rem;
+                font-weight: 600;
+
+                &::placeholder {
+                    color: #ffffff99;
+                    font-size: .72rem;
+                    font-weight: 600;
+                }
 
                 @include for-mobile-layout {
                     max-width: 7rem;
@@ -292,6 +330,24 @@
                     }
                 }
             }
+        }
+    }
+
+    .no-results-msg {
+        text-align: center;
+        padding: 1rem;
+        margin: auto;
+
+        h1 {
+            color: $clr2;
+            margin-block-end: 1rem;
+            font-size: 1.125rem;
+        }
+
+        h2 {
+            color: $clr2;
+            font-size: 0.875rem;
+            font-weight: 400;
         }
     }
 }

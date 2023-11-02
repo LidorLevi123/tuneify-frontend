@@ -1,5 +1,5 @@
 <template>
-    <section class="sidebar-list-container" :style="{ width: sidebarWidth }">
+    <section class="sidebar-list-container" v-if="user" :style="{ width: sidebarWidth }">
         <section class="sidebar-top">
             <button class="collapse" @click="collapseSidebar">
                 <span v-if="!sidebarCollapsed" v-icon="'collapse'"></span>
@@ -10,20 +10,26 @@
                 v-if="!sidebarCollapsed"></button>
         </section>
         <section class="filter-btns" v-if="!sidebarCollapsed">
-            <button @click="this.filterBy = null" v-icon="'close'" class="unfilter btn"></button>
-            <button @click="this.filterBy = 'Tuneify'" class="filter btn"
-                :class="{ active: this.filterBy === 'Tuneify' }">By Tuneify</button>
-            <button @click="this.filterBy = this.user?.fullname" class="filter btn"
-                :class="{ active: this.filterBy === this.user?.fullname }">By You</button>
+            <button v-show="filterBy" @click="this.filterBy = null" v-icon="'close'" class="unfilter btn"></button>
+            <button v-show="playlistsBtn" @click="setFilterBy('')" class="filter btn"
+                :class="{ active: this.filterBy === 'playlists' || this.filterBy === 'Tuneify' || this.filterBy === this.user?.fullname }">Playlists</button>
+            <button v-show="byTuneifyBtn" @click="setFilterBy('Tuneify')" class="filter btn"
+                :class="{ active: this.filterBy === 'Tuneify', transform: this.filterBy === 'Tuneify' }">By Tuneify</button>
+            <button v-show="byYouBtn" @click="setFilterBy(this.user?.fullname)" class="filter btn"
+                :class="{ active: this.filterBy === this.user?.fullname, transform: this.filterBy === this.user?.fullname }">By
+                You</button>
+            <button v-show="albumsBtn" @click="setFilterBy('albums')" class="filter btn"
+                :class="{ active: this.filterBy === 'albums' }">Albums</button>
         </section>
         <section class="filter-sort" v-if="!sidebarCollapsed">
             <div v-if="!searchOpen" @click.stop="toggleSearch">
-                <button v-icon="'sSearch'" title="Create playlist" class="station-search-btn"></button>
+                <button v-icon="'sSearch'" title="Search in library" class="station-search-btn"></button>
             </div>
             <section v-else class="search-container" v-clickOutside="toggleSearch">
                 <span class="df ai" v-icon="`sSearch`"></span>
-                <input class="station-search-input" type="text" v-model="query" placeholder="Search in Playlists">
-                <span class="df ai" v-icon="'close'" @click.stop="this.query = ''"></span>
+                <input ref="searchInput" class="station-search-input" type="text" v-model="query"
+                    placeholder="Search in Your Library">
+                <span v-if="query" class="df ai" v-icon="'close'" @click.stop="this.query = ''"></span>
             </section>
             <section @click="toggleSortMenu" class="sort-container">
                 <span class="sort-btn">{{ sortedBy }}
@@ -67,15 +73,19 @@
                 <span class="view-option-icon" v-icon="this.libraryView"></span>
             </section>
         </section>
-        <LibraryStationList v-if="libraryStations" @station-remove="removeStation" :libraryStations="libraryStations" />
+        <section v-if="!libraryStations.length && this.query" class="no-results-msg">
+            <h1>Couldn't find "{{ query }}"</h1>
+            <h2>Try searching again using a different spelling or keyword.</h2>
+        </section>
+        <LibraryStationList v-else @station-remove="removeStation" :libraryStations="libraryStations" />
     </section>
 </template>
 
 <script>
-import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service';
+import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service'
 import { stationService } from '../services/station.service'
-import LibraryStationList from './LibraryStationList.vue';
-import { eventBus } from '../services/event-bus.service';
+import LibraryStationList from './LibraryStationList.vue'
+import { eventBus } from '../services/event-bus.service'
 export default {
     name: 'Sidebar',
     data() {
@@ -171,7 +181,10 @@ export default {
             }
 
             this.libraryStations = this.libraryStations.filter(station => station.name.toLowerCase().includes(this.query.toLowerCase()))
-            if (this.filterBy) this.libraryStations = this.libraryStations.filter((station) => station.owner.fullname === this.filterBy)
+            if (this.filterBy === 'albums') this.libraryStations = this.libraryStations.filter(station => station.isAlbum)
+            else if (this.filterBy === 'playlists') this.libraryStations = this.libraryStations.filter(station => !station.isAlbum)
+            else if (this.filterBy) this.libraryStations = this.libraryStations.filter((station) => station.owner.fullname === this.filterBy)
+
             this.sortedBy = sortBy
         },
         collapseSidebar() {
@@ -187,10 +200,16 @@ export default {
         toggleSearch() {
             if (this.query) return
             this.searchOpen = !this.searchOpen
+            if (this.searchOpen) this.$nextTick(() => this.$refs.searchInput.focus())
         },
         setLibraryView(view) {
             this.$store.commit('setLibraryView', view)
-        }
+        },
+        setFilterBy(f) {
+            if (f === 'albums') return this.filterBy = this.filterBy === 'albums' ? '' : 'albums'
+            this.filterBy = (this.filterBy === f) ? 'playlists' : f
+        },
+
     },
 
     computed: {
@@ -208,10 +227,25 @@ export default {
         },
         stationsState() {
             return this.$store.getters.libraryStations
-        }
+        },
+        albumsBtn() {
+            return !(this.filterBy === 'Tuneify' || this.filterBy === 'playlists' || this.filterBy === this.user?.fullname)
+        },
+        byTuneifyBtn() {
+            return this.filterBy === 'Tuneify' || this.filterBy === 'playlists'
+        },
+        byYouBtn() {
+            return this.filterBy === 'playlists' || this.filterBy === this.user.fullname
+        },
+        playlistsBtn() {
+            return this.filterBy !== 'albums'
+        },
+
     },
     watch: {
-        query: 'filterSortLibrary',
+        query: function () {
+            this.filterSortLibrary()
+        },
         filterBy: function () {
             this.filterSortLibrary()
         },

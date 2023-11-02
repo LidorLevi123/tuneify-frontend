@@ -109,8 +109,15 @@ export const stationStore = {
                 const stations = await stationService.getStationsForHome()
                 commit({ type: 'setStationsForHome', stations })
             } catch (err) {
-                console.log('stationStore: Error in getStationsForHome', err)
-                throw new Error('Could not load stations for home page')
+                try {
+                    console.log('stationStore: Error in getStationsForHome - trying from DB', err.message)
+                    const stationsFromDb = await stationService.getById('6543d45fff8ac131cc340d47')
+                    commit({ type: 'setStationsForHome', stations: stationsFromDb.stations })
+                }
+                catch (err) {
+                    console.log('stationStore: Error in getStationsForHome', err.message)
+                    throw new Error('Could not load stations for home page')
+                }
             }
             finally {
                 commit('setLoading', false)
