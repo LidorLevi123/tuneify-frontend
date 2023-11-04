@@ -71,6 +71,13 @@
             font-weight: 400;
             color: $clr3;
             display: inline;
+
+            a {
+                &:hover {
+                    text-decoration: underline;
+                    color: $clr2;
+                }
+            }
         }
     }
 
@@ -118,9 +125,16 @@
             }
 
             .next-track-artist {
-                display: block;
+                display: inline;
                 font-size: 0.875rem;
                 color: $clr3;
+
+                a {
+                    &:hover {
+                        text-decoration: underline;
+                        color: $clr2;
+                    }
+                }
             }
         }
     }

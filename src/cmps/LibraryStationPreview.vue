@@ -1,11 +1,12 @@
 <template>
     <article class="library-station-preview" :style="{ columnGap: sidebarCollapsed ? '0' : '0.8rem' }">
-        <img v-if="libraryView === 'list'" :src="imgUrl[2].url || imgUrl" alt="">
+        <img v-if="libraryView === 'list'" :src="imgUrl[2].url || imgUrl" alt=""
+            :style="{ borderRadius: station.isArtist ? '50%' : 'unset' }">
         <h5 :class="{ 'is-current': currStation?._id === station._id }"
             :style="{ display: sidebarCollapsed ? 'none' : 'block' }">{{ stationName }}</h5>
         <small v-if="libraryView === 'list'" :style="{ display: sidebarCollapsed ? 'none' : 'block' }">
             <span>{{ stationType }}</span>
-            <span v-html="stationBelonging"></span>
+            <span v-if="!station.isArtist" v-html="stationBelonging"></span>
         </small>
     </article>
 </template>
@@ -20,6 +21,7 @@ export default {
     computed: {
         stationType() {
             if (this.station.name === 'Liked Songs') return `${this.station.tracks.length} songs`
+            else if (this.station.isArtist) return 'Artist'
             return this.station.isAlbum ? 'Album' : 'Playlist'
         },
         libraryView() {

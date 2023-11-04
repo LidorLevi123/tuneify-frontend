@@ -38,7 +38,15 @@
                 aspect-ratio: 1;
                 object-fit: cover;
             }
+
+            .artist {
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+
         }
+
 
         div>* {
             margin-right: 5px;

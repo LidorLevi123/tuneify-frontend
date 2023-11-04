@@ -84,7 +84,7 @@ export default {
         },
         goToDetails(station) {
             const stationId = station.spotifyId ? station.spotifyId : station._id
-            this.$router.push(`/station/${stationId}`)
+            station.isAlbum ? this.$router.push(`/album/${stationId}`) : this.$router.push(`/station/${stationId}`)
         },
         showContextMenu(stationId, ev) {
             this.contextmenuLeft = ev.clientX - 100

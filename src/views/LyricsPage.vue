@@ -53,7 +53,7 @@ export default {
             return this.$store.getters?.currTrack
         },
         currTrackName() {
-            const artist = this.$store.getters.currTrack?.artists[0]
+            const artist = this.$store.getters.currTrack?.artists[0].name
             const title = this.$store.getters.currTrack?.title
             return `${artist} ${title}`
         }

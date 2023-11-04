@@ -50,10 +50,19 @@
     .track-info-container {
         overflow: hidden;
 
+        .artist-name {
+            color: $clr3;
+            font-size: .875rem;
 
+            a {
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
 
         .track-name,
-        .artist-name {
+        .track-artists {
             color: $clr3;
 
             // handling text overflow

@@ -10,7 +10,12 @@
             </section>
             <section class="track-info-container">
                 <div class="track-name" :class="{ 'isGreen': this.isTrackPlaying }">{{ track.title }}</div>
-                <div class="artist-name">{{ track.artists.join(', ') }}</div>
+                <div v-if="!station?.isArtist" class="track-artists">
+                    <span v-for="(artist, idx) in track.artists" :key="artist.spotifyId" class="artist-name">
+                        <RouterLink :to="`/artist/${artist.spotifyId}`" @click.stop>{{ artist.name }}</RouterLink>
+                        <span v-if="idx < track.artists.length - 1">, </span>
+                    </span>
+                </div>
             </section>
         </div>
         <span class="track-album">{{ track.album }}</span>

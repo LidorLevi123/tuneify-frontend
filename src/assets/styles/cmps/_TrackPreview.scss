@@ -68,7 +68,7 @@
         background-color: #2c2d2a;
 
         .track-album,
-        .track-artist {
+        .track-artists span {
             color: $clr2;
         }
     }
@@ -123,7 +123,19 @@
         .track-info-container {
             overflow: hidden;
 
-            .track-artist,
+
+            .track-artists {
+                span {
+                    font-size: 0.875rem;
+
+                    :hover {
+                        text-decoration: underline;
+                    }
+                }
+            }
+
+
+            .track-artists,
             .track-name,
             .artist-name {
                 // handling text overflow

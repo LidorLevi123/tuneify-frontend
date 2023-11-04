@@ -9,6 +9,8 @@
           @click="searchFilter = 'Playlists'">Playlists</button>
         <button class="search-filter-btn" :class="{ active: searchFilter === 'Albums' }"
           @click="searchFilter = 'Albums'">Albums</button>
+        <button class="search-filter-btn" :class="{ active: searchFilter === 'Artists' }"
+          @click="searchFilter = 'Artists'">Artists</button>
       </section>
       <div v-show="!searchFilter || searchFilter === 'Songs'">
         <h1 class="songs">Songs</h1>
@@ -22,6 +24,10 @@
       <div v-show="!searchFilter || searchFilter === 'Albums'">
         <h1 class="playlists">Albums</h1>
         <StationList :stations="albums" />
+      </div>
+      <div v-show="!searchFilter || searchFilter === 'Artists'">
+        <h1 class="playlists">Artists</h1>
+        <StationList :stations="artists" />
       </div>
     </div>
     <div class="categories-list" v-else>
@@ -105,6 +111,9 @@ export default {
     },
     tracks() {
       return this.$store.getters.searchRes.tracks?.slice(0, 10)
+    },
+    artists() {
+      return this.$store.getters.searchRes.artists
     },
     searchResStation() {
       return this.$store.getters.searchRes

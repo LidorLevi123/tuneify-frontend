@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     updateDocumentTitle() {
-      if (this.isPlaying) document.title = `${this.currTrack.title} • ${this.currTrack.artists[0]}`;
+      if (this.isPlaying) document.title = `${this.currTrack.title} • ${this.currTrack.artists[0].name}`;
       else if (this.currStation?.isAlbum) document.title = `${this.currStation.name} - album by ${this.currStation.owner.fullname} | Tuneify`
       else if (!this.currStation?.name.includes('Search results')) document.title = `${this.currStation?.name} - playlist by ${this.currStation?.owner.fullname} | Tuneify`
       else if (this.currStation) document.title = `${this.currStation.name} | Tuneify`

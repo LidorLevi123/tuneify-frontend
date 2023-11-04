@@ -2,13 +2,15 @@
     <article @click="goToDetails(station._id)" @mouseover="emitAvgImgClr()"
         :class="{ 'main-preview-container': !horizontalDesign, 'main-preview-container-hor': horizontalDesign, 'category-station': this.$route.path.startsWith('/category/') }">
         <div class="prev-img-container">
-            <img crossorigin="anonymous" :src="`${station.imgUrl}`" alt="" ref="stationImg">
+            <img :class="{ artist: station.isArtist }" crossorigin="anonymous" :src="`${station.imgUrl}`" alt=""
+                ref="stationImg">
             <button v-if="!isStationPlaying" @click="onPlayStation" class="play-btn" v-icon="'mPlay'"></button>
             <button v-else @click="pauseTrack" class="play-btn pause-btn" v-icon="'pause'"></button>
         </div>
 
-        <h4>{{ station.name }}</h4>
-        <span v-if="station.isAlbum">{{ station.releaseDate.substr(0, 4) }} &bull; {{ station.artists[0] }}</span>
+        <h4 :class="{ artist: station.isArtist }">{{ station.name }}</h4>
+        <span v-if="station.isAlbum">{{ station.releaseDate.substr(0, 4) }} &bull; {{ station.artists[0].name }}</span>
+        <span v-else-if="station.isArtist">Artist</span>
         <span v-else>{{ station.description }}</span>
     </article>
 </template>
@@ -39,6 +41,7 @@ export default {
         goToDetails(stationId) {
             stationId = stationId ? stationId : this.station.spotifyId
             if (this.station.isAlbum) this.$router.push(`/album/${stationId}`)
+            else if (this.station.isArtist) this.$router.push(`/artist/${stationId}`)
             else this.$router.push(`/station/${stationId}`)
         },
 

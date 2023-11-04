@@ -14,7 +14,11 @@
             </section>
             <section class="track-info-container">
                 <div class="track-name" :class="isPlaying">{{ track.title }}</div>
-                <span class="track-artist">{{ track.artists.join(', ') }}</span>
+                <div v-if="!station?.isArtist" class="track-artists">
+                    <span v-for="(artist, idx) in track.artists" :key="artist.spotifyId">
+                        <RouterLink :to="`/artist/${artist.spotifyId}`" @click.stop>{{ artist.name }}</RouterLink>{{ idx <
+                            track.artists.length - 1 ? ', ' : '' }} </span>
+                </div>
             </section>
         </div>
         <span class="track-album">{{ track.album }}</span>

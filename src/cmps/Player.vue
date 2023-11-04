@@ -9,7 +9,11 @@
             </section>
             <section class="text-container">
                 <div v-if="currTrack" class="track-title">{{ currTrack.title }}</div>
-                <div v-if="currTrack" class="track-artist">{{ currTrack.artists.join(', ') }}
+                <div class="track-artists">
+                    <span v-if="currTrack" class="track-artist" v-for="(artist, idx) in currTrack.artists"
+                        :key="artist.spotifyId">
+                        <RouterLink :to="`/artist/${artist.spotifyId}`" @click.stop>{{ artist.name }}</RouterLink>
+                        {{ idx < currTrack.artists.length - 1 ? ', ' : '' }} </span>
                 </div>
             </section>
             <span v-if="!hasLiked(currTrack?.id) && currTrack" class="btn-like" v-icon="`smallLikeDis`"
@@ -234,7 +238,7 @@ export default {
             // get youtubeId from YT
             try {
                 console.log('Sending request to yt id...')
-                const term = this.currTrack.title + ' ' + this.currTrack.artists[0]
+                const term = this.currTrack.title + ' ' + this.currTrack.artists[0].name
                 const youtubeId = await ytService.queryYT(term)
                 // const youtubeId = this.getDemoYoutubeId()
                 await this.$store.dispatch({ type: 'updateTrack', youtubeId })
@@ -398,7 +402,7 @@ export default {
             // get youtubeId from YT
             try {
                 console.log('Sending request to yt id...')
-                const term = track.title + ' ' + track.artists[0]
+                const term = track.title + ' ' + track.artists[0].name
                 const youtubeId = await ytService.queryYT(term)
                 // const youtubeId = this.getDemoYoutubeId()
                 const youtubePlayer = this.$refs.youtubePlayer.player

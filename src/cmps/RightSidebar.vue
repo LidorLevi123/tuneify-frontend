@@ -7,8 +7,10 @@
         <img class="track-img" :src="currTrack.imgUrl[0].url" alt="">
         <section class="track-info">
             <h1>{{ currTrack.title }}</h1>
-            <h4 v-for="(artist, idx) in currTrack.artists" :key="idx">{{ artist }} <span
-                    v-if="idx < currTrack.artists.length - 1">, </span></h4>
+            <h4 v-for="(artist, idx) in currTrack.artists" :key="idx">
+                <RouterLink :to="`/artist/${artist.spotifyId}`" @click.stop>{{ artist.name }}</RouterLink>
+                <span v-if="idx < currTrack.artists.length - 1">, </span>
+            </h4>
         </section>
         <section v-if="this.nextTrack" class="next-track">
             <header>Next in queue</header>
@@ -20,7 +22,12 @@
                 <img :src="nextTrack.imgUrl[2].url" alt="">
                 <section>
                     <span class="next-track-name">{{ nextTrack.title }}</span>
-                    <span class="next-track-artist">{{ nextTrack.artists[0] }}</span>
+                    <span v-for="(artist, idx) in nextTrack.artists" :key="idx" class="next-track-artist">
+                        <RouterLink :to="`/artist/${artist.spotifyId}`" @click.stop>
+                            {{ artist.name }}
+                        </RouterLink>
+                        <span v-if="idx < nextTrack.artists.length - 1">, </span>
+                    </span>
                 </section>
             </section>
         </section>
@@ -96,7 +103,7 @@ export default {
             immediate: true,
             handler(newTrackName, oldTrackName) {
                 if (newTrackName !== oldTrackName) {
-                    this.getArtistData(this.currTrack.artists[0], this.currTrack.artistId)
+                    this.getArtistData(this.currTrack.artists[0].name, this.currTrack.artistId)
                 }
             }
         }

@@ -1,11 +1,12 @@
 <template>
     <section ref="stationDetails" class="station-details" v-if="station">
         <div ref="topGradient" class="top-gradient">
-            <section class="img-photo">
+            <section class="img-photo" :style="{ alignItems: station.isArtist ? 'center' : 'end' }">
                 <section class="img">
 
                     <img v-if="!this.station.owner._id" crossorigin="anonymous" class="station-img" :src="station.imgUrl"
-                        alt="" @load="setBackgroundClr" ref="stationImg" />
+                        alt="" @load="setBackgroundClr" ref="stationImg"
+                        :style="{ borderRadius: station.isArtist ? '50%' : 'unset' }" />
 
                     <img v-else-if="this.station.owner._id && this.station.imgUrl" crossorigin="anonymous"
                         class="station-img" :src="station.imgUrl" alt="" @load="setBackgroundClr" ref="stationImg" />
@@ -28,14 +29,16 @@
 
                 </section>
                 <section class="station-info">
-                    <span class="pl">{{ stationType }}</span>
+                    <span v-if="!station.isArtist" class="pl">{{ stationType }}</span>
                     <h1 @click="openStationEditor" :class="{ 'user-editable': userStations }">{{ station.name }}</h1>
                     <p class="description">{{ station.description }}</p>
-                    <div>
-                        <img :src="ownerImg" alt="">
-                        <span class="logo">{{ stationOwner }}</span>
-                        <span v-if="station.isAlbum" class="logo">&bull; {{ this.station.releaseDate?.substr(0, 4)
-                        }}</span>
+                    <div v-if="!station.isArtist">
+                        <img v-if="ownerImg" :src="ownerImg" alt="">
+                        <RouterLink v-if="station.isAlbum" :to="`/artist/${this.artist?.spotifyId}`">
+                            <span class="logo artist">{{ stationOwner }}</span>
+                        </RouterLink>
+                        <span v-else class="logo">{{ stationOwner }}</span>
+                        <span v-if="station.isAlbum" class="logo">&bull; {{ this.station.releaseDate?.substr(0, 4) }}</span>
                         <span class="songs-num" v-if="station.tracks">&bull; {{ station.tracks?.length }} songs</span>
                         <span class="songs-time" v-show="formattedTime">{{ formattedTime }}</span>
                     </div>
@@ -97,7 +100,6 @@ import {
     SOCKET_EMIT_SET_TOPIC,
     SOCKET_EMIT_LEAVE_TOPIC,
     SOCKET_EMIT_GET_TOPIC_USERS,
-    SOCKET_EMIT_SEND_MSG,
     SOCKET_EVENT_SET_TOPIC_USERS,
     socketService
 } from '../services/socket.service.js';
@@ -121,7 +123,7 @@ export default {
             else return this.user.imgUrl
         },
         stationType() {
-            return this.station.isAlbum ? 'Album' : 'Station'
+            return this.station.isAlbum ? 'Album' : 'Playlist'
         },
         stationId() {
             return this.$route.params.stationId
@@ -181,7 +183,7 @@ export default {
             return this.$store.getters.searchRes
         },
         userStations() {
-            return this.station.owner.fullname !== 'Tuneify' && this.station.name !== 'Liked Songs' && !this.station.isAlbum
+            return this.station.owner.fullname !== 'Tuneify' && this.station.name !== 'Liked Songs' && !this.station.isAlbum && !this.station.isArtist
         },
     },
     async created() {
@@ -204,7 +206,9 @@ export default {
             try {
                 let station
                 if (this.$route.path.startsWith('/station')) station = await stationService.getById(this.stationId, 'station')
-                else station = await stationService.getById(this.stationId, 'album')
+                else if (this.$route.path.startsWith('/album')) station = await stationService.getById(this.stationId, 'album')
+                else station = await stationService.getById(this.stationId, 'artist')
+
                 if (!station) return this.$router.push('/')
                 this.station = station
                 this.$emit('station', station)
@@ -306,7 +310,7 @@ export default {
             this.tracksTotalDuration = this.station.tracks?.reduce((sum, track) => sum = sum + track.formalDuration, 0)
         },
         openStationEditor() {
-            if (this.station.owner.fullname === 'Tuneify' || this.station._id === this.user.likedId || this.station.isAlbum) return
+            if (this.station.owner.fullname === 'Tuneify' || this.station._id === this.user.likedId || this.station.isAlbum || this.station.isArtist) return
             document.body.classList.add('se-modal-open')
         },
         clickTrack(trackIdx, isfromSearch) {

@@ -1,15 +1,19 @@
 <template>
     <section class="track-list-container">
 
-        <div v-show="station" class="list-header track-preview-layout" :class="{ 'is-sticky': scrollPosition > 450 }">
+        <div v-if="station && !station.isArtist" class="list-header track-preview-layout"
+            :class="{ 'is-sticky': scrollPosition > 450 }">
             <span>#</span>
             <span>Title</span>
             <span class="mq" :style="{ opacity: station?.isAlbum ? '0' : '1' }">Album</span>
             <span class="mq" :style="{ opacity: station?.isAlbum ? '0' : '1' }">Date added</span>
             <span v-icon="'clock'"></span>
         </div>
+        <div v-else>
+            <h1 v-if="!this.$route.path.startsWith('/search')">Popular</h1>
+        </div>
         <ul v-if="station?.tracks.length" class="clean-list track-list" @touchend="fixActionRestriction">
-            <hr v-show="station" />
+            <hr v-show="station && !station.isArtist" />
 
             <Container v-if="station.owner._id" dragClass="dragging" @drop="onDrop" :animation-duration="100"
                 drag-class="dragged-item">

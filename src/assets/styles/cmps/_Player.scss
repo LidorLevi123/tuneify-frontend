@@ -290,6 +290,7 @@
 
         .text-container {
             margin-inline-end: 0.375rem;
+            line-height: 1;
         }
 
         img {
@@ -317,21 +318,25 @@
             }
         }
 
-        .track-artist {
-            color: $clr3;
-            font-size: 0.69rem;
-            overflow: hidden;
+        .track-artists {
             display: -webkit-box;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 1;
             white-space: pre-wrap;
+            overflow: hidden;
+            color: $clr3;
 
-            @include for-mobile-layout {
-                font-size: 0.5rem;
-                overflow: hidden;
-                display: -webkit-box;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 1;
+            .track-artist {
+                font-size: 0.69rem;
+
+                :hover {
+                    color: $clr2;
+                    text-decoration: underline;
+                }
+
+                @include for-mobile-layout {
+                    font-size: 0.5rem;
+                }
             }
         }
 

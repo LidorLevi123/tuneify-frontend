@@ -47,6 +47,11 @@ const routes = [
         component: StationDetails,
       },
       {
+        path: 'artist/:stationId',
+        name: 'ArtistDetails',
+        component: StationDetails,
+      },
+      {
         path: '/library',
         name: 'PlayLists',
         component: Sidebar,

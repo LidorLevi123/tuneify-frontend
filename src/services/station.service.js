@@ -39,7 +39,9 @@ async function getById(spotifyId, type = 'station') {
 
         if (!dbStation) {
             console.log('fetching from Spotify')
-            spotifyStation = await spotifyService.getSpotifyItems({ type: type, id: spotifyId })
+            if (type === 'artist') spotifyStation = await getArtistData(spotifyId)
+            else spotifyStation = await spotifyService.getSpotifyItems({ type: type, id: spotifyId })
+
             dbStation = await httpService.post(BASE_URL, spotifyStation)
             return dbStation
         } else {
@@ -83,13 +85,15 @@ async function save(station) {
 }
 
 async function getSearchRes(query) {
-    const { tracks, stations, albums } = await spotifyService.getSpotifyItems({ type: 'search', query })
+    const { tracks, stations, albums, artists } = await spotifyService.getSpotifyItems({ type: 'search', query })
+
     return {
         name: `Search results for: ${query}`,
         isEmpty: false,
         tracks: tracks,
         stations: stations,
-        albums: albums
+        albums: albums,
+        artists: artists
     }
 
 }
@@ -128,5 +132,20 @@ function getEmptyStation() {
 }
 
 async function getArtistData(id) {
-    return await spotifyService.getSpotifyItems({ type: 'artist', id })
+
+    try {
+        const [artist, artistTopTracks] = await Promise.all([
+            spotifyService.getSpotifyItems({ type: 'artist', id }),
+            spotifyService.getSpotifyItems({ type: 'artistTopTracks', id })
+        ])
+
+        const fullData = {
+            ...artist,
+            tracks: artistTopTracks,
+        }
+        return fullData
+    }
+    catch (error) {
+        console.error('Error fetching artist data:', error)
+    }
 }
