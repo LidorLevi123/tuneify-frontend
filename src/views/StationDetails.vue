@@ -30,7 +30,14 @@
                 </section>
                 <section class="station-info">
                     <span v-if="!station.isArtist" class="pl">{{ stationType }}</span>
+                    <span v-if="station.isArtist" class="verified">
+                        <span v-icon="`verified`"></span>
+                        <span>Verified Artist</span>
+                    </span>
                     <h1 @click="openStationEditor" :class="{ 'user-editable': userStations }">{{ station.name }}</h1>
+                    <span v-if="station.isArtist" class="followers">
+                        {{ station.followers.toLocaleString("en-US") }} Followers
+                    </span>
                     <p class="description">{{ station.description }}</p>
                     <div v-if="!station.isArtist">
                         <img v-if="ownerImg" :src="ownerImg" alt="">
@@ -77,6 +84,18 @@
             </section>
             <TrackList @track-clicked="clickTrack" @track-add="addTrack" @track-remove="removeTrack"
                 @track-dislike="dislikeTrack" @station-update="loadStation" @search="getTracks" :station="station" />
+            <section class="artist-discography" v-if="station.isArtist">
+                <h1 class="title">Discography</h1>
+                <StationList :stations="station.albums.filter(album => album.group !== 'appears_on')" />
+            </section>
+            <section class="artist-discography" v-if="station.isArtist">
+                <h1 class="title">Appears On</h1>
+                <StationList :stations="station.albums.filter(album => album.group === 'appears_on')" />
+            </section>
+            <section class="related-artists" v-if="station.isArtist">
+                <h1 class="title">Fans also like</h1>
+                <StationList :stations="station.relatedArtists" />
+            </section>
         </div>
         <StationEdit @station-edit="loadStation" v-if="isOwner" />
     </section>
@@ -90,6 +109,7 @@ import Loader from '../cmps/Loader.vue'
 import historyTracker from '../services/history.service'
 import StationEdit from '../cmps/StationEdit.vue'
 import TrackList from '../cmps/TrackList.vue'
+import StationList from '../cmps/StationList.vue'
 import UserList from '../cmps/UserList.vue'
 import { stationService } from '../services/station.service'
 import { userService } from '../services/user.service'
@@ -123,7 +143,9 @@ export default {
             else return this.user.imgUrl
         },
         stationType() {
-            return this.station.isAlbum ? 'Album' : 'Playlist'
+            if (this.station.isAlbum && this.station.tracks.length === 1) return 'Single'
+            else if (this.station.isAlbum) return 'Album'
+            return 'Playlist'
         },
         stationId() {
             return this.$route.params.stationId
@@ -361,6 +383,7 @@ export default {
     components: {
         StationEdit,
         TrackList,
+        StationList,
         UserList,
         Loader
     }

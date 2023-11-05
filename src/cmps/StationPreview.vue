@@ -9,9 +9,7 @@
         </div>
 
         <h4 :class="{ artist: station.isArtist }">{{ station.name }}</h4>
-        <span v-if="station.isAlbum">{{ station.releaseDate.substr(0, 4) }} &bull; {{ station.artists[0].name }}</span>
-        <span v-else-if="station.isArtist">Artist</span>
-        <span v-else>{{ station.description }}</span>
+        <span>{{ stationDescription }}</span>
     </article>
 </template>
 <script>
@@ -35,6 +33,12 @@ export default {
         isStationPlaying() {
             return this.$store.getters.currStation?.spotifyId === this.station.spotifyId && this.$store.getters.isCurrTrackPlaying
         },
+        stationDescription() {
+            if (this.station.isAlbum && this.$route.path.startsWith('/artist')) return this.station.releaseDate.substr(0, 4) + ' • ' + this.station.type
+            else if (this.station.isAlbum) return this.station.releaseDate.substr(0, 4) + ' • ' + this.station.artists[0].name
+            else if (this.station.isArtist) return 'Artist'
+            else return this.station.description
+        }
     },
 
     methods: {
@@ -52,7 +56,10 @@ export default {
 
         async onPlayStation(ev) {
             ev.stopPropagation()
-            let station = await stationService.getById(this.station.spotifyId)
+            let station
+            if (this.station.isAlbum) station = await stationService.getById(this.station.spotifyId, 'album')
+            else if (this.station.isArtist) station = await stationService.getById(this.station.spotifyId, 'artist')
+            else station = await stationService.getById(this.station.spotifyId)
             station = JSON.parse(JSON.stringify(station))
 
             this.$store.commit({ type: 'setCurrStation', station })

@@ -8,8 +8,8 @@
         <button v-icon="'pause'" v-if="showPause" class="play-btn-header" @click="pauseStation"
             :style="{ opacity: this.scrollPosition > 400 ? '1' : '0' }">
         </button>
-        <span v-if="$route.path.startsWith('/station/') || this.station?.isAlbum" class="station-header"
-            :style="{ opacity: this.scrollPosition > 400 ? '1' : '0' }">{{ station?.name }}</span>
+        <span v-if="showName" class="station-header" :style="{ opacity: this.scrollPosition > 400 ? '1' : '0' }">{{
+            station?.name }}</span>
         <div v-if="$route.path === '/search'" class="search-input-container">
             <span class="df ai" v-icon="`sSearch`"></span>
             <input type="text" v-model="query" :placeholder="placeholderText">
@@ -128,11 +128,14 @@ export default {
         user() {
             return this.$store.getters.loggedinUser
         },
+        showName() {
+            return this.$route.path.startsWith('/station/') || this.station?.isAlbum || this.station?.isArtist
+        },
         showPlay() {
-            return this.$route.path.startsWith('/station/') && !this.isPlaying
+            return (this.$route.path.startsWith('/station/') || this.station?.isAlbum || this.station?.isArtist) && !this.isPlaying
         },
         showPause() {
-            return this.$route.path.startsWith('/station/') && this.isPlaying
+            return (this.$route.path.startsWith('/station/') || this.station?.isAlbum || this.station?.isArtist) && this.isPlaying
         },
         headerBgColor() {
             if (this.$route.path.startsWith('/station/')) return this.scrollPosition > 325 ? this.backgroundColor : 'transparent'

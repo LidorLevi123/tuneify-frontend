@@ -3,7 +3,7 @@
         <ul class="clean-list">
 
             <Container dragClass="dragging" @drop="onDrop" :animation-duration="100" drag-class="dragged-item">
-                <Draggable v-for="(station, idx) in libraryStations" :key="station._id">
+                <Draggable v-for="station in libraryStations" :key="station._id">
 
                     <li @click="goToDetails(station)" :class="{ active: stationActive(station) }"
                         @contextmenu.prevent="showContextMenu(station._id, $event)">
@@ -25,7 +25,6 @@
 
 <script>
 import { Container, Draggable } from 'vue3-smooth-dnd'
-import { SOCKET_EMIT_TRACK_DRAGGED } from '../services/socket.service.js'
 import LibraryStationPreview from './LibraryStationPreview.vue'
 import { userService } from '../services/user.service'
 
@@ -84,7 +83,9 @@ export default {
         },
         goToDetails(station) {
             const stationId = station.spotifyId ? station.spotifyId : station._id
-            station.isAlbum ? this.$router.push(`/album/${stationId}`) : this.$router.push(`/station/${stationId}`)
+            if (station.isAlbum) this.$router.push(`/album/${stationId}`)
+            else if (station.isArtist) this.$router.push(`/artist/${stationId}`)
+            else this.$router.push(`/station/${stationId}`)
         },
         showContextMenu(stationId, ev) {
             this.contextmenuLeft = ev.clientX - 100

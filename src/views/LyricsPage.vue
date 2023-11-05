@@ -42,7 +42,6 @@ export default {
             }
         },
         async setBackgroundClr() {
-            console.log(this.currTrack);
             const elImg = this.currTrack?.imgUrl[2].url
             const color = await utilService.getAvgImgClr(elImg)
             this.bgColor = color

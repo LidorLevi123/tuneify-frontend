@@ -18,6 +18,8 @@
             <button v-show="byYouBtn" @click="setFilterBy(this.user?.fullname)" class="filter btn"
                 :class="{ active: this.filterBy === this.user?.fullname, transform: this.filterBy === this.user?.fullname }">By
                 You</button>
+            <button v-show="artistsBtn" @click="setFilterBy('artists')" class="filter btn"
+                :class="{ active: this.filterBy === 'artists' }">Artists</button>
             <button v-show="albumsBtn" @click="setFilterBy('albums')" class="filter btn"
                 :class="{ active: this.filterBy === 'albums' }">Albums</button>
         </section>
@@ -182,7 +184,8 @@ export default {
 
             this.libraryStations = this.libraryStations.filter(station => station.name.toLowerCase().includes(this.query.toLowerCase()))
             if (this.filterBy === 'albums') this.libraryStations = this.libraryStations.filter(station => station.isAlbum)
-            else if (this.filterBy === 'playlists') this.libraryStations = this.libraryStations.filter(station => !station.isAlbum)
+            else if (this.filterBy === 'artists') this.libraryStations = this.libraryStations.filter(station => station.isArtist)
+            else if (this.filterBy === 'playlists') this.libraryStations = this.libraryStations.filter(station => !station.isAlbum && !station.isArtist)
             else if (this.filterBy) this.libraryStations = this.libraryStations.filter((station) => station.owner.fullname === this.filterBy)
 
             this.sortedBy = sortBy
@@ -207,6 +210,7 @@ export default {
         },
         setFilterBy(f) {
             if (f === 'albums') return this.filterBy = this.filterBy === 'albums' ? '' : 'albums'
+            if (f === 'artists') return this.filterBy = this.filterBy === 'artists' ? '' : 'artists'
             this.filterBy = (this.filterBy === f) ? 'playlists' : f
         },
 
@@ -229,7 +233,8 @@ export default {
             return this.$store.getters.libraryStations
         },
         albumsBtn() {
-            return !(this.filterBy === 'Tuneify' || this.filterBy === 'playlists' || this.filterBy === this.user?.fullname)
+            const filterOptions = ['Tuneify', 'playlists', this.user?.fullname, 'artists']
+            return !filterOptions.includes(this.filterBy)
         },
         byTuneifyBtn() {
             return this.filterBy === 'Tuneify' || this.filterBy === 'playlists'
@@ -238,7 +243,11 @@ export default {
             return this.filterBy === 'playlists' || this.filterBy === this.user.fullname
         },
         playlistsBtn() {
-            return this.filterBy !== 'albums'
+            return this.filterBy !== 'albums' && this.filterBy !== 'artists'
+        },
+        artistsBtn() {
+            const filters = ['albums', 'playlists', 'Tuneify', this.user.fullname]
+            return !filters.includes(this.filterBy)
         },
 
     },

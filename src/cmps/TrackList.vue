@@ -1,5 +1,5 @@
 <template>
-    <section class="track-list-container">
+    <section class="track-list-container" :class="{ 'in-artist-page': station?.isArtist }">
 
         <div v-if="station && !station.isArtist" class="list-header track-preview-layout"
             :class="{ 'is-sticky': scrollPosition > 450 }">
@@ -9,8 +9,8 @@
             <span class="mq" :style="{ opacity: station?.isAlbum ? '0' : '1' }">Date added</span>
             <span v-icon="'clock'"></span>
         </div>
-        <div v-else>
-            <h1 v-if="!this.$route.path.startsWith('/search')">Popular</h1>
+        <div v-if="station?.isArtist">
+            <h1>Popular</h1>
         </div>
         <ul v-if="station?.tracks.length" class="clean-list track-list" @touchend="fixActionRestriction">
             <hr v-show="station && !station.isArtist" />

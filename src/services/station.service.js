@@ -42,7 +42,7 @@ async function getById(spotifyId, type = 'station') {
             if (type === 'artist') spotifyStation = await getArtistData(spotifyId)
             else spotifyStation = await spotifyService.getSpotifyItems({ type: type, id: spotifyId })
 
-            dbStation = await httpService.post(BASE_URL, spotifyStation)
+            if (spotifyStation) dbStation = await httpService.post(BASE_URL, spotifyStation)
             return dbStation
         } else {
             if (dbStation.owner?.fullname !== 'Tuneify') return dbStation
@@ -134,14 +134,18 @@ function getEmptyStation() {
 async function getArtistData(id) {
 
     try {
-        const [artist, artistTopTracks] = await Promise.all([
+        const [artist, artistTopTracks, artistAlbums, artistRelatedArtists] = await Promise.all([
             spotifyService.getSpotifyItems({ type: 'artist', id }),
-            spotifyService.getSpotifyItems({ type: 'artistTopTracks', id })
+            spotifyService.getSpotifyItems({ type: 'artistTopTracks', id }),
+            spotifyService.getSpotifyItems({ type: 'artistAlbums', id }),
+            spotifyService.getSpotifyItems({ type: 'artistRelatedArtists', id })
         ])
 
         const fullData = {
             ...artist,
             tracks: artistTopTracks,
+            albums: artistAlbums,
+            relatedArtists: artistRelatedArtists
         }
         return fullData
     }
