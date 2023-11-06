@@ -16,6 +16,43 @@
     .bottom-gradient {
         background-image: linear-gradient(to bottom, #191919 0%, #121212 14.5rem, #121212);
 
+        .artist-discography {
+
+            .filter-btns {
+                display: flex;
+                gap: .4rem;
+                align-items: center;
+                padding-block-end: 1.8rem;
+
+                .btn {
+                    border: none;
+                    background-color: #ffffff12;
+                    color: $clr2;
+                    cursor: pointer;
+                    transition: .2s;
+
+                    &:hover {
+                        background-color: #ffffff1b;
+                    }
+
+                    path {
+                        fill: $clr2;
+                    }
+                }
+
+                .filter {
+                    padding: .5rem .7rem;
+                    border-radius: 500px;
+                    z-index: 1;
+
+                    &.active {
+                        background-color: $clr2;
+                        color: $clr1;
+                    }
+                }
+            }
+        }
+
         .artist-discography,
         .related-artists {
             padding: 1.5rem;
@@ -29,7 +66,7 @@
                 color: $clr2;
                 font-size: 1.5rem;
                 font-family: CircularSpTitle;
-                margin-block: 1.5rem;
+                margin-block: 1rem;
 
                 @include for-mobile-layout {
                     margin-block-start: 0;
@@ -115,6 +152,10 @@
 
         .followers {
             font-size: 1rem;
+
+            @include for-mobile-layout {
+                display: none;
+            }
         }
 
         .logo {

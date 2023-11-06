@@ -86,11 +86,21 @@
                 @track-dislike="dislikeTrack" @station-update="loadStation" @search="getTracks" :station="station" />
             <section class="artist-discography" v-if="station.isArtist">
                 <h1 class="title">Discography</h1>
-                <StationList :stations="station.albums.filter(album => album.group !== 'appears_on')" />
+                <section class="filter-btns">
+                    <button class="filter btn" :class="{ 'active': !filterBy }" @click="setFilterBy(null)">All</button>
+                    <button v-if="showBtn('album')" class="filter btn" :class="{ 'active': filterBy === 'album' }"
+                        @click="setFilterBy('album')">Albums</button>
+                    <button v-if="showBtn('single')" class="filter btn" :class="{ 'active': filterBy === 'single' }"
+                        @click="setFilterBy('single')">Singles & EPs</button>
+                    <button v-if="showBtn('compilation')" class="filter btn"
+                        :class="{ 'active': filterBy === 'compilation' }"
+                        @click="setFilterBy('compilation')">Compilations</button>
+                </section>
+                <StationList :stations="artistAlbums" />
             </section>
-            <section class="artist-discography" v-if="station.isArtist">
+            <section class="artist-discography" v-if="station.isArtist && artistAppearOn.length">
                 <h1 class="title">Appears On</h1>
-                <StationList :stations="station.albums.filter(album => album.group === 'appears_on')" />
+                <StationList :stations="artistAppearOn" />
             </section>
             <section class="related-artists" v-if="station.isArtist">
                 <h1 class="title">Fans also like</h1>
@@ -133,7 +143,10 @@ export default {
             tracksTotalDuration: 0,
             isShare: true,
             topicUsers: [],
-            artist: null
+            artist: null,
+            artistAlbums: null,
+            artistAppearOn: null,
+            filterBy: null,
         }
     },
     computed: {
@@ -220,25 +233,37 @@ export default {
         eventBus.off('clickFromSearchRes', this.clickTrack)
     },
     methods: {
+        showBtn(type) {
+            const discography = this.station?.albums.filter(album => album.group !== 'appears_on')
+            return discography.some(album => album.group === type)
+        },
         scrollDown() {
             const container = this.$refs.stationDetails
             if (container) container.scrollBy({ top: 600, behavior: 'smooth' })
         },
         async loadStation() {
             try {
-                let station
-                if (this.$route.path.startsWith('/station')) station = await stationService.getById(this.stationId, 'station')
-                else if (this.$route.path.startsWith('/album')) station = await stationService.getById(this.stationId, 'album')
-                else station = await stationService.getById(this.stationId, 'artist')
+                const path = this.$route.path
+                const stationType = path.startsWith('/station') ? 'station' : path.startsWith('/album') ? 'album' : 'artist'
 
+                const station = await stationService.getById(this.stationId, stationType)
                 if (!station) return this.$router.push('/')
+
                 this.station = station
+
+                if (station.isArtist) {
+                    this.artistAlbums = station.albums.filter(album => album.group !== 'appears_on')
+                    this.artistAppearOn = station.albums.filter(album => album.group === 'appears_on')
+                }
+
                 this.$emit('station', station)
                 this.setTracksTotalDuration()
-                if (this.station.isAlbum) this.loadArtist()
+
+                if (station.isAlbum) this.loadArtist()
+
             } catch (err) {
-                console.log(err.message)
-                showErrorMsg('Could not set current station')
+                console.log(err.message);
+                showErrorMsg('Could not set current station');
             }
         },
         async loadArtist() {
@@ -369,12 +394,19 @@ export default {
         async setTopicUsers(userIds) {
             const topicUsers = await Promise.all(userIds.map(userId => userService.getById(userId)))
             this.topicUsers = topicUsers
+        },
+        setFilterBy(filterBy) {
+            const discography = this.station?.albums.filter(album => album.group !== 'appears_on')
+            this.filterBy = filterBy
+            if (!filterBy) this.artistAlbums = discography
+            else this.artistAlbums = discography.filter(station => station.type === filterBy)
         }
     },
     watch: {
         stationId() {
             if (!this.stationId) return
             this.loadStation()
+            historyTracker.push(this.$route.fullPath)
             setTimeout(() => {
                 this.$refs.stationDetails.scrollTop = 0
             }, 500)

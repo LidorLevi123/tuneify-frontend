@@ -5,7 +5,7 @@
       <div v-for="(stationGroup, idx) in stations" :key="idx">
         <div v-if="stationGroup[0]?.category" class="sub-header">
           <h1>{{ stationGroup[0]?.category }}</h1>
-          <RouterLink v-if="this.$route.path === '/'"
+          <RouterLink v-if="this.$route.path === '/' && stationGroup.length > 9"
             :to="`/category/${stationGroup[0]?.categoryId}/${stationGroup[0]?.category}`" class="category-link">Show all
           </RouterLink>
         </div>

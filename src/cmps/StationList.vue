@@ -1,5 +1,5 @@
 <template>
-    <section class="station-list-container">
+    <section class="station-list-container" :style="{ maxWidth: maxWidth }">
         <ul v-if="stations" class="clean-list" :class="{
             'station-list': !horizontalDesign,
             'station-list-hor': horizontalDesign,
@@ -22,6 +22,14 @@ export default {
     props: {
         stations: { type: Array, required: true },
         horizontalDesign: { type: Boolean, default: false }
+    },
+
+    computed: {
+        maxWidth() {
+            const stationsSize = this.stations.length * 11.9
+            const gaps = (this.stations.length - 1) * 1.5
+            if (!this.horizontalDesign) return `${stationsSize + gaps}rem`
+        }
     },
 
     components: {

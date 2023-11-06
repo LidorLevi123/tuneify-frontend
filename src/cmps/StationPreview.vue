@@ -8,8 +8,8 @@
             <button v-else @click="pauseTrack" class="play-btn pause-btn" v-icon="'pause'"></button>
         </div>
 
-        <h4 :class="{ artist: station.isArtist }">{{ station.name }}</h4>
-        <span>{{ stationDescription }}</span>
+        <h4 :class="{ visible: isVisible, alineRight: isHebrew }">{{ station.name }}</h4>
+        <span :class="{ alineRight: isHebrew }">{{ stationDescription }}</span>
     </article>
 </template>
 <script>
@@ -38,6 +38,13 @@ export default {
             else if (this.station.isAlbum) return this.station.releaseDate.substr(0, 4) + ' • ' + this.station.artists[0].name
             else if (this.station.isArtist) return 'Artist'
             else return this.station.description
+        },
+        isVisible() {
+            return (this.station.isArtist || this.$route.path !== '/')
+        },
+        isHebrew() {
+            const hebrewRegExp = /[\u0590-\u05FF]/
+            return hebrewRegExp.test(this.station.name)
         }
     },
 

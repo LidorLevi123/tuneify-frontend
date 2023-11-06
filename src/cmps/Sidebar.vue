@@ -10,7 +10,7 @@
                 v-if="!sidebarCollapsed"></button>
         </section>
         <section class="filter-btns" v-if="!sidebarCollapsed">
-            <button v-show="filterBy" @click="this.filterBy = null" v-icon="'close'" class="unfilter btn"></button>
+            <button v-show="filterBy" @click="this.filterBy = ''" v-icon="'close'" class="unfilter btn"></button>
             <button v-show="playlistsBtn" @click="setFilterBy('')" class="filter btn"
                 :class="{ active: this.filterBy === 'playlists' || this.filterBy === 'Tuneify' || this.filterBy === this.user?.fullname }">Playlists</button>
             <button v-show="byTuneifyBtn" @click="setFilterBy('Tuneify')" class="filter btn"
@@ -95,7 +95,7 @@ export default {
             libraryStations: null,
             query: '',
             sortedBy: 'Custom Order',
-            filterBy: null,
+            filterBy: '',
             sortMenuOpen: false,
             searchOpen: false,
             searchBtn: true,
