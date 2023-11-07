@@ -28,7 +28,7 @@ export default {
         maxWidth() {
             const stationsSize = this.stations.length * 11.9
             const gaps = (this.stations.length - 1) * 1.5
-            if (!this.horizontalDesign) return `${stationsSize + gaps}rem`
+            if (this.stations.length < 9 && !this.horizontalDesign && this.$route.path !== '/') return `${stationsSize + gaps}rem`
         }
     },
 

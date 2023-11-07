@@ -87,7 +87,8 @@
             <section class="artist-discography" v-if="station.isArtist">
                 <h1 class="title">Discography</h1>
                 <section class="filter-btns">
-                    <button class="filter btn" :class="{ 'active': !filterBy }" @click="setFilterBy(null)">All</button>
+                    <button v-if="showBtn('all')" class="filter btn" :class="{ 'active': !filterBy }"
+                        @click="setFilterBy(null)">All</button>
                     <button v-if="showBtn('album')" class="filter btn" :class="{ 'active': filterBy === 'album' }"
                         @click="setFilterBy('album')">Albums</button>
                     <button v-if="showBtn('single')" class="filter btn" :class="{ 'active': filterBy === 'single' }"
@@ -235,6 +236,8 @@ export default {
     methods: {
         showBtn(type) {
             const discography = this.station?.albums.filter(album => album.group !== 'appears_on')
+            const firstGroup = discography[0]?.group
+            if (type === 'all') return !discography.every(album => album.group === firstGroup)
             return discography.some(album => album.group === type)
         },
         scrollDown() {
@@ -254,6 +257,7 @@ export default {
                 if (station.isArtist) {
                     this.artistAlbums = station.albums.filter(album => album.group !== 'appears_on')
                     this.artistAppearOn = station.albums.filter(album => album.group === 'appears_on')
+                    this.setFilterBy(this.filterBy)
                 }
 
                 this.$emit('station', station)

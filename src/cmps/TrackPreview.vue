@@ -21,7 +21,9 @@
                 </div>
             </section>
         </div>
-        <span class="track-album">{{ track.album }}</span>
+        <RouterLink :to="`/album/${track.albumId}`" class="track-album" @click.stop>
+            <span class="track-album">{{ track.album }}</span>
+        </RouterLink>
         <div class="df sb" :class="{ 'in-search': $route.path.startsWith('/search') }">
             <span v-show="!this.$route.path.startsWith('/search')" class="track-date">{{ formattedDate }}</span>
             <span v-show="isHovered" v-if="!isLiked(track.id)" @click="onAddTrack(track, user.likedId, $event)"
@@ -63,16 +65,15 @@
 <script>
 import moment from 'moment'
 import { eventBus } from '../services/event-bus.service'
+import { RouterLink } from 'vue-router'
 
 export default {
     name: 'TrackPreview',
-
     props: {
         station: { type: Object },
         track: { type: Object },
         trackIdx: { type: Number }
     },
-
     data() {
         return {
             trackTime: this.track.formalDuration,
@@ -80,110 +81,112 @@ export default {
             isHovered: false,
             showDropdown: false,
             showSubDropdown: false,
-        }
+        };
     },
-
     computed: {
         formattedTime() {
-            const totalSeconds = Math.floor(this.trackTime / 1000)
-            const hours = Math.floor(totalSeconds / 3600)
-            const minutes = Math.floor((totalSeconds % 3600) / 60)
+            const totalSeconds = Math.floor(this.trackTime / 1000);
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
             const seconds = totalSeconds % 60;
-            const padZero = (num) => (num < 10 ? `0${num}` : num)
-            return `${minutes}:${padZero(seconds)}`
+            const padZero = (num) => (num < 10 ? `0${num}` : num);
+            return `${minutes}:${padZero(seconds)}`;
         },
         formattedDate() {
-            if (!this.dateStr) return
-            const now = moment()
-            const targetDate = moment(this.dateStr)
-            let diffInDays = now.diff(targetDate, 'days')
-
+            if (!this.dateStr)
+                return;
+            const now = moment();
+            const targetDate = moment(this.dateStr);
+            let diffInDays = now.diff(targetDate, 'days');
             if (diffInDays < 7) {
-                if (diffInDays === 0) return "Today"
-                if (diffInDays === 1) return "Yesterday"
-                if (diffInDays < 0) diffInDays *= (-1)
-                return `${diffInDays} days ago`
-            } else {
-                return targetDate.format("MMM D, YYYY")
+                if (diffInDays === 0)
+                    return "Today";
+                if (diffInDays === 1)
+                    return "Yesterday";
+                if (diffInDays < 0)
+                    diffInDays *= (-1);
+                return `${diffInDays} days ago`;
+            }
+            else {
+                return targetDate.format("MMM D, YYYY");
             }
         },
         currStation() {
-            return this.$store.getters.currStation
+            return this.$store.getters.currStation;
         },
         currTrack() {
-            return this.$store.getters.currTrack
+            return this.$store.getters.currTrack;
         },
         currTrackIdx() {
-            return this.$store.getters.currTrackIdx
+            return this.$store.getters.currTrackIdx;
         },
         isTrackPlaying() {
-            return this.$store.getters.isCurrTrackPlaying && this.track?.id === this.currTrack?.id
+            return this.$store.getters.isCurrTrackPlaying && this.track?.id === this.currTrack?.id;
         },
         isPlaying() {
-            if (!this.currTrack) return
-
+            if (!this.currTrack)
+                return;
             return {
                 'track-playing': this.isTrackPlaying,
                 'track-paused': this.currTrack.id === this.track.id
-            }
+            };
         },
         isStationOwner() {
-            return this.station.owner?.fullname === this.user.fullname
+            return this.station.owner?.fullname === this.user.fullname;
         },
         likedTracks() {
-            const stations = this.$store.getters.libraryStations
-            const likedSongsStation = stations?.find(station => station._id === this.user?.likedId)
-            return likedSongsStation?.tracks
+            const stations = this.$store.getters.libraryStations;
+            const likedSongsStation = stations?.find(station => station._id === this.user?.likedId);
+            return likedSongsStation?.tracks;
         },
         createdStations() {
-            const stations = this.$store.getters.libraryStations
-            return stations.filter(station => station._id !== this.user.likedId && station.owner.fullname !== 'Tuneify' && !station.isAlbum)
+            const stations = this.$store.getters.libraryStations;
+            return stations.filter(station => station._id !== this.user.likedId && station.owner.fullname !== 'Tuneify' && !station.isAlbum);
         },
         user() {
-            return this.$store.getters.loggedinUser
+            return this.$store.getters.loggedinUser;
         },
-
     },
-
     methods: {
         addStation(track) {
-            eventBus.emit('add-station', track)
-            this.hideMenu()
+            eventBus.emit('add-station', track);
+            this.hideMenu();
         },
-        onMouseOver() { this.isHovered = true },
+        onMouseOver() { this.isHovered = true; },
         onMouseLeave() {
-            this.isHovered = false
+            this.isHovered = false;
         },
         onAddTrack(track, stationId, ev) {
-            ev.stopPropagation()
-            this.$emit('track-add', track, stationId)
-            this.hideMenu()
+            ev.stopPropagation();
+            this.$emit('track-add', track, stationId);
+            this.hideMenu();
         },
         onRemoveTrack(trackId, ev) {
-            ev.stopPropagation()
-            this.$emit('track-remove', trackId)
+            ev.stopPropagation();
+            this.$emit('track-remove', trackId);
         },
         onDislikeTrack(trackId, ev) {
-            ev.stopPropagation()
-            this.$emit('track-dislike', trackId)
-            eventBus.emit('dislikeTrack', trackId)
+            ev.stopPropagation();
+            this.$emit('track-dislike', trackId);
+            eventBus.emit('dislikeTrack', trackId);
         },
         isLiked(trackId) {
-            return this.likedTracks?.some(track => track.id === trackId)
+            return this.likedTracks?.some(track => track.id === trackId);
         },
         toggleDropdown(ev) {
-            ev.stopPropagation()
-            this.showDropdown = !this.showDropdown
-            this.showSubDropdown = false
+            ev.stopPropagation();
+            this.showDropdown = !this.showDropdown;
+            this.showSubDropdown = false;
         },
         popSubDropdown() {
-            this.showSubDropdown = true
+            this.showSubDropdown = true;
         },
         hideMenu() {
-            this.showSubDropdown = false
-            this.showDropdown = false
+            this.showSubDropdown = false;
+            this.showDropdown = false;
         },
-    }
+    },
+    components: { RouterLink }
 }
 </script>
 <style scoped>

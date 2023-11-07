@@ -157,6 +157,12 @@
         }
     }
 
+    .track-album {
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
     .time-actions {
         display: flex;
         align-items: center;

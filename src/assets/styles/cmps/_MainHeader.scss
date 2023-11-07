@@ -1,4 +1,5 @@
 .main-header {
+    position: relative;
     transition: .5s;
     border-top-left-radius: 0.5rem;
     border-top-right-radius: 0.5rem;
@@ -21,8 +22,8 @@
 
     .dropdown {
         position: absolute;
-        right: 2.5rem;
-        top: 4rem;
+        right: 1.5rem;
+        top: 3.2rem;
         color: #ffffffe6;
         font-size: 0.875rem;
         border-radius: 0.2rem;

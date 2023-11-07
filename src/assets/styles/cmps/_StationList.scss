@@ -6,7 +6,6 @@
         display: grid;
         gap: 1.5rem;
         grid-template-columns: repeat(auto-fit, minmax(10.625rem, 1fr));
-        min-width: 372px;
 
         @include for-mobile-layout {
             display: flex;

@@ -53,12 +53,6 @@
         .artist-name {
             color: $clr3;
             font-size: .875rem;
-
-            a {
-                &:hover {
-                    text-decoration: underline;
-                }
-            }
         }
 
         .track-name,

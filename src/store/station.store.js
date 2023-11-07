@@ -111,7 +111,7 @@ export const stationStore = {
             } catch (err) {
                 try {
                     console.log('stationStore: Error in getStationsForHome - trying from DB', err.message)
-                    const stationsFromDb = await stationService.getById('6543d45fff8ac131cc340d47')
+                    const stationsFromDb = await stationService.getById('65498ef9ce1a330f64be856e')
                     commit({ type: 'setStationsForHome', stations: stationsFromDb.stations })
                 }
                 catch (err) {
