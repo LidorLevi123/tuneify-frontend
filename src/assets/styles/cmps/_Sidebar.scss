@@ -15,6 +15,7 @@
 
     @include for-narrow-layout {
         width: auto;
+        max-width: 412px;
     }
 
     .sidebar-top {
@@ -310,6 +311,28 @@
                         align-items: center;
                         gap: .5rem;
                         padding: 0;
+                    }
+
+                    .grid-selector-container {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        padding-block: .5rem;
+
+                        .grid-selector {
+                            -webkit-appearance: none;
+                            height: .2rem;
+                            background: $clr3;
+                            border-radius: 5px;
+
+                            &::-webkit-slider-thumb {
+                                -webkit-appearance: none;
+                                width: .8rem;
+                                height: .8rem;
+                                background: $clr2;
+                                border-radius: 50%;
+                            }
+                        }
                     }
                 }
             }

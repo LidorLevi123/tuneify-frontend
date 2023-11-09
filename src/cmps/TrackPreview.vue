@@ -94,21 +94,21 @@ export default {
         },
         formattedDate() {
             if (!this.dateStr)
-                return;
-            const now = moment();
-            const targetDate = moment(this.dateStr);
-            let diffInDays = now.diff(targetDate, 'days');
+                return
+            const now = moment()
+            const targetDate = moment(this.dateStr)
+            let diffInDays = now.diff(targetDate, 'days')
             if (diffInDays < 7) {
                 if (diffInDays === 0)
-                    return "Today";
+                    return "Today"
                 if (diffInDays === 1)
-                    return "Yesterday";
+                    return "Yesterday"
                 if (diffInDays < 0)
-                    diffInDays *= (-1);
-                return `${diffInDays} days ago`;
+                    diffInDays *= (-1)
+                return `${diffInDays} days ago`
             }
             else {
-                return targetDate.format("MMM D, YYYY");
+                return targetDate.format("MMM D, YYYY")
             }
         },
         currStation() {
@@ -121,15 +121,14 @@ export default {
             return this.$store.getters.currTrackIdx;
         },
         isTrackPlaying() {
-            return this.$store.getters.isCurrTrackPlaying && this.track?.id === this.currTrack?.id;
+            return this.$store.getters.isCurrTrackPlaying && this.track?.id === this.currTrack?.id && this.currStation._id === this.station._id
         },
         isPlaying() {
-            if (!this.currTrack)
-                return;
+            if (!this.currTrack) return
             return {
                 'track-playing': this.isTrackPlaying,
-                'track-paused': this.currTrack.id === this.track.id
-            };
+                'track-paused': this.currTrack.id === this.track.id && this.currStation._id === this.station._id
+            }
         },
         isStationOwner() {
             return this.station.owner?.fullname === this.user.fullname;
@@ -152,38 +151,36 @@ export default {
             eventBus.emit('add-station', track);
             this.hideMenu();
         },
-        onMouseOver() { this.isHovered = true; },
-        onMouseLeave() {
-            this.isHovered = false;
-        },
+        onMouseOver() { this.isHovered = true },
+        onMouseLeave() { this.isHovered = false },
         onAddTrack(track, stationId, ev) {
-            ev.stopPropagation();
-            this.$emit('track-add', track, stationId);
-            this.hideMenu();
+            ev.stopPropagation()
+            this.$emit('track-add', track, stationId)
+            this.hideMenu()
         },
         onRemoveTrack(trackId, ev) {
-            ev.stopPropagation();
-            this.$emit('track-remove', trackId);
+            ev.stopPropagation()
+            this.$emit('track-remove', trackId)
         },
         onDislikeTrack(trackId, ev) {
-            ev.stopPropagation();
-            this.$emit('track-dislike', trackId);
-            eventBus.emit('dislikeTrack', trackId);
+            ev.stopPropagation()
+            this.$emit('track-dislike', trackId)
+            eventBus.emit('dislikeTrack', trackId)
         },
         isLiked(trackId) {
-            return this.likedTracks?.some(track => track.id === trackId);
+            return this.likedTracks?.some(track => track.id === trackId)
         },
         toggleDropdown(ev) {
-            ev.stopPropagation();
-            this.showDropdown = !this.showDropdown;
-            this.showSubDropdown = false;
+            ev.stopPropagation()
+            this.showDropdown = !this.showDropdown
+            this.showSubDropdown = false
         },
         popSubDropdown() {
-            this.showSubDropdown = true;
+            this.showSubDropdown = true
         },
         hideMenu() {
-            this.showSubDropdown = false;
-            this.showDropdown = false;
+            this.showSubDropdown = false
+            this.showDropdown = false
         },
     },
     components: { RouterLink }

@@ -107,10 +107,11 @@ export const stationStore = {
             commit('setLoading', true)
             try {
                 const stations = await stationService.getStationsForHome()
+                if (stations.length < 6) throw new Error('Could not load stations from api  - trying from DB')
                 commit({ type: 'setStationsForHome', stations })
             } catch (err) {
                 try {
-                    console.log('stationStore: Error in getStationsForHome - trying from DB', err.message)
+                    console.log('Error in getStationsForHome', err.message)
                     const stationsFromDb = await stationService.getById('65498ef9ce1a330f64be856e')
                     commit({ type: 'setStationsForHome', stations: stationsFromDb.stations })
                 }

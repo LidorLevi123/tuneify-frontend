@@ -2,13 +2,18 @@
     display: grid;
     grid-template-rows: auto auto;
     grid-template-columns: auto 1fr;
-    column-gap: 0.8rem;
     align-content: center;
-    padding: 0.3rem;
+
+    &.grid {
+        grid-template: unset;
+    }
 
     h5 {
         font-weight: 400;
         font-size: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
         @include for-mobile-layout {
             color: $clr2;
@@ -23,13 +28,15 @@
         font-weight: 400;
         font-size: 0.875rem;
         color: $clr3;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     img {
         grid-row: span 2;
-        width: 3rem;
         height: 3rem;
-        border-radius: 0.5rem;
         object-fit: cover;
+        height: 100%;
     }
 }

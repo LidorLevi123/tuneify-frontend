@@ -2,19 +2,20 @@
     <section v-if="libraryStations" class="library-station-list">
         <ul class="clean-list">
 
-            <Container dragClass="dragging" @drop="onDrop" :animation-duration="100" drag-class="dragged-item">
+            <Container dragClass="dragging" @drop="onDrop" :animation-duration="100" drag-class="dragged-item"
+                :style="gridStyle">
                 <Draggable v-for="station in libraryStations" :key="station._id">
 
                     <li @click="goToDetails(station)" :class="{ active: stationActive(station) }"
                         @contextmenu.prevent="showContextMenu(station._id, $event)">
-                        <LibraryStationPreview :station="station" />
+                        <LibraryStationPreview :station="station" :gridMode="gridMode" />
                         <div v-if="contextMenuOpenMap[station._id]" class="dlt-btn" @click="removeStation(station, $event)"
                             @mouseleave="closeContextMenu(station._id)"
                             :style="{ top: contextmenuTop + 'px', left: contextmenuLeft + 'px' }">
                             <div class="menu-item">Remove playlist</div>
                         </div>
-                        <span class="speaker" v-icon="`speaker`" v-if="currStation?._id === station._id && trackPlaying"
-                            :style="{ display: sidebarCollapsed ? 'none' : 'block' }"></span>
+                        <span class="speaker" v-icon="`speaker`"
+                            v-if="currStation?._id === station._id && trackPlaying && libraryView !== 'grid' && !sidebarCollapsed"></span>
                     </li>
 
                 </Draggable>
@@ -31,14 +32,12 @@ import { userService } from '../services/user.service'
 export default {
     name: 'LibraryStationList',
     props: {
-        libraryStations: {
-            type: Array,
-            required: true
-        }
+        libraryStations: { type: Array, required: true },
+        gridMode: { required: true },
     },
     data() {
         return {
-            contextMenuOpenMap: {}
+            contextMenuOpenMap: {},
         }
     },
     methods: {
@@ -98,10 +97,18 @@ export default {
         stationActive(station) {
             if (!this.$route.params.stationId) return false
             else return this.$route.params.stationId === station._id || this.$route.params.stationId === station.spotifyId
-        }
+        },
     },
 
     computed: {
+        columnCount() {
+            if (this.gridMode === '1') return 5
+            if (this.gridMode === '2') return 4
+            if (this.gridMode === '3') return 3
+        },
+        libraryView() {
+            return this.$store.getters.libraryView
+        },
         currStation() {
             return this.$store.getters.currStation
         },
@@ -113,6 +120,12 @@ export default {
         },
         sidebarCollapsed() {
             return this.$store.getters.sidebarCollapsed
+        },
+        gridStyle() {
+            if (this.libraryView === 'grid') return {
+                display: 'grid',
+                gridTemplateColumns: `repeat(${this.columnCount}, minmax(0, 1fr))`,
+            }
         }
     },
 

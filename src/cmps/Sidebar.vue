@@ -70,6 +70,18 @@
                             </div>
                             <span v-show="libraryView === 'list'" class="vee-icon" v-icon="`vee`"></span>
                         </li>
+                        <li class="sort-option" :class="{ active: libraryView === 'grid' }"
+                            @click.stop="setLibraryView('grid')">
+                            <div>
+                                <span class="view-option-icon" :class="{ active: libraryView === 'grid' }"
+                                    v-icon="`grid`"></span>
+                                <span>Grid</span>
+                            </div>
+                            <span v-show="libraryView === 'grid'" class="vee-icon" v-icon="`vee`"></span>
+                        </li>
+                        <li v-show="libraryView === 'grid'" class="grid-selector-container">
+                            <input type="range" min="1" max="3" v-model="gridMode" class="grid-selector">
+                        </li>
                     </ul>
                 </span>
                 <span class="view-option-icon" v-icon="this.libraryView"></span>
@@ -79,7 +91,8 @@
             <h1>Couldn't find "{{ query }}"</h1>
             <h2>Try searching again using a different spelling or keyword.</h2>
         </section>
-        <LibraryStationList v-else @station-remove="removeStation" :libraryStations="libraryStations" />
+        <LibraryStationList v-else @station-remove="removeStation" :libraryStations="libraryStations"
+            :gridMode="gridMode" />
     </section>
 </template>
 
@@ -99,6 +112,7 @@ export default {
             sortMenuOpen: false,
             searchOpen: false,
             searchBtn: true,
+            gridMode: '3',
         }
     },
 
@@ -119,10 +133,11 @@ export default {
             this.libraryStations = [...this.stationsState]
         },
         async addStation(track) {
+            const userStationsNum = this.libraryStations.filter(station => station.owner._id === this.user._id).length
+
             try {
                 const stationToSave = stationService.getEmptyStation()
-
-                stationToSave.name = track?.title || 'My Playlist #' + this.libraryStations.length
+                stationToSave.name = track?.title || 'My Playlist #' + userStationsNum
 
                 const station = await this.$store.dispatch({ type: 'saveStation', stationToSave })
                 if (track && station) await this.$store.dispatch({ type: 'addTrack', trackToSave: track, stationId: station._id })
@@ -206,6 +221,7 @@ export default {
             if (this.searchOpen) this.$nextTick(() => this.$refs.searchInput.focus())
         },
         setLibraryView(view) {
+            this.gridMode = view === 'grid' ? '3' : null
             this.$store.commit('setLibraryView', view)
         },
         setFilterBy(f) {
@@ -263,3 +279,9 @@ export default {
     components: { LibraryStationList }
 }
 </script>
+
+<style>
+.range {
+    --track-height: 2px;
+}
+</style>
