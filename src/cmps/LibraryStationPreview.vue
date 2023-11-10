@@ -1,7 +1,7 @@
 <template>
     <article class="library-station-preview" :class="{ 'grid': libraryView === 'grid' }" :style="containerStyles"
-        @mouseover="isHoverd = true" @mouseleave="isHoverd = false">
-        <img v-if="libraryView !== 'compact'" :src="imgUrl[2].url || imgUrl" alt="" :style="imgStyles">
+        :title="title">
+        <img v-if="libraryView !== 'compact'" :src="imgUrl[1].url || imgUrl" alt="" :style="imgStyles">
         <h5 v-if="!sidebarCollapsed && gridMode !== '1' && gridMode !== '2'"
             :class="{ 'is-current': currStation?._id === station._id }">{{ stationName }}</h5>
         <small v-if="!sidebarCollapsed && gridMode !== '1' && gridMode !== '2'">
@@ -17,11 +17,6 @@ export default {
     props: {
         station: { type: Object, required: true },
         gridMode: { required: true },
-    },
-    data() {
-        return {
-            isHoverd: null
-        }
     },
 
     computed: {
@@ -54,13 +49,16 @@ export default {
         },
         containerStyles() {
             const columnGap = this.sidebarCollapsed ? '0' : '0.8rem'
-            const padding = (this.libraryView === 'grid' && this.gridMode === '3') ? '0.8rem' : '0.3rem'
+            const padding = (this.libraryView === 'grid' && (this.gridMode === '3' || this.gridMode === '4')) ? '0.8rem' : '0.3rem'
             return { columnGap, padding }
         },
         imgStyles() {
             const borderRadius = this.station.isArtist ? '50%' : 'unset';
             const width = this.libraryView === 'grid' ? '100%' : '3rem';
             return { borderRadius, width }
+        },
+        title() {
+            if (this.gridMode === '1' || this.gridMode === '2') return `${this.stationName} · ${this.stationType}`
         }
     },
 }

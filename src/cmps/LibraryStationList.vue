@@ -105,6 +105,7 @@ export default {
             if (this.gridMode === '1') return 5
             if (this.gridMode === '2') return 4
             if (this.gridMode === '3') return 3
+            if (this.gridMode === '4') return 2
         },
         libraryView() {
             return this.$store.getters.libraryView

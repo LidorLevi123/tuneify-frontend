@@ -80,7 +80,8 @@
                             <span v-show="libraryView === 'grid'" class="vee-icon" v-icon="`vee`"></span>
                         </li>
                         <li v-show="libraryView === 'grid'" class="grid-selector-container">
-                            <input type="range" min="1" max="3" v-model="gridMode" class="grid-selector">
+                            <input type="range" min="1" max="4" v-model="gridMode" class="grid-selector"
+                                :style="{ backgroundImage: gradientStyle }">
                         </li>
                     </ul>
                 </span>
@@ -113,6 +114,7 @@ export default {
             searchOpen: false,
             searchBtn: true,
             gridMode: '3',
+            lastView: null
         }
     },
 
@@ -207,7 +209,10 @@ export default {
         },
         collapseSidebar() {
             this.$store.commit('setSidebarCollapsed', true)
-            this.setLibraryView('list')
+            if (this.sidebarCollapsed) {
+                this.lastView = this.libraryView
+                this.setLibraryView('list')
+            } else this.setLibraryView(this.lastView)
         },
         searchLibrary() {
             this.$store.dispatch({ type: 'searchLibrary', query: this.query })
@@ -221,7 +226,6 @@ export default {
             if (this.searchOpen) this.$nextTick(() => this.$refs.searchInput.focus())
         },
         setLibraryView(view) {
-            this.gridMode = view === 'grid' ? '3' : null
             this.$store.commit('setLibraryView', view)
         },
         setFilterBy(f) {
@@ -229,7 +233,6 @@ export default {
             if (f === 'artists') return this.filterBy = this.filterBy === 'artists' ? '' : 'artists'
             this.filterBy = (this.filterBy === f) ? 'playlists' : f
         },
-
     },
 
     computed: {
@@ -265,6 +268,15 @@ export default {
             const filters = ['albums', 'playlists', 'Tuneify', this.user.fullname]
             return !filters.includes(this.filterBy)
         },
+        slider() {
+            if (this.gridMode === '1') return 0
+            if (this.gridMode === '2') return 30
+            if (this.gridMode === '3') return 70
+            if (this.gridMode === '4') return 100
+        },
+        gradientStyle() {
+            return `linear-gradient(to right, #1db954 0%, #1db954 ${this.slider}%, rgba(0,0,0,0) ${this.slider}%)`
+        }
 
     },
     watch: {

@@ -121,13 +121,13 @@ export default {
             return this.$store.getters.currTrackIdx;
         },
         isTrackPlaying() {
-            return this.$store.getters.isCurrTrackPlaying && this.track?.id === this.currTrack?.id && this.currStation._id === this.station._id
+            return this.$store.getters.isCurrTrackPlaying && this.track?.id === this.currTrack?.id && this.currStation?._id === this.station?._id
         },
         isPlaying() {
             if (!this.currTrack) return
             return {
                 'track-playing': this.isTrackPlaying,
-                'track-paused': this.currTrack.id === this.track.id && this.currStation._id === this.station._id
+                'track-paused': this.currTrack.id === this.track.id && this.currStation?._id === this.station?._id
             }
         },
         isStationOwner() {
