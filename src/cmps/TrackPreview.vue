@@ -81,16 +81,16 @@ export default {
             isHovered: false,
             showDropdown: false,
             showSubDropdown: false,
-        };
+        }
     },
     computed: {
         formattedTime() {
-            const totalSeconds = Math.floor(this.trackTime / 1000);
-            const hours = Math.floor(totalSeconds / 3600);
-            const minutes = Math.floor((totalSeconds % 3600) / 60);
-            const seconds = totalSeconds % 60;
-            const padZero = (num) => (num < 10 ? `0${num}` : num);
-            return `${minutes}:${padZero(seconds)}`;
+            const totalSeconds = Math.floor(this.trackTime / 1000)
+            const hours = Math.floor(totalSeconds / 3600)
+            const minutes = Math.floor((totalSeconds % 3600) / 60)
+            const seconds = totalSeconds % 60
+            const padZero = (num) => (num < 10 ? `0${num}` : num)
+            return `${minutes}:${padZero(seconds)}`
         },
         formattedDate() {
             if (!this.dateStr)
@@ -112,13 +112,13 @@ export default {
             }
         },
         currStation() {
-            return this.$store.getters.currStation;
+            return this.$store.getters.currStation
         },
         currTrack() {
-            return this.$store.getters.currTrack;
+            return this.$store.getters.currTrack
         },
         currTrackIdx() {
-            return this.$store.getters.currTrackIdx;
+            return this.$store.getters.currTrackIdx
         },
         isTrackPlaying() {
             return this.$store.getters.isCurrTrackPlaying && this.track?.id === this.currTrack?.id && this.currStation?._id === this.station?._id
@@ -131,25 +131,25 @@ export default {
             }
         },
         isStationOwner() {
-            return this.station.owner?.fullname === this.user.fullname;
+            return this.station.owner?.fullname === this.user.fullname
         },
         likedTracks() {
-            const stations = this.$store.getters.libraryStations;
-            const likedSongsStation = stations?.find(station => station._id === this.user?.likedId);
-            return likedSongsStation?.tracks;
+            const stations = this.$store.getters.libraryStations
+            const likedSongsStation = stations?.find(station => station._id === this.user?.likedId)
+            return likedSongsStation?.tracks
         },
         createdStations() {
-            const stations = this.$store.getters.libraryStations;
-            return stations.filter(station => station._id !== this.user.likedId && station.owner.fullname !== 'Tuneify' && !station.isAlbum);
+            const stations = this.$store.getters.libraryStations
+            return stations.filter(station => station._id !== this.user.likedId && station.owner.fullname !== 'Tuneify' && !station.isAlbum && !station.isArtist)
         },
         user() {
-            return this.$store.getters.loggedinUser;
+            return this.$store.getters.loggedinUser
         },
     },
     methods: {
         addStation(track) {
-            eventBus.emit('add-station', track);
-            this.hideMenu();
+            eventBus.emit('add-station', track)
+            this.hideMenu()
         },
         onMouseOver() { this.isHovered = true },
         onMouseLeave() { this.isHovered = false },

@@ -146,8 +146,36 @@ export default {
         socketService.on(SOCKET_EMIT_BROADCAST_TRACK, this.updateByBroadcast)
 
         this.loadCookie()
+        document.addEventListener('keydown', this.handleKeyPress)
     },
     methods: {
+        handleKeyPress(ev) {
+            const { tagName } = document.activeElement
+            const { code } = ev
+
+            if (tagName === 'INPUT') return
+
+            switch (code) {
+                case 'Space':
+                    ev.preventDefault()
+                    this.togglePlayPause()
+                    break
+                case 'ArrowRight':
+                    this.previousNextVideo(1)
+                    break
+                case 'ArrowLeft':
+                    this.previousNextVideo(-1)
+                    break
+                case 'NumpadAdd':
+                    this.currVolume = Math.min(100, this.currVolume + 10)
+                    this.onChangeVolume()
+                    break
+                case 'NumpadSubtract':
+                    this.currVolume = Math.max(0, this.currVolume - 10)
+                    this.onChangeVolume()
+                    break
+            }
+        },
         async loadCookie() {
             await this.$store.dispatch({ type: 'setLastTrackFromCookie' })
             this.cookieLoaded = true
@@ -425,7 +453,7 @@ export default {
         eventBus.off('trackPlay', this.playTrack)
         eventBus.off('trackPaused', this.pauseVideo)
         eventBus.off('playNextTrack', () => this.previousNextVideo(1))
-
+        document.removeEventListener('keydown', this.handleKeyPress)
     },
     computed: {
         rsbOpen() {

@@ -80,8 +80,8 @@
                             <span v-show="libraryView === 'grid'" class="vee-icon" v-icon="`vee`"></span>
                         </li>
                         <li v-show="libraryView === 'grid'" class="grid-selector-container">
-                            <input type="range" min="1" max="4" v-model="gridMode" class="grid-selector"
-                                :style="{ backgroundImage: gradientStyle }">
+                            <input type="range" @input="setLibraryView('grid')" min="1" max="4" v-model="gridMode"
+                                class="grid-selector" :style="{ backgroundImage: gradientStyle }">
                         </li>
                     </ul>
                 </span>
@@ -93,7 +93,7 @@
             <h2>Try searching again using a different spelling or keyword.</h2>
         </section>
         <LibraryStationList v-else @station-remove="removeStation" :libraryStations="libraryStations"
-            :gridMode="gridMode" />
+            @playStation="playStation" />
     </section>
 </template>
 
@@ -120,6 +120,7 @@ export default {
 
     created() {
         this.duplicateStationsToLibrary()
+        this.loadLibraryViewCookie()
         eventBus.on('duplicateStationsToLibrary', this.duplicateStationsToLibrary)
         eventBus.on('loadLibrary', this.filterSortLibrary)
         eventBus.on('add-station', this.addStation)
@@ -131,8 +132,23 @@ export default {
     },
 
     methods: {
+        async playStation(station) {
+            const stationId = station._id ? station._id : station.spotifyId
+            if (this.currStation?._id !== stationId) {
+                const stationType = station.isAlbum ? 'album' : (station.isArtist ? 'artist' : 'station')
+                const stationToPlay = await this.$store.dispatch({ type: 'getStation', stationId: stationId, stationType })
+
+                this.$store.commit({ type: 'setCurrStation', station: stationToPlay })
+                this.$store.commit({ type: 'setCurrTrackIdx', trackIdx: 0 })
+            }
+            eventBus.emit('trackClicked')
+        },
         async duplicateStationsToLibrary() {
             this.libraryStations = [...this.stationsState]
+        },
+        loadLibraryViewCookie() {
+            this.$store.commit({ type: 'getlibraryViewFromCookie' })
+            this.gridMode = this.$store.getters.libraryView.gridMode
         },
         async addStation(track) {
             const userStationsNum = this.libraryStations.filter(station => station.owner._id === this.user._id).length
@@ -226,7 +242,7 @@ export default {
             if (this.searchOpen) this.$nextTick(() => this.$refs.searchInput.focus())
         },
         setLibraryView(view) {
-            this.$store.commit('setLibraryView', view)
+            this.$store.commit('setLibraryView', { view, gridMode: this.gridMode })
         },
         setFilterBy(f) {
             if (f === 'albums') return this.filterBy = this.filterBy === 'albums' ? '' : 'albums'
@@ -236,11 +252,14 @@ export default {
     },
 
     computed: {
+        currStation() {
+            return this.$store.getters.currStation
+        },
         sidebarCollapsed() {
             return this.$store.getters.sidebarCollapsed
         },
         libraryView() {
-            return this.$store.getters.libraryView
+            return this.$store.getters.libraryView.view
         },
         sidebarWidth() {
             if (this.sidebarCollapsed) return 'auto'
@@ -252,21 +271,23 @@ export default {
             return this.$store.getters.libraryStations
         },
         albumsBtn() {
-            const filterOptions = ['Tuneify', 'playlists', this.user?.fullname, 'artists']
-            return !filterOptions.includes(this.filterBy)
+            const albumsExist = this.$store.getters.libraryStations.some(station => station.isAlbum)
+            return albumsExist && !['Tuneify', 'playlists', this.user?.fullname, 'artists'].includes(this.filterBy)
         },
         byTuneifyBtn() {
-            return this.filterBy === 'Tuneify' || this.filterBy === 'playlists'
+            const byTuneifyExist = this.$store.getters.libraryStations.some(station => station.owner.fullname === 'Tuneify')
+            return (this.filterBy === 'Tuneify' || this.filterBy === 'playlists') && byTuneifyExist
         },
         byYouBtn() {
-            return this.filterBy === 'playlists' || this.filterBy === this.user.fullname
+            const byYouExist = this.$store.getters.libraryStations.some(station => station.owner.fullname === this.user?.fullname)
+            return (this.filterBy === 'playlists' || this.filterBy === this.user.fullname) && byYouExist
         },
         playlistsBtn() {
             return this.filterBy !== 'albums' && this.filterBy !== 'artists'
         },
         artistsBtn() {
-            const filters = ['albums', 'playlists', 'Tuneify', this.user.fullname]
-            return !filters.includes(this.filterBy)
+            const artistsExist = this.$store.getters.libraryStations.some(station => station.isArtist)
+            return artistsExist && !['Tuneify', 'playlists', this.user?.fullname, 'albums'].includes(this.filterBy)
         },
         slider() {
             if (this.gridMode === '1') return 0
@@ -291,9 +312,3 @@ export default {
     components: { LibraryStationList }
 }
 </script>
-
-<style>
-.range {
-    --track-height: 2px;
-}
-</style>

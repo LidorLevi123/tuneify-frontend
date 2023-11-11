@@ -2,9 +2,12 @@
     <article class="library-station-preview" :class="{ 'grid': libraryView === 'grid' }" :style="containerStyles"
         :title="title">
         <img v-if="libraryView !== 'compact'" :src="imgUrl[1].url || imgUrl" alt="" :style="imgStyles">
-        <h5 v-if="!sidebarCollapsed && gridMode !== '1' && gridMode !== '2'"
-            :class="{ 'is-current': currStation?._id === station._id }">{{ stationName }}</h5>
-        <small v-if="!sidebarCollapsed && gridMode !== '1' && gridMode !== '2'">
+        <button v-if="playBtnTerms" @click="onPlayStation" class="play-btn" :class="{ 'grid-mode3': gridMode === '3' }"
+            v-icon="'mPlay'"></button>
+        <button v-if="pauseBtnTerms" @click="pauseTrack" class="play-btn pause-btn"
+            :class="{ 'grid-mode3': gridMode === '3' }" v-icon="'pause'"></button>
+        <h5 v-if="terms" :class="{ 'is-current': currStation?._id === station._id }">{{ stationName }}</h5>
+        <small v-if="terms">
             <span>{{ stationType }}</span>
             <span v-if="!station.isArtist" v-html="stationBelonging"></span>
         </small>
@@ -12,11 +15,11 @@
 </template>
 
 <script>
+import { eventBus } from '../services/event-bus.service'
 export default {
     name: 'LibraryStationPreview',
     props: {
         station: { type: Object, required: true },
-        gridMode: { required: true },
     },
 
     computed: {
@@ -26,8 +29,11 @@ export default {
             if (this.station.isArtist) return 'Artist'
             return this.station.isAlbum ? 'Album' : 'Playlist'
         },
+        gridMode() {
+            return this.$store.getters.libraryView.gridMode
+        },
         libraryView() {
-            return this.$store.getters.libraryView
+            return this.$store.getters.libraryView.view
         },
         stationName() {
             return this.station.name
@@ -59,7 +65,31 @@ export default {
         },
         title() {
             if (this.gridMode === '1' || this.gridMode === '2') return `${this.stationName} · ${this.stationType}`
+        },
+        terms() {
+            return !(this.libraryView === 'grid' && (this.gridMode === '1' || this.gridMode === '2')) && !this.sidebarCollapsed
+        },
+        isStationPlaying() {
+            const id = this.station._id ? this.station._id : this.station.spotifyId
+            return this.currStation?._id === id && this.$store.getters.isCurrTrackPlaying
+        },
+        playBtnTerms() {
+            return !(this.isStationPlaying || this.libraryView !== 'grid' || this.gridMode === '1' || this.gridMode === '2' || this.sidebarCollapsed)
+        },
+        pauseBtnTerms() {
+            return !(!this.isStationPlaying || this.libraryView !== 'grid' || this.gridMode === '1' || this.gridMode === '2' || this.sidebarCollapsed)
         }
     },
+
+    methods: {
+        onPlayStation(ev) {
+            ev.stopPropagation()
+            this.$emit('playStation', this.station)
+        },
+        pauseTrack(ev) {
+            ev.stopPropagation()
+            eventBus.emit('trackPaused')
+        }
+    }
 }
 </script>

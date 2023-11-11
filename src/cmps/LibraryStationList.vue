@@ -8,7 +8,7 @@
 
                     <li @click="goToDetails(station)" :class="{ active: stationActive(station) }"
                         @contextmenu.prevent="showContextMenu(station._id, $event)">
-                        <LibraryStationPreview :station="station" :gridMode="gridMode" />
+                        <LibraryStationPreview :station="station" @playStation="playStation" />
                         <div v-if="contextMenuOpenMap[station._id]" class="dlt-btn" @click="removeStation(station, $event)"
                             @mouseleave="closeContextMenu(station._id)"
                             :style="{ top: contextmenuTop + 'px', left: contextmenuLeft + 'px' }">
@@ -33,7 +33,6 @@ export default {
     name: 'LibraryStationList',
     props: {
         libraryStations: { type: Array, required: true },
-        gridMode: { required: true },
     },
     data() {
         return {
@@ -98,6 +97,9 @@ export default {
             if (!this.$route.params.stationId) return false
             else return this.$route.params.stationId === station._id || this.$route.params.stationId === station.spotifyId
         },
+        playStation(station) {
+            this.$emit('playStation', station)
+        }
     },
 
     computed: {
@@ -108,7 +110,10 @@ export default {
             if (this.gridMode === '4') return 2
         },
         libraryView() {
-            return this.$store.getters.libraryView
+            return this.$store.getters.libraryView.view
+        },
+        gridMode() {
+            return this.$store.getters.libraryView.gridMode
         },
         currStation() {
             return this.$store.getters.currStation

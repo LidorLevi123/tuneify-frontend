@@ -57,17 +57,17 @@ export default {
   },
   created() {
     historyTracker.push(this.$route.fullPath)
-    eventBus.on('search', this.getTracks)
+    eventBus.on('search', this.getSearchRes)
     eventBus.on('dislikeTrack', this.dislikeTrack)
   },
   unmounted() {
-    eventBus.off('search', this.getTracks)
+    eventBus.off('search', this.getSearchRes)
     eventBus.off('dislikeTrack', this.dislikeTrack)
   },
   methods: {
-    async getTracks(query) {
+    async getSearchRes(query) {
       try {
-        await this.$store.dispatch({ type: 'getTracks', query })
+        await this.$store.dispatch({ type: 'getSearchRes', query })
       } catch (err) {
         console.log(err.message)
         showErrorMsg(`Could not load tracks`)

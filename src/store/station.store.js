@@ -6,7 +6,7 @@ export const stationStore = {
         isRsbOpen: false,
         isLoading: false,
         sidebarCollapsed: false,
-        libraryView: 'list',
+        libraryView: { view: 'list', gridMode: '3' },
         stations: [],
         stationsForHome: [],
         currStation: null,
@@ -34,8 +34,16 @@ export const stationStore = {
         setSidebarCollapsed(state) {
             state.sidebarCollapsed = !state.sidebarCollapsed
         },
-        setLibraryView(state, view) {
-            state.libraryView = view
+        setLibraryView(state, { view, gridMode }) {
+            state.libraryView = { view, gridMode }
+            Cookies.set('libraryView', JSON.stringify({ view, gridMode }))
+        },
+        getlibraryViewFromCookie(state) {
+            const libraryViewCookie = Cookies.get('libraryView')
+            if (libraryViewCookie) {
+                const { view, gridMode } = JSON.parse(libraryViewCookie)
+                state.libraryView = { view, gridMode }
+            }
         },
         setLoading(state, value) {
             state.isLoading = value
@@ -146,9 +154,9 @@ export const stationStore = {
                 throw new Error('Could not save station')
             }
         },
-        async getStation({ }, { stationId }) {
+        async getStation({ }, { stationId, stationType }) {
             try {
-                const station = await stationService.getById(stationId)
+                const station = await stationService.getById(stationId, stationType)
                 return station
             } catch (err) {
                 console.log(err.message)
@@ -178,7 +186,7 @@ export const stationStore = {
                 throw new Error('Could not remove station')
             }
         },
-        async getTracks({ commit }, { query }) {
+        async getSearchRes({ commit }, { query }) {
             if (!query) {
                 commit({ type: 'setSearchRes', res: [] })
                 return
@@ -189,19 +197,6 @@ export const stationStore = {
             } catch (err) {
                 console.log(err.message)
                 throw new Error('Could not get tracks')
-            }
-        },
-        async getStations({ commit }, { query }) {
-            if (!query) {
-                commit({ type: 'setSearchRes', res: [] })
-                return
-            }
-            try {
-                const res = await stationService.getSearchRes(query)
-                commit({ type: 'setSearchRes', res: res.stations })
-            } catch (err) {
-                console.log(err.message)
-                throw new Error('Could not get stations')
             }
         },
         async addTrack({ commit, state }, { trackToSave, stationId }) {

@@ -3,6 +3,7 @@
     grid-template-rows: auto auto;
     grid-template-columns: auto 1fr;
     align-content: center;
+    position: relative;
 
     &.grid {
         grid-template: unset;
@@ -38,5 +39,31 @@
         height: 3rem;
         object-fit: cover;
         height: 100%;
+    }
+
+    .play-btn {
+        bottom: 3.8rem;
+        right: 1.3rem;
+
+        &.grid-mode3 {
+            bottom: 3.2rem;
+            right: .6rem;
+            scale: 70%;
+        }
+    }
+
+    // .pause-btn {
+    //     &.grid-mode3 {
+    //         bottom: 3.2rem;
+    //         right: .6rem;
+    //         scale: 70%;
+    //     }
+    // }
+
+    &:hover {
+        .play-btn {
+            opacity: 1;
+            transform: translateY(-0.6rem);
+        }
     }
 }

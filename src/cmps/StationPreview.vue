@@ -14,7 +14,6 @@
 </template>
 <script>
 import { eventBus } from '../services/event-bus.service'
-import { stationService } from '../services/station.service'
 import { utilService } from '../services/util.service'
 
 export default {
@@ -63,15 +62,7 @@ export default {
 
         async onPlayStation(ev) {
             ev.stopPropagation()
-            let station
-            if (this.station.isAlbum) station = await stationService.getById(this.station.spotifyId, 'album')
-            else if (this.station.isArtist) station = await stationService.getById(this.station.spotifyId, 'artist')
-            else station = await stationService.getById(this.station.spotifyId)
-            station = JSON.parse(JSON.stringify(station))
-
-            this.$store.commit({ type: 'setCurrStation', station })
-            this.$store.commit({ type: 'setCurrTrackIdx', trackIdx: 0 })
-            eventBus.emit('trackClicked')
+            this.$emit('playStation', this.station)
         },
         async emitAvgImgClr() {
             if (this.horizontalDesign) {

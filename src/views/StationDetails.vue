@@ -83,7 +83,7 @@
                 <UserList v-show="!isShare" :users="topicUsers" />
             </section>
             <TrackList @track-clicked="clickTrack" @track-add="addTrack" @track-remove="removeTrack"
-                @track-dislike="dislikeTrack" @station-update="loadStation" @search="getTracks" :station="station" />
+                @track-dislike="dislikeTrack" @station-update="loadStation" @search="getSearchRes" :station="station" />
             <section class="artist-discography" v-if="station.isArtist">
                 <h1 class="title">Discography</h1>
                 <section class="filter-btns">
@@ -249,7 +249,7 @@ export default {
                 const path = this.$route.path
                 const stationType = path.startsWith('/station') ? 'station' : path.startsWith('/album') ? 'album' : 'artist'
 
-                const station = await stationService.getById(this.stationId, stationType)
+                const station = await this.$store.dispatch({ type: 'getStation', stationId: this.stationId, stationType })
                 if (!station) return this.$router.push('/')
 
                 this.station = station
@@ -332,9 +332,9 @@ export default {
                 showErrorMsg('Could not dislike track')
             }
         },
-        async getTracks(query) {
+        async getSearchRes(query) {
             try {
-                await this.$store.dispatch({ type: 'getTracks', query })
+                await this.$store.dispatch({ type: 'getSearchRes', query })
             } catch (err) {
                 console.log(err.message)
                 showErrorMsg(`Could not load tracks`)
