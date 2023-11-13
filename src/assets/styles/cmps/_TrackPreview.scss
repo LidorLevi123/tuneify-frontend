@@ -7,16 +7,8 @@
     border: 1px solid transparent;
     border-radius: 4px;
 
-    &.inSearch {
-        grid-template-columns: [index] 1rem [first] 7fr [var1] 4fr [var2] 1fr [last] 2rem;
-
-        @include for-mobile-layout {
-            grid-template-columns: 9fr 2fr auto
-        }
-    }
-
     @include for-mobile-layout {
-        grid-template-columns: 9fr 2fr auto;
+        grid-template-columns: 9fr 1fr auto;
         column-gap: 0;
         padding: 0 .5rem;
     }
@@ -157,7 +149,7 @@
         }
     }
 
-    .track-album {
+    .track-album a {
         &:hover {
             text-decoration: underline;
         }
@@ -167,72 +159,85 @@
         display: flex;
         align-items: center;
 
-
         .track-time {
             display: flex;
             justify-content: end;
             width: 2rem;
         }
 
-        .sub-dropdown {
-            position: absolute;
-            right: 13.5rem;
-            top: -1rem;
-            color: #ffffffe6;
-            border-radius: 0.2rem;
-            display: grid;
+        .dropdown {
+            position: fixed;
             padding: .25rem;
-            box-shadow: 0 16px 24px rgba(0, 0, 0, .3), 0 6px 8px rgba(0, 0, 0, .2);
             background-color: $clr6;
-            min-width: 11.5rem;
-            cursor: pointer;
+            box-shadow: 0 16px 24px rgba(0, 0, 0, .3), 0 6px 8px rgba(0, 0, 0, .2);
+            width: 16.25rem;
+            font-size: .875rem;
+            color: #ffffffe6;
+            z-index: 1;
+            border-radius: .2rem;
 
             @include for-mobile-layout {
-                right: 2rem;
-                top: 1.48rem;
-            }
-
-            .sub-dropdown-item {
-                display: flex;
-                gap: .75rem;
-                padding: .35rem;
-                border-radius: 0.2rem;
-                color: #ffffffe6;
-                font-size: 0.875rem;
-
-                &:hover {
-                    background-color: $clr13;
-                }
+                top: 50% !important;
+                left: 50% !important;
+                translate: -50% -50%;
+                scale: 130%;
             }
 
             hr {
                 margin: 0;
                 border-color: $clr13;
             }
-        }
 
-        .dropdown {
-            position: relative;
-
-            .menu-li {
-                cursor: pointer;
-                position: absolute;
-                background-color: $clr6;
-                right: 2rem;
-                top: -1rem;
-                padding: .5rem;
-                min-width: 11.5rem;
-                border-radius: 0.2rem;
-                color: #ffffffe6;
-                font-size: 0.875rem;
-                box-shadow: 0 16px 24px rgba(0, 0, 0, .3), 0 6px 8px rgba(0, 0, 0, .2);
+            .dropdown-item {
+                display: flex;
+                padding: .4rem .5rem .4rem .75rem;
+                border-radius: .2rem;
 
                 &:hover {
-                    background-color: $clr13
+                    background-color: $clr13;
+                }
+
+                .wrapper {
+                    display: flex;
+                    align-items: center;
+                    gap: .75rem;
+                }
+            }
+
+            .sub-dropdown {
+                position: absolute;
+                top: .25rem;
+                border-radius: .2rem;
+                display: grid;
+                padding: .25rem;
+                box-shadow: 0 16px 24px rgba(0, 0, 0, .3), 0 6px 8px rgba(0, 0, 0, .2);
+                background-color: $clr6;
+                min-width: 11.5rem;
+
+                @include for-mobile-layout {
+                    top: 9rem;
+                    left: 50% !important;
+                    translate: -50%;
+                    width: 16.25rem;
+                    box-shadow: -16px 0 24px rgba(0, 0, 0, .3), 16px 0 24px rgba(0, 0, 0, .3), 0 6px 8px rgba(0, 0, 0, .2);
+                    // border-radius: unset;
+                    // border-radius-bottom: .2rem;
+                    border-radius-bottom-right: .2rem;
+                    border-radius-bottom-left: .2rem;
+                }
+
+                .sub-dropdown-item {
+                    display: flex;
+                    gap: .75rem;
+                    padding: .4rem .5rem .4rem .75rem;
+                    border-radius: 0.2rem;
+
+                    &:hover {
+                        background-color: $clr13;
+                    }
                 }
             }
         }
-
     }
 
     .btn-options,
@@ -251,5 +256,13 @@
     .btn-dislike,
     .btn-like {
         padding-inline-end: 1rem;
+    }
+
+    .btn-options,
+    .btn-like,
+    .btn-dislike {
+        @include for-mobile-layout {
+            display: flex !important;
+        }
     }
 }

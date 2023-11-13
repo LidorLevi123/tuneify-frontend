@@ -64,7 +64,7 @@ export default {
             return { borderRadius, width }
         },
         title() {
-            if (this.gridMode === '1' || this.gridMode === '2') return `${this.stationName} · ${this.stationType}`
+            if (this.gridMode === '1' || this.gridMode === '2' || this.sidebarCollapsed) return `${this.stationName} · ${this.stationType}`
         },
         terms() {
             return !(this.libraryView === 'grid' && (this.gridMode === '1' || this.gridMode === '2')) && !this.sidebarCollapsed

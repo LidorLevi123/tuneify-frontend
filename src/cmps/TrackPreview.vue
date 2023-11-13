@@ -1,6 +1,5 @@
 <template>
-    <article class="track-preview track-preview-layout" :class="{ inSearch: $route.path.startsWith('/search') }"
-        @mouseover="onMouseOver" @mouseleave="onMouseLeave">
+    <article class="track-preview track-preview-layout" @mouseover="onMouseOver" @mouseleave="onMouseLeave">
 
         <img v-if="isTrackPlaying && !isHovered" class="eq"
             src="https://res.cloudinary.com/dmmsf57ko/image/upload/v1683729372/Song_hoitzd.gif" alt="">
@@ -21,42 +20,78 @@
                 </div>
             </section>
         </div>
-        <RouterLink :to="`/album/${track.albumId}`" class="track-album" @click.stop>
-            <span class="track-album">{{ track.album }}</span>
-        </RouterLink>
+        <span class="track-album">
+            <RouterLink :to="`/album/${track.albumId}`" class="track-album" @click.stop>{{ track.album }}</RouterLink>
+        </span>
         <div class="df sb" :class="{ 'in-search': $route.path.startsWith('/search') }">
             <span v-show="!this.$route.path.startsWith('/search')" class="track-date">{{ formattedDate }}</span>
-            <span v-show="isHovered" v-if="!isLiked(track.id)" @click="onAddTrack(track, user.likedId, $event)"
+            <span v-show="isHovered" v-if="!isLiked(track.id)" @click.stop="onAddTrack(track, user.likedId)"
                 class="btn-like" v-icon="`smallLikeDis`"></span>
-            <span v-else @click="onDislikeTrack(track.id, $event)" class="btn-dislike" v-icon="`smallLikeEna`"></span>
+            <span v-else @click.stop="onDislikeTrack(track.id)" class="btn-dislike" v-icon="`smallLikeEna`"></span>
         </div>
         <div class="time-actions">
             <div class="track-time">
                 <span>{{ formattedTime }}</span>
             </div>
-            <span v-show="isHovered && !this.$route.path.startsWith('/search')" class="btn-options svg-fill"
-                v-icon="'moreOptionsSmall'" @click="toggleDropdown($event)"></span>
-            <div v-if="showDropdown" class="dropdown">
-                <div v-if="!isStationOwner" class="dropdown-item" @mouseenter="popSubDropdown">
-                    <span @click="$event.stopPropagation()" class="menu-li df sb" v-clickOutside="hideMenu">Add to
-                        playlist <span v-icon="`rightArrow`" class="df ai"></span></span>
+            <span v-show="isHovered" class="btn-options svg-fill" v-icon="'moreOptionsSmall'"
+                @click="toggleDropdown($event)"></span>
 
-                    <div v-show="showSubDropdown" class="sub-dropdown">
-                        <div class="sub-dropdown-item" @click.stop="addStation(track)">
-                            <span v-icon="'createList'" class="df ai"></span>
-                            <div>Create playlist</div>
+            <div v-if="showDropdown" class="dropdown" v-clickOutside="hideMenu"
+                :style="{ top: dropdownTop + 'px', left: dropdownLeft + 'px' }" ref="dropdown">
+                <div class="dropdown-item sb" @mouseenter="popSubDropdown">
+                    <div class="wrapper">
+                        <span v-icon="'createList'" class="df ai"></span>
+                        <div>Add to playlist</div>
+                    </div>
+                    <span v-icon="`rightArrow`" class="df ai"></span>
+                </div>
+                <div @mouseenter="this.showSubDropdown = false">
+                    <div v-if="isStationOwner" class="dropdown-item" @click.stop="onRemoveTrack(track.id)">
+                        <div class="wrapper">
+                            <span v-icon="'trash'" class="df ai"></span>
+                            <div>Remove from playlist</div>
                         </div>
-                        <hr v-if="createdStations?.length">
-                        <div class="sub-dropdown-item" v-for="idx in createdStations?.length"
-                            @click="onAddTrack(track, createdStations[idx - 1]._id, $event)">
-                            {{ createdStations[idx - 1].name }}
-
+                    </div>
+                    <div v-if="!isLiked(track.id)" class="dropdown-item" @click.stop="onAddTrack(track, user.likedId)">
+                        <div class="wrapper">
+                            <span v-icon="'plus'" class="df ai"></span>
+                            <div>Save to your Liked Songs</div>
+                        </div>
+                    </div>
+                    <div v-else class="dropdown-item" @click.stop="onDislikeTrack(track.id)">
+                        <div class="wrapper">
+                            <span v-icon="'greenVee'" class="df ai"></span>
+                            <div>Remove from your Liked Songs</div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="dropdown-item" @click.stop="goTo(`/artist/${track.artistId}`)">
+                        <div class="wrapper">
+                            <span v-icon="'artist'" class="df ai"></span>
+                            <div>Go to artist</div>
+                        </div>
+                    </div>
+                    <div class="dropdown-item" @click.stop="goTo(`/album/${track.albumId}`)">
+                        <div class="wrapper">
+                            <span v-icon="'album'" class="df ai"></span>
+                            <div>Go to album</div>
                         </div>
                     </div>
                 </div>
-                <div v-else class="dropdown-item" @click="onRemoveTrack(track.id, $event)">
-                    <span class="menu-li" v-clickOutside="hideMenu">Remove from playlist</span>
+
+                <div v-show="showSubDropdown" class="sub-dropdown" @mouseenter="popSubDropdown" ref="subDropdown"
+                    :style="{ left: subDropdownLeft + 'px' }">
+                    <div class="sub-dropdown-item" @click.stop="addStation(track)">
+                        <span v-icon="'createList'" class="df ai"></span>
+                        <div>Create playlist</div>
+                    </div>
+                    <hr v-if="createdStations?.length">
+                    <div class="sub-dropdown-item" v-for="idx in createdStations?.length"
+                        @click="onAddTrack(track, createdStations[idx - 1]._id, $event)">
+                        {{ createdStations[idx - 1].name }}
+                    </div>
                 </div>
+
             </div>
         </div>
     </article>
@@ -66,6 +101,7 @@
 import moment from 'moment'
 import { eventBus } from '../services/event-bus.service'
 import { RouterLink } from 'vue-router'
+import { nextTick } from 'vue'
 
 export default {
     name: 'TrackPreview',
@@ -81,6 +117,9 @@ export default {
             isHovered: false,
             showDropdown: false,
             showSubDropdown: false,
+            dropdownTop: 0,
+            dropdownLeft: 0,
+            subDropdownLeft: 0,
         }
     },
     computed: {
@@ -131,7 +170,7 @@ export default {
             }
         },
         isStationOwner() {
-            return this.station.owner?.fullname === this.user.fullname
+            return this.station?.owner.fullname === this.user.fullname && this.station.name !== 'Liked Songs'
         },
         likedTracks() {
             const stations = this.$store.getters.libraryStations
@@ -153,35 +192,61 @@ export default {
         },
         onMouseOver() { this.isHovered = true },
         onMouseLeave() { this.isHovered = false },
-        onAddTrack(track, stationId, ev) {
-            ev.stopPropagation()
+        onAddTrack(track, stationId) {
             this.$emit('track-add', track, stationId)
             this.hideMenu()
         },
-        onRemoveTrack(trackId, ev) {
-            ev.stopPropagation()
+        onRemoveTrack(trackId) {
             this.$emit('track-remove', trackId)
         },
-        onDislikeTrack(trackId, ev) {
-            ev.stopPropagation()
+        onDislikeTrack(trackId) {
             this.$emit('track-dislike', trackId)
             eventBus.emit('dislikeTrack', trackId)
+            this.hideMenu()
         },
         isLiked(trackId) {
             return this.likedTracks?.some(track => track.id === trackId)
         },
         toggleDropdown(ev) {
+            this.dropdownLeft = ev.clientX
+            this.dropdownTop = ev.clientY + 20
             ev.stopPropagation()
             this.showDropdown = !this.showDropdown
             this.showSubDropdown = false
+            nextTick(() => {
+                const elementIsInViewport = this.isElementInViewport(this.$refs.dropdown)
+                if (!elementIsInViewport.horizontally) this.dropdownLeft = ev.clientX - 250
+                if (!elementIsInViewport.vertically) this.dropdownTop = ev.clientY - 170
+            })
+
         },
         popSubDropdown() {
             this.showSubDropdown = true
+            this.subDropdownLeft = 256
+            nextTick(() => {
+                const elementIsInViewport = this.isElementInViewport(this.$refs.subDropdown)
+                if (!elementIsInViewport.horizontally) this.subDropdownLeft = -180
+            })
+        },
+        hideSubDropdown() {
+            this.showSubDropdown = false
         },
         hideMenu() {
             this.showSubDropdown = false
             this.showDropdown = false
         },
+        goTo(path) {
+            this.$router.push(path)
+            this.hideMenu()
+        },
+        isElementInViewport(el) {
+            const rect = el.getBoundingClientRect()
+
+            return {
+                horizontally: rect.left >= 0 && rect.right <= (window.innerWidth || document.documentElement.clientWidth),
+                vertically: rect.top >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight),
+            }
+        }
     },
     components: { RouterLink }
 }

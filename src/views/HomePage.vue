@@ -1,5 +1,5 @@
 <template>
-  <section v-if="stations" class="container home-page text-center" :style="{ backgroundColor: this.backgroundColor }">
+  <section v-if="stations" class="home-page" :style="{ backgroundColor: this.backgroundColor }">
     <div class="stations-container">
       <h2 v-if="loggedinUser">{{ `${greeting}, ${loggedinUser}` }}</h2>
       <div v-for="(stationGroup, idx) in stations" :key="idx">
@@ -31,13 +31,13 @@ export default {
     }
   },
   mounted() {
+    this.maxStationsCalc()
     window.addEventListener("resize", this.maxStationsCalc)
   },
   unmounted() {
     window.removeEventListener("resize", this.maxStationsCalc)
   },
   created() {
-    this.maxStationsCalc()
     historyTracker.push(this.$route.fullPath)
     eventBus.on('changeBgColor', this.setBgcolor)
   },
@@ -57,31 +57,26 @@ export default {
     },
     rsbOpen() {
       return this.$store.getters.isRsbOpen
+    },
+    sidebarCollapsed() {
+      return this.$store.getters.sidebarCollapsed
     }
   },
   methods: {
     maxStationsCalc() {
-      const delta = this.rsbOpen ? 420 : 0
-      const winwidth = window.innerWidth
-
-      if (winwidth > 890 + delta && winwidth <= 1050 + delta) this.maxStations = 2
-      else if (winwidth > 1050 + delta && winwidth <= 1250 + delta) this.maxStations = 3
-      else if (winwidth > 1250 + delta && winwidth <= 1440 + delta) this.maxStations = 4
-      else if (winwidth > 1440 + delta && winwidth <= 1640 + delta) this.maxStations = 5
-      else if (winwidth > 1640 + delta && winwidth <= 1840 + delta) this.maxStations = 6
-      else if (winwidth > 1840 + delta && winwidth <= 2030 + delta) this.maxStations = 7
-      else if (winwidth > 2030 + delta && winwidth <= 2230 + delta) this.maxStations = 8
-      else this.maxStations = 9
+      const stationsWidth = document.querySelector('.station-list-container').clientWidth
+      this.maxStations = window.innerWidth < 890 ? 9 : Math.floor(stationsWidth / 200) || 1
     },
     setBgcolor(color) {
       this.backgroundColor = color
     }
   },
-
+  watch: {
+    rsbOpen: 'maxStationsCalc',
+    sidebarCollapsed: 'maxStationsCalc'
+  },
   components: {
     StationList
   },
-
 }
-
 </script>

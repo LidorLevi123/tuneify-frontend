@@ -26,8 +26,7 @@
             </Container>
 
             <template v-else>
-                <li v-for="(track, idx) in station.tracks" :key="track.id" @click="onTrackClicked(idx)"
-                    class="`track-${track.id}`">
+                <li v-for="(track, idx) in station.tracks" :key="track.id" @click="onTrackClicked(idx)">
                     <TrackPreview @track-add="onAddTrack" @track-remove="onRemoveTrack" @track-dislike="onDislikeTrack"
                         :station="station" :track="track" :trackIdx="idx" />
                 </li>
