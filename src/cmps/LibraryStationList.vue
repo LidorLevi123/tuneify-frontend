@@ -9,11 +9,30 @@
                     <li @click="goToDetails(station)" :class="{ active: stationActive(station) }"
                         @contextmenu.prevent="showContextMenu(station._id, $event)">
                         <LibraryStationPreview :station="station" @playStation="playStation" />
-                        <div v-if="contextMenuOpenMap[station._id]" class="dlt-btn" @click="removeStation(station, $event)"
-                            @mouseleave="closeContextMenu(station._id)"
+
+                        <div v-if="contextMenuOpenMap[station._id] && station.name !== 'Liked Songs'" class="context-menu"
+                            v-clickOutside="() => contextMenuOpenMap[station._id] = false"
                             :style="{ top: contextmenuTop + 'px', left: contextmenuLeft + 'px' }">
-                            <div class="menu-item">Remove playlist</div>
+                            <div v-if="station.owner._id" class="menu-item" @click.stop="emitEditStation(station._id)">
+                                <span v-icon="`edit`"></span>
+                                Edit details
+                            </div>
+                            <div class="menu-item" @click.stop="removeStation(station)">
+                                <span v-if="!station.owner._id" v-icon="'greenVee'"></span>
+                                <span v-else v-icon="'delete'"></span>
+                                {{ station.owner._id ? 'Delete' : 'Remove from Library' }}
+                            </div>
+                            <div class="menu-item" @click.stop="emitAddStation(station._id)">
+                                <span v-icon="'create'"></span>
+                                Create playlist
+                            </div>
+                            <hr>
+                            <div class="menu-item" @click.stop="copyLink(station)">
+                                <span v-icon="'copy'"></span>
+                                Copy link to {{ station.isAlbum ? 'album' : station.isArtist ? 'artist' : 'playlist' }}
+                            </div>
                         </div>
+
                         <span class="speaker" v-icon="`speaker`"
                             v-if="currStation?._id === station._id && trackPlaying && libraryView !== 'grid' && !sidebarCollapsed"></span>
                     </li>
@@ -28,6 +47,7 @@
 import { Container, Draggable } from 'vue3-smooth-dnd'
 import LibraryStationPreview from './LibraryStationPreview.vue'
 import { userService } from '../services/user.service'
+import { showSuccessMsg } from '../services/event-bus.service'
 
 export default {
     name: 'LibraryStationList',
@@ -75,8 +95,7 @@ export default {
                 console.log(err)
             }
         },
-        removeStation(stationId, ev) {
-            ev.stopPropagation()
+        removeStation(stationId) {
             this.$emit('station-remove', stationId)
         },
         goToDetails(station) {
@@ -86,8 +105,12 @@ export default {
             else this.$router.push(`/station/${stationId}`)
         },
         showContextMenu(stationId, ev) {
-            this.contextmenuLeft = ev.clientX - 100
-            this.contextmenuTop = ev.clientY - 300
+            for (const id in this.contextMenuOpenMap) {
+                if (id !== stationId && this.contextMenuOpenMap[id]) this.contextMenuOpenMap[id] = false
+            }
+
+            this.contextmenuLeft = ev.clientX
+            this.contextmenuTop = ev.clientY + 5
             this.contextMenuOpenMap[stationId] = true
         },
         closeContextMenu(stationId) {
@@ -99,6 +122,15 @@ export default {
         },
         playStation(station) {
             this.$emit('playStation', station)
+        },
+        async copyLink(station) {
+            this.$emit('copyLink', station)
+        },
+        emitAddStation() {
+            this.$emit('addStation')
+        },
+        emitEditStation(stationId) {
+            this.$emit('editStation', stationId)
         }
     },
 

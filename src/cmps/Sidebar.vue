@@ -92,8 +92,8 @@
             <h1>Couldn't find "{{ query }}"</h1>
             <h2>Try searching again using a different spelling or keyword.</h2>
         </section>
-        <LibraryStationList v-else @station-remove="removeStation" :libraryStations="libraryStations"
-            @playStation="playStation" />
+        <LibraryStationList v-else @station-remove="removeStation" @addStation="addStation" @copyLink="copyLink"
+            @editStation="editStation" :libraryStations="libraryStations" @playStation="playStation" />
     </section>
 </template>
 
@@ -249,6 +249,21 @@ export default {
             if (f === 'artists') return this.filterBy = this.filterBy === 'artists' ? '' : 'artists'
             this.filterBy = (this.filterBy === f) ? 'playlists' : f
         },
+        async copyLink(station) {
+            const stationId = station.owner._id ? station._id : station.spotifyId
+            const stationType = station.isAlbum ? 'album' : station.isArtist ? 'artist' : 'station'
+            try {
+                await navigator.clipboard.writeText(`https://tuneify.onrender.com/#/${stationType}/${stationId}`)
+                showSuccessMsg('Link copied to clipboard')
+            }
+            catch (err) {
+                console.log(err)
+            }
+        },
+        editStation(stationId) {
+            this.$router.push(`/station/${stationId}`)
+            document.body.classList.add('se-modal-open')
+        }
     },
 
     computed: {

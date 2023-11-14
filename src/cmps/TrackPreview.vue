@@ -87,7 +87,7 @@
                     </div>
                     <hr v-if="createdStations?.length">
                     <div class="sub-dropdown-item" v-for="idx in createdStations?.length"
-                        @click="onAddTrack(track, createdStations[idx - 1]._id, $event)">
+                        @click.stop="onAddTrack(track, createdStations[idx - 1]._id, $event)">
                         {{ createdStations[idx - 1].name }}
                     </div>
                 </div>

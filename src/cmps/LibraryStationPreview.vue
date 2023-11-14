@@ -2,9 +2,9 @@
     <article class="library-station-preview" :class="{ 'grid': libraryView === 'grid' }" :style="containerStyles"
         :title="title">
         <img v-if="libraryView !== 'compact'" :src="imgUrl[1].url || imgUrl" alt="" :style="imgStyles">
-        <button v-if="playBtnTerms" @click="onPlayStation" class="play-btn" :class="{ 'grid-mode3': gridMode === '3' }"
+        <button v-if="playBtnTerms" @click.stop="onPlayStation" class="play-btn" :class="{ 'grid-mode3': gridMode === '3' }"
             v-icon="'mPlay'"></button>
-        <button v-if="pauseBtnTerms" @click="pauseTrack" class="play-btn pause-btn"
+        <button v-if="pauseBtnTerms" @click.stop="pauseTrack" class="play-btn pause-btn"
             :class="{ 'grid-mode3': gridMode === '3' }" v-icon="'pause'"></button>
         <h5 v-if="terms" :class="{ 'is-current': currStation?._id === station._id }">{{ stationName }}</h5>
         <small v-if="terms">
@@ -51,7 +51,7 @@ export default {
             return this.$store.getters.sidebarCollapsed
         },
         imgUrl() {
-            return this.station.imgUrl || this.station.tracks[0]?.imgUrl || 'https://res.cloudinary.com/dys1sj4cd/image/upload/v1697929192/note_cu2ps5.png'
+            return this.station.imgUrl || this.station.tracks[0]?.imgUrl || 'https://res.cloudinary.com/dys1sj4cd/image/upload/v1699955746/note1_zaakp6.png'
         },
         containerStyles() {
             const columnGap = this.sidebarCollapsed ? '0' : '0.8rem'
@@ -74,20 +74,18 @@ export default {
             return this.currStation?._id === id && this.$store.getters.isCurrTrackPlaying
         },
         playBtnTerms() {
-            return !(this.isStationPlaying || this.libraryView !== 'grid' || this.gridMode === '1' || this.gridMode === '2' || this.sidebarCollapsed)
+            return !(this.isStationPlaying || this.libraryView !== 'grid' || this.gridMode === '1' || this.gridMode === '2' || this.sidebarCollapsed || !this.station.tracks.length)
         },
         pauseBtnTerms() {
-            return !(!this.isStationPlaying || this.libraryView !== 'grid' || this.gridMode === '1' || this.gridMode === '2' || this.sidebarCollapsed)
+            return !(!this.isStationPlaying || this.libraryView !== 'grid' || this.gridMode === '1' || this.gridMode === '2' || this.sidebarCollapsed || !this.station.tracks.length)
         }
     },
 
     methods: {
-        onPlayStation(ev) {
-            ev.stopPropagation()
+        onPlayStation() {
             this.$emit('playStation', this.station)
         },
-        pauseTrack(ev) {
-            ev.stopPropagation()
+        pauseTrack() {
             eventBus.emit('trackPaused')
         }
     }

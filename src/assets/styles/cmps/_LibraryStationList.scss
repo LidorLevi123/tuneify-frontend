@@ -34,24 +34,33 @@
             padding-inline-end: 1rem;
         }
 
-        .dlt-btn {
+        .context-menu {
             padding: .25rem;
-            position: absolute;
+            position: fixed;
             cursor: pointer;
-            color: $clr3;
             background-color: $clr6;
-            width: 10rem;
+            width: 13.75rem;
             border-radius: .2rem;
+            z-index: 1;
 
             .menu-item {
+                display: flex;
+                align-items: center;
+                gap: .75rem;
                 color: #FFFFFFE6;
                 border-radius: .2rem;
-                padding: .4rem .7rem;
+                padding: .4rem .5rem .4rem .75rem;
                 font-size: 0.875rem;
+                height: 2.19rem;
 
                 &:hover {
-                    background-color: $clr12;
+                    background-color: $clr13;
                 }
+            }
+
+            hr {
+                margin: 0;
+                border-color: $clr12;
             }
         }
     }
