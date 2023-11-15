@@ -165,6 +165,8 @@
                 border-radius: 50%;
                 cursor: pointer;
                 transition: .3s;
+                opacity: 0;
+                animation: fadeIn .4s ease-in-out forwards;
 
                 path {
                     fill: $clr3;
@@ -180,8 +182,6 @@
             }
         }
 
-
-
         .search-container {
             display: flex;
             align-items: center;
@@ -191,19 +191,12 @@
             border-radius: .2rem;
             height: 2rem;
             width: 11.8rem;
-            animation: createBox .2s ease-in-out;
+            animation: openInput .2s ease-in-out;
             transform-origin: left;
+            animation-iteration-count: 1;
 
-            @keyframes createBox {
-                from {
-                    transform: scaleX(.5);
-                    opacity: .5;
-                }
-
-                to {
-                    transform: scaleX(1);
-                    opacity: 1;
-                }
+            &.close {
+                animation: closeInput .3s ease-in-out;
             }
 
             span path {

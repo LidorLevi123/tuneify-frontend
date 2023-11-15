@@ -238,8 +238,13 @@ export default {
         },
         toggleSearch() {
             if (this.query) return
-            this.searchOpen = !this.searchOpen
-            if (this.searchOpen) this.$nextTick(() => this.$refs.searchInput.focus())
+            if (this.searchOpen) {
+                document.querySelector('.search-container').classList.add('close')
+                setTimeout(() => this.searchOpen = false, 250)
+            } else {
+                this.searchOpen = true
+                this.$nextTick(() => this.$refs.searchInput.focus())
+            }
         },
         setLibraryView(view) {
             this.$store.commit('setLibraryView', { view, gridMode: this.gridMode })

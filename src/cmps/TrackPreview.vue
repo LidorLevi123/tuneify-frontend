@@ -193,6 +193,7 @@ export default {
         onMouseOver() { this.isHovered = true },
         onMouseLeave() { this.isHovered = false },
         onAddTrack(track, stationId) {
+            document.querySelector('.btn-like').classList.add('pulse')
             this.$emit('track-add', track, stationId)
             this.hideMenu()
         },
@@ -200,6 +201,7 @@ export default {
             this.$emit('track-remove', trackId)
         },
         onDislikeTrack(trackId) {
+            document.querySelector('.btn-dislike').classList.add('shake')
             this.$emit('track-dislike', trackId)
             eventBus.emit('dislikeTrack', trackId)
             this.hideMenu()
