@@ -12,7 +12,7 @@
                         class="station-img" :src="station.imgUrl" alt="" @load="setBackgroundClr" ref="stationImg" />
 
                     <img v-else-if="this.station.owner._id && this.station.tracks.length && this.station.tracks.length < 4"
-                        crossorigin="anonymous" class="station-img" :src="station.tracks[0]?.imgUrl[1].url" alt=""
+                        crossorigin="anonymous" class="station-img" :src="station.tracks[0]?.imgUrl[0].url" alt=""
                         @load="setBackgroundClr" ref="stationImg" />
 
                     <div v-else-if="this.station.owner._id && this.station.tracks.length >= 4" class="collage-container">
@@ -83,7 +83,8 @@
                 <UserList v-show="!isShare" :users="topicUsers" />
             </section>
             <TrackList @track-clicked="clickTrack" @track-add="addTrack" @track-remove="removeTrack"
-                @track-dislike="dislikeTrack" @station-update="loadStation" @search="getSearchRes" :station="station" />
+                @track-dislike="dislikeTrack" @station-update="loadStation" @search="getSearchRes"
+                @getRecommendations="getRecommendations" :station="station" />
             <section class="artist-discography" v-if="station.isArtist">
                 <h1 class="title">Discography</h1>
                 <section class="filter-btns">
@@ -404,6 +405,10 @@ export default {
             this.filterBy = filterBy
             if (!filterBy) this.artistAlbums = discography
             else this.artistAlbums = discography.filter(station => station.type === filterBy)
+        },
+        getRecommendations() {
+            const trackIds = this.station.tracks.map(track => track.id).slice(0, 5).join(',')
+            this.$store.dispatch({ type: 'getRecommendations', trackIds })
         }
     },
     watch: {

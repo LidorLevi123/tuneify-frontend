@@ -58,10 +58,48 @@
         color: $clr2;
         background-color: transparent;
         border: none;
+        font-family: Circular;
         font-size: 0.875rem;
         font-weight: 700;
-        margin: 2rem 1rem 0 0;
-        margin-left: auto;
-
+        margin: 2rem 1rem 0 auto;
     }
+
+    .recommendations {
+
+        .recommendations-header {
+            padding-block: 2rem;
+            display: flex;
+            flex-direction: column;
+
+            @include for-mobile-layout {
+                padding-inline-start: .5rem;
+            }
+
+            h1 {
+                color: $clr2;
+                font-size: 1.5rem;
+                font-family: CircularSpTitle;
+            }
+
+            span {
+                font-size: 0.875rem;
+                line-height: 1;
+            }
+        }
+
+        .refresh-btn {
+            color: $clr3;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: .02s;
+            padding: .5rem 2rem;
+            margin: 2rem 0 2rem auto;
+
+            &:hover {
+                color: $clr2;
+                scale: 104%;
+            }
+        }
+    }
+
 }

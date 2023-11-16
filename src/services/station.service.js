@@ -17,7 +17,8 @@ export const stationService = {
     getStationsForHome,
     getAllStations,
     removeStationsByName,
-    getArtistData
+    getArtistData,
+    getRecommendations
 }
 
 window.cs = stationService // for console usage
@@ -152,4 +153,9 @@ async function getArtistData(id) {
     catch (error) {
         console.error('Error fetching artist data:', error)
     }
+}
+
+async function getRecommendations(id) {
+    const recommendations = await spotifyService.getSpotifyItems({ type: 'recommendations', id })
+    return recommendations
 }

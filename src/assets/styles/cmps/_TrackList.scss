@@ -27,14 +27,17 @@
         }
     }
 
-    h1 {
-        color: $clr2;
-        font-size: 1.5rem;
-        font-family: CircularSpTitle;
-        padding: 1.5rem;
+    .artist-header {
 
-        @include for-mobile-layout {
-            padding: 1.5rem .5rem;
+        h1 {
+            color: $clr2;
+            font-size: 1.5rem;
+            font-family: CircularSpTitle;
+            padding: 1.5rem;
+
+            @include for-mobile-layout {
+                padding: 1.5rem .5rem;
+            }
         }
     }
 

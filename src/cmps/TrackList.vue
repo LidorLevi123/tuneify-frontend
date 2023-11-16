@@ -9,7 +9,7 @@
             <span class="mq" :style="{ opacity: station?.isAlbum ? '0' : '1' }">Date added</span>
             <span v-icon="'clock'"></span>
         </div>
-        <div v-if="station?.isArtist">
+        <div v-if="station?.isArtist" class="artist-header">
             <h1>Popular</h1>
         </div>
         <ul v-if="station?.tracks.length" class="clean-list track-list" @touchend="fixActionRestriction">
@@ -33,7 +33,8 @@
             </template>
 
         </ul>
-        <TrackSearch v-if="canShowSearch && station" @search="onLoadTracks" @track-add="onAddTrack" :station="station" />
+        <TrackSearch v-if="canShowSearch && station" @search="onLoadTracks" @track-add="onAddTrack"
+            @getRecommendations="getRecommendations" :station="station" />
 
         <ul v-if="tracks?.length" class="clean-list">
             <li v-for="(track, idx) in tracks" :key="track.id" @click="onTrackClicked(idx)">
@@ -159,6 +160,9 @@ export default {
         logScroll({ scrollTop }) {
             this.scrollPosition = scrollTop
         },
+        getRecommendations() {
+            this.$emit('getRecommendations')
+        }
     },
 
     components: {

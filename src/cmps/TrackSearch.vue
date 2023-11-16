@@ -13,8 +13,16 @@
             </div>
             <button @click="toggleModal" class="close-btn" v-icon="`bClose`"></button>
         </section>
-        <button v-if="!modalOpen" @click="toggleModal" class="find-btn">Find more</button>
+        <button v-else @click="toggleModal" class="find-btn">Find more</button>
         <SearchList :tracks="tracks" v-if="modalOpen" :station="station" @track-add="onAddTrack" />
+        <section v-if="station.tracks.length && !modalOpen && recommendations.length" class="recommendations">
+            <div class="recommendations-header">
+                <h1>Recommended</h1>
+                <span>Based on what's in this playlist</span>
+            </div>
+            <SearchList :tracks="tracksToDisplay" :station="station" @track-add="onAddTrack" />
+            <button @click="cycleRecommendations" class="find-btn refresh-btn">Refresh</button>
+        </section>
     </section>
 </template>
 
@@ -32,15 +40,28 @@ export default {
         return {
             query: '',
             modalOpen: true,
-            scrollDown: false
+            scrollDown: false,
+            currPage: 0
         }
     },
     computed: {
         tracks() {
             return this.$store.getters.searchRes.tracks
-        }
+        },
+        recommendations() {
+            return this.$store.getters.recommendations
+        },
+        tracksToDisplay() {
+            const start = this.currPage * 10
+            const end = start + 10
+            return this.recommendations.slice(start, end)
+        },
     },
     created() {
+        if (this.station.tracks.length) {
+            this.modalOpen = false
+            this.getRecommendations()
+        }
         this.search = utilService.debounce(() => {
             this.$emit('search', this.query)
             if (!this.scrollDown && this.query && window.innerWidth > 890) {
@@ -61,6 +82,12 @@ export default {
         },
         scrollToResults() {
             eventBus.emit('scrollDown')
+        },
+        getRecommendations() {
+            this.$emit('getRecommendations')
+        },
+        cycleRecommendations() {
+            this.currPage = (this.currPage + 1) % 10
         }
     },
     watch: {
@@ -71,6 +98,12 @@ export default {
             },
             deep: true,
         },
+        'station._id': {
+            handler() {
+                this.getRecommendations()
+            },
+            deep: true,
+        }
     },
     components: {
         SearchList,

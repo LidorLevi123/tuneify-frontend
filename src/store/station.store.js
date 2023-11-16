@@ -13,6 +13,7 @@ export const stationStore = {
         currTrackIdx: -1,
         isCurrTrackPlaying: false,
         searchRes: [],
+        recommendations: [],
     },
     getters: {
         isRsbOpen({ isRsbOpen }) { return isRsbOpen },
@@ -26,6 +27,7 @@ export const stationStore = {
         currTrack({ currStation, currTrackIdx }) { return currStation?.tracks[currTrackIdx] },
         isCurrTrackPlaying({ isCurrTrackPlaying }) { return isCurrTrackPlaying },
         searchRes({ searchRes }) { return searchRes },
+        recommendations({ recommendations }) { return recommendations }
     },
     mutations: {
         toggleRsb(state) {
@@ -108,6 +110,9 @@ export const stationStore = {
                 if (idx === -1) return
                 state.stations.splice(idx, 1)
             }
+        },
+        setRecommendations(state, { recommendations }) {
+            state.recommendations = recommendations
         }
     },
     actions: {
@@ -234,6 +239,16 @@ export const stationStore = {
                 console.log(err.message)
                 throw new Error('Could not update track')
             }
+        },
+        async getRecommendations({ commit }, { trackIds }) {
+            try {
+                const recommendations = await stationService.getRecommendations(trackIds)
+                commit({ type: 'setRecommendations', recommendations })
+            } catch (err) {
+                console.log(err.message)
+                throw new Error('Could not get recommendations')
+            }
+
         }
     }
 }
