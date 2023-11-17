@@ -24,6 +24,12 @@
         "backgroundColor": "#537aa1"
     },
     {
+        "id": "0JQ5DAqbMKFQ00XGBls6ym",
+        "name": "Hip-Hop",
+        "imgUrl": "https://i.scdn.co/image/ab67fb8200005caf9e3dea60be755ccd97b7351f",
+        "backgroundColor": "#8d67ab"
+    },
+    {
         "id": "0JQ5DAqbMKFCbimwdOYlsl",
         "name": "Focus",
         "imgUrl": "https://i.scdn.co/image/ab67706f00000002e4eadd417a05b2546e866934",
@@ -34,6 +40,18 @@
         "name": "Rock",
         "imgUrl": "https://i.scdn.co/image/ab67fb8200005cafae7e69beb88f16969641b53e",
         "backgroundColor": "#7358ff"
+    },
+    {
+        "id": "0JQ5DAqbMKFFtlLYUHv8bT",
+        "name": "Alternative",
+        "imgUrl": "https://i.scdn.co/image/ab67fb8200005caf106e29a9f294cb4265da6af9",
+        "backgroundColor": "#af2896"
+    },
+    {
+        "id": "0JQ5DAqbMKFPw634sFwguI",
+        "name": "EQUAL",
+        "imgUrl": "https://i.scdn.co/image/ab67fb8200005caf9ed6e364e8839210dc4dbff7",
+        "backgroundColor": "#148a08"
     },
     {
         "id": "0JQ5DAqbMKFCWjUTdzaG0e",
@@ -90,10 +108,28 @@
         "backgroundColor": "#283ea3"
     },
     {
+        "id": "0JQ5DAqbMKFLVaM30PMBm4",
+        "name": "Summer",
+        "imgUrl": "https://i.scdn.co/image/ab67fb8200005caf097a46192e6bb67e52cdff60",
+        "backgroundColor": "#283ea3"
+    },
+    {
         "id": "featured",
         "name": "Featured Playlists",
         "imgUrl": "https://i.scdn.co/image/ab67706f00000003d1e67ca86b9727635bd5bc69",
         "backgroundColor": "#283ea3"
+    },
+    {
+        "id": "0JQ5DAqbMKFEZPnFQSFB1T",
+        "name": "R&B",
+        "imgUrl": "https://i.scdn.co/image/ab67fb8200005caff4e38be86ca48a3b10884ae3",
+        "backgroundColor": "#ba5d07"
+    },
+    {
+        "id": "0JQ5DAqbMKFIpEuaCnimBj",
+        "name": "Soul",
+        "imgUrl": "https://i.scdn.co/image/ab67fb8200005cafd82e2c83fe100a89e9cbb2a2",
+        "backgroundColor": "#dc148c"
     },
     {
         "id": "0JQ5DAqbMKFAJ5xb0fwo9m",
@@ -135,7 +171,7 @@
         "id": "0JQ5DAqbMKFPrEiAOxgac3",
         "name": "Classical",
         "imgUrl": "https://i.scdn.co/image/ab67fb8200005caf12809992dfc5b318892ea07b",
-        "backgroundColor": "#e1118b"
+        "backgroundColor": "#7d4b32"
     },
     {
         "id": "0JQ5DAqbMKFObNLOHydSW8",
@@ -156,6 +192,12 @@
         "backgroundColor": "#1e3264"
     },
     {
+        "id": "funk",
+        "name": "Funk",
+        "imgUrl": "https://i.scdn.co/image/ab67fb8200005cafbb0e4ea229824157eee7467d",
+        "backgroundColor": "#e61e32"
+    },
+    {
         "id": "0JQ5DAqbMKFF9bY76LXmfI",
         "name": "Frequency",
         "imgUrl": "https://t.scdn.co/images/cad629fb65a14de4beddb38510e27cb1",
@@ -166,6 +208,12 @@
         "name": "Trending",
         "imgUrl": "https://i.scdn.co/image/ab67fb8200005caf1867113f5218598847550acd",
         "backgroundColor": "#ff4632"
+    },
+    {
+        "id": "0JQ5DAqbMKFFoimhOqWzLB",
+        "name": "Kids & Family",
+        "imgUrl": "https://i.scdn.co/image/ab67fb8200005caf8a04560a209b3f32165ea8a2",
+        "backgroundColor": "#8d67ab"
     },
     {
         "id": "0JQ5DAqbMKFKLfwjuJMoNC",

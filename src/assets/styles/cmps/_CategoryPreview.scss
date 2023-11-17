@@ -1,17 +1,10 @@
 .category-preview {
     position: relative;
-    // width: 11.9rem;
-    // height: 11.9rem;
     aspect-ratio: 1;
     font-size: 2rem;
     border-radius: 0.5rem;
     overflow: hidden;
     cursor: pointer;
-
-    @include for-mobile-layout {
-        // width: 100%;
-        // height: 100%;
-    }
 
     h1 {
         padding-inline-start: 0.5rem;
@@ -20,7 +13,7 @@
         font-weight: normal;
 
         @include for-mobile-layout {
-            font-size: 1.2rem;
+            font-size: 1.8rem;
             margin-block-end: 3rem;
         }
     }

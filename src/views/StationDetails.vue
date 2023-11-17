@@ -100,7 +100,7 @@
                 </section>
                 <StationList :stations="artistAlbums" />
             </section>
-            <section class="artist-discography" v-if="station.isArtist && artistAppearOn.length">
+            <section class="artist-discography" v-if="station.isArtist && artistAppearOn?.length">
                 <h1 class="title">Appears On</h1>
                 <StationList :stations="artistAppearOn" />
             </section>
@@ -134,7 +134,7 @@ import {
     SOCKET_EMIT_GET_TOPIC_USERS,
     SOCKET_EVENT_SET_TOPIC_USERS,
     socketService
-} from '../services/socket.service.js';
+} from '../services/socket.service.js'
 
 
 export default {
@@ -249,11 +249,19 @@ export default {
             try {
                 const path = this.$route.path
                 const stationType = path.startsWith('/station') ? 'station' : path.startsWith('/album') ? 'album' : 'artist'
-
                 const station = await this.$store.dispatch({ type: 'getStation', stationId: this.stationId, stationType })
+
                 if (!station) return this.$router.push('/')
 
                 this.station = station
+
+                if (station._id && !station.isArtist && !station.isAlbum) {
+                    const updatedStation = await stationService.checkForChanges(station)
+                    if (updatedStation) {
+                        console.log('updated station')
+                        this.station = updatedStation
+                    }
+                }
 
                 if (station.isArtist) {
                     this.artistAlbums = station.albums.filter(album => album.group !== 'appears_on')
@@ -261,14 +269,14 @@ export default {
                     this.setFilterBy(this.filterBy)
                 }
 
+                if (station.isAlbum) this.loadArtist()
+
                 this.$emit('station', station)
                 this.setTracksTotalDuration()
 
-                if (station.isAlbum) this.loadArtist()
-
             } catch (err) {
-                console.log(err.message);
-                showErrorMsg('Could not set current station');
+                console.log(err.message)
+                showErrorMsg('Could not set current station')
             }
         },
         async loadArtist() {

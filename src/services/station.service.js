@@ -18,7 +18,8 @@ export const stationService = {
     getAllStations,
     removeStationsByName,
     getArtistData,
-    getRecommendations
+    getRecommendations,
+    checkForChanges
 }
 
 window.cs = stationService // for console usage
@@ -36,45 +37,40 @@ async function getAllStations() {
 async function getById(spotifyId, type = 'station') {
     try {
         let dbStation = await httpService.get(BASE_URL + spotifyId)
-        let spotifyStation
-
-        if (!dbStation) {
+        if (dbStation) return dbStation
+        else {
+            let spotifyStation
             console.log('fetching from Spotify')
             if (type === 'artist') spotifyStation = await getArtistData(spotifyId)
             else spotifyStation = await spotifyService.getSpotifyItems({ type: type, id: spotifyId })
 
-            if (spotifyStation) dbStation = await httpService.post(BASE_URL, spotifyStation)
-            return dbStation
-        } else {
-            if (dbStation.owner?.fullname !== 'Tuneify') return dbStation
-
-            spotifyStation = await spotifyService.getSpotifyItems({ type: type, id: dbStation.spotifyId })
-
-            if (_stationsDifferent(spotifyStation, dbStation)) {
-                console.log('changed - updating from Spotify')
-                spotifyStation._id = dbStation._id
-                save(spotifyStation)
-
-                return spotifyStation
-            } else {
-                console.log('station unchanged - fetching from DB')
-                return dbStation
-            }
+            if (spotifyStation) await httpService.post(BASE_URL, spotifyStation)
+            return spotifyStation
         }
     } catch (error) {
         console.error('Error fetching data:', error)
     }
 }
 
-function _stationsDifferent(spotify, db) {
-    return spotify.tracks.some((track, i) => db.tracks[i].id !== track.id)
+async function checkForChanges(station) {
+    try {
+        const spotifyStation = await spotifyService.getSpotifyItems({ type: 'station', id: station.spotifyId })
+        if (spotifyStation.snapshot_id === station.snapshot_id) return null
+        else {
+            spotifyStation._id = station._id
+            return save(spotifyStation)
+        }
+    }
+    catch (error) {
+        console.error('Error fetching data:', error)
+    }
 }
-
 
 async function remove(stationId) {
     const station = await httpService.delete('station/byid/' + stationId)
     return station
 }
+
 async function removeStationsByName(term) {
     return await httpService.delete('station/byname/' + term)
 }
