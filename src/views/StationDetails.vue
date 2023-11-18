@@ -222,12 +222,15 @@ export default {
         userStations() {
             return this.station.owner.fullname !== 'Tuneify' && this.station.name !== 'Liked Songs' && !this.station.isAlbum && !this.station.isArtist
         },
+        recommendationsStation() {
+            return this.$store.getters.recommendationsStation
+        }
     },
     async created() {
         await this.loadStation()
         socketService.on(SOCKET_EVENT_SET_TOPIC_USERS, this.setTopicUsers)
         historyTracker.push(this.$route.fullPath)
-        eventBus.on('clickFromSearchRes', this.clickTrack)
+        eventBus.on('clickFromUserPlaylist', this.clickTrack)
         eventBus.on('scrollDown', this.scrollDown)
     },
     unmounted() {
@@ -255,7 +258,7 @@ export default {
 
                 this.station = station
 
-                if (station._id && !station.isArtist && !station.isAlbum) {
+                if (station._id && station.snapshot_id) {
                     const updatedStation = await stationService.checkForChanges(station)
                     if (updatedStation) {
                         console.log('updated station')
@@ -373,13 +376,14 @@ export default {
             if (this.station.owner.fullname === 'Tuneify' || this.station._id === this.user.likedId || this.station.isAlbum || this.station.isArtist) return
             document.body.classList.add('se-modal-open')
         },
-        clickTrack(trackIdx, isfromSearch) {
+        clickTrack(trackIdx, source) {
             trackIdx = trackIdx === -1 ? 0 : trackIdx
 
             if (trackIdx === this.currTrackIdx && this.isPlaying) this.pauseTrack()
             else {
                 this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
-                if (isfromSearch) this.$store.commit({ type: 'setCurrStation', station: this.searchResStation })
+                if (source === 'search') this.$store.commit({ type: 'setCurrStation', station: this.searchResStation })
+                else if (source === 'recommendations') this.$store.commit({ type: 'setCurrStation', station: this.recommendationsStation })
                 else this.setViewedStationAsCurrent()
                 eventBus.emit('trackClicked')
             }

@@ -17,13 +17,15 @@ export default {
     props: {
         station: { type: Object },
         tracks: { type: Array },
+        fromRecommendations: { type: Boolean },
     },
     methods: {
         onAddTrack(track, stationId) {
             this.$emit('track-add', track, stationId)
         },
         onTrackClicked(trackIdx) {
-            eventBus.emit('clickFromSearchRes', trackIdx, true)
+            if (this.fromRecommendations) eventBus.emit('clickFromUserPlaylist', trackIdx, 'recommendations')
+            else eventBus.emit('clickFromUserPlaylist', trackIdx, 'search')
         },
     },
     computed: {

@@ -51,9 +51,13 @@
         overflow: hidden;
 
         .artist-name {
-            color: $clr3;
             font-size: .875rem;
+
+            &:hover {
+                text-decoration: underline;
+            }
         }
+
 
         .track-name,
         .track-artists {
@@ -88,8 +92,10 @@
 
 }
 
-.track-album {
-    color: $clr3;
+.track-album a {
+    &:hover {
+        text-decoration: underline;
+    }
 
     @include for-mobile-layout {
         display: none;

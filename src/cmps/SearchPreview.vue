@@ -18,9 +18,11 @@
                 </div>
             </section>
         </div>
-        <RouterLink :to="`/album/${track.albumId}`" class="track-album" @click.stop>
-            <span class="track-album">{{ track.album }}</span>
-        </RouterLink>
+        <span class="track-album">
+            <RouterLink :to="`/album/${track.albumId}`" class="track-album" @click.stop>
+                {{ track.album }}
+            </RouterLink>
+        </span>
         <button class="add-btn" @click.stop="onAddTrack(track, station?._id)">Add</button>
     </article>
 </template>

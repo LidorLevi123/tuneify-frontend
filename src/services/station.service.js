@@ -44,8 +44,7 @@ async function getById(spotifyId, type = 'station') {
             if (type === 'artist') spotifyStation = await getArtistData(spotifyId)
             else spotifyStation = await spotifyService.getSpotifyItems({ type: type, id: spotifyId })
 
-            if (spotifyStation) await httpService.post(BASE_URL, spotifyStation)
-            return spotifyStation
+            if (spotifyStation) return await httpService.post(BASE_URL, spotifyStation)
         }
     } catch (error) {
         console.error('Error fetching data:', error)
@@ -76,7 +75,7 @@ async function removeStationsByName(term) {
 }
 
 async function save(station) {
-    if (station.name.includes('Search results')) return
+    if (station.name.includes('Search results') || station.name.includes('Recommendations')) return
     if (station._id) return await httpService.put(BASE_URL + station._id, station)
     else return await httpService.post(BASE_URL, station)
 }

@@ -37,6 +37,7 @@
     img {
         grid-row: span 2;
         height: 3rem;
+        aspect-ratio: 1;
         object-fit: cover;
         height: 100%;
     }
