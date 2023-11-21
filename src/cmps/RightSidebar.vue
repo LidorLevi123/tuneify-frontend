@@ -78,7 +78,7 @@ export default {
             document.body.classList.remove('ad-modal-open')
         },
         async getArtistData(artist, artistId) {
-            const [metaData, { imgUrl, followers }] = await Promise.all([wikiService.getArtistData(artist), stationService.getArtistData(artistId)])
+            const [metaData, { imgUrl, followers }] = await Promise.all([wikiService.getArtistData(artist), stationService.getArtistData(artistId, true)])
             this.artistImage = imgUrl
             this.artistSnippet = metaData
             this.artistFollowers = followers

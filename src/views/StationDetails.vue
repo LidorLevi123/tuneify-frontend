@@ -285,7 +285,7 @@ export default {
         async loadArtist() {
             const artistId = this.station.tracks[0].artistId
             try {
-                this.artist = await stationService.getArtistData(artistId)
+                this.artist = await stationService.getArtistData(artistId, true)
             }
             catch (err) {
                 console.log(err.message)

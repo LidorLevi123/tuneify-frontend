@@ -127,7 +127,18 @@ function getEmptyStation() {
     }
 }
 
-async function getArtistData(id) {
+async function getArtistData(id, light = false) {
+
+    if (light) {
+        try {
+            console.log('fetching light artist data');
+            const artist = await spotifyService.getSpotifyItems({ type: 'artist', id })
+            return artist
+        }
+        catch (error) {
+            console.error('Error fetching artist data:', error)
+        }
+    }
 
     try {
         const [artist, artistTopTracks, artistAlbums, artistRelatedArtists] = await Promise.all([
