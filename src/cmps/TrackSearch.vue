@@ -84,7 +84,6 @@ export default {
         getRecommendations() {
             if (this.station.tracks.length) {
                 this.modalOpen = false
-                console.log('gettin Recommendations')
                 this.$emit('getRecommendations')
             }
         },

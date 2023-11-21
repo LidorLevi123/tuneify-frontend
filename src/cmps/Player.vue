@@ -266,7 +266,12 @@ export default {
             // get youtubeId from YT
             try {
                 console.log('Sending request to yt id...')
-                const term = this.currTrack.artists[0].name + ' ' + this.currTrack.title
+
+                let term
+                if (this.currTrack.artists[1]?.name) term = `${this.currTrack.artists[1].name} ${this.currTrack.artists[0].name} ${this.currTrack.title} `
+                else term = `${this.currTrack.artists[0].name} ${this.currTrack.title}`
+
+                console.log(term);
                 const youtubeId = await ytService.queryYT(term)
                 // const youtubeId = this.getDemoYoutubeId()
                 await this.$store.dispatch({ type: 'updateTrack', youtubeId })
