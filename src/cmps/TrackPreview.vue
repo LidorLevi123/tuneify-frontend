@@ -38,7 +38,7 @@
 
             <div v-if="showDropdown" class="dropdown" v-clickOutside="hideMenu"
                 :style="{ top: dropdownTop + 'px', left: dropdownLeft + 'px' }" ref="dropdown">
-                <div class="dropdown-item sb" @mouseenter="popSubDropdown">
+                <div class="dropdown-item sb" @mouseenter="popSubDropdown" @click.stop>
                     <div class="wrapper">
                         <span v-icon="'createList'" class="df ai"></span>
                         <div>Add to playlist</div>

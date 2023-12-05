@@ -17,6 +17,11 @@ $heart-scale: 1.1;
         justify-content: center;
         margin-block-start: -0.3rem;
         margin-inline-start: -1.7rem;
+
+        @include for-mobile-layout {
+            margin-block-start: -1rem;
+            margin-inline-start: -.3rem;
+        }
     }
 
     .label {

@@ -93,7 +93,7 @@
             <h2>Try searching again using a different spelling or keyword.</h2>
         </section>
         <LibraryStationList v-else @station-remove="removeStation" @addStation="addStation" @copyLink="copyLink"
-            @editStation="editStation" :libraryStations="libraryStations" @playStation="playStation" />
+            @editStation="editStation" :libraryStations="libraryStations" :query="query" @playStation="playStation" />
     </section>
 </template>
 
@@ -102,6 +102,7 @@ import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service'
 import { stationService } from '../services/station.service'
 import LibraryStationList from './LibraryStationList.vue'
 import { eventBus } from '../services/event-bus.service'
+import { utilService } from '../services/util.service'
 export default {
     name: 'Sidebar',
     data() {
@@ -215,7 +216,8 @@ export default {
                 }
             }
 
-            this.libraryStations = this.libraryStations.filter(station => station.name.toLowerCase().includes(this.query.toLowerCase()))
+            this.libraryStations = this.libraryStations.filter(station => (station.owner.fullname.toLowerCase().includes(this.query.toLowerCase()) && station.isAlbum)
+                || station.name.toLowerCase().includes(this.query.toLowerCase()))
             if (this.filterBy === 'albums') this.libraryStations = this.libraryStations.filter(station => station.isAlbum)
             else if (this.filterBy === 'artists') this.libraryStations = this.libraryStations.filter(station => station.isArtist)
             else if (this.filterBy === 'playlists') this.libraryStations = this.libraryStations.filter(station => !station.isAlbum && !station.isArtist)
@@ -322,7 +324,10 @@ export default {
     },
     watch: {
         query: function () {
-            this.filterSortLibrary()
+            this.search = utilService.debounce(() => {
+                this.filterSortLibrary()
+            }, 300)
+            this.search()
         },
         filterBy: function () {
             this.filterSortLibrary()

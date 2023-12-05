@@ -8,7 +8,7 @@
 
                     <li @click="goToDetails(station)" :class="{ active: stationActive(station) }"
                         @contextmenu.prevent="showContextMenu(station._id, $event)">
-                        <LibraryStationPreview :station="station" @playStation="playStation" />
+                        <LibraryStationPreview :station="station" :query="query" @playStation="playStation" />
 
                         <div v-if="contextMenuOpenMap[station._id] && station.name !== 'Liked Songs'" class="context-menu"
                             v-clickOutside="() => contextMenuOpenMap[station._id] = false"
@@ -47,12 +47,12 @@
 import { Container, Draggable } from 'vue3-smooth-dnd'
 import LibraryStationPreview from './LibraryStationPreview.vue'
 import { userService } from '../services/user.service'
-import { showSuccessMsg } from '../services/event-bus.service'
 
 export default {
     name: 'LibraryStationList',
     props: {
         libraryStations: { type: Array, required: true },
+        query: { type: String },
     },
     data() {
         return {

@@ -6,7 +6,8 @@ export const ytService = {
 
 async function queryYT(term) {
     try {
-        const youtubeId = await httpService.get('youtube/', term)
+        const { youtubeId, currApiKeyIdx } = await httpService.get('youtube/', term)
+        console.log(`got response using api key ${currApiKeyIdx}`)
         return youtubeId
     }
     catch (error) {

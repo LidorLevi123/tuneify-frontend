@@ -15,13 +15,16 @@ import { eventBus } from './services/event-bus.service'
 export default {
 
   async created() {
-
     try {
-      await this.$store.dispatch({ type: 'getStationsForHome' })
-      let user = userService.getLoggedinUser()
+      const user = userService.getLoggedinUser()
+
+      await Promise.all([
+        this.$store.dispatch({ type: 'loadUserStations', userId: user._id }),
+        this.$store.dispatch({ type: 'getStationsForHome' })
+      ])
 
       if (!user) user = await this.$store.dispatch({ type: 'login', userCred: { username: 'guest', password: '123' } })
-      await this.$store.dispatch({ type: 'loadUserStations', userId: user._id })
+
       if (user) eventBus.emit('duplicateStationsToLibrary')
 
     } catch (err) {

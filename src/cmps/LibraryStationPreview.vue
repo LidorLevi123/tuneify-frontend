@@ -6,7 +6,9 @@
             v-icon="'mPlay'"></button>
         <button v-if="pauseBtnTerms" @click.stop="pauseTrack" class="play-btn pause-btn"
             :class="{ 'grid-mode3': gridMode === '3' }" v-icon="'pause'"></button>
-        <h5 v-if="terms" :class="{ 'is-current': currStation?._id === station._id }">{{ stationName }}</h5>
+        <h5 v-if="terms" :class="{ 'is-current': currStation?._id === station._id }">
+            <span v-html="highlightStationName"></span>
+        </h5>
         <small v-if="terms">
             <span>{{ stationType }}</span>
             <span v-if="!station.isArtist" v-html="stationBelonging"></span>
@@ -20,9 +22,17 @@ export default {
     name: 'LibraryStationPreview',
     props: {
         station: { type: Object, required: true },
+        query: { type: String },
     },
 
     computed: {
+        highlightStationName() {
+            if (this.query && this.stationName.toLowerCase().includes(this.query.toLowerCase())) {
+                const regex = new RegExp(`(${this.query})`, 'gi')
+                return this.stationName.replace(regex, '<span style="background-color: #2e77d0; border-radius: .25rem">$1</span>')
+            }
+            return this.stationName;
+        },
         stationType() {
             if (this.station.name === 'Liked Songs' && this.station.tracks.length === 1) return '1 song'
             if (this.station.name === 'Liked Songs') return `${this.station.tracks.length} songs`
