@@ -16,14 +16,11 @@ export default {
 
   async created() {
     try {
-      const user = userService.getLoggedinUser()
+      await this.$store.dispatch({ type: 'getStationsForHome' })
 
-      await Promise.all([
-        this.$store.dispatch({ type: 'loadUserStations', userId: user._id }),
-        this.$store.dispatch({ type: 'getStationsForHome' })
-      ])
+      const user = userService.getLoggedinUser() || await this.$store.dispatch({ type: 'login', userCred: { username: 'guest', password: '123' } })
 
-      if (!user) user = await this.$store.dispatch({ type: 'login', userCred: { username: 'guest', password: '123' } })
+      await this.$store.dispatch({ type: 'loadUserStations', userId: user._id })
 
       if (user) eventBus.emit('duplicateStationsToLibrary')
 
