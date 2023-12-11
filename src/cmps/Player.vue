@@ -51,7 +51,8 @@
             <section v-show="pipWindow" class="pipContent" ref="pipContent"
                 style="position: relative; display: flex; justify-content: center;">
 
-                <img v-show="pipWindow" :src="`${currTrack?.imgUrl[0].url}`" alt="" style="width: 100%;">
+                <img v-show="pipWindow" :src="`${currTrack?.imgUrl[0].url}`" alt=""
+                    style="width: 100vw; object-fit: cover; height: 100vh;">
                 <div
                     style="justify-content: center; display: flex; height: 20%; width: 100%; position: fixed; bottom: 0px; background-color:rgba(62, 62, 62, 0.7);">
                     <button v-icon="'previousPIP'" class="previous btn" @click="previousNextVideo(-1)" title="Previous"

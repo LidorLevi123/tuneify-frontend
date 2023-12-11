@@ -19,7 +19,8 @@ export const stationService = {
     removeStationsByName,
     getArtistData,
     getRecommendations,
-    checkForChanges
+    checkForChanges,
+    getBackendLog
 }
 
 window.cs = stationService // for console usage
@@ -32,6 +33,10 @@ async function query(userId) {
 
 async function getAllStations() {
     return await httpService.get('station/getall')
+}
+
+async function getBackendLog() {
+    return await httpService.get('log')
 }
 
 async function getById(spotifyId, type = 'station') {

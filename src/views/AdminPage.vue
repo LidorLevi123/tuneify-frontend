@@ -2,6 +2,8 @@
     <section class="admin-page">
         <div class="admin-page-header">
             <h1>Admin Page</h1>
+            <button class="log-btn" @click="getLog()">show log</button>
+            <button class="log-btn" @click="getLog(true)">show only errors</button>
             <button class="print-btn" @click="printAllStations">Print all stations to console</button>
             <RouterLink to="/">
                 <button class="back-btn">back to app</button>
@@ -13,7 +15,7 @@
             <button class="delete-btn" @click="removeStations(stationNameToDelete)">delete</button>
         </section>
         <section class="delete-stations">
-            <span>Delete stations with id:</span>
+            <span>Delete station with id:</span>
             <input type="text" v-model="stationId">
             <button class="delete-btn" @click="removeStation(stationId)">delete</button>
         </section>
@@ -26,7 +28,8 @@
                 </div>
             </div>
         </div>
-        <pre>{{ user }}</pre>
+        <pre v-if="user">{{ user }}</pre>
+        <pre v-if="log">{{ log }}</pre>
     </section>
 </template>
 
@@ -38,6 +41,7 @@ export default {
     data() {
         return {
             user: null,
+            log: null,
             stationNameToDelete: null,
             stationId: null
         }
@@ -61,6 +65,7 @@ export default {
         },
         showUserDetails(user) {
             this.user = user
+            this.log = null
         },
         async printAllStations() {
             const stations = await stationService.getAllStations()
@@ -91,6 +96,14 @@ export default {
                     throw err
                 }
             }
+        },
+        async getLog(onlyErrors = false) {
+            let log = await stationService.getBackendLog()
+            if (onlyErrors) log = log.filter(line => line.msg.includes('ERROR'))
+
+            const miniLog = log.slice(-100).reverse()
+            this.log = miniLog
+            this.user = null
         }
     },
     computed: {

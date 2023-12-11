@@ -1,4 +1,7 @@
 .admin-page {
+    display: grid;
+    grid-template-rows: repeat(4, auto) 1fr;
+    gap: .5rem;
     height: 100vh;
     background-image: linear-gradient(to bottom, #282828 0%, #121212 33rem, #121212);
     overflow: auto;
@@ -6,6 +9,7 @@
     padding: 3rem;
 
     @include for-mobile-layout {
+        display: unset;
         padding: .5rem;
         user-select: text
     }
@@ -14,6 +18,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        margin-block-end: 1rem;
 
         @include for-mobile-layout {
             flex-direction: column;
@@ -24,7 +29,10 @@
     .delete-stations {
         display: flex;
         gap: .5rem;
-        margin-block: 3rem;
+
+        span {
+            width: 18rem;
+        }
 
         @include for-mobile-layout {
             flex-direction: column;
@@ -67,7 +75,8 @@
     .delete-btn,
     .print-btn,
     .remove-btn,
-    .back-btn {
+    .back-btn,
+    .log-btn {
         border: none;
         color: $clr2;
         background-color: rgba(0, 0, 0, 0.54);
@@ -81,5 +90,10 @@
         &:hover {
             background-color: $clr9;
         }
+    }
+
+    pre {
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 }
