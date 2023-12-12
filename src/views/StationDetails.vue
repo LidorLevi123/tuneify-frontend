@@ -249,6 +249,7 @@ export default {
             if (container) container.scrollBy({ top: 600, behavior: 'smooth' })
         },
         async loadStation() {
+            this.station = null
             try {
                 const path = this.$route.path
                 const stationType = path.startsWith('/station') ? 'station' : path.startsWith('/album') ? 'album' : 'artist'

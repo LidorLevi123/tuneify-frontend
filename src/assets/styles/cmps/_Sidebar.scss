@@ -11,11 +11,11 @@
     @include for-mobile-layout {
         width: auto;
         height: 100%;
+        margin-block-start: unset;
     }
 
     @include for-narrow-layout {
         width: auto;
-        max-width: 412px;
     }
 
     .sidebar-top {

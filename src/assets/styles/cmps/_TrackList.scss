@@ -57,8 +57,7 @@
             background-color: $clr4;
         }
 
-        // transition: .5s;
-        z-index: 2;
+        z-index: 1;
         display: grid;
         grid-template-columns: [index] 1rem [first] 6fr [var1] 4fr [var2] 3fr [last] 4rem;
         top: 4rem;

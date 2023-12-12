@@ -154,9 +154,6 @@ export default {
         async onTrackDragged(dragResult) {
             this.applyDrag(dragResult, true)
         },
-        onPlayTrack(track) {
-            eventBus.emit('trackPlay', track)
-        },
         logScroll({ scrollTop }) {
             this.scrollPosition = scrollTop
         },

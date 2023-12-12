@@ -1,5 +1,5 @@
 <template>
-    <section class="sidebar-list-container" v-if="user" :style="{ width: sidebarWidth }">
+    <section class="sidebar-list-container" :style="{ width: sidebarWidth }">
         <section class="sidebar-top">
             <button class="collapse" @click="collapseSidebar">
                 <span v-if="!sidebarCollapsed" v-icon="'collapse'"></span>
@@ -9,7 +9,7 @@
             <button v-icon="'createList'" @click="addStation()" title="Create playlist" class="add-station"
                 v-if="!sidebarCollapsed"></button>
         </section>
-        <section class="filter-btns" v-if="!sidebarCollapsed">
+        <section class="filter-btns" v-if="!sidebarCollapsed && user">
             <button v-show="filterBy" @click="this.filterBy = ''" v-icon="'close'" class="unfilter btn"></button>
             <button v-show="playlistsBtn" @click="setFilterBy('')" class="filter btn"
                 :class="{ active: this.filterBy === 'playlists' || this.filterBy === 'Tuneify' || this.filterBy === this.user?.fullname }">Playlists</button>

@@ -139,7 +139,6 @@ export default {
     created() {
         eventBus.on('trackClicked', this.loadVideo)
         eventBus.on('trackPaused', this.pauseVideo)
-        eventBus.on('trackPlay', this.playTrack)
         eventBus.on('playNextTrack', () => this.previousNextVideo(1))
 
         // sockets
@@ -272,8 +271,7 @@ export default {
                 if (this.currTrack.artists[1]?.name) term = `${this.currTrack.artists[1].name} ${this.currTrack.artists[0].name} ${this.currTrack.title} `
                 else term = `${this.currTrack.artists[0].name} ${this.currTrack.title}`
 
-                console.log(term);
-                const youtubeId = await ytService.queryYT(term)
+                const youtubeId = await ytService.queryYT(term, this.currTrack.id)
                 // const youtubeId = this.getDemoYoutubeId()
                 await this.$store.dispatch({ type: 'updateTrack', youtubeId })
                 this.elapsedTime = 0
@@ -432,20 +430,6 @@ export default {
                 this.pauseVideo(false)
             }
         },
-        async playTrack(track) {
-            // get youtubeId from YT
-            try {
-                console.log('Sending request to yt id...')
-                const term = track.title + ' ' + track.artists[0].name
-                const youtubeId = await ytService.queryYT(term)
-                // const youtubeId = this.getDemoYoutubeId()
-                const youtubePlayer = this.$refs.youtubePlayer.player
-                youtubePlayer?.loadVideoById(youtubeId)
-                // this.playVideo()
-            } catch (err) {
-                console.log('Could not set track youtube id', err.message)
-            }
-        },
         goToStation() {
             if (this.currStation._id) {
                 this.$router.push(`/station/${this.currStation._id}`)
@@ -456,7 +440,6 @@ export default {
     },
     beforeunmount() {
         eventBus.off('trackClicked', this.loadVideo)
-        eventBus.off('trackPlay', this.playTrack)
         eventBus.off('trackPaused', this.pauseVideo)
         eventBus.off('playNextTrack', () => this.previousNextVideo(1))
         document.removeEventListener('keydown', this.handleKeyPress)

@@ -136,7 +136,6 @@ async function getArtistData(id, light = false) {
 
     if (light) {
         try {
-            console.log('fetching light artist data');
             const artist = await spotifyService.getSpotifyItems({ type: 'artist', id })
             return artist
         }
