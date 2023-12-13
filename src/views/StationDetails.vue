@@ -249,7 +249,6 @@ export default {
             if (container) container.scrollBy({ top: 600, behavior: 'smooth' })
         },
         async loadStation() {
-            this.station = null
             try {
                 const path = this.$route.path
                 const stationType = path.startsWith('/station') ? 'station' : path.startsWith('/album') ? 'album' : 'artist'
@@ -426,6 +425,7 @@ export default {
     },
     watch: {
         stationId() {
+            this.station = null
             if (!this.stationId) return
             this.loadStation()
             historyTracker.push(this.$route.fullPath)
