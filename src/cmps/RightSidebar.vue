@@ -38,17 +38,37 @@
                 <section v-html="artistSnippet" class="mini-bio"></section>
             </section>
         </section>
+        <ul v-if="artistEvents" class="artist-events clean-list">
+            <h4>On Tour</h4>
+            <a :href="event.url" v-for="event in artistEvents" :key="event.id" target="_blank">
+                <li class="event">
+                    <div class="date">
+                        <span class="month">{{ event.month }}</span>
+                        <span class="day">{{ event.day }}</span>
+                    </div>
+                    <div class="event-info">
+                        <h3>{{ event.city }}</h3>
+                        <p>{{ event.artist }}</p>
+                        <div>{{ event.weekday }} {{ event.time }}
+                            <span v-if="event.venue">&bull;</span>
+                            {{ event.venue }}
+                        </div>
+                    </div>
+                </li>
+            </a>
+        </ul>
     </section>
     <ArtistData v-if="artistBioOpen" :artistSnippet="artistSnippet" :artistImage="artistImage"
-        :artistFollowers="artistFollowers" @closeBio="closeBio" />
+        :artistFollowers="artistFollowers" :artistSocials="artistSocials" @closeBio="closeBio" />
 </template>
 
 <script>
 import { eventBus } from '../services/event-bus.service'
 import { wikiService } from '../services/wiki.service'
-import { mapGetters } from 'vuex';
-import ArtistData from './ArtistData.vue';
-import { stationService } from '../services/station.service';
+import { mapGetters } from 'vuex'
+import ArtistData from './ArtistData.vue'
+import { stationService } from '../services/station.service'
+import { eventsService } from '../services/events.service'
 
 export default {
     name: 'RightSidebar',
@@ -58,7 +78,9 @@ export default {
             artistImage: null,
             artistSnippet: null,
             artistFollowers: null,
-            artistBioOpen: false
+            artistEvents: null,
+            artistBioOpen: false,
+            artistSocials: null
         }
     },
     created() {
@@ -78,10 +100,12 @@ export default {
             document.body.classList.remove('ad-modal-open')
         },
         async getArtistData(artist, artistId) {
-            const [metaData, { imgUrl, followers }] = await Promise.all([wikiService.getArtistData(artist), stationService.getArtistData(artistId, true)])
+            const [metaData, { imgUrl, followers }, { events, socials }] = await Promise.all([wikiService.getArtistData(artist), stationService.getArtistData(artistId, true), eventsService.getEventsAndSocials(artist)])
             this.artistImage = imgUrl
             this.artistSnippet = metaData
             this.artistFollowers = followers
+            this.artistEvents = events
+            this.artistSocials = socials
         }
     },
     computed: {
@@ -103,6 +127,8 @@ export default {
             immediate: true,
             handler(newTrackName, oldTrackName) {
                 if (newTrackName !== oldTrackName) {
+                    this.artistImage = null
+                    this.artistEvents = null
                     this.getArtistData(this.currTrack.artists[0].name, this.currTrack.artistId)
                 }
             }

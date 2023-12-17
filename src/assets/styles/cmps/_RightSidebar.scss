@@ -178,4 +178,79 @@
             }
         }
     }
+
+    .artist-events {
+        background-color: #ffffff12;
+        padding: 1rem .5rem .5rem .5rem;
+        border-radius: .5rem;
+        line-height: 1.2;
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+
+        h4 {
+            padding-inline-start: .5rem;
+        }
+
+        .event {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            align-items: center;
+            gap: 1rem;
+            padding: .5rem;
+            border-radius: .5rem;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #393939;
+            }
+
+            .date {
+                background-color: #1a1a1a;
+                display: flex;
+                flex-direction: column;
+                width: 3rem;
+                height: 3rem;
+                border-radius: .25rem;
+                padding-block-start: .25rem;
+                align-items: center;
+                justify-content: center;
+
+                .month {
+                    font-size: 0.6875rem;
+                    font-weight: 700;
+                }
+
+                .day {
+                    font-size: 1.5rem;
+                    font-family: CircularSpTitle;
+                }
+            }
+
+            .event-info {
+                line-height: 1.4;
+
+                h3 {
+                    font-size: 1rem;
+                    font-weight: 400;
+                }
+
+                p,
+                span {
+                    font-size: 0.875rem;
+                    margin: 0;
+                }
+
+                div {
+                    color: $clr3;
+                    overflow: hidden;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 1;
+                    white-space: pre-wrap;
+                    font-size: .875rem;
+                }
+            }
+        }
+    }
 }

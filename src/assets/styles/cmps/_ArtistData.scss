@@ -87,6 +87,32 @@
                 color: $clr3;
                 margin-top: -.5rem;
             }
+
+            .socials {
+                line-height: 1;
+                margin-block-start: 2rem;
+                display: flex;
+                flex-direction: column;
+                gap: .5rem;
+
+                a {
+                    display: flex;
+                    align-items: center;
+                    gap: .25rem;
+                    color: $clr3;
+                    font-size: .875rem;
+
+                    &:hover {
+                        color: $clr2;
+                        text-decoration: underline;
+
+                        path {
+                            fill: $clr2;
+                        }
+                    }
+
+                }
+            }
         }
 
         .artist-wiki {
