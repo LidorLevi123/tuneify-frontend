@@ -7,7 +7,7 @@
         <section class="edit">
             <label>
                 <input type="file" @change="handleFile" hidden>
-                <img class="album-image" :src="userToEdit.imgUrl" ref="userImg" alt="" @mouseover="imageIsHovered = true"
+                <img class="user-image" :src="userToEdit.imgUrl" ref="userImg" alt="" @mouseover="imageIsHovered = true"
                     @mouseleave="imageIsHovered = false">
                 <button v-if="this.userToEdit.imgUrl" @click.stop="removeImg" class="remove-img-btn"
                     :style="{ opacity: imageIsHovered ? '1' : '0' }" @mouseover="imageIsHovered = true">Remove
@@ -42,6 +42,7 @@ export default {
             this.userToEdit = JSON.parse(JSON.stringify(this.user))
         },
         async save() {
+            if (this.user.fullname === 'Guest') return showErrorMsg('Can not edit guest user, please logout and sign in')
             if (!this.userToEdit.fullname) {
                 showErrorMsg('Please add a display name')
                 return

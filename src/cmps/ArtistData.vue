@@ -45,9 +45,6 @@ export default {
         closeBio() {
             this.$emit('closeBio')
         }
-    },
-    created() {
-        console.log(this.artistSocials);
     }
 }
 </script>

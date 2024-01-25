@@ -299,8 +299,8 @@ export default {
                 : (successMsg = 'Removed from Your Library', errMsg = 'Could not remove station')
 
             try {
-                await this.$store.dispatch({ type: 'updateUserStations', stationId: this.station._id, action })
                 this.$store.commit({ type: 'setUserStations', station: this.station, action })
+                await this.$store.dispatch({ type: 'updateUserStations', stationId: this.station._id, action })
                 eventBus.emit('loadLibrary')
                 showSuccessMsg(successMsg)
             } catch (err) {

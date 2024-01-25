@@ -16,6 +16,7 @@
 
     @include for-narrow-layout {
         width: auto;
+        max-width: 25.75rem;
     }
 
     .sidebar-top {

@@ -211,8 +211,8 @@ export const stationStore = {
 
             try {
                 trackToSave = JSON.parse(JSON.stringify(trackToSave))
-                await stationService.saveTrack(trackToSave, stationId)
                 commit({ type: 'addTrack', trackToSave, stationId })
+                await stationService.saveTrack(trackToSave, stationId)
             } catch (err) {
                 console.log(err.message)
                 throw new Error('Could not add track')
@@ -224,8 +224,8 @@ export const stationStore = {
             if (!isTrackExist) return
 
             try {
-                await stationService.removeTrack(trackId, stationId)
                 commit({ type: 'removeTrack', trackId, stationId })
+                await stationService.removeTrack(trackId, stationId)
             } catch (err) {
                 console.log(err.message)
                 throw new Error('Could not remove track')

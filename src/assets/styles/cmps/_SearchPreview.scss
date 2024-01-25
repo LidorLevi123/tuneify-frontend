@@ -90,33 +90,33 @@
         color: $clr9;
     }
 
-}
+    .track-album {
+        a {
+            &:hover {
+                text-decoration: underline;
+            }
+        }
 
-.track-album a {
-    &:hover {
-        text-decoration: underline;
+        @include for-mobile-layout {
+            display: none;
+        }
     }
 
-    @include for-mobile-layout {
-        display: none;
+    .add-btn {
+        cursor: pointer;
+        justify-self: end;
+        color: $clr2;
+        background-color: transparent;
+        border: 1px solid $clr10;
+        font-weight: 700;
+        border-radius: 500px;
+        padding: 0.25rem 0.9375;
+        width: 3.6875rem;
+        height: 2rem;
+
+        &:hover {
+            scale: 103%;
+            outline: 1px solid $clr2;
+        }
     }
-}
-
-.add-btn {
-    cursor: pointer;
-    justify-self: end;
-    color: $clr2;
-    background-color: transparent;
-    border: 1px solid $clr10;
-    font-weight: 700;
-    border-radius: 500px;
-    padding: 0.25rem 0.9375;
-    width: 3.6875rem;
-    height: 2rem;
-
-    &:hover {
-        scale: 103%;
-        outline: 1px solid $clr2;
-    }
-
 }

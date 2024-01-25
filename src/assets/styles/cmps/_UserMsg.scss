@@ -8,6 +8,7 @@
     padding: 1rem 1.5rem 1rem 1.5rem;
     border-radius: 0.5rem;
     color: $clr2;
+    z-index: 10;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
 
     &.success {
