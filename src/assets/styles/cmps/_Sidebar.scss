@@ -8,15 +8,17 @@
     overflow-y: hidden;
     width: 412px;
 
-    @include for-mobile-layout {
-        width: auto;
-        height: 100%;
-        margin-block-start: unset;
-    }
 
     @include for-narrow-layout {
         width: auto;
         max-width: 25.75rem;
+    }
+
+    @include for-mobile-layout {
+        width: auto;
+        height: 100%;
+        margin-block-start: unset;
+        max-width: unset;
     }
 
     .sidebar-top {

@@ -6,7 +6,7 @@
         </header>
         <section class="edit">
             <label>
-                <input type="file" @change="handleFile" hidden>
+                <input type="file" @change="handleFile" accept="image/*" hidden>
                 <img class="user-image" :src="userToEdit.imgUrl" ref="userImg" alt="" @mouseover="imageIsHovered = true"
                     @mouseleave="imageIsHovered = false">
                 <button v-if="this.userToEdit.imgUrl" @click.stop="removeImg" class="remove-img-btn"

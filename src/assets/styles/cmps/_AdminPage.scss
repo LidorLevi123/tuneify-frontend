@@ -1,7 +1,4 @@
 .admin-page {
-    display: grid;
-    grid-template-rows: repeat(4, auto) 1fr;
-    gap: .5rem;
     height: 100vh;
     background-image: linear-gradient(to bottom, #282828 0%, #121212 33rem, #121212);
     overflow: auto;
@@ -9,7 +6,6 @@
     padding: 3rem;
 
     @include for-mobile-layout {
-        display: unset;
         padding: .5rem;
         user-select: text
     }
@@ -27,6 +23,7 @@
     }
 
     .delete-stations {
+        margin-block-end: .5rem;
         display: flex;
         gap: .5rem;
 

@@ -6,7 +6,7 @@
         </header>
         <section class="edit">
             <label>
-                <input type="file" @change="handleFile" hidden>
+                <input type="file" @change="handleFile" accept="image/*" hidden>
                 <img class="album-image" :src="imgUrl" ref="stationImg" alt="" @mouseover="imageIsHovered = true"
                     @mouseleave="imageIsHovered = false">
                 <button v-if="this.stationToEdit.imgUrl" v-icon="`moreOptionsSmall`" class="station-img-btn"
