@@ -36,10 +36,42 @@
         min-width: 10rem;
         overflow-y: auto;
 
+        &.markets-dropdown {
+            box-sizing: unset;
+            right: 5.5rem;
+        }
 
         @include for-mobile-layout {
             right: .5rem;
             top: 2.5rem;
+        }
+
+        .markets-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .2rem;
+
+            li {
+                border-radius: 50%;
+                width: 2rem;
+                height: 2rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: rgba(0, 0, 0, 0.54);
+                cursor: pointer;
+
+                &:hover {
+                    background-color: $clr1;
+                    scale: 104%;
+                }
+
+                img {
+                    width: 1.5rem;
+                    height: 1.5rem;
+                    border-radius: 50%;
+                }
+            }
         }
 
         .menu-li {
@@ -105,6 +137,13 @@
                 scale: 104%;
             }
 
+            &:first-of-type {
+                margin: unset;
+
+                img {
+                    object-fit: unset;
+                }
+            }
         }
 
         .login-link {

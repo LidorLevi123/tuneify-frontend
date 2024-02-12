@@ -14,6 +14,7 @@ export const stationStore = {
         isCurrTrackPlaying: false,
         searchRes: [],
         recommendationsStation: null,
+        currMarket: 'IL'
     },
     getters: {
         isRsbOpen({ isRsbOpen }) { return isRsbOpen },
@@ -24,6 +25,7 @@ export const stationStore = {
         stationsForHome({ stationsForHome }) { return stationsForHome },
         currStation({ currStation }) { return currStation },
         currTrackIdx({ currTrackIdx }) { return currTrackIdx },
+        currMarket({ currMarket }) { return currMarket },
         currTrack({ currStation, currTrackIdx }) { return currStation?.tracks[currTrackIdx] },
         isCurrTrackPlaying({ isCurrTrackPlaying }) { return isCurrTrackPlaying },
         searchRes({ searchRes }) { return searchRes },
@@ -56,8 +58,12 @@ export const stationStore = {
         setSearchRes(state, { res }) {
             state.searchRes = res
         },
-        setStationsForHome(state, { stations }) {
+        setStationsForHome(state, { stations, market }) {
+            Cookies.set('currMarket', market.toString())
             state.stationsForHome = stations
+        },
+        setCurrMarket(state, { market }) {
+            state.currMarket = market
         },
         setCurrStation(state, { station }) {
             state.currStation = station
@@ -116,12 +122,12 @@ export const stationStore = {
         }
     },
     actions: {
-        async getStationsForHome({ commit }) {
+        async getStationsForHome({ commit }, { market }) {
             commit('setLoading', true)
             try {
-                const stations = await stationService.getStationsForHome()
+                const stations = await stationService.getStationsForHome(market)
                 if (stations.length < 6) throw new Error('Could not load stations from api  - trying from DB')
-                commit({ type: 'setStationsForHome', stations })
+                commit({ type: 'setStationsForHome', stations, market })
             } catch (err) {
                 try {
                     console.log('Error in getStationsForHome', err.message)

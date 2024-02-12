@@ -17,14 +17,29 @@
                 <span class="df ai" v-icon="'close'" @click="onClearFilter"></span>
             </div>
         </div>
+
         <div v-if="showUserMenu" class="dropdown" v-clickOutside="handleClickOutside">
             <div @click="editProfile" class="menu-li">Edit profile</div>
             <div @click="doLogout" class="menu-li">Log out</div>
         </div>
+
+        <div v-if="showMarketsMenu" class="dropdown markets-dropdown" v-clickOutside="handleClickOutside">
+            <ul class="clean-list markets-list">
+                <li @click="changeMarket(market)" v-for="market in markets" :key="market.id" :title="market">
+                    <img :src="getFlagImageUrl(market)" alt="">
+                </li>
+            </ul>
+        </div>
+
         <div class="profile-btns">
             <RouterLink v-if="user?.isAdmin" class="admin-link" to="/admin">
                 <button class="admin-btn">Admin page</button>
             </RouterLink>
+
+            <button v-if="user && this.$route.path === '/'" @click="openMarketsMenu" class="profile-btn"
+                :title="`${currMarket}`">
+                <img :src="`https://www.worldatlas.com/r/w236/img/flag/${currMarket.toLowerCase()}-flag.jpg`" alt="">
+            </button>
 
             <button v-if="user" @click="openUserMenu" class="profile-btn" :title="`${user.fullname}`">
                 <img :src="user.imgUrl" :alt="user.imgUrl">
@@ -33,6 +48,7 @@
             <RouterLink v-if="!user" class="login-link" to="/login">
                 <button class="login-btn">Log in</button>
             </RouterLink>
+
         </div>
     </section>
 </template>
@@ -54,7 +70,8 @@ export default {
             query: '',
             scrollPosition: null,
             backgroundColor: '#121212',
-            showUserMenu: false
+            showUserMenu: false,
+            showMarketsMenu: false,
         }
     },
     created() {
@@ -66,11 +83,20 @@ export default {
         }, 500)
     },
     methods: {
+        changeMarket(market) {
+            this.$store.commit({ type: 'setCurrMarket', market })
+            this.$store.dispatch({ type: 'getStationsForHome', market })
+            this.showMarketsMenu = false
+        },
         handleClickOutside() {
             this.showUserMenu = false
+            this.showMarketsMenu = false
         },
         openUserMenu() {
             this.showUserMenu = true
+        },
+        openMarketsMenu() {
+            this.showMarketsMenu = true
         },
         doLogout() {
             this.$router.push('/')
@@ -119,6 +145,9 @@ export default {
         currStation() {
             return this.$store.getters.currStation
         },
+        currMarket() {
+            return this.$store.getters.currMarket
+        },
         currTrackIdx() {
             return this.$store.getters.currTrackIdx
         },
@@ -144,6 +173,15 @@ export default {
         },
         placeholderText() {
             return window.innerWidth > 890 ? 'What do you want to listen to?' : 'Search'
+        },
+        markets() {
+            return utilService.getCountryCodes()
+        },
+        getFlagImageUrl() {
+            return (market) => {
+                if (market === 'CH') return 'https://www.worldatlas.com/r/w236/img/flag/ch-flag.png'
+                else return `https://www.worldatlas.com/r/w236/img/flag/${market.toLowerCase()}-flag.jpg`
+            }
         }
     },
     beforeUnmount() {

@@ -118,8 +118,8 @@ async function getCategoryStations(categoryId) {
     return stations
 }
 
-async function getStationsForHome() {
-    return await httpService.get('spotify/home')
+async function getStationsForHome(market) {
+    return await httpService.get(`spotify/home/${market}`)
 }
 
 function getEmptyStation() {

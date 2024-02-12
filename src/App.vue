@@ -11,12 +11,19 @@ import BackDrop from './cmps/BackDrop.vue'
 import UserEdit from './cmps/UserEdit.vue'
 import { userService } from './services/user.service'
 import { eventBus } from './services/event-bus.service'
+import Cookies from 'js-cookie'
 
 export default {
 
   async created() {
     try {
-      await this.$store.dispatch({ type: 'getStationsForHome' })
+      const market = Cookies.get('currMarket')
+
+      if (market) {
+        this.$store.commit({ type: 'setCurrMarket', market })
+        await this.$store.dispatch({ type: 'getStationsForHome', market })
+      }
+      else await this.$store.dispatch({ type: 'getStationsForHome', market: 'IL' })
 
       const user = userService.getLoggedinUser() || await this.$store.dispatch({ type: 'login', userCred: { username: 'guest', password: '123' } })
 
