@@ -36,7 +36,7 @@
                 <button class="admin-btn">Admin page</button>
             </RouterLink>
 
-            <button v-if="user && this.$route.path === '/'" @click="openMarketsMenu" class="profile-btn"
+            <button v-if="user && this.$route.path === '/'" @click="openMarketsMenu" class="profile-btn market-btn"
                 :title="`${currMarket}`">
                 <img :src="`https://www.worldatlas.com/r/w236/img/flag/${currMarket.toLowerCase()}-flag.jpg`" alt="">
             </button>
@@ -84,8 +84,10 @@ export default {
     },
     methods: {
         changeMarket(market) {
-            this.$store.commit({ type: 'setCurrMarket', market })
-            this.$store.dispatch({ type: 'getStationsForHome', market })
+            if (market !== this.currMarket) {
+                this.$store.commit({ type: 'setCurrMarket', market })
+                this.$store.dispatch({ type: 'getStationsForHome', market })
+            }
             this.showMarketsMenu = false
         },
         handleClickOutside() {

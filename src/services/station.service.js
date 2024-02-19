@@ -113,8 +113,8 @@ async function removeTrack(trackId, stationId) {
     await save(station)
 }
 
-async function getCategoryStations(categoryId) {
-    const stations = await spotifyService.getSpotifyItems({ type: 'categoryStations', id: categoryId })
+async function getCategoryStations(categoryId, market) {
+    const stations = await spotifyService.getSpotifyItems({ type: 'categoryStations', id: categoryId, market })
     return stations
 }
 

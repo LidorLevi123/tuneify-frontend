@@ -29,6 +29,9 @@ export default {
         },
         stationsForHome() {
             return this.$store.getters.stationsForHome
+        },
+        currMarket() {
+            return this.$store.getters.currMarket
         }
     },
 
@@ -43,7 +46,7 @@ export default {
                 this.categoryStations = this.stationsForHome[1]
             } else {
                 try {
-                    const stations = await stationService.getCategoryStations(this.categoryId)
+                    const stations = await stationService.getCategoryStations(this.categoryId, this.currMarket)
                     this.categoryStations = stations
                 } catch (err) {
                     console.log('Could not load category stations')

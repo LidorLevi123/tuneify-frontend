@@ -38,7 +38,17 @@
 
         &.markets-dropdown {
             box-sizing: unset;
-            right: 5.5rem;
+            right: 4rem;
+
+            @include for-mobile-layout {
+                position: fixed;
+                height: fit-content;
+                max-height: 70svh;
+                width: 70vw;
+                top: 50%;
+                left: 50%;
+                translate: -50% -50%;
+            }
         }
 
         @include for-mobile-layout {
@@ -51,15 +61,27 @@
             flex-wrap: wrap;
             gap: .2rem;
 
+            @include for-mobile-layout {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
+            }
+
             li {
                 border-radius: 50%;
                 width: 2rem;
                 height: 2rem;
+                aspect-ratio: 1/1;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 background-color: rgba(0, 0, 0, 0.54);
                 cursor: pointer;
+
+                @include for-mobile-layout {
+                    width: unset;
+                    height: unset;
+                    padding: 3px;
+                }
 
                 &:hover {
                     background-color: $clr1;
@@ -67,8 +89,8 @@
                 }
 
                 img {
-                    width: 1.5rem;
-                    height: 1.5rem;
+                    width: 1.7rem;
+                    height: 1.7rem;
                     border-radius: 50%;
                 }
             }
@@ -137,7 +159,7 @@
                 scale: 104%;
             }
 
-            &:first-of-type {
+            &.market-btn {
                 margin: unset;
 
                 img {
