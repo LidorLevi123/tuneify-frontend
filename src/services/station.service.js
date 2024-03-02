@@ -133,32 +133,20 @@ function getEmptyStation() {
 }
 
 async function getArtistData(id, light = false) {
-
-    if (light) {
-        try {
-            const artist = await spotifyService.getSpotifyItems({ type: 'artist', id })
-            return artist
-        }
-        catch (error) {
-            console.error('Error fetching artist data:', error)
-        }
-    }
-
     try {
-        const [artist, artistTopTracks, artistAlbums, artistRelatedArtists] = await Promise.all([
-            spotifyService.getSpotifyItems({ type: 'artist', id }),
-            spotifyService.getSpotifyItems({ type: 'artistTopTracks', id }),
-            spotifyService.getSpotifyItems({ type: 'artistAlbums', id }),
-            spotifyService.getSpotifyItems({ type: 'artistRelatedArtists', id })
-        ])
+        const artist = await spotifyService.getSpotifyItems({ type: 'artist', id })
+        if (light) return artist
 
-        const fullData = {
+        const artistTopTracks = await spotifyService.getSpotifyItems({ type: 'artistTopTracks', id })
+        const artistAlbums = await spotifyService.getSpotifyItems({ type: 'artistAlbums', id })
+        const artistRelatedArtists = await spotifyService.getSpotifyItems({ type: 'artistRelatedArtists', id })
+
+        return {
             ...artist,
             tracks: artistTopTracks,
             albums: artistAlbums,
             relatedArtists: artistRelatedArtists
         }
-        return fullData
     }
     catch (error) {
         console.error('Error fetching artist data:', error)

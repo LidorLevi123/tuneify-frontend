@@ -2,32 +2,7 @@
     <section ref="stationDetails" class="station-details" v-if="station">
         <div ref="topGradient" class="top-gradient">
             <section class="img-photo" :style="{ alignItems: station.isArtist ? 'center' : 'end' }">
-                <section class="img">
-
-                    <img v-if="!this.station.owner._id" crossorigin="anonymous" class="station-img" :src="station.imgUrl"
-                        alt="" @load="setBackgroundClr" ref="stationImg"
-                        :style="{ borderRadius: station.isArtist ? '50%' : 'unset' }" />
-
-                    <img v-else-if="this.station.owner._id && this.station.imgUrl" crossorigin="anonymous"
-                        class="station-img" :src="station.imgUrl" alt="" @load="setBackgroundClr" ref="stationImg" />
-
-                    <img v-else-if="this.station.owner._id && this.station.tracks.length && this.station.tracks.length < 4"
-                        crossorigin="anonymous" class="station-img" :src="station.tracks[0]?.imgUrl[0].url" alt=""
-                        @load="setBackgroundClr" ref="stationImg" />
-
-                    <div v-else-if="this.station.owner._id && this.station.tracks.length >= 4" class="collage-container">
-                        <img class="s-img" :src="this.station.tracks[0]?.imgUrl[1].url" alt="" crossorigin="anonymous"
-                            @load="setBackgroundClr" ref="stationImg">
-                        <img class="s-img" :src="this.station.tracks[1]?.imgUrl[1].url" alt="">
-                        <img class="s-img" :src="this.station.tracks[2]?.imgUrl[1].url" alt="">
-                        <img class="s-img" :src="this.station.tracks[3]?.imgUrl[1].url" alt="">
-                    </div>
-
-                    <div v-else class="img-placeholder">
-                        <span class="note-svg" v-icon="`note2`"></span>
-                    </div>
-
-                </section>
+                <StationImg :station="station" @backgroundColor="setBgColor" />
                 <section class="station-info">
                     <span v-if="!station.isArtist" class="pl">{{ stationType }}</span>
                     <span v-if="station.isArtist" class="verified">
@@ -123,9 +98,9 @@ import StationEdit from '../cmps/StationEdit.vue'
 import TrackList from '../cmps/TrackList.vue'
 import StationList from '../cmps/StationList.vue'
 import UserList from '../cmps/UserList.vue'
+import StationImg from '../cmps/StationImg.vue'
 import { stationService } from '../services/station.service'
 import { userService } from '../services/user.service'
-import { utilService } from '../services/util.service'
 import { eventBus, showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
 
 import {
@@ -238,6 +213,7 @@ export default {
         eventBus.off('clickFromSearchRes', this.clickTrack)
     },
     methods: {
+
         showBtn(type) {
             const discography = this.station?.albums.filter(album => album.group !== 'appears_on')
             const firstGroup = discography[0]?.group
@@ -352,22 +328,13 @@ export default {
                 showErrorMsg(`Could not load tracks`)
             }
         },
-        async setBackgroundClr() {
-            const elImg = this.$refs.stationImg
-            try {
-                const avgColor = await utilService.getAvgImgClr(elImg)
-                const [darkerColor, darkerDarkerColor] = utilService.generateColors(avgColor)
+        setBgColor(colors) {
+            const { avgColor, darkerColor, darkerDarkerColor } = colors
+            const elTopGrad = this.$refs.topGradient
+            const elBotGrad = this.$refs.botGradient
 
-                const elTopGrad = this.$refs.topGradient
-                const elBotGrad = this.$refs.botGradient
-
-                elTopGrad.style.backgroundImage = `linear-gradient(to bottom, ${avgColor} 0%, ${darkerColor})`
-                elBotGrad.style.backgroundImage = `linear-gradient(to bottom, ${darkerDarkerColor} 0%, #121212 14.5rem, #121212)`
-                eventBus.emit('backgroundColor', darkerDarkerColor)
-            }
-            catch (err) {
-                console.log(err.message)
-            }
+            elTopGrad.style.backgroundImage = `linear-gradient(to bottom, ${avgColor} 0%, ${darkerColor})`
+            elBotGrad.style.backgroundImage = `linear-gradient(to bottom, ${darkerDarkerColor} 0%, #121212 14.5rem, #121212)`
         },
         setTracksTotalDuration() {
             this.tracksTotalDuration = this.station.tracks?.reduce((sum, track) => sum = sum + track.formalDuration, 0)
@@ -439,7 +406,8 @@ export default {
         TrackList,
         StationList,
         UserList,
-        Loader
+        Loader,
+        StationImg
     }
 }
 </script>

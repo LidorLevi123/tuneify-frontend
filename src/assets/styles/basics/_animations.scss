@@ -240,3 +240,28 @@ $heart-scale: 1.1;
         opacity: 1;
     }
 }
+
+@keyframes moveImgUp {
+    0% {
+        transform: translateY(20rem);
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes moveTextRight {
+    0% {
+        transform: translate(-20rem, 20rem);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}

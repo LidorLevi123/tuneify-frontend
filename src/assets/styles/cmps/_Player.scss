@@ -197,6 +197,13 @@
             display: none;
         }
 
+        .fullscreen-btn {
+            @include for-mobile-layout {
+                display: none;
+            }
+        }
+
+        .fullscreen-btn,
         .toggleRSB-btn,
         .lyrics-btn {
             display: flex;
@@ -250,6 +257,7 @@
 
         .vol-slider {
             width: 5.8125rem;
+            margin-inline-end: 1rem;
         }
 
         .mute {

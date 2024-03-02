@@ -1,4 +1,12 @@
 <template>
+    <FullscreenPlayer ref="fullscreenPlayer" v-if="showFullscreen" :secsToTimeFormat="secsToTimeFormat"
+        :isShuffle="isShuffle" :elapsedTime="+elapsedTime" :currTrackDuration="currTrackDuration"
+        :repeatStateIdx="repeatStateIdx" :playbackProgressPercentage="playbackProgressPercentage" :hasLiked="hasLiked"
+        :currVolume="+currVolume" @changeVolume="changeVolumefromFsPlayer" @changeTime="changeTimefromFsPlayer"
+        @togglePlayPause="togglePlayPause" @previousNextVideo="previousNextVideo" @toggleShuffle="toggleShuffle"
+        @cycleRepeatStates="cycleRepeatStates" @closeFullscreen="toggleFullscreen" @toggleMute="toggleMute"
+        @likeTrack="likeTrack" @dislikeTrack="dislikeTrack" />
+
     <YouTube v-if="cookieLoaded" ref="youtubePlayer" :src="currTrack?.youtubeId || ''" @state-change="onStateChange"
         style="display: none;" />
     <section class="main-player-container" :class="{ 'is-shown': screenWidth < 890 && currTrack }"
@@ -94,6 +102,8 @@
             </button>
             <input class="vol-slider slider" @input="onChangeVolume" type="range" min="0" max="100" v-model="currVolume"
                 :style="{ backgroundImage: `linear-gradient(to right, rgba(0,0,0,0) ${currVolume}%, rgb(77,77,77) ${currVolume}%)` }">
+            <span v-if="currTrack" v-icon="`fullScreen`" class="fullscreen-btn" @click="toggleFullscreen"
+                title="Full screen"></span>
         </section>
     </section>
 </template>
@@ -103,6 +113,7 @@ import { eventBus, showErrorMsg, showSuccessMsg } from '../services/event-bus.se
 import { ytService } from '../services/yt.service.js'
 import YouTube from 'vue3-youtube'
 import { socketService, SOCKET_EVENT_ADD_MSG, SOCKET_EMIT_BROADCAST_TRACK } from '../services/socket.service.js'
+import FullscreenPlayer from './FullscreenPlayer.vue'
 export default {
     data() {
         return {
@@ -131,10 +142,12 @@ export default {
                 BUFFERING: 3,
                 CUED: 5,
             },
+            showFullscreen: false,
         }
     },
     components: {
         YouTube,
+        FullscreenPlayer
     },
     created() {
         eventBus.on('trackClicked', this.loadVideo)
@@ -149,6 +162,35 @@ export default {
         document.addEventListener('keydown', this.handleKeyPress)
     },
     methods: {
+
+        toggleFullscreen() {
+            const doc = window.document
+            const docEl = doc.documentElement
+            const isFullscreen = doc.fullscreenElement || doc.mozFullScreenElement || doc.webkitFullscreenElement || doc.msFullscreenElement
+            const exitFullscreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen
+
+            if (isFullscreen) {
+                exitFullscreen.call(doc)
+                this.showFullscreen = false
+            } else {
+                const requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen
+                requestFullScreen.call(docEl)
+                this.showFullscreen = true
+
+                const fullscreenChangeHandler = () => {
+                    if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+                        this.showFullscreen = false
+                        eventListeners.forEach(ev => doc.removeEventListener(ev, fullscreenChangeHandler))
+                    }
+                }
+
+                const eventListeners = ['fullscreenchange', 'mozfullscreenchange', 'webkitfullscreenchange', 'msfullscreenchange']
+                eventListeners.forEach(ev => doc.addEventListener(ev, fullscreenChangeHandler))
+            }
+        },
+
+
+
         handleKeyPress(ev) {
             const { tagName } = document.activeElement
             const { code } = ev
@@ -326,12 +368,20 @@ export default {
             }
             this.isMute = !this.isMute
         },
+        changeVolumefromFsPlayer(volume) {
+            this.currVolume = volume
+            this.onChangeVolume()
+        },
         onChangeVolume() {
             this.$refs.youtubePlayer.setVolume(this.currVolume)
             if (this.currVolume > 0 && this.isMute === true) {
                 this.isMute = false
                 this.$refs.youtubePlayer.unMute()
             }
+        },
+        changeTimefromFsPlayer(time) {
+            this.elapsedTime = +time
+            this.onChangeTime()
         },
         onChangeTime() {
             this.changeTime()
@@ -474,7 +524,9 @@ export default {
             const likedSongsStation = stations?.find(station => station._id === this.user?.likedId)
             return likedSongsStation?.tracks
         },
+        nextTrack() {
+            return this.$store.getters.currStation?.tracks[this.currTrackIdx + 1]
+        },
     },
 }
 </script>
-

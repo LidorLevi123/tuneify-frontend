@@ -51,6 +51,7 @@
 
         &.alineRight {
             text-align: right;
+            direction: rtl;
         }
 
         @include for-mobile-layout {

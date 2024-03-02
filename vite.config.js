@@ -10,6 +10,7 @@ export default defineConfig({
       manifest: {
         name: 'Tuneify',
         short_name: 'Tuneify',
+        version: '1.0.1',
         theme_color: '#1ed760',
         background_color: '#000000',
         display: 'standalone',
