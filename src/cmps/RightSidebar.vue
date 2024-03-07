@@ -14,7 +14,8 @@
         </section>
         <section v-if="this.nextTrack" class="next-track">
             <header>Next in queue</header>
-            <section class="next-track-info" @click="emitToNextTrack" @mouseover="onMouseOver" @mouseleave="onMouseLeave">
+            <section class="next-track-info" @click="emitToNextTrack" @mouseover="onMouseOver"
+                @mouseleave="onMouseLeave">
                 <button class="next-track-btn">
                     <span v-if="this.nextTrackHovered" v-icon="`sPlay`" class="rsb-play"></span>
                     <span v-else v-icon="`note`"></span>
@@ -100,13 +101,18 @@ export default {
             document.body.classList.remove('ad-modal-open')
         },
         async getArtistData(artist, artistId) {
-            const [metaData, { imgUrl, followers }, { events, socials }] = await Promise.all([wikiService.getArtistData(artist), stationService.getArtistData(artistId, true), eventsService.getEventsAndSocials(artist)])
-            this.artistImage = imgUrl
+
+            const metaData = await wikiService.getArtistData(artist)
             this.artistSnippet = metaData
+
+            const { imgUrl, followers } = await stationService.getArtistData(artistId, true)
+            this.artistImage = imgUrl
             this.artistFollowers = followers
+
+            const { events, socials } = await eventsService.getEventsAndSocials(artist)
             this.artistEvents = events
             this.artistSocials = socials
-        }
+        },
     },
     computed: {
         ...mapGetters([
@@ -140,4 +146,3 @@ export default {
 }
 
 </script>
-

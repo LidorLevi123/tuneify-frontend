@@ -162,7 +162,6 @@ export default {
         document.addEventListener('keydown', this.handleKeyPress)
     },
     methods: {
-
         toggleFullscreen() {
             const doc = window.document
             const docEl = doc.documentElement
@@ -188,9 +187,6 @@ export default {
                 eventListeners.forEach(ev => doc.addEventListener(ev, fullscreenChangeHandler))
             }
         },
-
-
-
         handleKeyPress(ev) {
             const { tagName } = document.activeElement
             const { code } = ev

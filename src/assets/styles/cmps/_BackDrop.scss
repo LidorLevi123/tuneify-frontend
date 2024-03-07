@@ -18,3 +18,7 @@ body.ue-modal-open .backdrop {
     opacity: 1;
     pointer-events: auto;
 }
+
+body.absorb-click {
+    pointer-events: none;
+}

@@ -10,8 +10,8 @@
                         @contextmenu.prevent="showContextMenu(station._id, $event)">
                         <LibraryStationPreview :station="station" :query="query" @playStation="playStation" />
 
-                        <div v-if="contextMenuOpenMap[station._id] && station.name !== 'Liked Songs'" class="context-menu"
-                            v-clickOutside="() => contextMenuOpenMap[station._id] = false"
+                        <div v-if="contextMenuOpenMap[station._id] && station.name !== 'Liked Songs'"
+                            class="context-menu" v-clickOutside="() => contextMenuOpenMap[station._id] = false"
                             :style="{ top: contextmenuTop + 'px', left: contextmenuLeft + 'px' }">
                             <div v-if="station.owner._id" class="menu-item" @click.stop="emitEditStation(station._id)">
                                 <span v-icon="`edit`"></span>
@@ -59,6 +59,12 @@ export default {
             contextMenuOpenMap: {},
         }
     },
+    mounted() {
+        document.addEventListener('touchend', this.cleanUpSmoothDnd)
+    },
+    unmounted() {
+        document.removeEventListener('touchend', this.cleanUpSmoothDnd)
+    },
     methods: {
         fixActionRestriction() {
             document.body.classList.remove(
@@ -68,6 +74,7 @@ export default {
         },
         onDrop(dropResult) {
             this.applyDrag(dropResult)
+
         },
         async applyDrag(dragResult) {
 
@@ -131,7 +138,13 @@ export default {
         },
         emitEditStation(stationId) {
             this.$emit('editStation', stationId)
-        }
+        },
+        cleanUpSmoothDnd() {
+            document.body.className = document.body.className
+                .split(' ')
+                .filter(c => c.indexOf('dnd') < 0)
+                .join(' ')
+        },
     },
 
     computed: {
