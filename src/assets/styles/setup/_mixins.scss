@@ -4,6 +4,12 @@
     }
 }
 
+@mixin for-xlmobile-layout {
+    @media (max-width: calc($mobile-breakpoint + 100px)) {
+        @content;
+    }
+}
+
 @mixin for-narrow-layout {
     @media (max-width: calc($narrow-breakpoint + 40px)) {
         @content;

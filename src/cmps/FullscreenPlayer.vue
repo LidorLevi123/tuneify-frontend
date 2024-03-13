@@ -1,5 +1,5 @@
 <template>
-    <section class="fullscreen-player" ref="fullscreenPlayer">
+    <section class="fullscreen-player" ref="fullscreenPlayer" :class="{ 'portrait': isPortrait }">
         <section class="station-info">
             <span v-icon="`logo`"></span>
             <section class="playing-from">
@@ -8,18 +8,20 @@
             </section>
         </section>
         <section class="next-track" v-if="nextTrack" :class="{
-            'fade-in': playbackProgressPercentage > 80,
-            'fade-out': playbackProgressPercentage > 99
-        }">
+        'fade-in': playbackProgressPercentage > 80,
+        'fade-out': playbackProgressPercentage > 99,
+        'portrait': isPortrait
+    }">
             <img :src="nextTrack.imgUrl[1].url" alt="">
             <section class="next-track-text">
                 <h1 class="uppercase">up next</h1>
                 <h2>{{ nextTrack.title }} • {{ nextTrack.artists[0].name }}</h2>
             </section>
         </section>
-        <section class="track-info">
-            <img :src="currTrack.imgUrl[0].url" alt="" crossorigin="anonymous" @load="setBackgroundClr" ref="trackImg">
-            <div class="track-text">
+        <section class="track-info" :class="{ 'portrait': isPortrait }">
+            <img :src="currTrack.imgUrl[0].url" alt="" crossorigin="anonymous" @load="setBackgroundClr" ref="trackImg"
+                :class="{ 'portrait': isPortrait }">
+            <div class="track-text" :class="{ 'portrait': isPortrait }">
                 <h1 class="track-title">{{ currTrack.title }}</h1>
                 <h3 class="track-artist">{{ currTrack.artists[0].name }}</h3>
             </div>
@@ -32,7 +34,7 @@
                     :style="{ backgroundImage: `linear-gradient(to right, rgba(0,0,0,0) ${playbackProgressPercentage}%, rgb(77,77,77) ${playbackProgressPercentage}%)` }">
                 <span>{{ secsToTimeFormat(currTrackDuration) }}</span>
             </section>
-            <section class="track-controls-container">
+            <section class="track-controls-container" :class="{ 'portrait': isPortrait }">
                 <section class="liked">
                     <span v-if="!hasLiked(currTrack.id)" class="btn-like btn" v-icon="`smallLikeDis`"
                         @click="$emit('likeTrack', currTrack)" title="Add to your liked tracks"></span>
@@ -50,12 +52,13 @@
                         <span v-if="!isPlaying" v-icon="'detailsPlay'"></span>
                         <span v-else v-icon="'detailsPause'"></span>
                     </button>
-                    <button v-icon="'next'" class="next btn" @click="$emit('previousNextVideo', 1)" title="Next"></button>
+                    <button v-icon="'next'" class="next btn" @click="$emit('previousNextVideo', 1)"
+                        title="Next"></button>
                     <button class="repeat btn" @click="$emit('cycleRepeatStates')" title="Repeat" :class="{
-                        'no-repeat': repeatStateIdx === 0,
-                        'repeat-playlist': repeatStateIdx === 1,
-                        'repeat-song': repeatStateIdx === 2
-                    }">
+        'no-repeat': repeatStateIdx === 0,
+        'repeat-playlist': repeatStateIdx === 1,
+        'repeat-song': repeatStateIdx === 2
+    }">
                         <span v-if="this.repeatStateIdx === 2" v-icon="'repeatSong'"></span>
                         <span v-else v-icon="'repeat'"></span>
                     </button>
@@ -80,7 +83,6 @@
 
 <script>
 import { utilService } from '../services/util.service'
-import { stationService } from '../services/station.service'
 export default {
     name: 'FullscreenPlayer',
     props: {
@@ -94,7 +96,17 @@ export default {
         secsToTimeFormat: Function,
         hasLiked: Function,
     },
+
+    data() {
+        return {
+            isPortrait: false,
+            isLandscape: false,
+        }
+    },
     created() {
+        document.querySelector('.station-main-container').style.padding = '0'
+        this.updateScreenOrientation()
+
         let opacityTimeout
         this.mouseMoveHandler = () => {
             const playerDiv = this.$refs.playerControls
@@ -106,7 +118,10 @@ export default {
                 playerDiv.style.opacity = '0'
             }, 2000)
         }
-        window.document.addEventListener('mousemove', this.mouseMoveHandler)
+
+        if (window.innerWidth > 940) window.document.addEventListener('mousemove', this.mouseMoveHandler)
+
+        window.addEventListener('resize', this.updateScreenOrientation)
     },
     methods: {
         emitChangeTime(ev) {
@@ -127,9 +142,14 @@ export default {
                 console.log(err.message)
             }
         },
+        updateScreenOrientation() {
+            this.isPortrait = window.innerHeight > window.innerWidth
+        },
     },
     unmounted() {
+        document.querySelector('.station-main-container').style.padding = '.5rem'
         window.document.removeEventListener('mousemove', this.mouseMoveHandler)
+        window.removeEventListener('resize', this.updateScreenOrientation)
     },
     computed: {
         stationType() {

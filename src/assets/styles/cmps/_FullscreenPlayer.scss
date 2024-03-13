@@ -9,6 +9,16 @@
     row-gap: 3rem;
     line-height: 1.2;
 
+    @include for-xlmobile-layout {
+        grid-template-columns: 2rem 1fr 2rem;
+        grid-template-rows: auto 1fr auto;
+        row-gap: 1rem;
+
+        &.portrait {
+            grid-template-columns: .5rem 1fr .5rem;
+        }
+    }
+
     .uppercase {
         font-size: 1.2rem;
         text-transform: uppercase;
@@ -22,11 +32,27 @@
         grid-column: 2;
         grid-row: 1;
 
+        svg {
+            @include for-xlmobile-layout {
+                width: 3rem;
+                height: 3rem;
+            }
+        }
+
         .playing-from {
             color: #9c9c9e;
 
+            h1 {
+                @include for-xlmobile-layout {
+                    font-size: .8rem;
+                }
+            }
+
             h2 {
                 font-size: 2rem;
+                @include for-xlmobile-layout {
+                    font-size: 1.2rem;
+                }
             }
         }
     }
@@ -48,15 +74,35 @@
         opacity: 0;
         transition: opacity 1s ease;
 
-        h1 {
-            font-size: 1.5rem;
-            font-weight: 400;
+        @include for-xlmobile-layout {
+            margin-block-start: 1rem;
+            aspect-ratio: unset;
+            max-height: 5rem;
+
+            &.portrait {
+                justify-self: unset;
+            }
         }
 
-        h2 {
-            font-size: 2rem;
-            margin-block-start: 1rem;
+        .next-track-text {
+            h1 {
+                font-size: 1.5rem;
+                font-weight: 400;
+                @include for-xlmobile-layout {
+                    font-size: 1rem;
+                }
+            }
+    
+            h2 {
+                font-size: 2rem;
+                margin-block-start: 1rem;
+                @include for-xlmobile-layout {
+                    font-size: 1rem;
+                }
+            }
+
         }
+
 
         &.fade-in {
             opacity: 1;
@@ -77,22 +123,49 @@
         grid-column: 2;
         grid-row: 2;
 
+        @include for-xlmobile-layout {
+
+            &.portrait {
+                flex-direction: column;
+            }
+        }
+
         img {
             max-width: 40rem;
             max-height: 40rem;
             align-self: flex-end;
             border-radius: 1rem;
             animation: moveImgUp 1s ease-in-out;
+
+            @include for-xlmobile-layout {
+                max-width: 9rem;
+
+                &.portrait {
+                    max-width: 100%;
+                }
+            }
         }
 
         .track-text {
             align-self: flex-end;
             animation: moveTextRight 1s ease-in-out;
 
+            @include for-xlmobile-layout {
+
+                &.portrait {
+                    align-self: unset;
+                    text-align: center;
+                }
+            }
+
             .track-title {
                 font-size: 6rem;
                 color: $clr2;
                 line-height: 1;
+                
+                @include for-xlmobile-layout {
+                    font-size: 3rem;
+                }
             }
 
             .track-artist {
@@ -127,6 +200,12 @@
             align-items: center;
             justify-content: space-between;
 
+            @include for-xlmobile-layout {
+                &.portrait {
+                    justify-content: space-around;
+                }
+            }
+
             .btn {
                 display: flex;
                 cursor: pointer;
@@ -153,6 +232,10 @@
                 gap: 1.25rem;
                 align-items: center;
                 height: 9rem;
+
+                @include for-xlmobile-layout {
+                    height: 5.5rem;
+                }
 
                 .play-fs {
                     display: flex;
@@ -201,9 +284,20 @@
                 display: flex;
                 align-items: center;
 
+                .mute,
+                .vol-slider {
+                    @include for-xlmobile-layout {
+                        display: none;
+                    }
+                }
+
                 .fullscreen-btn {
                     margin-inline-start: 1rem;
 
+                    @include for-xlmobile-layout {
+                        margin-inline-start: unset;
+                    }
+                    
                     &:hover {
                         path {
                             fill: $clr2;

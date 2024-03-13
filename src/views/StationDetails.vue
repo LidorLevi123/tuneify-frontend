@@ -20,7 +20,8 @@
                             <span class="logo artist">{{ stationOwner }}</span>
                         </RouterLink>
                         <span v-else class="logo">{{ stationOwner }}</span>
-                        <span v-if="station.isAlbum" class="logo">&bull; {{ this.station.releaseDate?.substr(0, 4) }}</span>
+                        <span v-if="station.isAlbum" class="logo">&bull; {{ this.station.releaseDate?.substr(0, 4)
+                            }}</span>
                         <span class="songs-num" v-if="station.tracks">&bull; {{ station.tracks?.length }} songs</span>
                         <span class="songs-time" v-show="formattedTime">{{ formattedTime }}</span>
                     </div>
@@ -52,7 +53,8 @@
                 </span>
 
                 <div class="bubbling-heart" v-show="hasLiked && !isOwner">
-                    <input type="checkbox" @click="likeDislikeStation('remove')" class="heart-input" id="like-undefined">
+                    <input type="checkbox" @click="likeDislikeStation('remove')" class="heart-input"
+                        id="like-undefined">
                     <label class="label" for="like-undefined"><span v-icon="`bHearts`"></span></label>
                 </div>
                 <UserList v-show="!isShare" :users="topicUsers" />
@@ -222,7 +224,7 @@ export default {
         },
         scrollDown() {
             const container = this.$refs.stationDetails
-            if (container) container.scrollBy({ top: 600, behavior: 'smooth' })
+            if (container) setTimeout(() => container.scrollTo({ top: 1000, behavior: 'smooth' }), 1000)
         },
         async loadStation() {
             try {

@@ -9,7 +9,7 @@
             :style="{ opacity: this.scrollPosition > 400 ? '1' : '0' }">
         </button>
         <span v-if="showName" class="station-header" :style="{ opacity: this.scrollPosition > 400 ? '1' : '0' }">{{
-            station?.name }}</span>
+        station?.name }}</span>
         <div v-if="$route.path === '/search'" class="search-input-container">
             <span class="df ai" v-icon="`sSearch`"></span>
             <input type="text" v-model="query" :placeholder="placeholderText">
@@ -35,6 +35,10 @@
             <RouterLink v-if="user?.isAdmin" class="admin-link" to="/admin">
                 <button class="admin-btn">Admin page</button>
             </RouterLink>
+
+            <button v-icon="'fullScreen'" v-if="currStation && windowWidth < 890" @click="emitFullScreen"
+                class="profile-btn market-btn">
+            </button>
 
             <button v-if="user && this.$route.path === '/'" @click="openMarketsMenu" class="profile-btn market-btn"
                 :title="`${currMarket}`">
@@ -72,6 +76,7 @@ export default {
             backgroundColor: '#121212',
             showUserMenu: false,
             showMarketsMenu: false,
+            windowWidth: window.innerWidth,
         }
     },
     created() {
@@ -83,6 +88,9 @@ export default {
         }, 500)
     },
     methods: {
+        emitFullScreen() {
+            eventBus.emit('fullscreen')
+        },
         changeMarket(market) {
             if (market !== this.currMarket) {
                 this.$store.commit({ type: 'setCurrMarket', market })

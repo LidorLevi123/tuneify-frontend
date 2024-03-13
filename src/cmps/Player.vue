@@ -40,18 +40,19 @@
                 <button class="shuffle btn" @click="toggleShuffle" title="Shuffle">
                     <span v-icon="'shuffle'" :class="{ 'enabled': this.isShuffle }"></span>
                 </button>
-                <button v-icon="'previous'" class="previous btn" @click="previousNextVideo(-1)" title="Previous"></button>
+                <button v-icon="'previous'" class="previous btn" @click="previousNextVideo(-1)"
+                    title="Previous"></button>
                 <button class="play btn" @click="togglePlayPause" title="Play">
                     <span v-if="!isPlaying" v-icon="'play'"></span>
                     <span v-else v-icon="'pause'"></span>
                 </button>
                 <button v-icon="'next'" class="next btn" @click="previousNextVideo(1)" title="Next"></button>
                 <button class="repeat btn" @click="cycleRepeatStates" title="Repeat" :class="{
-                    'no-repeat': repeatStateIdx === 0,
-                    'repeat-playlist': repeatStateIdx === 1,
-                    'repeat-song': repeatStateIdx === 2
-                }
-                    ">
+        'no-repeat': repeatStateIdx === 0,
+        'repeat-playlist': repeatStateIdx === 1,
+        'repeat-song': repeatStateIdx === 2
+    }
+        ">
                     <span v-if="this.repeatStateIdx === 2" v-icon="'repeatSong'"></span>
                     <span v-else v-icon="'repeat'"></span>
                 </button>
@@ -78,8 +79,8 @@
             </section>
             <section class="playback-container">
                 <span>{{ secsToTimeFormat(elapsedTime) }}</span>
-                <input class="playback-slider slider" @input="onChangeTime" type="range" min="0" :max="currTrackDuration"
-                    v-model="elapsedTime"
+                <input class="playback-slider slider" @input="onChangeTime" type="range" min="0"
+                    :max="currTrackDuration" v-model="elapsedTime"
                     :style="{ backgroundImage: `linear-gradient(to right, rgba(0,0,0,0) ${playbackProgressPercentage}%, rgb(77,77,77) ${playbackProgressPercentage}%)` }">
                 <span>{{ secsToTimeFormat(currTrackDuration) }}</span>
             </section>
@@ -153,6 +154,7 @@ export default {
         eventBus.on('trackClicked', this.loadVideo)
         eventBus.on('trackPaused', this.pauseVideo)
         eventBus.on('playNextTrack', () => this.previousNextVideo(1))
+        eventBus.on('fullscreen', this.toggleFullscreen)
 
         // sockets
         socketService.on(SOCKET_EVENT_ADD_MSG, this.onSocketMessage)
