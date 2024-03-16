@@ -4,7 +4,7 @@
             <RouterLink to="/">
                 <div :class="{ 'isActive': $route.path === '/' }">
                     <span v-if="$route.path === '/'" v-icon="'homeActive'"></span>
-                    <span v-else v-icon="'home'"></span>
+                    <span v-else v-icon="'home'" title="ver 1.1.0"></span>
                     <section v-if="!sidebarCollapsed">Home</section>
                 </div>
             </RouterLink>

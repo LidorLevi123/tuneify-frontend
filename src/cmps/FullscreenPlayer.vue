@@ -147,7 +147,7 @@ export default {
         },
     },
     unmounted() {
-        document.querySelector('.station-main-container').style.padding = '.5rem'
+        if (window.innerWidth > 940) document.querySelector('.station-main-container').style.padding = '.5rem'
         window.document.removeEventListener('mousemove', this.mouseMoveHandler)
         window.removeEventListener('resize', this.updateScreenOrientation)
     },

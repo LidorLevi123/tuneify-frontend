@@ -101,17 +101,20 @@ export default {
             document.body.classList.remove('ad-modal-open')
         },
         async getArtistData(artist, artistId) {
+            try {
+                const metaData = await wikiService.getArtistData({ artist })
+                this.artistSnippet = metaData
 
-            const metaData = await wikiService.getArtistData(artist)
-            this.artistSnippet = metaData
+                const { imgUrl, followers } = await stationService.getArtistData(artistId, true)
+                this.artistImage = imgUrl
+                this.artistFollowers = followers
 
-            const { imgUrl, followers } = await stationService.getArtistData(artistId, true)
-            this.artistImage = imgUrl
-            this.artistFollowers = followers
-
-            const { events, socials } = await eventsService.getEventsAndSocials(artist)
-            this.artistEvents = events
-            this.artistSocials = socials
+                const { events, socials } = await eventsService.getEventsAndSocials({ artist })
+                this.artistEvents = events
+                this.artistSocials = socials
+            } catch (err) {
+                console.error(err)
+            }
         },
     },
     computed: {
