@@ -25,12 +25,13 @@
             </div>
 
             <div>
-                <div v-if="showUserMenu" class="dropdown" v-clickOutside="handleClickOutside">
+                <div v-if="showUserMenu" class="dropdown" v-clickOutside="handleClickOutsideUser">
                     <div @click="editProfile" class="menu-li">Edit profile</div>
                     <div @click="doLogout" class="menu-li">Log out</div>
                 </div>
 
-                <div v-if="showMarketsMenu" class="dropdown markets-dropdown" v-clickOutside="handleClickOutside">
+                <div v-if="showMarketsMenu" class="dropdown markets-dropdown"
+                    v-clickOutside="handleClickOutsideMarkets">
                     <ul class="clean-list markets-list">
                         <li @click="changeMarket(market)" v-for="market in markets" :key="market.id" :title="market">
                             <img onload="this.style.opacity = '1'" :src="getFlagImageUrl(market)" alt="">
@@ -108,8 +109,10 @@ export default {
             }
             this.showMarketsMenu = false
         },
-        handleClickOutside() {
+        handleClickOutsideUser() {
             this.showUserMenu = false
+        },
+        handleClickOutsideMarkets() {
             this.showMarketsMenu = false
         },
         openUserMenu() {

@@ -10,7 +10,7 @@ export default defineConfig({
       manifest: {
         name: 'Tuneify',
         short_name: 'Tuneify',
-        version: '1.1.0',
+        version: '1.1.1',
         theme_color: '#1ed760',
         background_color: '#000000',
         display: 'standalone',
@@ -25,14 +25,14 @@ export default defineConfig({
             src: '/icons/512.png',
             sizes: '512x512',
             type: 'image/png',
-          }
-        ]
-      }
-    })
+          },
+        ],
+      },
+    }),
   ],
 
   build: {
     outDir: '../backend/public',
-    emptyOutDir: true
-  }
+    emptyOutDir: true,
+  },
 })
