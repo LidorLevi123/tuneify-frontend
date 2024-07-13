@@ -5,7 +5,7 @@ export const lyricsService = {
 
 async function getLyrics(term) {
     try {
-        const lyrics = await httpService.get('lyrics/', term)
+        const lyrics = await httpService.get('lyrics/', {term})
         return lyrics
     }
     catch (error) {

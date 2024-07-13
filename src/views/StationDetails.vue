@@ -1,7 +1,7 @@
 <template>
     <section ref="stationDetails" class="station-details" v-if="station">
         <div ref="topGradient" class="top-gradient">
-            <section class="img-photo" :style="{ alignItems: station.isArtist ? 'center' : 'end' }">
+            <section class="img-photo new-layout" :style="{ alignItems: station.isArtist ? 'center' : 'end' }">
                 <StationImg :station="station" @backgroundColor="setBgColor" />
                 <section class="station-info">
                     <span v-if="!station.isArtist" class="pl">{{ stationType }}</span>
@@ -9,7 +9,8 @@
                         <span v-icon="`verified`"></span>
                         <span>Verified Artist</span>
                     </span>
-                    <h1 @click="openStationEditor" :class="{ 'user-editable': userStations }">{{ station.name }}</h1>
+                    <h1 @click="openStationEditor" :class="{ 'user-editable': userStations }">{{ station.name }}
+                    </h1>
                     <span v-if="station.isArtist" class="followers">
                         {{ station.followers.toLocaleString("en-US") }} Followers
                     </span>
@@ -22,69 +23,72 @@
                         <span v-else class="logo">{{ stationOwner }}</span>
                         <span v-if="station.isAlbum" class="logo">&bull; {{ this.station.releaseDate?.substr(0, 4)
                             }}</span>
-                        <span class="songs-num" v-if="station.tracks">&bull; {{ station.tracks?.length }} songs</span>
+                        <span class="songs-num" v-if="station.tracks">&bull; {{ station.tracks?.length }}
+                            songs</span>
                         <span class="songs-time" v-show="formattedTime">{{ formattedTime }}</span>
                     </div>
                 </section>
             </section>
         </div>
         <div ref="botGradient" class="bottom-gradient">
-            <section class="details-player">
+            <div class="new-layout">
+                <section class="details-player">
 
-                <button v-if="!isPlaying" class="details-play" v-icon="'detailsPlay'" v-show="hasTracks"
-                    @click="clickTrack(currTrackIdx)" title="Play">
-                </button>
+                    <button v-if="!isPlaying" class="details-play" v-icon="'detailsPlay'" v-show="hasTracks"
+                        @click="clickTrack(currTrackIdx)" title="Play">
+                    </button>
 
-                <button v-else class="details-play" v-icon="'detailsPause'" v-show="hasTracks" @click="pauseTrack"
-                    title="Pause">
-                </button>
+                    <button v-else class="details-play" v-icon="'detailsPause'" v-show="hasTracks" @click="pauseTrack"
+                        title="Pause">
+                    </button>
 
-                <button class="details-like" v-icon="'like'" v-show="!hasLiked && !isOwner"
-                    @click="likeDislikeStation('add')">
-                </button>
+                    <button class="details-like" v-icon="'like'" v-show="!hasLiked && !isOwner"
+                        @click="likeDislikeStation('add')">
+                    </button>
 
-                <button class="details-unlike" v-icon="'unlike'" v-show="hasLiked && !isOwner"
-                    @click="likeDislikeStation('remove')">
-                </button>
+                    <button class="details-unlike" v-icon="'unlike'" v-show="hasLiked && !isOwner"
+                        @click="likeDislikeStation('remove')">
+                    </button>
 
-                <span v-if="this.station.tracks.length" class="material-symbols-outlined df ai share"
-                    :class="{ 'enabled': !isShare, 'user-station': isOwner }" @click="activateShare(isShare)"
-                    title="Listen With Friends">group_add
-                </span>
+                    <span v-if="this.station.tracks.length" class="material-symbols-outlined df ai share"
+                        :class="{ 'enabled': !isShare, 'user-station': isOwner }" @click="activateShare(isShare)"
+                        title="Listen With Friends">group_add
+                    </span>
 
-                <div class="bubbling-heart" v-show="hasLiked && !isOwner">
-                    <input type="checkbox" @click="likeDislikeStation('remove')" class="heart-input"
-                        id="like-undefined">
-                    <label class="label" for="like-undefined"><span v-icon="`bHearts`"></span></label>
-                </div>
-                <UserList v-show="!isShare" :users="topicUsers" />
-            </section>
-            <TrackList @track-clicked="clickTrack" @track-add="addTrack" @track-remove="removeTrack"
-                @track-dislike="dislikeTrack" @station-update="loadStation" @search="getSearchRes"
-                @getRecommendations="getRecommendations" :station="station" />
-            <section class="artist-discography" v-if="station.isArtist">
-                <h1 class="title">Discography</h1>
-                <section class="filter-btns">
-                    <button v-if="showBtn('all')" class="filter btn" :class="{ 'active': !filterBy }"
-                        @click="setFilterBy(null)">All</button>
-                    <button v-if="showBtn('album')" class="filter btn" :class="{ 'active': filterBy === 'album' }"
-                        @click="setFilterBy('album')">Albums</button>
-                    <button v-if="showBtn('single')" class="filter btn" :class="{ 'active': filterBy === 'single' }"
-                        @click="setFilterBy('single')">Singles & EPs</button>
-                    <button v-if="showBtn('compilation')" class="filter btn"
-                        :class="{ 'active': filterBy === 'compilation' }"
-                        @click="setFilterBy('compilation')">Compilations</button>
+                    <div class="bubbling-heart" v-show="hasLiked && !isOwner">
+                        <input type="checkbox" @click="likeDislikeStation('remove')" class="heart-input"
+                            id="like-undefined">
+                        <label class="label" for="like-undefined"><span v-icon="`bHearts`"></span></label>
+                    </div>
+                    <UserList v-show="!isShare" :users="topicUsers" />
                 </section>
-                <StationList :stations="artistAlbums" />
-            </section>
-            <section class="artist-discography" v-if="station.isArtist && artistAppearOn?.length">
-                <h1 class="title">Appears On</h1>
-                <StationList :stations="artistAppearOn" />
-            </section>
-            <section class="related-artists" v-if="station.isArtist">
-                <h1 class="title">Fans also like</h1>
-                <StationList :stations="station.relatedArtists" />
-            </section>
+                <TrackList @track-clicked="clickTrack" @track-add="addTrack" @track-remove="removeTrack"
+                    @track-dislike="dislikeTrack" @station-update="loadStation" @search="getSearchRes"
+                    @getRecommendations="getRecommendations" :station="station" />
+                <section class="artist-discography" v-if="station.isArtist">
+                    <h1 class="title">Discography</h1>
+                    <section class="filter-btns">
+                        <button v-if="showBtn('all')" class="filter btn" :class="{ 'active': !filterBy }"
+                            @click="setFilterBy(null)">All</button>
+                        <button v-if="showBtn('album')" class="filter btn" :class="{ 'active': filterBy === 'album' }"
+                            @click="setFilterBy('album')">Albums</button>
+                        <button v-if="showBtn('single')" class="filter btn" :class="{ 'active': filterBy === 'single' }"
+                            @click="setFilterBy('single')">Singles & EPs</button>
+                        <button v-if="showBtn('compilation')" class="filter btn"
+                            :class="{ 'active': filterBy === 'compilation' }"
+                            @click="setFilterBy('compilation')">Compilations</button>
+                    </section>
+                    <StationList :stations="artistAlbums" />
+                </section>
+                <section class="artist-discography" v-if="station.isArtist && artistAppearOn?.length">
+                    <h1 class="title">Appears On</h1>
+                    <StationList :stations="artistAppearOn" />
+                </section>
+                <section class="related-artists" v-if="station.isArtist">
+                    <h1 class="title">Fans also like</h1>
+                    <StationList :stations="station.relatedArtists" />
+                </section>
+            </div>
         </div>
         <StationEdit @station-edit="loadStation" v-if="isOwner" />
     </section>

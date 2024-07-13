@@ -1,8 +1,7 @@
 .main-preview-container {
     border-radius: 0.5rem;
-    background-color: $clr5;
     aspect-ratio: 0.6785;
-    padding: 1rem;
+    padding: .75rem;
     cursor: pointer;
     transition: ease-in-out 0.3s;
 
@@ -18,7 +17,7 @@
     }
 
     &:hover {
-        background-color: $clr6;
+        background-color: $clr5;
     }
 
     img {

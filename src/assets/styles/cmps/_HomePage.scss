@@ -10,6 +10,8 @@
 
     .stations-container {
         padding: 1.5rem;
+        max-width: 123rem;
+        margin: auto;
 
         @include for-mobile-layout {
             padding: 2rem 0.5rem 10rem;
@@ -19,19 +21,25 @@
             color: $clr2;
             margin-block: 3rem 1rem;
             font-size: 2rem;
+            padding-inline: .75rem;
 
             @include for-mobile-layout {
                 font-size: 1.5rem;
                 margin-block: 1rem;
+                padding-inline: unset;
             }
         }
 
         .sub-header {
-            max-width: 119rem;
             display: flex;
             justify-content: space-between;
             align-items: end;
+            padding-inline: .75rem;
 
+            @include for-mobile-layout {
+                padding-inline: unset;
+            }
+            
             h1 {
                 font-size: 1.5rem;
                 font-family: CircularSpTitle;

@@ -1,6 +1,6 @@
 .category-preview {
     position: relative;
-    aspect-ratio: 1;
+    aspect-ratio: 2/1;
     font-size: 2rem;
     border-radius: 0.5rem;
     overflow: hidden;
@@ -13,8 +13,7 @@
         font-weight: normal;
 
         @include for-mobile-layout {
-            font-size: 1.8rem;
-            margin-block-end: 3rem;
+            font-size: 1.5rem;
         }
     }
 

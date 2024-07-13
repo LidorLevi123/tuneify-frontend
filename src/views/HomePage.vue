@@ -65,7 +65,7 @@ export default {
   methods: {
     maxStationsCalc() {
       const stationsWidth = document.querySelector('.station-list-container').clientWidth
-      this.maxStations = window.innerWidth < 890 ? 9 : Math.floor(stationsWidth / 200) || 1
+      this.maxStations = window.innerWidth < 890 ? 9 : Math.floor(stationsWidth / 210) || 1
     },
     setBgcolor(color) {
       this.backgroundColor = color

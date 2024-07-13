@@ -1,58 +1,68 @@
 <template>
     <section class="main-header" :style="{ backgroundColor: headerBgColor }">
-        <button @click="goBack" v-icon="`navBack`" class="nav-btn" title="Go back"></button>
-        <button @click="goNext" v-icon="`navNext`" class="nav-btn" title="Go forward"></button>
-        <button v-icon="'mPlay'" v-if="showPlay" class="play-btn-header" @click="playStation(currTrackIdx)"
-            :style="{ opacity: this.scrollPosition > 400 ? '1' : '0' }">
-        </button>
-        <button v-icon="'pause'" v-if="showPause" class="play-btn-header" @click="pauseStation"
-            :style="{ opacity: this.scrollPosition > 400 ? '1' : '0' }">
-        </button>
-        <span v-if="showName" class="station-header" :style="{ opacity: this.scrollPosition > 400 ? '1' : '0' }">{{
-        station?.name }}</span>
-        <div v-if="$route.path === '/search'" class="search-input-container">
-            <span class="df ai" v-icon="`sSearch`"></span>
-            <input type="text" v-model="query" :placeholder="placeholderText">
-            <div v-if="query">
-                <span class="df ai" v-icon="'close'" @click="onClearFilter"></span>
+        <div class="main-header-container">
+            <div class="header-l">
+                <div class="nav-btns">
+                    <button @click="goBack" v-icon="`navBack`" class="nav-btn" title="Go back"></button>
+                    <button @click="goNext" v-icon="`navNext`" class="nav-btn" title="Go forward"></button>
+                </div>
+                <button v-icon="'mPlay'" v-if="showPlay" class="play-btn-header" @click="playStation(currTrackIdx)"
+                    :style="{ opacity: this.scrollPosition > 400 ? '1' : '0' }">
+                </button>
+                <button v-icon="'pause'" v-if="showPause" class="play-btn-header" @click="pauseStation"
+                    :style="{ opacity: this.scrollPosition > 400 ? '1' : '0' }">
+                </button>
+                <span v-if="showName" class="station-header"
+                    :style="{ opacity: this.scrollPosition > 400 ? '1' : '0' }">{{
+                        station?.name }}</span>
+                <div v-if="$route.path === '/search'" class="search-input-container">
+                    <span class="df ai" v-icon="`sSearch`"></span>
+                    <input type="text" v-model="query" :placeholder="placeholderText">
+                    <div v-if="query">
+                        <span class="df ai" v-icon="'close'" @click="onClearFilter"></span>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <div v-if="showUserMenu" class="dropdown" v-clickOutside="handleClickOutside">
-            <div @click="editProfile" class="menu-li">Edit profile</div>
-            <div @click="doLogout" class="menu-li">Log out</div>
-        </div>
+            <div>
+                <div v-if="showUserMenu" class="dropdown" v-clickOutside="handleClickOutside">
+                    <div @click="editProfile" class="menu-li">Edit profile</div>
+                    <div @click="doLogout" class="menu-li">Log out</div>
+                </div>
 
-        <div v-if="showMarketsMenu" class="dropdown markets-dropdown" v-clickOutside="handleClickOutside">
-            <ul class="clean-list markets-list">
-                <li @click="changeMarket(market)" v-for="market in markets" :key="market.id" :title="market">
-                    <img :src="getFlagImageUrl(market)" alt="">
-                </li>
-            </ul>
-        </div>
+                <div v-if="showMarketsMenu" class="dropdown markets-dropdown" v-clickOutside="handleClickOutside">
+                    <ul class="clean-list markets-list">
+                        <li @click="changeMarket(market)" v-for="market in markets" :key="market.id" :title="market">
+                            <img onload="this.style.opacity = '1'" :src="getFlagImageUrl(market)" alt="">
+                        </li>
+                    </ul>
+                </div>
 
-        <div class="profile-btns">
-            <RouterLink v-if="user?.isAdmin" class="admin-link" to="/admin">
-                <button class="admin-btn">Admin page</button>
-            </RouterLink>
+                <div class="profile-btns">
+                    <RouterLink v-if="user?.isAdmin" class="admin-link" to="/admin">
+                        <button class="admin-btn">Admin page</button>
+                    </RouterLink>
 
-            <button v-icon="'fullScreen'" v-if="currStation && windowWidth < 890" @click="emitFullScreen"
-                class="profile-btn market-btn">
-            </button>
+                    <button v-icon="'fullScreen'" v-if="currStation && windowWidth < 890" @click="emitFullScreen"
+                        class="profile-btn market-btn">
+                    </button>
 
-            <button v-if="user && this.$route.path === '/'" @click="openMarketsMenu" class="profile-btn market-btn"
-                :title="`${currMarket}`">
-                <img :src="`https://www.worldatlas.com/r/w236/img/flag/${currMarket.toLowerCase()}-flag.jpg`" alt="">
-            </button>
+                    <button v-if="user && this.$route.path === '/'" @click="openMarketsMenu"
+                        class="profile-btn market-btn" :title="`${currMarket}`">
+                        <img :src="`https://www.worldatlas.com/r/w236/img/flag/${currMarket.toLowerCase()}-flag.jpg`"
+                            alt="">
+                    </button>
 
-            <button v-if="user" @click="openUserMenu" class="profile-btn" :title="`${user.fullname}`">
-                <img :src="user.imgUrl" :alt="user.imgUrl">
-            </button>
+                    <button v-if="user" @click="openUserMenu" class="profile-btn" :title="`${user.fullname}`">
+                        <img :src="user.imgUrl" :alt="user.imgUrl">
+                    </button>
 
-            <RouterLink v-if="!user" class="login-link" to="/login">
-                <button class="login-btn">Log in</button>
-            </RouterLink>
+                    <RouterLink v-if="!user" class="login-link" to="/login">
+                        <button class="login-btn">Log in</button>
+                    </RouterLink>
 
+                </div>
+            </div>
         </div>
     </section>
 </template>

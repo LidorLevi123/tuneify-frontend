@@ -1,29 +1,46 @@
 .main-header {
-    position: relative;
-    transition: .5s;
-    border-top-left-radius: 0.5rem;
-    border-top-right-radius: 0.5rem;
-    padding-inline-start: 1.4rem;
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
     grid-column: 2;
     grid-row: 1;
     z-index: 2;
     height: 4rem;
-
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    display: grid;
+    align-items: center;
+    padding-inline: 2rem;
+    
     @include for-mobile-layout {
         position: fixed;
         width: 100vw;
         padding: .5rem;
-        height: 2.5rem;
+        height: 3rem;
         border-radius: 0;
     }
+    
+    .main-header-container {
+        position: relative;
+        margin-inline: auto;
+        transition: .5s;
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 119rem;
+
+        .header-l {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+    
+
+
 
     .dropdown {
         position: absolute;
-        right: 1.5rem;
-        top: 3.2rem;
+        right: 0;
+        top: 2.5rem;
         color: #ffffffe6;
         font-size: 0.875rem;
         border-radius: 0.2rem;
@@ -38,7 +55,7 @@
 
         &.markets-dropdown {
             box-sizing: unset;
-            right: 4rem;
+            right: 2.5rem;
 
             @include for-mobile-layout {
                 position: fixed;
@@ -92,6 +109,8 @@
                     width: 1.7rem;
                     height: 1.7rem;
                     border-radius: 50%;
+                    opacity: 0;
+                    transition: opacity .7s;
                 }
             }
         }
@@ -139,8 +158,6 @@
             width: 2rem;
             background-color: rgba(0, 0, 0, 0.54);
             cursor: pointer;
-            margin-left: auto;
-            margin-inline-end: 1.5rem;
 
             @include for-mobile-layout {
                 margin-inline-end: unset;
@@ -211,16 +228,22 @@
         gap: 8px;
     }
 
-    .nav-btn {
-        border-radius: 50%;
-        border: none;
-        height: 2rem;
-        width: 2rem;
-        opacity: 0.6;
-        background-color: rgba(23, 23, 23, 0.457);
-        background-color: $clr4;
-        cursor: pointer;
+    .nav-btns {
+        display: flex;
+        gap: .5rem;
+
+        .nav-btn {
+            border-radius: 50%;
+            border: none;
+            height: 2rem;
+            width: 2rem;
+            opacity: 0.6;
+            background-color: rgba(23, 23, 23, 0.457);
+            background-color: $clr4;
+            cursor: pointer;
+        }
     }
+
 
     .play-btn-header {
 
@@ -307,4 +330,5 @@
             display: flex;
         }
     }
+}
 }

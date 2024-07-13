@@ -1,6 +1,6 @@
 <template>
   <section class="categories-container">
-    <div class="search-res" v-if="tracks?.length">
+    <div class="search-res new-layout" v-if="tracks?.length">
       <section class="df search-filter-btns">
         <button class="search-filter-btn" :class="{ active: !searchFilter }" @click="searchFilter = ''">All</button>
         <button class="search-filter-btn" :class="{ active: searchFilter === 'Songs' }"

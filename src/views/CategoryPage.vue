@@ -1,9 +1,11 @@
 <template>
     <section class="category-page">
-        <header>
-            <h1>{{ categoryName }}</h1>
-        </header>
-        <StationList v-if="categoryStations" :stations="categoryStations" />
+        <div class="new-layout">
+            <header>
+                <h1>{{ categoryName }}</h1>
+            </header>
+            <StationList v-if="categoryStations" :stations="categoryStations" />
+        </div>
     </section>
 </template>
 

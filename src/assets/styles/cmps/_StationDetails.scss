@@ -199,10 +199,18 @@
 
     & .img-photo {
 
+        align-self: end;
+        display: flex;
+        flex: 1;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        align-items: end;
+        line-height: 1;
+
         @include for-mobile-layout {
             display: block;
             margin: auto;
-            padding-block-start: 2.5rem;
+            padding: 3rem 0 0 0;
         }
 
         .img {
@@ -250,14 +258,6 @@
                 }
             }
         }
-
-        align-self: end;
-        display: flex;
-        gap: 1.5rem;
-        margin-inline-start: 1.5rem;
-        align-items: end;
-        line-height: 1;
-        margin-block-end: 1.34rem;
     }
 
     .top-gradient {
