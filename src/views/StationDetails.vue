@@ -235,15 +235,17 @@ export default {
                 const path = this.$route.path
                 const stationType = path.startsWith('/station') ? 'station' : path.startsWith('/album') ? 'album' : 'artist'
                 const station = await this.$store.dispatch({ type: 'getStation', stationId: this.stationId, stationType })
-
+                const isStale = Date.now() - station.lastUpdate > 3600000 * 12
+               
                 if (!station) return this.$router.push('/')
 
                 this.station = station
 
-                if (station._id && station.snapshot_id) {
+                if (station._id && station.snapshot_id && isStale) {
+                    console.log('checking for updates')
                     const updatedStation = await stationService.checkForChanges(station)
                     if (updatedStation) {
-                        console.log('updated station')
+                        console.log('playlist updated')
                         this.station = updatedStation
                     }
                 }
@@ -261,7 +263,7 @@ export default {
 
             } catch (err) {
                 console.log(err.message)
-                showErrorMsg('Could not set current station')
+                // showErrorMsg('Could not set current station')
             }
         },
         async loadArtist() {

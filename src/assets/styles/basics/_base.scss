@@ -3,6 +3,14 @@
     margin-inline: auto;
 }
 
+.absorb-click {
+    pointer-events: none;
+}
+  
+.click-outside-active {
+    pointer-events: auto;
+}
+
 a {
     text-decoration: none;
     color: inherit;

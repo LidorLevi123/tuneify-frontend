@@ -123,24 +123,27 @@ export const stationStore = {
     },
     actions: {
         async getStationsForHome({ commit }, { market }) {
-            commit('setLoading', true)
+            const savedStations = JSON.parse(localStorage.getItem('stationsForHome'))
+            if (savedStations) commit({ type: 'setStationsForHome', stations: savedStations, market })
+
             try {
-                const stations = await stationService.getStationsForHome(market)
-                if (stations.length < 6) throw new Error('Could not load stations from api  - trying from DB')
-                commit({ type: 'setStationsForHome', stations, market })
-            } catch (err) {
-                try {
-                    console.log('Error in getStationsForHome', err.message)
-                    const stationsFromDb = await stationService.getById('65498ef9ce1a330f64be856e')
-                    commit({ type: 'setStationsForHome', stations: stationsFromDb.stations })
+                const staleTime = 3600000 * 12
+                const isExpired = Date.now() - localStorage.getItem('timestamp') > staleTime
+
+                if (isExpired) {
+                    if (!savedStations) commit('setLoading', true)
+                    const stations = await stationService.getStationsForHome(market)
+                    commit({ type: 'setStationsForHome', stations, market })
+                    commit('setLoading', false)
+
+                    if (stations.length >= 12) {
+                        localStorage.setItem('stationsForHome', JSON.stringify(stations))
+                        localStorage.setItem('timestamp', Date.now())
+                    }
                 }
-                catch (err) {
+            } catch (err) {
                     console.log('stationStore: Error in getStationsForHome', err.message)
                     throw new Error('Could not load stations for home page')
-                }
-            }
-            finally {
-                commit('setLoading', false)
             }
         },
         async loadUserStations({ commit }, { userId }) {

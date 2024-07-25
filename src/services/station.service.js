@@ -57,6 +57,8 @@ async function getById(spotifyId, type = 'station') {
 }
 
 async function checkForChanges(station) {
+    station.lastUpdate = Date.now()
+    save(station)
     try {
         const spotifyStation = await spotifyService.getSpotifyItems({ type: 'station', id: station.spotifyId })
         if (spotifyStation.snapshot_id === station.snapshot_id) return null

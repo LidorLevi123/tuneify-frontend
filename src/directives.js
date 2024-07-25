@@ -21,10 +21,15 @@ const clickOutside = {
     setTimeout(() => {
       document.addEventListener('click', el.clickOutside)
     }, 0)
-    if (window.innerWidth < 890) document.body.classList.add('absorb-click')
+    
+    if (window.innerWidth < 890) {
+      document.body.classList.add('absorb-click')
+      el.classList.add('click-outside-active')
+    }
   },
   unmounted(el) {
     document.body.classList.remove('absorb-click')
+    el.classList.remove('click-outside-active')
     document.removeEventListener('click', el.clickOutside)
   },
 }
