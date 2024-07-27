@@ -13,7 +13,8 @@
 
     @include for-mobile-layout {
         top: 0;
-        right: 0;
+        left: 0;
+        padding: 0;
     }
 
     header {
@@ -21,6 +22,10 @@
         justify-content: space-between;
         align-items: center;
         padding-block-end: .5rem;
+
+        @include for-mobile-layout {
+            display: none;;
+        }
 
         span {
             color: $clr2;
@@ -450,15 +455,21 @@
             display: none;
             width: 0.7rem;
             height: 0.7rem;
-            margin-inline-end: 0.3rem;
+            margin-inline-start: .5rem;
 
             @include for-mobile-layout {
                 display: block;
             }
         }
 
+        .btn-dislike,
+        .btn-like,
         .lyrics-btn {
             display: flex;
+
+            @include for-mobile-layout {
+                margin-inline-start: .5rem;
+            }
         }
 
 

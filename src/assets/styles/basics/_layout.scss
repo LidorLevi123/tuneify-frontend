@@ -1,4 +1,11 @@
 .RouterView {
     grid-column: 2;
     grid-row: 1;
+    transition: .2s;
+
+    @include for-mobile-layout {
+        &.video-player-open {
+            margin-block-start: 15.8rem;
+        }
+    }
 }

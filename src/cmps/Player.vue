@@ -38,6 +38,9 @@
                 src="https://res.cloudinary.com/dmmsf57ko/image/upload/v1683729372/Song_hoitzd.gif" alt="">
             <span v-if="screenWidth < 890" class="lyrics-btn" v-icon="`lyrics`" title="Lyrics" @click="showLyrics"
                 :class="{ active: $route.path === '/lyrics' }"></span>
+            <span v-if="screenWidth < 890" class="lyrics-btn" v-icon="`youTube`" title="Lyrics" @click="toggleVideoPlayer"
+                :class="{ active: $route.path === '/lyrics' }"></span>
+            
             <span v-if="currTrack" @click="togglePIP" class="btn-pip" :class="{ 'is-active': pipWindow }" v-icon="`pip`"
                 title="Picture in picture"></span>
             <span v-if="currTrack" @click="toggleVideoPlayer" class="btn-pip btn-youtube" :class="{ 'is-active': showVideoPlayer }" v-icon="`youTube`"
@@ -175,7 +178,7 @@ export default {
     mounted() {
         this.dragVideoPlayer()
     },
-
+    emits: ['toggle-video-player'],
     methods: {
         dragVideoPlayer() {
             const draggable = this.$refs.videoPlayer
@@ -222,6 +225,7 @@ export default {
         },
         toggleVideoPlayer() {
             this.showVideoPlayer = !this.showVideoPlayer
+            this.$emit('toggle-video-player', this.showVideoPlayer)
         },
         toggleFullscreen() {
             const doc = window.document

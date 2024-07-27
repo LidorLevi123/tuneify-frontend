@@ -3,9 +3,9 @@
         <Nav />
         <MainHeader :station="station" />
         <Loader v-if="isLoading" />
-        <RouterView class="RouterView" @scroll="handleScroll" @station="setStation" v-else />
+        <RouterView :class="{ 'video-player-open': isVideoPlayerOpen }" class="RouterView" @scroll="handleScroll" @station="setStation" v-else />
         <RightSidebar v-if="isRsbOpen" />
-        <Player />
+        <Player @toggle-video-player="toggleVideoPlayer" />
     </section>
 </template>
 
@@ -21,11 +21,16 @@ export default {
 
     data() {
         return {
-            station: null
+            station: null,
+            isVideoPlayerOpen: false
         }
     },
 
     methods: {
+        toggleVideoPlayer() {
+            this.isVideoPlayerOpen = !this.isVideoPlayerOpen
+            console.log(this.isVideoPlayerOpen);
+        },
         handleScroll({ target }) {
             eventBus.emit('handleScroll', target)
         },
