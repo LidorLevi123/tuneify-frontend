@@ -207,6 +207,43 @@
                 }
             }
 
+            .liked {
+                display: flex;
+                gap: 1rem;
+                align-items: center;
+
+                .video-player-btn {
+                    margin-block-start: .1rem;
+
+                    @include for-mobile-layout {
+                        display: none;
+                    }
+
+                    &.is-active {
+                        &:hover {
+                            path {
+                                fill : lighten($clr9, 10%)
+                            }
+                        }
+
+                        path {
+                            fill : $clr9;
+                        }
+                    }
+
+                    svg {       
+                        height: 2rem;
+                        width: 2rem;
+                        
+                        &:hover {
+                            fill : $clr2;
+                        }
+
+                    }
+                }
+                
+            }
+
             .btn {
                 display: flex;
                 cursor: pointer;

@@ -2,13 +2,19 @@
     <FullscreenPlayer ref="fullscreenPlayer" v-if="showFullscreen" :secsToTimeFormat="secsToTimeFormat"
         :isShuffle="isShuffle" :elapsedTime="+elapsedTime" :currTrackDuration="currTrackDuration"
         :repeatStateIdx="repeatStateIdx" :playbackProgressPercentage="playbackProgressPercentage" :hasLiked="hasLiked"
-        :currVolume="+currVolume" @changeVolume="changeVolumefromFsPlayer" @changeTime="changeTimefromFsPlayer"
+        :currVolume="+currVolume" :showVideoPlayer="showVideoPlayer" @changeVolume="changeVolumefromFsPlayer" @changeTime="changeTimefromFsPlayer"
         @togglePlayPause="togglePlayPause" @previousNextVideo="previousNextVideo" @toggleShuffle="toggleShuffle"
         @cycleRepeatStates="cycleRepeatStates" @closeFullscreen="toggleFullscreen" @toggleMute="toggleMute"
-        @likeTrack="likeTrack" @dislikeTrack="dislikeTrack" />
+        @likeTrack="likeTrack" @dislikeTrack="dislikeTrack" @toggleVideoPlayer="toggleVideoPlayer" />
 
-    <YouTube v-if="cookieLoaded" ref="youtubePlayer" :src="currTrack?.youtubeId || ''" @state-change="onStateChange"
-        style="display: none;" />
+    <div :class="{ 'close': !showVideoPlayer }" class="video-player" ref="videoPlayer">
+        <header>
+            <span>{{ currTrack?.artists[0].name }} - {{ currTrack?.title }}</span>
+            <button v-icon="'close'" class="close-btn" @click="showVideoPlayer = false"></button>
+        </header>
+        <YouTube v-if="cookieLoaded" ref="youtubePlayer" :src="currTrack?.youtubeId || ''" @state-change="onStateChange" />
+    </div>
+    
     <section class="main-player-container" :class="{ 'is-shown': screenWidth < 890 && currTrack }"
         :style="rsbOpen ? { gridColumn: '1 / span 3' } : { gridColumn: '1 / -1' }">
         <section class="track-info-container">
@@ -18,7 +24,7 @@
             <section class="text-container">
                 <div v-if="currTrack" class="track-title">{{ currTrack.title }}</div>
                 <div class="track-artists">
-                    <span v-if="currTrack" class="track-artist" v-for="(artist, idx) in currTrack.artists"
+                    <span class="track-artist" v-for="(artist, idx) in currTrack?.artists"
                         :key="artist.spotifyId">
                         <RouterLink :to="`/artist/${artist.spotifyId}`" @click.stop>{{ artist.name }}</RouterLink>
                         {{ idx < currTrack.artists.length - 1 ? ', ' : '' }} </span>
@@ -34,6 +40,8 @@
                 :class="{ active: $route.path === '/lyrics' }"></span>
             <span v-if="currTrack" @click="togglePIP" class="btn-pip" :class="{ 'is-active': pipWindow }" v-icon="`pip`"
                 title="Picture in picture"></span>
+            <span v-if="currTrack" @click="toggleVideoPlayer" class="btn-pip btn-youtube" :class="{ 'is-active': showVideoPlayer }" v-icon="`youTube`"
+                title="Open video player"></span>
         </section>
         <section class="player-mid-container" ref="playerMid">
             <section class="track-controls-container">
@@ -144,6 +152,7 @@ export default {
                 CUED: 5,
             },
             showFullscreen: false,
+            showVideoPlayer: false,
         }
     },
     components: {
@@ -163,7 +172,57 @@ export default {
         this.loadCookie()
         document.addEventListener('keydown', this.handleKeyPress)
     },
+    mounted() {
+        this.dragVideoPlayer()
+    },
+
     methods: {
+        dragVideoPlayer() {
+            const draggable = this.$refs.videoPlayer
+
+            draggable.addEventListener('mousedown', (ev) => {
+                let shiftX = ev.clientX - draggable.getBoundingClientRect().left
+                let shiftY = ev.clientY - draggable.getBoundingClientRect().top
+
+                const moveAt = (pageX, pageY) => {
+                    const viewportWidth = window.innerWidth
+                    const viewportHeight = window.innerHeight
+                    const draggableWidth = draggable.offsetWidth
+                    const draggableHeight = draggable.offsetHeight
+
+                    let left = pageX - shiftX
+                    let top = pageY - shiftY
+
+                    if (left < 0) left = 0
+                    else if (left + draggableWidth > viewportWidth) left = viewportWidth - draggableWidth
+
+                    if (top < 0) top = 0;
+                    else if (top + draggableHeight > viewportHeight) top = viewportHeight - draggableHeight
+  
+                    draggable.style.left = left + 'px'
+                    draggable.style.top = top + 'px'
+                }
+
+                const onMouseMove = (ev) => {
+                    moveAt(ev.pageX, ev.pageY)
+                }
+
+                document.addEventListener('mousemove', onMouseMove)
+
+            draggable.addEventListener('mouseup', () => {
+                document.removeEventListener('mousemove', onMouseMove)
+            }) 
+
+            })
+
+            draggable.ondragstart = () => {
+                return false // Prevent default drag behavior
+            }
+
+        },
+        toggleVideoPlayer() {
+            this.showVideoPlayer = !this.showVideoPlayer
+        },
         toggleFullscreen() {
             const doc = window.document
             const docEl = doc.documentElement

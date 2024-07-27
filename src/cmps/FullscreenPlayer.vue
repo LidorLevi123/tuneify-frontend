@@ -40,6 +40,7 @@
                         @click="$emit('likeTrack', currTrack)" title="Add to your liked tracks"></span>
                     <span v-else-if="hasLiked(currTrack.id)" class="btn-dislike btn" v-icon="`smallLikeEna`"
                         @click="$emit('dislikeTrack', currTrack.id)" title="Remove from your liked tracks"></span>
+                    <span class="video-player-btn btn" :class="{ 'is-active': showVideoPlayer }" v-icon="`youTube`" title="Toggle video player" @click="toggleVideoPlayer"></span>
                 </section>
                 <section class="playback-controls">
                     <button class="shuffle btn" :class="{ 'is-shuffle': isShuffle }" @click="$emit('toggleShuffle')"
@@ -95,6 +96,7 @@ export default {
         isShuffle: Boolean,
         secsToTimeFormat: Function,
         hasLiked: Function,
+        showVideoPlayer: Boolean,
     },
 
     data() {
@@ -124,6 +126,9 @@ export default {
         window.addEventListener('resize', this.updateScreenOrientation)
     },
     methods: {
+        toggleVideoPlayer() {
+            this.$emit('toggleVideoPlayer')
+        },
         emitChangeTime(ev) {
             this.$emit('changeTime', ev.target.value)
         },
