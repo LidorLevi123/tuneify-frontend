@@ -123,7 +123,6 @@ export default {
     data() {
         return {
             station: null,
-            tracksTotalDuration: 0,
             isShare: true,
             topicUsers: [],
             artist: null,
@@ -205,7 +204,10 @@ export default {
         },
         recommendationsStation() {
             return this.$store.getters.recommendationsStation
-        }
+        },
+        tracksTotalDuration() {
+            return this.station.tracks?.reduce((sum, track) => sum = sum + track.formalDuration, 0)
+        },
     },
     async created() {
         await this.loadStation()
@@ -219,7 +221,6 @@ export default {
         eventBus.off('clickFromSearchRes', this.clickTrack)
     },
     methods: {
-
         showBtn(type) {
             const discography = this.station?.albums.filter(album => album.group !== 'appears_on')
             const firstGroup = discography[0]?.group
@@ -230,40 +231,62 @@ export default {
             const container = this.$refs.stationDetails
             if (container) setTimeout(() => container.scrollTo({ top: 1000, behavior: 'smooth' }), 1000)
         },
-        async loadStation() {
+        getStationFromCache() {
+            const stationsCache = JSON.parse(localStorage.getItem('stationsCache')) || []
+            return stationsCache.find(station => station?.spotifyId === this.stationId)
+        },
+        async updateStationsCache() {
+            let stationsCache = JSON.parse(localStorage.getItem('stationsCache')) || []
+            if (stationsCache.length >= 50) stationsCache.pop()
+            localStorage.setItem('stationsCache', JSON.stringify([ this.station, ...stationsCache ]))
+        },
+        filterAlbums(station) {
+            this.artistAlbums = station.albums.filter(album => album.group !== 'appears_on')
+            this.artistAppearOn = station.albums.filter(album => album.group === 'appears_on')
+            this.setFilterBy(this.filterBy)
+        },
+        getStationType() {
+            const path = this.$route.path
+            return path.startsWith('/station') ? 'station' : path.startsWith('/album') ? 'album' : 'artist'
+        },
+        async checkStationForChanges(station) {
+            console.log('checking for updates')
             try {
-                const path = this.$route.path
-                const stationType = path.startsWith('/station') ? 'station' : path.startsWith('/album') ? 'album' : 'artist'
+                const updatedStation = await stationService.checkForChanges(station)
+                if (updatedStation) {
+                    console.log('playlist updated')
+                    this.station = updatedStation
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        async loadStation() {
+        
+            const selectedStation = this.getStationFromCache()
+            if (selectedStation) this.station = selectedStation
+            if (Date.now() - selectedStation?.lastUpdate < 3600000 * 12) return
+           
+            try {           
+                const stationType = this.getStationType()
                 const station = await this.$store.dispatch({ type: 'getStation', stationId: this.stationId, stationType })
-                const isStale = Date.now() - station.lastUpdate > 3600000 * 12
-               
+                
                 if (!station) return this.$router.push('/')
-
+                
                 this.station = station
+                
+                const isStale = Date.now() - station.lastUpdate > 3600000 * 12
+                if (station._id && station.snapshot_id && isStale) this.checkStationForChanges(station)
 
-                if (station._id && station.snapshot_id && isStale) {
-                    console.log('checking for updates')
-                    const updatedStation = await stationService.checkForChanges(station)
-                    if (updatedStation) {
-                        console.log('playlist updated')
-                        this.station = updatedStation
-                    }
-                }
-
-                if (station.isArtist) {
-                    this.artistAlbums = station.albums.filter(album => album.group !== 'appears_on')
-                    this.artistAppearOn = station.albums.filter(album => album.group === 'appears_on')
-                    this.setFilterBy(this.filterBy)
-                }
+                if (station.isArtist) this.filterAlbums(station)
 
                 if (station.isAlbum) this.loadArtist()
 
                 this.$emit('station', station)
-                this.setTracksTotalDuration()
 
+                if (this.station.owner.fullname === 'Tuneify') await this.updateStationsCache()
             } catch (err) {
                 console.log(err.message)
-                // showErrorMsg('Could not set current station')
             }
         },
         async loadArtist() {
@@ -343,9 +366,6 @@ export default {
 
             elTopGrad.style.backgroundImage = `linear-gradient(to bottom, ${avgColor} 0%, ${darkerColor})`
             elBotGrad.style.backgroundImage = `linear-gradient(to bottom, ${darkerDarkerColor} 0%, #121212 14.5rem, #121212)`
-        },
-        setTracksTotalDuration() {
-            this.tracksTotalDuration = this.station.tracks?.reduce((sum, track) => sum = sum + track.formalDuration, 0)
         },
         openStationEditor() {
             if (this.station.owner.fullname === 'Tuneify' || this.station._id === this.user.likedId || this.station.isAlbum || this.station.isArtist) return
