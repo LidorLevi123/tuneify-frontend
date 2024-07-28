@@ -29,7 +29,6 @@ export default {
     methods: {
         toggleVideoPlayer() {
             this.isVideoPlayerOpen = !this.isVideoPlayerOpen
-            console.log(this.isVideoPlayerOpen);
         },
         handleScroll({ target }) {
             eventBus.emit('handleScroll', target)

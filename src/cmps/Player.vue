@@ -38,8 +38,8 @@
                 src="https://res.cloudinary.com/dmmsf57ko/image/upload/v1683729372/Song_hoitzd.gif" alt="">
             <span v-if="screenWidth < 890" class="lyrics-btn" v-icon="`lyrics`" title="Lyrics" @click="showLyrics"
                 :class="{ active: $route.path === '/lyrics' }"></span>
-            <span v-if="screenWidth < 890" class="lyrics-btn" v-icon="`youTube`" title="Lyrics" @click="toggleVideoPlayer"
-                :class="{ active: $route.path === '/lyrics' }"></span>
+            <span v-if="screenWidth < 890" class="youtube-btn" v-icon="`youTube`" @click="toggleVideoPlayer"
+                :class="{ 'is-active': showVideoPlayer }"></span>
             
             <span v-if="currTrack" @click="togglePIP" class="btn-pip" :class="{ 'is-active': pipWindow }" v-icon="`pip`"
                 title="Picture in picture"></span>

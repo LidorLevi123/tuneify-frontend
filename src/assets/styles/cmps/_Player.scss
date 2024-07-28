@@ -464,11 +464,22 @@
 
         .btn-dislike,
         .btn-like,
-        .lyrics-btn {
+        .lyrics-btn,
+        .youtube-btn {
             display: flex;
 
             @include for-mobile-layout {
                 margin-inline-start: .5rem;
+            }
+        }
+
+        .youtube-btn {
+            &.is-active {
+                svg {
+                    path {
+                        fill: $clr9
+                    }
+                }
             }
         }
 
