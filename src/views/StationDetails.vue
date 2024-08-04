@@ -276,7 +276,7 @@ export default {
                 this.station = station
                 
                 const isStale = Date.now() - station.lastUpdate > 3600000 * 12
-                if (station._id && station.snapshot_id && isStale) this.checkStationForChanges(station)
+                if (station._id && station.snapshot_id && isStale) await this.checkStationForChanges(station)
 
                 if (station.isArtist) this.filterAlbums(station)
 

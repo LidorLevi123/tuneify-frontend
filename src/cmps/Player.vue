@@ -183,7 +183,7 @@ export default {
         dragVideoPlayer() {
             const draggable = this.$refs.videoPlayer
 
-            draggable.addEventListener('mousedown', (ev) => {
+            draggable.addEventListener('pointerdown', (ev) => {
                 let shiftX = ev.clientX - draggable.getBoundingClientRect().left
                 let shiftY = ev.clientY - draggable.getBoundingClientRect().top
 
@@ -199,30 +199,32 @@ export default {
                     if (left < 0) left = 0
                     else if (left + draggableWidth > viewportWidth) left = viewportWidth - draggableWidth
 
-                    if (top < 0) top = 0;
+                    if (top < 0) top = 0
                     else if (top + draggableHeight > viewportHeight) top = viewportHeight - draggableHeight
-  
+
                     draggable.style.left = left + 'px'
                     draggable.style.top = top + 'px'
                 }
 
-                const onMouseMove = (ev) => {
+                const onPointerMove = (ev) => {
                     moveAt(ev.pageX, ev.pageY)
                 }
 
-                document.addEventListener('mousemove', onMouseMove)
+                document.addEventListener('pointermove', onPointerMove)
 
-            draggable.addEventListener('mouseup', () => {
-                document.removeEventListener('mousemove', onMouseMove)
-            }) 
+                const onPointerUp = () => {
+                    document.removeEventListener('pointermove', onPointerMove)
+                    document.removeEventListener('pointerup', onPointerUp)
+                }
 
+                document.addEventListener('pointerup', onPointerUp)
             })
 
             draggable.ondragstart = () => {
                 return false // Prevent default drag behavior
             }
-
         },
+
         toggleVideoPlayer() {
             this.showVideoPlayer = !this.showVideoPlayer
             this.$emit('toggle-video-player', this.showVideoPlayer)
