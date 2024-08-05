@@ -23,7 +23,7 @@
                 :class="{ 'portrait': isPortrait }">
             <div class="track-text" :class="{ 'portrait': isPortrait }">
                 <h1 class="track-title">{{ currTrack.title }}</h1>
-                <h3 class="track-artist">{{ currTrack.artists[0].name }}</h3>
+                <h3 class="track-artist" v-for="(artist, idx) in currTrack.artists" :key="artist.spotifyId">{{ artist.name }}{{ idx < currTrack.artists.length - 1 ? ', ' : '' }}</h3>
             </div>
         </section>
         <section class="player-mid-container-fs" ref="playerControls">

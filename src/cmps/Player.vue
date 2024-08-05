@@ -175,13 +175,34 @@ export default {
         this.loadCookie()
         document.addEventListener('keydown', this.handleKeyPress)
     },
-    mounted() {
-        this.dragVideoPlayer()
-    },
     emits: ['toggle-video-player'],
     methods: {
         dragVideoPlayer() {
             const draggable = this.$refs.videoPlayer
+            
+            const updatePosition = () => {
+                const viewportWidth = window.innerWidth
+                const viewportHeight = window.innerHeight
+                const draggableWidth = draggable.offsetWidth
+                const draggableHeight = draggable.offsetHeight
+                
+                let left = parseInt(draggable.style.left, 10) || 0
+                let top = parseInt(draggable.style.top, 10) || 0
+                
+                if (left + draggableWidth > viewportWidth) left = viewportWidth - draggableWidth
+                if (top + draggableHeight > viewportHeight) top = viewportHeight - draggableHeight
+                
+                if (left < 0) left = 0
+                if (top < 0) top = 0
+                
+                draggable.style.left = left + 'px'
+                draggable.style.top = top + 'px'
+            }
+            
+            if (!this.showVideoPlayer){
+                 document.removeEventListener('resize', updatePosition)
+                 return 
+            }
 
             draggable.addEventListener('pointerdown', (ev) => {
                 let shiftX = ev.clientX - draggable.getBoundingClientRect().left
@@ -223,11 +244,14 @@ export default {
             draggable.ondragstart = () => {
                 return false // Prevent default drag behavior
             }
+
+            window.addEventListener('resize', updatePosition)
         },
 
         toggleVideoPlayer() {
             this.showVideoPlayer = !this.showVideoPlayer
             this.$emit('toggle-video-player', this.showVideoPlayer)
+            this.dragVideoPlayer()
         },
         toggleFullscreen() {
             const doc = window.document

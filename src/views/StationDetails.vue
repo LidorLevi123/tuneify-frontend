@@ -265,11 +265,12 @@ export default {
         
             const selectedStation = this.getStationFromCache()
             if (selectedStation) this.station = selectedStation
-            if (Date.now() - selectedStation?.lastUpdate < 3600000 * 12) return
+            if (Date.now() - selectedStation?.lastUpdate < 3600000 * 12) return this.$emit('station', this.station)
            
             try {           
                 const stationType = this.getStationType()
                 const station = await this.$store.dispatch({ type: 'getStation', stationId: this.stationId, stationType })
+                this.$emit('station', station)
                 
                 if (!station) return this.$router.push('/')
                 
@@ -282,7 +283,6 @@ export default {
 
                 if (station.isAlbum) this.loadArtist()
 
-                this.$emit('station', station)
 
                 if (this.station.owner.fullname === 'Tuneify') await this.updateStationsCache()
             } catch (err) {
