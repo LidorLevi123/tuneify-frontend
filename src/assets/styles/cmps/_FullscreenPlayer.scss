@@ -163,6 +163,7 @@
                 font-size: 6rem;
                 color: $clr2;
                 line-height: 1;
+                margin-block-end: 1rem;
                 
                 @include for-xlmobile-layout {
                     font-size: 1.5rem;
@@ -173,7 +174,6 @@
                 display: inline;
                 font-size: 1.5rem;
                 color: $clr3;
-                margin-block-start: 1rem;
             }
         }
     }
