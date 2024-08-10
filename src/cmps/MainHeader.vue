@@ -103,10 +103,7 @@ export default {
             eventBus.emit('fullscreen')
         },
         changeMarket(market) {
-            if (market !== this.currMarket) {
-                this.$store.commit({ type: 'setCurrMarket', market })
-                this.$store.dispatch({ type: 'getStationsForHome', market })
-            }
+            if (market !== this.currMarket) this.$store.dispatch({ type: 'getStationsForHome', market })
             this.showMarketsMenu = false
         },
         handleClickOutsideUser() {

@@ -10,7 +10,7 @@
             <section class="followers" v-if="artistFollowers">
                 <span class="followers-number">{{ artistFollowers.toLocaleString("en-US") }}</span>
                 <span class="followers-text">Followers</span>
-                <section class="socials" v-if="artistSocials">
+                <section class="socials" v-if="showSocials">
                     <a  v-if="artistSocials.facebook" :href="artistSocials.facebook[0].url" target="_blank">
                         <span v-icon="`facebook`"></span>
                         <span>Facebook</span>
@@ -40,6 +40,11 @@ export default {
         artistSnippet: { type: String },
         artistFollowers: { type: Number },
         artistSocials: { type: Object },
+    },
+    computed: {
+        showSocials() {
+            return this.artistSocials?.twitter || this.artistSocials?.facebook || this.artistSocials?.instagram
+        }
     },
     methods: {
         closeBio() {

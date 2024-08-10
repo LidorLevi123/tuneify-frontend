@@ -124,28 +124,37 @@ export const stationStore = {
     },
     actions: {
         async getStationsForHome({ commit }, { market }) {
-            const savedStations = JSON.parse(localStorage.getItem('stationsForHome'))
-            if (savedStations) commit({ type: 'setStationsForHome', stations: savedStations, market })
-
-            try {
-                const staleTime = 3600000 * 12
-                const isExpired = Date.now() - localStorage.getItem('timestamp') > staleTime
-
-                if (isExpired) {
-                    if (!savedStations) commit('setLoading', true)
+            const getStations = async () => { 
+                try {
                     const stations = await stationService.getStationsForHome(market)
                     commit({ type: 'setStationsForHome', stations, market })
+                    commit({ type: 'setCurrMarket', market })
                     commit('setLoading', false)
-
                     if (stations.length >= 12) {
                         localStorage.setItem('stationsForHome', JSON.stringify(stations))
                         localStorage.setItem('timestamp', Date.now())
                     }
-                }
-            } catch (err) {
-                    console.log('stationStore: Error in getStationsForHome', err.message)
+                } catch (error) {
+                    console.log(error)
                     throw new Error('Could not load stations for home page')
+                }
             }
+
+            const savedStations = JSON.parse(localStorage.getItem('stationsForHome'))
+            if (savedStations) commit({ type: 'setStationsForHome', stations: savedStations, market })
+
+            if (this.state.stationStore.currMarket !== market) {
+                    commit('setLoading', true) 
+                    return getStations()
+            }
+
+            const staleTime = 3600000 * 12
+            const isExpired = Date.now() - localStorage.getItem('timestamp') > staleTime
+
+                if (isExpired) {
+                    if (!savedStations) commit('setLoading', true)
+                    getStations()
+                }
         },
         async loadUserStations({ commit }, { userId }) {
             try {

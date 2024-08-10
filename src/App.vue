@@ -11,11 +11,13 @@ import BackDrop from './cmps/BackDrop.vue'
 import UserEdit from './cmps/UserEdit.vue'
 import { userService } from './services/user.service'
 import { eventBus } from './services/event-bus.service'
+import { utilService } from './services/util.service'
 import Cookies from 'js-cookie'
 
 export default {
 
   async created() {
+    utilService.printlog()
     try {
       const market = Cookies.get('currMarket')
 
