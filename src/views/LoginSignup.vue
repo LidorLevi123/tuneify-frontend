@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import DOMPurify from 'dompurify'
 import { showErrorMsg } from '../services/event-bus.service'
 
 export default {
@@ -56,10 +57,15 @@ export default {
       if (password && (password < 6 || password > 10)) return '2px solid red'
       else if (password) return '2px solid #1ed760'
     }
-
   },
   methods: {
+    sanitizeInput(input) {
+      return DOMPurify.sanitize(input)
+    },
     async doLogin() {
+      this.loginCred.username = this.sanitizeInput(this.loginCred.username)
+      this.loginCred.password = this.sanitizeInput(this.loginCred.password)
+
       if (!this.loginCred.username || !this.loginCred.password) return showErrorMsg('Please enter username/password')
 
       try {
@@ -71,10 +77,11 @@ export default {
         showErrorMsg('Wrong username or password')
       }
     },
-    doLogout() {
-      this.$store.dispatch({ type: 'logout' })
-    },
     async doSignup() {
+      this.signupCred.fullname = this.sanitizeInput(this.signupCred.fullname)
+      this.signupCred.username = this.sanitizeInput(this.signupCred.username)
+      this.signupCred.password = this.sanitizeInput(this.signupCred.password)
+
       const { fullname, password, username } = this.signupCred
 
       if (!fullname || !password || !username) return showErrorMsg('Please fill up the form')
