@@ -9,6 +9,7 @@ import LoginSignup from './views/LoginSignup.vue'
 import Sidebar from './cmps/Sidebar.vue'
 import LyricsPage from './views/LyricsPage.vue'
 import AdminPage from './views/AdminPage.vue'
+import SearchHistory from './views/SearchHistory.vue'
 
 const routes = [
   {
@@ -55,7 +56,12 @@ const routes = [
         path: '/library',
         name: 'PlayLists',
         component: Sidebar,
-      }
+      },
+      {
+        path: '/recent-searches',
+        name: 'SearchHistory',
+        component: SearchHistory,
+      },
     ]
   },
   {

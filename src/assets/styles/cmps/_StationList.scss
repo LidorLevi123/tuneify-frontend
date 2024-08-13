@@ -3,7 +3,7 @@
     .station-list {
 
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(11.625rem, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(13.125rem, 1fr));
         row-gap: 3rem;
 
         @include for-mobile-layout {
@@ -20,12 +20,18 @@
             &.category-list {
                 padding-inline: .5rem;
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(5.625rem, 1fr));
+                grid-template-columns: repeat(auto-fit, minmax(6.625rem, 1fr));
                 gap: .5rem;
             }
 
             &.search-list {
                 padding-inline: .5rem;
+            }
+
+            &.recent-searches {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(6.625rem, 1fr));
+                gap: 0.5rem;
             }
         }
 

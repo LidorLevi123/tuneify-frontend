@@ -162,5 +162,7 @@ function printlog() {
         'background: #222; color: #1db954; font-size: 1.2rem; padding: .2rem;',
         'background: #222; color: #1db954; font-size: 1.2rem; padding: .2rem;'
     )
+    const appVersion = import.meta.env.VITE_TUNEIFY_VERSION
+    console.log(`%c ver: ${appVersion} `, 'background: #222; color: #1db954; font-size: 1.2rem; padding: .2rem;')
 }
 

@@ -1,6 +1,7 @@
 <template>
     <article @click="goToDetails(station._id)" @mouseover="emitAvgImgClr()"
-        :class="{ 'main-preview-container': !horizontalDesign, 'main-preview-container-hor': horizontalDesign, 'category-station': this.$route.path.startsWith('/category/') }">
+        :class="{ 'main-preview-container': !horizontalDesign, 'main-preview-container-hor': horizontalDesign, 'category-station': this.$route.path.startsWith('/category/') || this.$route.path.startsWith('/recent-searches') }">
+        <button class="remove-btn btn" v-icon="'close'" v-if="isSearchHistory" @click.stop="removeFromSearchHistory(station.spotifyId)"></button>
         <div class="prev-img-container">
             <img :class="{ artist: station.isArtist }" crossorigin="anonymous" :src="`${station.imgUrl}`" alt=""
                 ref="stationImg">
@@ -21,11 +22,8 @@ export default {
 
     props: {
         station: { type: Object, required: true },
-
-        horizontalDesign: {
-            type: Boolean,
-            default: false
-        }
+        horizontalDesign: { type: Boolean, default: false },
+        isSearchHistory: { type: Boolean, default: false }
     },
 
     computed: {
@@ -49,12 +47,16 @@ export default {
 
     methods: {
         goToDetails(stationId) {
+            if (!this.isSearchHistory) eventBus.emit('addToSearchHistory' , this.station)
+    
             stationId = stationId ? stationId : this.station.spotifyId
             if (this.station.isAlbum) this.$router.push(`/album/${stationId}`)
             else if (this.station.isArtist) this.$router.push(`/artist/${stationId}`)
             else this.$router.push(`/station/${stationId}`)
         },
-
+        removeFromSearchHistory() {  
+            eventBus.emit('removeFromSearchHistory', this.station.spotifyId)
+        },
         pauseTrack(ev) {
             ev.stopPropagation()
             eventBus.emit('trackPaused')

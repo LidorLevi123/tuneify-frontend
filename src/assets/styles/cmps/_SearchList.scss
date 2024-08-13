@@ -11,4 +11,14 @@
             }
         }
     }
+
+    &.search-history {
+        padding-inline: unset !important;
+        
+        li {
+            &:hover {
+                background-color: unset;
+            }
+        }
+    }
 }

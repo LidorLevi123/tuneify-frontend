@@ -1,0 +1,45 @@
+.search-history-container {
+    padding: 5rem 1rem 1.5rem;
+    background-color: $clr4;
+    
+    @include for-mobile-layout {
+        display: flex;
+        flex: 1;
+        padding: 3rem .5rem 9rem;
+    }
+
+    .search-history-page {
+        margin-inline: auto; 
+        max-width: 119rem;
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: .75rem;
+    
+            @include for-mobile-layout {
+                padding: .75rem 0 2rem;
+            }
+    
+            h1 {
+                font-size: 1.5rem;
+            }
+    
+            button {
+                all: unset;
+                cursor: pointer;
+                color: $clr3;
+                font-size: 1rem;
+                font-weight: 700;
+                padding-block: .5rem;
+                transition: scale .1s;
+    
+                &:hover {
+                    color: $clr2;
+                    scale: 103%;
+                }
+            }
+        }
+    }
+}

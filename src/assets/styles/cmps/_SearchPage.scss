@@ -57,16 +57,40 @@
         margin: auto;
 
         @include for-mobile-layout {
-            padding: 0 .5rem 0;
+            padding: 3rem .5rem 0;
+        }
+        
+        .search-history {
+
+            .wrapper {
+                margin: .75rem;
+                
+                @include for-mobile-layout {
+                    margin: .75rem 0rem;
+                }
+
+                a {
+                    color: $clr2;
+                    font-family: CircularSpTitle;
+                    font-size: 1.5rem;
+    
+                    &:hover {
+                        text-decoration: underline;
+                        cursor: pointer;
+                    }
+    
+                }
+            }
+
+
         }
 
         .browse {
             color: $clr2;
-            margin-block: 1.5rem 1rem;
-            ;
+            margin: .75rem;
 
             @include for-mobile-layout {
-                margin-block-start: 3rem;
+                margin: 1.5rem 0rem 1rem;
             }
         }
     }

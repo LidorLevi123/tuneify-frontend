@@ -2,12 +2,19 @@
 
     ul {
         display: grid;
-        gap: 1.5rem;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 
         @include for-mobile-layout {
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 0.5rem;
+        }
+
+        li {
+            padding: .75rem;
+
+            @include for-mobile-layout {
+                padding: unset;
+            }
         }
     }
 
