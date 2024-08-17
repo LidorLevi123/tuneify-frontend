@@ -1,0 +1,75 @@
+.top-ten {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    z-index: 4;
+    background-color: #282828;
+    border-radius: .5rem;
+    color: $clr2;
+    max-height: 95vh;
+    overflow-y: auto;
+
+    @include for-mobile-layout {
+        translate: -50% 0%;
+    }
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+
+        button {
+            all: unset;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 2rem;
+            width: 2rem;
+            border-radius: 50%;
+            transition: .2s;
+
+            &:hover {
+                background-color: $clr4;
+            }
+        }
+    }
+
+    ul {
+        padding: 0 1rem 1rem 1rem;
+
+        li {
+            display: grid;
+            grid-template-columns: 4rem 6rem auto;
+            align-items: center;
+            gap: 1rem;
+            padding-block: .5rem;
+            cursor: pointer;
+
+            @include for-mobile-layout {
+                grid-template-columns: 3rem 6rem 9rem;
+            }
+            
+            .num {
+                font-size: 2rem;
+                justify-self: center;
+            }
+            
+            img {
+                width: 6rem;
+            }
+
+            .text {
+                span {
+                    color: $clr3;
+                }
+            }
+        }
+        
+        li:not(:last-child) {
+            border-block-end: 1px solid $clr9;
+        }
+    }
+}

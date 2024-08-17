@@ -132,7 +132,6 @@ export default {
             cookieLoaded: false,
             pipWindow: null,
             screenWidth: window.innerWidth,
-            idIdx: 0,
             playbackProgressPercentage: 0,
             volProgressPercentage: 0,
             intervalId: null,
@@ -385,23 +384,14 @@ export default {
             this.loadVideo()
         },
         async loadVideo() {
-            if (this.currTrack?.youtubeId) {
-                console.log('Got yt id from storage')
-                this.elapsedTime = 0
-                this.playVideo()
-                this.broadcastTrackInfo()
-                return
-            }
-            // get youtubeId from YT
             try {
-                console.log('Sending request to yt id...')
-
+            
                 let term
                 if (this.currTrack.artists[1]?.name) term = `${this.currTrack.artists[1].name} ${this.currTrack.artists[0].name} ${this.currTrack.title} `
                 else term = `${this.currTrack.artists[0].name} ${this.currTrack.title}`
 
-                const youtubeId = await ytService.queryYT(term, this.currTrack.id)
-                // const youtubeId = this.getDemoYoutubeId()
+                const youtubeId = await ytService.queryYT(term, this.currTrack)
+    
                 await this.$store.dispatch({ type: 'updateTrack', youtubeId })
                 this.elapsedTime = 0
                 this.playVideo()
@@ -428,11 +418,6 @@ export default {
             } catch (err) {
                 showErrorMsg('Could not dislike track')
             }
-        },
-        getDemoYoutubeId() {
-            if (this.idIdx > 3) this.idIdx = 0
-            const ids = ['UNZJQw8cr6o', 'nyuo9-OjNNg', 'ic8j13piAhQ', 'EfWmWlW2PvM']
-            return ids[this.idIdx++]
         },
         toggleShuffle() {
             this.isShuffle = !this.isShuffle

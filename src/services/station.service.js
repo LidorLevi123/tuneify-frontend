@@ -20,7 +20,8 @@ export const stationService = {
     getArtistData,
     getRecommendations,
     checkForChanges,
-    getBackendLog
+    getBackendLog,
+    getTopTenTracks
 }
 
 window.cs = stationService // for console usage
@@ -158,4 +159,14 @@ async function getArtistData(id, light = false) {
 async function getRecommendations(id) {
     const recommendations = await spotifyService.getSpotifyItems({ type: 'recommendations', id })
     return recommendations
+}
+
+async function getTopTenTracks() {
+    try {
+        const topTenTracks = await httpService.get('station/topTen')
+        return topTenTracks
+    }
+    catch (error) {
+        console.error('Error fetching top ten tracks:', error)
+    }
 }

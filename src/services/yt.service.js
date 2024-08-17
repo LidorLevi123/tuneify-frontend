@@ -4,9 +4,12 @@ export const ytService = {
     queryYT
 }
 
-async function queryYT(term, trackId) {
+async function queryYT(term, track) {
+    const { id, artists, title , imgUrl, albumId } = track
+
     try {
-        const { youtubeId, currApiKeyIdx } = await httpService.get('youtube/', { term, trackId })
+        const { youtubeId, currApiKeyIdx } = await httpService.get('youtube/', { term, id, artists, title, imgUrl, albumId })
+        
         if (currApiKeyIdx === 'From DB') console.log(`got response from DB`)
         else console.log(`got response using api key ${currApiKeyIdx}`)
         return youtubeId

@@ -1,5 +1,7 @@
 <template>
     <section class="main-header" :style="{ backgroundColor: headerBgColor }">
+        <TopTen v-if="showTopTen" @closeTopTen="showTopTen = false" />
+
         <div class="main-header-container">
             <div class="header-l">
                 <div class="nav-btns">
@@ -48,6 +50,10 @@
                         class="profile-btn market-btn">
                     </button>
 
+                    <button v-icon="'topTen'" @click="toggleTopTen"
+                        class="profile-btn market-btn" title="Top 10" style="padding: 0 1px;">
+                    </button>
+
                     <button v-if="user && this.$route.path === '/'" @click="openMarketsMenu"
                         class="profile-btn market-btn" :title="`${currMarket}`">
                         <img :src="`https://www.worldatlas.com/r/w236/img/flag/${currMarket.toLowerCase()}-flag.jpg`"
@@ -71,7 +77,7 @@
 <script>
 import { eventBus } from '../services/event-bus.service'
 import { utilService } from '../services/util.service'
-
+import TopTen from './TopTen.vue'
 import historyTracker from '../services/history.service'
 export default {
     name: 'SearchPage',
@@ -88,6 +94,7 @@ export default {
             showUserMenu: false,
             showMarketsMenu: false,
             windowWidth: window.innerWidth,
+            showTopTen: false
         }
     },
     created() {
@@ -159,6 +166,10 @@ export default {
         editProfile() {
             document.body.classList.add('ue-modal-open')
             this.showUserMenu = false
+        },
+        toggleTopTen() {
+            this.showTopTen = !this.showTopTen
+            document.body.classList.add('tt-modal-open')
         }
     },
     computed: {
@@ -215,5 +226,8 @@ export default {
             },
         },
     },
+    components: {
+        TopTen
+    }
 }
 </script>
