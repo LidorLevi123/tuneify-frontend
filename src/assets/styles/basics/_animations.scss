@@ -265,3 +265,15 @@ $heart-scale: 1.1;
         transform: translate(0, 0);
     }
 }
+
+@keyframes createBox {
+    from {
+        transform: scale(.7);
+        opacity: .5;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

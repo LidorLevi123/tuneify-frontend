@@ -13,18 +13,6 @@
     animation: createBox .4s ease-out;
     transform-origin: bottom;
 
-    @keyframes createBox {
-        from {
-            transform: scale(.7);
-            opacity: .5;
-        }
-
-        to {
-            transform: scale(1);
-            opacity: 1;
-        }
-    }
-
     div {
         height: 0;
         display: flex;

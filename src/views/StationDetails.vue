@@ -35,7 +35,7 @@
                 <section class="details-player">
 
                     <button v-if="!isPlaying" class="details-play" v-icon="'detailsPlay'" v-show="hasTracks"
-                        @click="clickTrack(currTrackIdx)" title="Play">
+                        @click="playStation" title="Play">
                     </button>
 
                     <button v-else class="details-play" v-icon="'detailsPause'" v-show="hasTracks" @click="pauseTrack"
@@ -170,7 +170,6 @@ export default {
             }
             else return albumTimeCalc()
         },
-
         stationOwner() {
             return this.station.owner?.fullname
         },
@@ -325,6 +324,12 @@ export default {
                 showErrorMsg('Could not dislike track')
             }
         },
+        playStation() {
+            this.setViewedStationAsCurrent()
+            if (!this.currStation.tracks[0].youtubeId) eventBus.emit('trackClicked')
+            eventBus.emit('toggle-play-pause')
+            this.$store.commit({ type: 'setIsPlaying', isPlaying: true })
+        },
         async addTrack(trackToSave, stationId) {
             try {
                 await this.$store.dispatch({ type: 'addTrack', trackToSave, stationId })
@@ -379,7 +384,7 @@ export default {
                 this.$store.commit({ type: 'setCurrTrackIdx', trackIdx })
                 if (source === 'search') this.$store.commit({ type: 'setCurrStation', station: this.searchResStation })
                 else if (source === 'recommendations') this.$store.commit({ type: 'setCurrStation', station: this.recommendationsStation })
-                else this.setViewedStationAsCurrent()
+                else this.$store.commit({ type: 'setCurrStation', station: this.station })
                 eventBus.emit('trackClicked')
             }
         },
@@ -397,10 +402,9 @@ export default {
             this.setViewedStationAsCurrent()
         },
         setViewedStationAsCurrent() {
-            // Without this condition, tracks will be always resetting as we set the current station to be the viewed station.
-            // This condition solved the track youtube ids problem
             if (this.station !== this.currStation) {
                 this.$store.commit({ type: 'setCurrStation', station: this.station })
+                this.$store.commit({ type: 'setCurrTrackIdx', trackIdx: 0 })
             }
         },
         async setTopicUsers(userIds) {

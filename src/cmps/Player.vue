@@ -166,6 +166,7 @@ export default {
         eventBus.on('trackPaused', this.pauseVideo)
         eventBus.on('playNextTrack', () => this.previousNextVideo(1))
         eventBus.on('fullscreen', this.toggleFullscreen)
+        eventBus.on('toggle-play-pause', this.togglePlayPause)
 
         // sockets
         socketService.on(SOCKET_EVENT_ADD_MSG, this.onSocketMessage)
@@ -388,10 +389,10 @@ export default {
             
                 let term
                 if (this.currTrack.artists[1]?.name) term = `${this.currTrack.artists[1].name} ${this.currTrack.artists[0].name} ${this.currTrack.title} `
-                else term = `${this.currTrack.artists[0].name} ${this.currTrack.title}`
+                else term = `${this.currTrack.artists[0].name} ${this.currTrack.title}`     
 
                 const youtubeId = await ytService.queryYT(term, this.currTrack)
-    
+            
                 await this.$store.dispatch({ type: 'updateTrack', youtubeId })
                 this.elapsedTime = 0
                 this.playVideo()
@@ -564,6 +565,7 @@ export default {
         eventBus.off('trackClicked', this.loadVideo)
         eventBus.off('trackPaused', this.pauseVideo)
         eventBus.off('playNextTrack', () => this.previousNextVideo(1))
+        eventBus.off('toggle-play-pause', this.togglePlayPause)
         document.removeEventListener('keydown', this.handleKeyPress)
     },
     computed: {

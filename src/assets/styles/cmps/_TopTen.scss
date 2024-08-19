@@ -9,6 +9,8 @@
     color: $clr2;
     max-height: 95vh;
     overflow-y: auto;
+    animation: createBox .4s ease-out;
+    transform-origin: top;
 
     @include for-mobile-layout {
         translate: -50% 0%;
@@ -35,6 +37,22 @@
                 background-color: $clr4;
             }
         }
+    }
+
+    .list-move,
+    .list-enter-active,
+    .list-leave-active {
+        transition: all 0.8s ease;
+    }
+
+    .list-enter-from,
+    .list-leave-to {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    .list-leave-active {
+        position: absolute;
     }
 
     ul {

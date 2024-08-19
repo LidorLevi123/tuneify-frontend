@@ -61,10 +61,12 @@ export default {
             ev.stopPropagation()
             eventBus.emit('trackPaused')
         },
-
+        
         async onPlayStation(ev) {
             ev.stopPropagation()
-            this.$emit('playStation', this.station)
+    
+            if (this.station._id === this.$store.getters.currStation?._id || this.station.spotifyId === this.$store.getters.currStation?.spotifyId) eventBus.emit('toggle-play-pause')
+            else this.$emit('playStation', this.station)
         },
         async emitAvgImgClr() {
             if (this.horizontalDesign) {
