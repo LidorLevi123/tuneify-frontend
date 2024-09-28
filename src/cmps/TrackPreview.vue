@@ -77,6 +77,12 @@
                             <div>Go to album</div>
                         </div>
                     </div>
+                    <div class="dropdown-item" @click.stop="copyTrackLink(track.albumId)">
+                        <div class="wrapper">
+                            <span v-icon="'copy'" class="df ai"></span>
+                            <div>Copy Song Link</div>
+                        </div>
+                    </div>
                 </div>
 
                 <div v-show="showSubDropdown" class="sub-dropdown" @mouseenter="popSubDropdown" ref="subDropdown"
@@ -86,7 +92,7 @@
                         <div>Create playlist</div>
                     </div>
                     <hr v-if="createdStations?.length">
-                    <div class="sub-dropdown-item" v-for="idx in createdStations?.length"
+                    <div class="sub-dropdown-item" v-for="idx in createdStations?.length" :key="idx"
                         @click.stop="onAddTrack(track, createdStations[idx - 1]._id, $event)">
                         {{ createdStations[idx - 1].name }}
                     </div>
@@ -102,6 +108,7 @@ import moment from 'moment'
 import { eventBus } from '../services/event-bus.service'
 import { RouterLink } from 'vue-router'
 import { nextTick } from 'vue'
+import { showSuccessMsg } from '../services/event-bus.service'
 
 export default {
     name: 'TrackPreview',
@@ -248,7 +255,17 @@ export default {
                 horizontally: rect.left >= 0 && rect.right <= (window.innerWidth || document.documentElement.clientWidth),
                 vertically: rect.top >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight),
             }
+        },
+        async copyTrackLink(albumId) {
+            const link = `https://tuneify.onrender.com/#/album/${albumId}`
+            try {
+                await navigator.clipboard.writeText(link)
+                showSuccessMsg('Link copied to clipboard')
+            } catch (error) {
+                console.log(error)
+            }
         }
+
     },
     components: { RouterLink }
 }
