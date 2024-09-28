@@ -260,7 +260,7 @@ export default {
             const stationId = station.owner._id ? station._id : station.spotifyId
             const stationType = station.isAlbum ? 'album' : station.isArtist ? 'artist' : 'station'
             try {
-                await navigator.clipboard.writeText(`https://tuneify.onrender.com/#/${stationType}/${stationId}`)
+                await navigator.clipboard.writeText(`https://tuneify.onrender.com/${stationType}/${stationId}`)
                 showSuccessMsg('Link copied to clipboard')
             }
             catch (err) {

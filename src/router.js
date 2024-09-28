@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 import StationIndex from './views/StationIndex.vue'
 import HomePage from './views/HomePage.vue'
@@ -62,7 +62,7 @@ const routes = [
         name: 'SearchHistory',
         component: SearchHistory,
       },
-    ]
+    ],
   },
   {
     path: '/login',
@@ -74,12 +74,15 @@ const routes = [
     name: 'AdminPage',
     component: AdminPage,
   },
+  {
+    path: '/api/station/:stationId',
+    redirect: (to) => {
+      return { path: `/album/${to.params.stationId}` }
+    },
+  },
 ]
-
 
 export const router = createRouter({
   routes,
-  history: createWebHashHistory()
-  // base: process.env.BASE_URL,
+  history: createWebHistory(), // Change this line to use history mode
 })
-
