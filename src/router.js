@@ -74,12 +74,6 @@ const routes = [
     name: 'AdminPage',
     component: AdminPage,
   },
-  {
-    path: '/api/station/:stationId',
-    redirect: (to) => {
-      return { path: `/album/${to.params.stationId}` }
-    },
-  },
 ]
 
 export const router = createRouter({

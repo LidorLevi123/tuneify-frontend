@@ -257,7 +257,7 @@ export default {
             }
         },
         async copyTrackLink(albumId) {
-            const link = `https://tuneify.onrender.com/api/station/${albumId}`
+            const link = `https://tuneify.onrender.com/station/${albumId}`
             try {
                 await navigator.clipboard.writeText(link)
                 showSuccessMsg('Link copied to clipboard')
