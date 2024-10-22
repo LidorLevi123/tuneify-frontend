@@ -21,9 +21,9 @@
                             <span class="logo artist">{{ stationOwner }}</span>
                         </RouterLink>
                         <span v-else class="logo">{{ stationOwner }}</span>
-                        <span v-if="station.isAlbum" class="logo">&bull; {{ this.station.releaseDate?.substr(0, 4)
+                        <span v-if="station.isAlbum || station.isTrack" class="logo">&bull; {{ this.station.releaseDate?.substr(0, 4)
                             }}</span>
-                        <span class="songs-num" v-if="station.tracks">&bull; {{ station.tracks?.length }}
+                        <span class="songs-num" v-if="station.tracks.length > 1">&bull; {{ station.tracks?.length }}
                             songs</span>
                         <span class="songs-time" v-show="formattedTime">{{ formattedTime }}</span>
                     </div>
@@ -42,7 +42,7 @@
                         title="Pause">
                     </button>
 
-                    <button class="details-like" v-icon="'like'" v-show="!hasLiked && !isOwner"
+                    <button class="details-like" v-icon="'like'" v-show="!hasLiked && !isOwner && !station.isTrack"
                         @click="likeDislikeStation('add')">
                     </button>
 
@@ -50,7 +50,7 @@
                         @click="likeDislikeStation('remove')">
                     </button>
 
-                    <span v-if="this.station.tracks.length" class="material-symbols-outlined df ai share"
+                    <span v-if="this.station.tracks.length && !this.station.isTrack" class="material-symbols-outlined df ai share"
                         :class="{ 'enabled': !isShare, 'user-station': isOwner }" @click="activateShare(isShare)"
                         title="Listen With Friends">group_add
                     </span>
@@ -134,12 +134,13 @@ export default {
     computed: {
         ownerImg() {
             if (this.station.owner.fullname === 'Tuneify') return `https://res.cloudinary.com/dys1sj4cd/image/upload/v1691227930/favicon_juzdft.svg`
-            else if (this.station.isAlbum) return this.artist?.imgUrl
+            else if (this.station.isAlbum || this.station.isTrack) return this.artist?.imgUrl
             else return this.user.imgUrl
         },
         stationType() {
             if (this.station.isAlbum && this.station.tracks.length === 1) return 'Single'
             else if (this.station.isAlbum) return 'Album'
+            else if (this.station.isTrack) return 'Song'
             return 'Playlist'
         },
         stationId() {
@@ -246,7 +247,7 @@ export default {
         },
         getStationType() {
             const path = this.$route.path
-            return path.startsWith('/station') ? 'station' : path.startsWith('/album') ? 'album' : 'artist'
+            return path.split('/')[1]
         },
         async checkStationForChanges(station) {
             console.log('checking for updates')
@@ -261,7 +262,6 @@ export default {
             }
         },
         async loadStation() {
-        
             const selectedStation = this.getStationFromCache()
             if (selectedStation) this.station = selectedStation
             if (Date.now() - selectedStation?.lastUpdate < 3600000 * 12) return this.$emit('station', this.station)
@@ -280,7 +280,7 @@ export default {
 
                 if (station.isArtist) this.filterAlbums(station)
 
-                if (station.isAlbum) this.loadArtist()
+                if (station.isTrack || station.isAlbum) this.loadArtist()    
 
 
                 if (this.station.owner.fullname === 'Tuneify') await this.updateStationsCache()

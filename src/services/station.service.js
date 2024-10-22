@@ -49,7 +49,8 @@ async function getById(spotifyId, type = 'station') {
             console.log('fetching from Spotify')
             if (type === 'artist') spotifyStation = await getArtistData(spotifyId)
             else spotifyStation = await spotifyService.getSpotifyItems({ type: type, id: spotifyId })
-
+        
+            if (spotifyStation.isTrack) return spotifyStation
             if (spotifyStation) return await httpService.post(BASE_URL, spotifyStation)
         }
     } catch (error) {

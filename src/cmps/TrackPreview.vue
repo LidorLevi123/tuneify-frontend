@@ -77,7 +77,7 @@
                             <div>Go to album</div>
                         </div>
                     </div>
-                    <div class="dropdown-item" @click.stop="copyTrackLink(track.albumId)">
+                    <div class="dropdown-item" @click.stop="copyTrackLink(track.id)">
                         <div class="wrapper">
                             <span v-icon="'copy'" class="df ai"></span>
                             <div>Copy Song Link</div>
@@ -256,10 +256,11 @@ export default {
                 vertically: rect.top >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight),
             }
         },
-        async copyTrackLink(albumId) {
-            const link = `https://tuneify.onrender.com/station/${albumId}`
+        async copyTrackLink(trackId) {
+            const link = `https://tuneify.onrender.com/track/${trackId}`
             try {
                 await navigator.clipboard.writeText(link)
+                this.hideMenu()
                 showSuccessMsg('Link copied to clipboard')
             } catch (error) {
                 console.log(error)

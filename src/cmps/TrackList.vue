@@ -6,7 +6,7 @@
             <span>#</span>
             <span>Title</span>
             <span class="mq" :style="{ opacity: station?.isAlbum ? '0' : '1' }">Album</span>
-            <span class="mq" :style="{ opacity: station?.isAlbum ? '0' : '1' }">Date added</span>
+            <span class="mq" :style="{ opacity: station?.isAlbum || station?.isTrack ? '0' : '1' }">Date added</span>
             <span v-icon="'clock'"></span>
         </div>
         <div v-if="station?.isArtist" class="artist-header">
